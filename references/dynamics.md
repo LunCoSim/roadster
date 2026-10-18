@@ -76,10 +76,16 @@ Corner lift acts at ±0.8 m and ±1.5 m; yaw lever is 1.7 m. The measured
 quaternion rotates moments to world axes. Individual corner commands retain
 separate force outputs. There are no invented reverse/downward jet banks.
 
-`AirAttitudeControl.mo` maps manual pitch/roll/yaw demand to 2.5 rad/s body-rate
-commands and realizes correction through actual finite jets. Release damps
-rates using gas. Holding a raw corner key bypasses rate assistance. It supplies
-no attitude target, automatic landing or scripted pose/velocity correction.
+W/S commands only the motors and A/D only the steering rack, on the ground and
+in flight. K commands all four bottom valves equally, independent of altitude;
+Q/E command the front/rear pairs; U/O command the right/left pairs for roll.
+I/P/comma/period command individual corner valves and J/L the yaw jets. The
+paired controls are authored key aliases for those same
+corner commands, with no extra controller or flight-only behavior.
+There is no automatic body-rate controller or input mode switch. Releasing a
+jet key closes its valve with the 25 ms actuator response; the driver must pulse
+opposing jets to arrest rotation. Body rates are measurements only. Native
+contact, inertia and the explicit finite forces/moments determine the motion.
 
 The widening shader envelope begins at each exhaust mouth. Modelica publishes
 radii, expansion/mixing lengths and exhaust speed; delivered force gates the

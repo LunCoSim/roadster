@@ -8,10 +8,11 @@ not current evidence for changed controls/geometry.
 
 | Gate | Current evidence |
 |---|---|
-| Complete skill course | `course.json`: launch, two instant services, three airborne block crossings, fan climb, manual finite-jet turn and four-wheel landing. Acceptance driver uses commands, no pose/velocity writes. |
+| Complete skill course | `course.json`: 47.22 s with direct jet commands; launch, two instant services, three airborne block crossings, fan climb, manual finite-jet turn and four-wheel landing. Acceptance driver uses commands, no pose/velocity writes. |
+| Moving jump / fixed input meanings | `moving_jump.json`: 89 airborne samples; four driving commands exercised, zero front/rear collective imbalance and at most 0.012 N residual jet force 0.35 s after release. |
 | Steering | `steering.json`: measured steady right turns at approximately 5, 15 and 30 m/s; native yaw within 2–7% of geometric turn rate. Progressive keyboard driver retains full rack travel. |
-| Native controls | `controls.json`: Space, K, J/L, I/P/comma/period, W, A and Shift pass native injected keys; physical mass checked in a single-frame snapshot. |
-| HUD / pause | `hud-controls.json`: real native pointer clicks change fan state and temperature target; Ctrl+P freezes simulation ticks and resumes. `hud-final.png` shows the split compact HUD. |
+| Native controls | `controls.json`: 15 checks: Space, K, Q/E, J/L, U/O, I/P/comma/period, W, A and Shift pass native injected keys; physical mass checked in a single-frame snapshot. |
+| HUD / pause | `hud-controls.json`: real native pointer clicks change fan state and temperature target; Ctrl+P freezes simulation ticks and resumes. `hud-fixed-controls.png` shows the current compact HUD and fixed key meanings. |
 | Wheels / braking | `driving.json`: all eight native rotation, rolling, steering, brake, contact, mass and HUD checks pass. |
 | Gas / energy EOS | `gas-sizing.json`: eight actual Modelica State/function experiments compared with CoolProp 8.0.0. Includes internal energy with the documented constant reference offset of 531917.3305791204 J/kg. |
 | Earth gravity | `earth.json`: free-fall acceleration 9.7906 m/s² with drag, authored gravity 9.80665 m/s². |
@@ -23,10 +24,18 @@ not current evidence for changed controls/geometry.
 
 ## Validation boundaries
 
-Source changes to the final focused headlamp optics are undergoing visual
-comparison. The rear-high jump observation is under investigation; holding W
-through takeoff currently becomes a nose-down flight command. These are not
-claimed resolved by this milestone.
+Current correction: WASD remains drivetrain control at every altitude; the
+flight-mode remapping and automatic rate controller were removed. `moving_jump.json`
+exercises W/S/A/D during a moving jump: equal front/rear collective force, less
+than 6 mm front/rear body-point height difference in airborne samples, continuing
+motor torque and no jets beyond the modeled valve-close transient. Q/E and U/O
+are paired aliases of the same four native auxiliary inputs. The acceptance
+pilot was updated to operate those physical valves; its feedback lives only in
+the automated test driver, not in player controls.
+
+`headlights.json` and `headlights-on/off.png` establish the focused native lamps
+illuminate the road: 75,230 road-ROI pixels change by more than two brightness
+levels. This is a rendering check, not measured Tesla photometry.
 
 The finite-actuator course run establishes playability of the authored study,
 not Tesla performance or safe real-car stunt behavior. No manufacturer tire,

@@ -53,7 +53,9 @@ package Roadster {
     part def ThermalSystem {
         doc /* Finite Modelica tank-wall heat storage and passive exchange; editable initial/refill temperature. No assertion of Tesla's undisclosed cold-gas heating design. */
     }
-    part def DriverStation;
+    part def DriverStation {
+        doc /* Fixed key meanings at every altitude: WASD drivetrain, Q/E front/rear lift pairs for pitch, J/L yaw, U/O side lift pairs for roll, K collective lift, Space forward boost and Shift brake. No airborne remapping or automatic attitude correction. */
+    }
     part def GameRefillWaypoint {
         doc /* Explicit game service boundary. Modelica computes immediate inventory/thermal ledger adjustments, native mass/inertia and EOS pressure. Co-moving supply preserves velocity and accounts external mechanical/stored energy exchange. Not a real instantaneous refill mechanism. */
         attribute targetAirMass : MassValue = 250[kg];

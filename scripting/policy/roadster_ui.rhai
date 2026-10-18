@@ -70,8 +70,8 @@ fn course_ui(c) {
   "Fans OFF. Build 65–85 km/h. Tap K (~0.4 s) at YELLOW line. Clear all three blocks.",
   "Drive through green posts for immediate refill. Fans ON, then slow to 35–45 km/h for ramp.",
   "Fans ON. Aim for 35–45 km/h at ramp entry. W climbs; keep wheels sealed to ramp.",
-  "Follow the long return lip. At the green crest: fans OFF, release W, then W/S to flip.",
-  "W/S pitch · A/D roll · J/L yaw. Release to damp. Align wheels down; land green, Shift to stop.",
+  "Follow the long return lip. At the green crest: fans OFF. Pulse Q/E to flip.",
+  "Q nose up · E nose down · J/L yaw · U/O roll. Counterpulse to stop rotation. Land wheels down, Shift brake.",
   "Launch, three blocks, fan climb and manual flip landed on FOUR wheels. Retry for a faster run.",
   "Checkpoint missed. Retry resets course, car, air and the simulation clock."];
  let index=max(0,min(8,c.course_stage.round().to_int()));

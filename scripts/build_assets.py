@@ -370,7 +370,6 @@ def vehicle():
         def "yaw_left" { uniform string lunco:port = "thrust_x" uniform double lunco:factor = -1 }
         def "yaw_right" { uniform string lunco:port = "thrust_x" uniform double lunco:factor = 1 }
         def "speed_boost" { uniform string lunco:port = "thrust_y" uniform double lunco:factor = 1 }
-        def "action" { uniform string lunco:port = "thrust_y" uniform double lunco:factor = -1 }
     }
     def Xform "GroundSeal" (prepend references = @lunco://vessels/sensors/altimeter.usda@</Altimeter>) {
         double3 xformOp:translate = (0,-0.3,0)

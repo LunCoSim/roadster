@@ -28,16 +28,22 @@ Editor/inspector and Modelica documents to inspect parameters while paused.
 
 | Keys | Action |
 |---|---|
-| W / S | Motor forward/reverse; in flight, pitch |
-| A / D | Progressive keyboard steering; in flight, roll |
+| W / S | Motor forward/reverse, including in flight |
+| A / D | Progressive keyboard steering, including in flight |
 | Space | Forward air boost |
 | Shift | Wheel brakes |
 | K | All four bottom jets; short pulse to jump |
+| Q / E | Nose-up / nose-down jets (front / rear pairs) |
 | J / L | Yaw jets |
 | I / P | Front-left / front-right bottom jets |
 | , / . | Rear-left / rear-right bottom jets |
-| O | Inhibit collective lift |
+| U / O | Roll left/right (right / left bottom pairs) |
 | Ctrl+P | Pause/resume; P alone remains a corner jet |
+
+**WASD always controls the drivetrain.** It never opens thrusters. In the air,
+wheel torque and steering still operate, but tires cannot generate road forces
+without contact. K commands equal valves on all four bottom jets at any altitude;
+there is no automatic pitch/roll/yaw correction or airborne control remapping.
 
 Fans have a HUD **ON/OFF** button and measured seal, suction and electrical power.
 Four rear extractors sit behind a dark grille. The forward headlights are actual
@@ -52,14 +58,16 @@ pressure, gas temperature, refill target and battery charge.
    tank temperature, including the tank wall. No stop is required.
 3. Build **65–85 km/h**, switch fans off, then pulse **K near the yellow line**.
    All three 1.2 m blocks must actually be crossed in the air. Going around does
-   not pass the clearance checks. Release W in flight unless pitching deliberately.
+   not pass the clearance checks. W continues to control the motors in flight.
 4. Cross the second green waypoint, enable fans and approach the ramp at
    **35–45 km/h**.
 5. Climb with wheel traction and measured fan sealing to the green upper marker.
    Follow the long return lip, then switch fans off near its end.
-6. Use **W/S** to pitch through the aerial turn. Release to damp angular rates;
-   **A/D** and **J/L** trim roll/yaw. Align wheels down, land in the green area and
-   brake. Completion requires four wheel contacts, upright attitude and low speed.
+6. Pulse **Q** (front jets) to pitch nose up, or **E** (rear jets)
+   to pitch nose down. Opposing pairs counter rotation; release closes the valves
+   rather than automatically leveling the car. Use left/right corner combinations
+   for roll (or **U/O**) and **J/L** for yaw. Align wheels down, land in the green area and brake.
+   Completion requires four wheel contacts, upright attitude and low speed.
 
 **RETRY COURSE** reloads the authored starting state. The timer uses simulation
 time, so pausing does not consume run time. Tests command only the same finite
@@ -97,7 +105,7 @@ Tesla temperature limit or a fundamental air freezing point.
 | Layer | Responsibility |
 |---|---|
 | USD | Body compound colliders, roof envelope, wheel mounts, suspension, Earth gravity, lights, ramp and obstacle collision geometry; native port wiring |
-| Modelica | Motors, real-gas EOS, air/energy balance, wall heat transfer, refill, variable mass/inertia, finite jets and moments, fan plenum/leakage, 3D aero, regeneration, steering driver/rack, flight rate assistance and course measurements |
+| Modelica | Motors, real-gas EOS, air/energy balance, wall heat transfer, refill, variable mass/inertia, finite jets and moments, fan plenum/leakage, 3D aero, regeneration, steering driver/rack and course measurements |
 | Rhai | Input possession, HUD formatting/buttons, checkpoint sequencing and acceptance observations |
 | Shared Rust | Native integration/contact/wheel shafts, generic auxiliary actions/chords and input/pointer transport |
 

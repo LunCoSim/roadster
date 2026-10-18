@@ -65,7 +65,7 @@ def main():
     await_ready()
     for name in ['ControlLeft','ControlRight','AltLeft','AltRight','ShiftLeft','ShiftRight','SuperLeft','SuperRight']:
         q('InjectWindowInput',{'event':{'Key':dict(key=name,state='Released',text=None,repeat=False)}})
-    for name in ['I','J','K','L','P','O','W','A','S','D','Space','Comma','Period','ShiftLeft']: key(name,'Released')
+    for name in ['I','J','K','L','P','O','Q','E','U','W','A','S','D','Space','Comma','Period','ShiftLeft']: key(name,'Released')
     # Remove any popup/text focus so native input reaches the controller.
     for state in ['Pressed','Released']:
         q('InjectWindowInput',{'event':{'PointerButton':dict(button='Primary',state=state,x=1100,y=150)}})
@@ -73,8 +73,8 @@ def main():
     results=[]
     try:
         # Each key passes through the native input map and authored bindings.
-        for name,axis,sign,corner in [('K','y',1,None),('O','y',0,None),('Space','z',-1,None),
-                ('J','x',-1,None),('L','x',1,None),('I','y',1,0),('P','y',1,2),('Comma','y',1,1),('Period','y',1,3)]:
+        for name,axis,sign,corner in [('K','y',1,None),('Space','z',-1,None),
+                ('J','x',-1,None),('L','x',1,None),('I','y',1,0),('P','y',1,2),('Comma','y',1,1),('Period','y',1,3),('Q','y',1,[0,2]),('E','y',1,[1,3]),('U','y',1,[2,3]),('O','y',1,[0,1])]:
             # Each direction starts from the authored reservoir. Native API
             # round trips can take seconds on an unfocused window, so sharing
             # one tank would measure depletion before later key checks.
@@ -94,23 +94,26 @@ def main():
                 gas_after_kg=value(released,'gas_mass_kg'),
                 tank_pressure_pa=value(held,'tank_pressure_pa'),
                 position_y_m=value(held,'position_y'))
-            input_name={'I':'lift_fl','P':'lift_fr','Comma':'lift_rl','Period':'lift_rr'}.get(name,'thrust_'+axis)
+            input_name={'I':'lift_fl','P':'lift_fr','Comma':'lift_rl','Period':'lift_rr','Q':'lift_fl','E':'lift_rl','U':'lift_fr','O':'lift_fl'}.get(name,'thrust_'+axis)
             row['input_value']=value(held,input_name,'in')
             if corner is not None:
                 jets=[value(held,'jet_lift_'+str(i)) for i in range(4)]
                 row.update(corner_forces_n=jets,torque_x_nm=value(held,'torque_x'),torque_z_nm=value(held,'torque_z'))
-                row['corner_ok']=jets[corner]>100 and all(abs(f)<1 for i,f in enumerate(jets) if i!=corner)
+                selected=corner if isinstance(corner,list) else [corner]
+                row['corner_ok']=all(jets[i]>100 for i in selected) and all(abs(f)<1 for i,f in enumerate(jets) if i not in selected)
+                if len(selected)==2: row['corner_ok']=row['corner_ok'] and abs(jets[selected[0]]-jets[selected[1]])<.01
             snapshot=json.loads(q('RunRhai',dict(code=f'let ph=query("QueryPhysicsState",#{{id:{car}}}); let ps=query("ReadPorts",#{{api_id:{car},port_names:["gas_mass_kg"]}}); let gas=0.0; for p in ps.ports {{if p.direction=="out" {{gas=p.value;}}}} [ph.mass_kg,gas]'))['stdout'])
             row['physical_mass_kg'],row['mass_snapshot_gas_kg']=snapshot
             row['ok']=(sign*force>1 and row['gas_after_kg']<row['gas_before_kg'] if sign else
                        abs(force)<1 and row['input_value']==-1 and abs(row['gas_after_kg']-row['gas_before_kg'])<1e-5)
             if corner is not None:
-                # The finite-gas rate controller may fire opposing jets after
-                # release to arrest rotation. It must release the raw command.
-                row['damping_power_w']=sum(value(released,'torque_'+a)*value(released,'angvel_'+a) for a in 'xyz')
-                row['ok']=row['ok'] and value(released,input_name,'in')==0 and row['damping_power_w']<=100.0
+                # Raw valves close on release. No automatic counter-jet firing.
+                row['ok']=row['ok'] and value(released,input_name,'in')==0 and abs(after)<max(1.0,abs(force)*.05)
             else:
                 row['ok']=row['ok'] and abs(after)<max(1.0,abs(force)*.05)
+            if sign:
+                expected_input=-1.0 if name=='J' else 1.0
+                row['ok']=row['ok'] and row['input_value']==expected_input
             row['ok']=row['ok'] and abs(row['physical_mass_kg']-(1700+row['mass_snapshot_gas_kg']))<.1
             row['ok']=row['ok'] and row.get('corner_ok',True)
             results.append(row)
@@ -130,7 +133,7 @@ def main():
         q('InjectWindowInput',{'event':{'Key':dict(key='ShiftLeft',state='Released',text=None,repeat=False)}})
         results.append(dict(key='ShiftLeft',brake=value(brake,'brake','in'),ok=value(brake,'brake','in')==1))
     finally:
-        for name in ['I','J','K','L','P','O','W','A','S','D','Space','Comma','Period','ShiftLeft']: key(name,'Released')
+        for name in ['I','J','K','L','P','O','Q','E','U','W','A','S','D','Space','Comma','Period','ShiftLeft']: key(name,'Released')
         q('InjectWindowInput',{'event':{'Key':dict(key='ShiftLeft',state='Released',text=None,repeat=False)}})
     report=dict(ok=all(r['ok'] for r in results),checks=results)
     (root/'results/controls.json').write_text(json.dumps(report,indent=2)+'\n')

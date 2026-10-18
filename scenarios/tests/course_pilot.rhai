@@ -11,13 +11,13 @@ fn on_start(me,ctx) {
 }
 fn on_tick(me,ctx) {
  if this.done {return;}this.time+=dt();let v=#{};
- for p in query("ReadPorts",#{api_id:this.car,port_names:["course_stage","course_blocks","position_z","position_y","speed_mps","up_alignment","flight_control_weight","gas_mass_kg","tank_temperature_k","fan_seal","downforce","course_air_rotation_degrees","instant_services","instant_air_added_kg","vehicle_mass_kg","vehicle_inertia_xx","vehicle_inertia_yy","vehicle_inertia_zz"]}).ports {
+ for p in query("ReadPorts",#{api_id:this.car,port_names:["yaw","position_x","pitch_rate_deg_s","course_stage","course_blocks","position_z","position_y","speed_mps","up_alignment","flight_control_weight","gas_mass_kg","tank_temperature_k","fan_seal","downforce","course_air_rotation_degrees","instant_services","instant_air_added_kg","vehicle_mass_kg","vehicle_inertia_xx","vehicle_inertia_yy","vehicle_inertia_zz"]}).ports {
   if p.direction=="out" {v[p.name]=p.value;}
  }
  let stage=v.course_stage.round().to_int();
  if stage!=this.last_stage {this.stage_times.push(#{stage:stage,time_s:this.time,position:world_pos(this.car)});this.last_stage=stage;}
  let throttle=0.0;let brake=0.0;let boost=0.0;let lift=0.0;let fan=1.0;
- let target=0.0;
+ let target=0.0;let pitch=0.0;let steer=0.0;
  if stage==0 {throttle=1.0;if this.time<2.6 && this.time>2.0 {boost=1.0;}if this.time<2.0 {throttle=0.0;brake=1.0;}}
  if stage==1 || stage==3 {target=22.0;}
  if stage==2 {
@@ -30,9 +30,10 @@ fn on_tick(me,ctx) {
  if stage==6 {
   fan=0.0;
   if !this.rotated {
-   throttle= -1.0;
-   if v.up_alignment>0.45 {this.rotated=true;throttle=0.0;}
+   pitch=max(-0.25,min(0.25,0.01*(143.24-v.pitch_rate_deg_s)));
+   if v.up_alignment>0.95 {this.rotated=true;}
   }
+  if this.rotated {pitch=max(-0.25,min(0.25,-0.01*v.pitch_rate_deg_s));}
   if this.rotated && v.up_alignment>0.95 && v.position_y<7.0 && v.position_y>1.5 {lift=0.3;}
   if v.flight_control_weight<0.2 {throttle=0.0;brake=1.0;}
  }
@@ -42,8 +43,10 @@ fn on_tick(me,ctx) {
  }
 
  if stage==7 || stage==8 {brake=1.0;}
- drive(this.car,throttle,0.0);
- cmd("SetPorts",#{target:this.car,writes:[["brake",brake],["fan",fan],["boost",boost],["thrust_y",lift]]});
+ // The acceptance driver steers back to the lane through the ordinary rack.
+ if stage<4 && v.flight_control_weight<0.2 {steer=max(-0.15,min(0.15,0.8*(v.yaw-atan(v.position_x/20.0))));}
+ drive(this.car,throttle,steer);
+ cmd("SetPorts",#{target:this.car,writes:[["brake",brake],["fan",fan],["boost",boost],["thrust_y",lift],["lift_fl",max(0.0,pitch)],["lift_fr",max(0.0,pitch)],["lift_rl",max(0.0,-pitch)],["lift_rr",max(0.0,-pitch)]]});
  if this.samples.len==0 || this.time-this.samples[this.samples.len-1].time_s>0.2 {
   let row=#{time_s:this.time,stage:stage,position:world_pos(this.car),speed:v.speed_mps,up_y:v.up_alignment,
    gas_kg:v.gas_mass_kg,temperature:v.tank_temperature_k,seal:v.fan_seal,suction:v.downforce,air_rotation:v.course_air_rotation_degrees};

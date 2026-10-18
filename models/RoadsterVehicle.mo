@@ -140,21 +140,15 @@ model RoadsterVehicle
     autopilot_radius=autopilot_radius,autopilot_turn_only=autopilot_turn_only,
     autopilot_position_x=autopilot_position_x,autopilot_position_z=autopilot_position_z,
     autopilot_yaw=autopilot_yaw,autopilot_yaw_rate=autopilot_yaw_rate,piloted=piloted);
-  AirAttitudeControl air_control(
-    flight_weight=flight_control_weight,pitch_command=-throttle,roll_command=-steer,
-    yaw_command=thrust_x,collective=max(0.0,min(1.0,lift+thrust_y)),
-    individual={lift_fl,lift_rl,lift_fr,lift_rr},omega_body=omega_body,
-    inertia={vehicle_inertia_xx,vehicle_inertia_yy,vehicle_inertia_zz},
-    full_area_force=powertrain.full_area_force);
   RoadsterPowertrain powertrain(
     boost_available=boost_available, lift_available=lift_available,
     gas_capacity_kg=gas_capacity_kg,initial_fill=initial_fill,fan_initial_fraction=fan_initial_fraction,initial_gas_temperature=initial_gas_temperature,
     steer=steer,attitude={attitude_w,attitude_x,attitude_y,attitude_z},omega_body=omega_body,headlight_switch=headlights,
-    demand=steering.drive_left*(1.0-flight_control_weight), brake=brake, boost=boost, lift=0.0, fan=fan,refill=refill,instant_mass_offset=instant_mass_offset,instant_temperature_offset=instant_temperature_offset,
+    demand=steering.drive_left, brake=brake, boost=boost, lift=lift, fan=fan,refill=refill,instant_mass_offset=instant_mass_offset,instant_temperature_offset=instant_temperature_offset,
     instant_wall_temperature_offset=instant_wall_temperature_offset,instant_refill_count=instant_refill_count,
     instant_mechanical_energy_j=instant_mechanical_energy_j,instant_stored_energy_j=instant_stored_energy_j,refill_target_temperature_k=refill_target_temperature_k,
-    lift_individual=air_control.corner_command,
-    thrust_x=air_control.side_command,thrust_y=0.0,thrust_z=thrust_z,
+    lift_individual={lift_fl,lift_rl,lift_fr,lift_rr},
+    thrust_x=thrust_x,thrust_y=thrust_y,thrust_z=thrust_z,
     omega_left=wheel_speed_left, omega_right=wheel_speed_right,
     velocity_x=measured_vx, velocity_z=measured_vz, velocity_y=measured_vy,
     ground_gap=ground_gap,ground_valid=ground_valid,velocity_forward=velocity_forward,
@@ -296,9 +290,10 @@ equation
   omega_body[3] = 2.0*(attitude_x*attitude_z+attitude_w*attitude_y)*measured_wx
     +2.0*(attitude_y*attitude_z-attitude_w*attitude_x)*measured_wy
     +(1.0-2.0*(attitude_x^2+attitude_y^2))*measured_wz;
-  pitch_rate_deg_s = air_control.pitch_rate_deg_s;
-  roll_rate_deg_s = air_control.roll_rate_deg_s;
-  yaw_rate_deg_s = air_control.yaw_rate_deg_s;
+  // Measurement only: WASD never commands jets or changes meaning in flight.
+  pitch_rate_deg_s = omega_body[1]*180.0/3.141592653589793;
+  roll_rate_deg_s = omega_body[3]*180.0/3.141592653589793;
+  yaw_rate_deg_s = omega_body[2]*180.0/3.141592653589793;
   air_fill_percent = powertrain.air_fill_percent;
   refill_allowed = powertrain.refill_allowed;
   refill_active = powertrain.refill_active;

@@ -10,7 +10,10 @@ env=os.environ.copy();env.update(TMPDIR=str(ROOT/'.scratch'),LUNCO_ASSET_ROOT=st
 with (ROOT/f'results/{key}.log').open('w') as log:
  p=subprocess.run([a.binary,'test','--scene',str(ROOT/f'scenes/{a.scene}.usda'),'--max-ticks',str(a.ticks),'--verdict-channel',a.channel],env=env,stdout=log,stderr=subprocess.STDOUT)
 events=[];samples=[]
-for line in (ROOT/f'results/{key}.log').read_text().splitlines():
+log_text=(ROOT/f'results/{key}.log').read_text()
+if any(marker in log_text for marker in ["on_tick() failed", "on_start() failed"]):
+ raise RuntimeError(f'Acceptance script failed: results/{key}.log')
+for line in log_text.splitlines():
  if line.startswith('LUNCO_SCENE_TEST_EVIDENCE '):
   event=json.loads(line.split(' ',1)[1])
   if event['name']==a.channel+'_EVIDENCE':events.append(decode(event['data']))

@@ -34,7 +34,7 @@ Modelica reads measured motion and supplies motor torques, forces and native
 mass/inertia inputs. The gas system integrates mass and temperature.
 
 One-pedal regeneration, blower/plenum flow and external test refill are now modeled.
-No active suspension, calibrated aero map, CFD, automatic attitude/landing target, or road certification is modeled. Manual body-rate assistance uses finite jets and gas; it does not hold an attitude or animate a stunt.
+No active suspension, calibrated aero map, CFD, automatic attitude/landing target, or road certification is modeled. Thruster keys directly command finite valves. WASD remains motor/steering control at every altitude; no automatic flight-rate controller or stunt animation is used.
 The ideal nozzle closure and unknown thrust calibration limit acceleration and
 flight predictions. A passing model requirement does not validate Tesla's claim.
 
