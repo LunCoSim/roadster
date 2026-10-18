@@ -3,7 +3,7 @@ description = "October 2026 Tesla Roadster engineering study: Performance, Thrus
 version = "0.1.0"
 
 [usd]
-default_scene = "scenes/roadster_rocket.usda"
+default_scene = "scenes/roadster_skill_course.usda"
 scenes = ["scenes/*.usda"]
 
 [sysml]

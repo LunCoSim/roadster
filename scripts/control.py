@@ -12,11 +12,15 @@ def main():
     parser.add_argument('--steer',type=float)
     parser.add_argument('--brake',type=float)
     parser.add_argument('--fan',type=float)
+    parser.add_argument('--headlights',type=float)
     parser.add_argument('--boost',type=float)
     parser.add_argument('--lift',type=float)
     parser.add_argument('--thrust-x',type=float)
     parser.add_argument('--thrust-y',type=float)
     parser.add_argument('--thrust-z',type=float)
+    for name in ['lift-fl','lift-fr','lift-rl','lift-rr','refill']:
+        parser.add_argument('--'+name,type=float)
+    parser.add_argument('--refill-temperature',type=float,help='Live external refill target in K (253.15–333.15)')
     parser.add_argument('--status',action='store_true')
     parser.add_argument('--keyboard',action='store_true',help='Return control to the native keyboard')
     parser.add_argument('--camera',choices=['chase','driver','free'])
@@ -40,18 +44,21 @@ def main():
         else:
             print(json.dumps(call('SetUserCamera',{'name':{'chase':'ChaseCamera','driver':'DriverCamera'}[args.camera]})))
     writes = []
-    for name in ['throttle','steer','brake','fan','boost','lift','thrust_x','thrust_y','thrust_z']:
+    for name in ['throttle','steer','brake','fan','headlights','boost','lift','thrust_x','thrust_y','thrust_z','lift_fl','lift_fr','lift_rl','lift_rr','refill']:
         value = getattr(args,name)
         if value is not None:
-            low = -1 if name in ['throttle','steer','thrust_x','thrust_y','thrust_z'] else 0
+            low = -1 if name in ['throttle','steer','thrust_x','thrust_y','thrust_z','lift_fl','lift_fr','lift_rl','lift_rr','refill'] else 0
             if not low <= value <= 1:
                 parser.error(f'{name} must be between {low} and 1')
             writes.append([name,value])
+    if args.refill_temperature is not None:
+        if not 253.15 <= args.refill_temperature <= 333.15: parser.error('refill-temperature must be 253.15–333.15 K')
+        writes.append(['refill_target_temperature_k',args.refill_temperature])
     if args.keyboard:
         call('SetPorts',dict(target=target,producer_id=4198001,writes=[
-            [name,0.0] for name in ['throttle','steer','brake','boost','lift','thrust_x','thrust_y','thrust_z']]))
+            [name,0.0] for name in ['throttle','steer','brake','boost','lift','thrust_x','thrust_y','thrust_z','lift_fl','lift_fr','lift_rl','lift_rr','refill']]))
         call('AcquireControl',dict(target=target,bind_camera=True))
-        call('SetUserCamera',dict(name='ChaseCamera'))
+        call('ObserveAvatar',{})
     if writes:
         avatar=int(call('RunRhai',{'code':'find_path("/World/Avatar")'})['stdout'])
         if avatar>=0: call('ReleaseControlSource',dict(source=avatar))

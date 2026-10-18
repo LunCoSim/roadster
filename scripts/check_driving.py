@@ -30,12 +30,12 @@ def main():
         code='let result=[]; for n in ["FL","FR","RL","RR"] { let w=find_path("/World/Roadster/Wheel_"+n); result.push(get(w,"WheelRaycast.spin_velocity")); result.push(get(w,"WheelRaycast.spin_angle")); } result'
         values['wheel_omega_angle']=json.loads(q('RunRhai',dict(code=code))['stdout'])
         return values
-    q('SetUserCamera',dict(name='ChaseCamera'))
-    key('Space','Pressed')
+    q('ObserveAvatar',{})
+    key('ShiftLeft','Pressed')
     wait_sim(3)
     before=sample()
     try:
-        key('Space','Released')
+        key('ShiftLeft','Released')
         key('KeyW','Pressed')
         wait_sim(.6)
         key('KeyW','Released')
@@ -53,7 +53,7 @@ def main():
     finally:
         key('KeyW','Released')
         key('KeyA','Released')
-        key('Space','Pressed')
+        key('ShiftLeft','Pressed')
     wait_sim(3)
     stopped=sample()
     checks=dict(rolls=all(abs(w*.34-rolling[-1]['speed'])<1.5 for w in rolling[-1]['wheel_omega_angle'][::2]),
@@ -68,6 +68,6 @@ def main():
         stopped=stopped,physics=physics,hud=hud)
     (ROOT/'results/driving.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(checks,indent=2))
-    key('Space','Released')
+    key('ShiftLeft','Released')
     return 0 if report['ok'] else 1
 if __name__=='__main__': raise SystemExit(main())

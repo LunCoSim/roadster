@@ -11,10 +11,10 @@
     "hud": true
   },
   "before": {
-    "heading_fr": -0.0,
     "heading_fl": -0.0,
-    "position_y": 0.45907231207292476,
-    "speed": 1.7486012637846216e-15,
+    "heading_fr": -0.0,
+    "position_y": 0.5007309018770856,
+    "speed": 1.700029006457271e-15,
     "wheel_omega_angle": [
       0.0,
       0.0,
@@ -28,113 +28,113 @@
   },
   "rolling": [
     {
-      "heading_fr": -0.0,
       "heading_fl": -0.0,
-      "position_y": 0.45907220176202157,
-      "speed": 8.724820844380138,
+      "heading_fr": -0.0,
+      "position_y": 0.5005735635689368,
+      "speed": 9.80659261557935,
       "wheel_omega_angle": [
-        25.663228623222842,
-        0.7852349911669629,
-        25.663228623222842,
-        0.7852349911669629,
-        25.670249465388082,
-        3.065264200976594,
-        25.670249465388082,
-        3.065264200976594
+        28.84461051286779,
+        5.238112249134755,
+        28.84461051286779,
+        5.238112249134755,
+        28.678838187545725,
+        6.235856198334525,
+        28.678838187545725,
+        6.235856198334525
       ]
     },
     {
-      "heading_fr": -0.0,
       "heading_fl": -0.0,
-      "position_y": 0.45907230518153763,
-      "speed": 8.70102684547656,
+      "heading_fr": -0.0,
+      "position_y": 0.5005625297171956,
+      "speed": 9.422898746446574,
       "wheel_omega_angle": [
-        25.590695242098963,
-        0.9091075241144517,
-        25.590695242098963,
-        0.9091075241144517,
-        25.59202130793109,
-        3.189944372577292,
-        25.59202130793109,
-        3.189944372577292
+        27.716221700969648,
+        4.13063159073189,
+        27.716221700969648,
+        4.13063159073189,
+        27.546017523971518,
+        5.0974606794262645,
+        27.546017523971518,
+        5.0974606794262645
       ]
     },
     {
-      "heading_fr": -0.0,
       "heading_fl": -0.0,
-      "position_y": 0.4590723124720726,
-      "speed": 8.67310787981714,
+      "heading_fr": -0.0,
+      "position_y": 0.5005664868494201,
+      "speed": 9.06986146407297,
       "wheel_omega_angle": [
-        25.508682525772567,
-        0.1611275606385476,
-        25.508682525772567,
-        0.1611275606385476,
-        25.508995314320206,
-        2.4421081130598083,
-        25.508995314320206,
-        2.4421081130598083
+        26.677949148363382,
+        2.371716054604591,
+        26.677949148363382,
+        2.371716054604591,
+        26.50650352631874,
+        3.310045397165192,
+        26.50650352631874,
+        3.310045397165192
       ]
     },
     {
-      "heading_fr": -0.0,
       "heading_fl": -0.0,
-      "position_y": 0.45907231584965014,
-      "speed": 8.634915002182353,
+      "heading_fr": -0.0,
+      "position_y": 0.5005766417181541,
+      "speed": 8.680469880813913,
       "wheel_omega_angle": [
-        25.403031007236862,
-        0.6653351318662928,
-        25.403031007236862,
-        0.6653351318662928,
-        25.403083872667843,
-        2.9463525468337863,
-        25.403083872667843,
-        2.9463525468337863
+        25.636856554711322,
+        0.4394343646279948,
+        25.636856554711322,
+        0.4394343646279948,
+        25.46500225765527,
+        1.3491458568080097,
+        25.46500225765527,
+        1.3491458568080097
       ]
     }
   ],
   "turning": {
-    "heading_fr": 0.27690018955753704,
-    "heading_fl": 0.3327857868669686,
-    "position_y": 0.45902068482395497,
-    "speed": 8.215439217097778,
+    "heading_fl": 0.5076368722671687,
+    "heading_fr": 0.391390988248485,
+    "position_y": 0.5005612131115439,
+    "speed": 6.4133394488541935,
     "wheel_omega_angle": [
-      22.594599816358073,
-      5.049049560571743,
-      26.96431560436817,
-      0.940072415759999,
-      21.75126092174358,
-      0.7149222138068769,
-      26.260036720074517,
-      2.936661322740081
+      17.740038400643247,
+      1.0605015182469242,
+      22.662190582620894,
+      3.2488389762891967,
+      15.819034055591096,
+      1.2776065884519214,
+      21.14766087890448,
+      3.5717884542981952
     ]
   },
   "stopped": {
-    "heading_fr": 7.025881311410317e-12,
-    "heading_fl": 7.025881311441192e-12,
-    "position_y": 0.4590723120729211,
-    "speed": 5.504671982490509e-13,
+    "heading_fl": 2.5376901204642075e-11,
+    "heading_fr": 2.5376901204239286e-11,
+    "position_y": 0.5007309018770856,
+    "speed": 1.5852696183069336e-15,
     "wheel_omega_angle": [
-      0.6033074279196008,
-      2.7196160336401864,
-      -0.6033074279304915,
-      5.531196899731238,
-      0.6033074279263781,
-      4.559260825317425,
-      -0.6033074279237135,
-      1.151952867101018
+      7.002136009124072e-17,
+      3.3077021099248807,
+      7.002136009124074e-17,
+      6.142789154281343,
+      7.002136007662731e-17,
+      3.3283376533993443,
+      7.002136007662739e-17,
+      0.03139437736916284
     ]
   },
   "physics": {
-    "api_id": 5160213805625131,
+    "api_id": 229991504954483,
     "usd_prim_path": "/World/Roadster",
     "body_mode": "dynamic",
     "linear_velocity_mps": [
       0.0,
-      6.482755790515604e-10,
-      -8.60547095607337
+      6.755948817038782e-05,
+      -8.29111584968453
     ],
     "angular_velocity_radps": [
-      -8.863245165671099e-07,
+      -8.079061050323214e-07,
       0.0,
       0.0
     ],
@@ -152,19 +152,22 @@
     "rigid_body_disabled": false,
     "collider_present": true,
     "collider_source_paths": [
-      "/World/Roadster/Body/BatteryFloorCollider"
+      "/World/Roadster/Body/BatteryFloorCollider",
+      "/World/Roadster/Body/CabinCollider",
+      "/World/Roadster/Body/NoseCollider",
+      "/World/Roadster/Body/RearDeckCollider"
     ],
     "collider_local_bounds": {
       "frame": "body_local",
       "min": [
-        -0.7400000095367432,
+        -0.7699999809265137,
         -0.27000001072883606,
-        -1.899999976158142
+        -2.199999988079071
       ],
       "max": [
-        0.7400000095367432,
-        -0.09000000357627869,
-        1.899999976158142
+        0.7699999809265137,
+        0.699999988079071,
+        2.175000011920929
       ]
     },
     "collider_disabled": false,
@@ -197,28 +200,28 @@
     "support_contacts": [],
     "wheel_contacts": [
       {
-        "wheel_api_id": 1702736844321938,
+        "wheel_api_id": 3474168305924849,
         "wheel_usd_prim_path": "/World/Roadster/Wheel_FL",
         "contact_valid": true,
         "hit_available": true,
         "hit_api_id_available": true,
-        "hit_api_id": 8816754298926420,
+        "hit_api_id": 7241508788447949,
         "hit_usd_prim_path_available": true,
         "hit_usd_prim_path": "/World/Ground",
         "distance_available": true,
-        "distance_m": 0.33906234799829915,
+        "distance_m": 0.37983121670997233,
         "normal": [
           0.0,
           1.0,
           0.0
         ],
-        "normal_force_n": 9093.776996267257,
+        "normal_force_n": 15049.71224498689,
         "suspension_rest_length_m": 0.4300000071525574,
-        "suspension_compression_m": 0.09093765915425822,
+        "suspension_compression_m": 0.05016879044258504,
         "tire_force_n": [
-          -0.0,
           0.0,
-          4.310171415671249
+          0.0,
+          -19.949356342543467
         ],
         "ray_hit_count": 1,
         "valid_ray_hit_count": 1,
@@ -227,53 +230,53 @@
         "raycast_filter_exclusions": [
           {
             "api_id_available": true,
-            "api_id": 5160213805625131,
+            "api_id": 229991504954483,
             "usd_prim_path_available": true,
             "usd_prim_path": "/World/Roadster"
           },
           {
             "api_id_available": true,
-            "api_id": 1702736844321938,
+            "api_id": 3474168305924849,
             "usd_prim_path_available": true,
             "usd_prim_path": "/World/Roadster/Wheel_FL"
           }
         ],
         "ray_origin": [
           -0.8600000143051147,
-          0.33906234799829915,
-          -18.3642211797602
+          0.37983114879085805,
+          182.0192830853301
         ],
         "ray_direction": [
           0.0,
-          -1.0,
-          7.224458386190236e-06
+          -0.9999998211860657,
+          0.0005501324194483459
         ],
         "ray_max_distance_m": 0.43000100715255735,
-        "sample_tick": 97606
+        "sample_tick": 60453
       },
       {
-        "wheel_api_id": 1726926100136240,
+        "wheel_api_id": 3489561470329007,
         "wheel_usd_prim_path": "/World/Roadster/Wheel_FR",
         "contact_valid": true,
         "hit_available": true,
         "hit_api_id_available": true,
-        "hit_api_id": 8816754298926420,
+        "hit_api_id": 7241508788447949,
         "hit_usd_prim_path_available": true,
         "hit_usd_prim_path": "/World/Ground",
         "distance_available": true,
-        "distance_m": 0.33906234799829915,
+        "distance_m": 0.37983121670997233,
         "normal": [
           0.0,
           1.0,
           0.0
         ],
-        "normal_force_n": 9093.776996267257,
+        "normal_force_n": 15049.71224498689,
         "suspension_rest_length_m": 0.4300000071525574,
-        "suspension_compression_m": 0.09093765915425822,
+        "suspension_compression_m": 0.05016879044258504,
         "tire_force_n": [
-          -0.0,
           0.0,
-          4.310171415671249
+          0.0,
+          -19.949356342543467
         ],
         "ray_hit_count": 1,
         "valid_ray_hit_count": 1,
@@ -282,53 +285,53 @@
         "raycast_filter_exclusions": [
           {
             "api_id_available": true,
-            "api_id": 1726926100136240,
+            "api_id": 3489561470329007,
             "usd_prim_path_available": true,
             "usd_prim_path": "/World/Roadster/Wheel_FR"
           },
           {
             "api_id_available": true,
-            "api_id": 5160213805625131,
+            "api_id": 229991504954483,
             "usd_prim_path_available": true,
             "usd_prim_path": "/World/Roadster"
           }
         ],
         "ray_origin": [
           0.8600000143051147,
-          0.33906234799829915,
-          -18.3642211797602
+          0.37983114879085805,
+          182.0192830853301
         ],
         "ray_direction": [
           0.0,
-          -1.0,
-          7.224458386190236e-06
+          -0.9999998211860657,
+          0.0005501324194483459
         ],
         "ray_max_distance_m": 0.43000100715255735,
-        "sample_tick": 97606
+        "sample_tick": 60453
       },
       {
-        "wheel_api_id": 8106292564444772,
+        "wheel_api_id": 6077811840698532,
         "wheel_usd_prim_path": "/World/Roadster/Wheel_RL",
         "contact_valid": true,
         "hit_available": true,
         "hit_api_id_available": true,
-        "hit_api_id": 8816754298926420,
+        "hit_api_id": 7241508788447949,
         "hit_usd_prim_path_available": true,
         "hit_usd_prim_path": "/World/Ground",
         "distance_available": true,
-        "distance_m": 0.3390822152594699,
+        "distance_m": 0.38134408115148166,
         "normal": [
           0.0,
           1.0,
           0.0
         ],
-        "normal_force_n": 9091.768097218288,
+        "normal_force_n": 14595.814896249969,
         "suspension_rest_length_m": 0.4300000071525574,
-        "suspension_compression_m": 0.09091779189308746,
+        "suspension_compression_m": 0.04865592600107571,
         "tire_force_n": [
           -0.0,
           0.0,
-          4.1829800260906325
+          1734.4075448019148
         ],
         "ray_hit_count": 1,
         "valid_ray_hit_count": 1,
@@ -337,53 +340,53 @@
         "raycast_filter_exclusions": [
           {
             "api_id_available": true,
-            "api_id": 8106292564444772,
+            "api_id": 229991504954483,
             "usd_prim_path_available": true,
-            "usd_prim_path": "/World/Roadster/Wheel_RL"
+            "usd_prim_path": "/World/Roadster"
           },
           {
             "api_id_available": true,
-            "api_id": 5160213805625131,
+            "api_id": 6077811840698532,
             "usd_prim_path_available": true,
-            "usd_prim_path": "/World/Roadster"
+            "usd_prim_path": "/World/Roadster/Wheel_RL"
           }
         ],
         "ray_origin": [
           -0.8600000143051147,
-          0.3390822152594699,
-          -15.614221179831963
+          0.3813440129618461,
+          184.76928266919225
         ],
         "ray_direction": [
           0.0,
-          -1.0,
-          7.224458386190236e-06
+          -0.9999998211860657,
+          0.0005501324194483459
         ],
         "ray_max_distance_m": 0.43000100715255735,
-        "sample_tick": 97606
+        "sample_tick": 60453
       },
       {
-        "wheel_api_id": 8121685727246494,
+        "wheel_api_id": 6102001096468538,
         "wheel_usd_prim_path": "/World/Roadster/Wheel_RR",
         "contact_valid": true,
         "hit_available": true,
         "hit_api_id_available": true,
-        "hit_api_id": 8816754298926420,
+        "hit_api_id": 7241508788447949,
         "hit_usd_prim_path_available": true,
         "hit_usd_prim_path": "/World/Ground",
         "distance_available": true,
-        "distance_m": 0.3390822152594699,
+        "distance_m": 0.38134408115148166,
         "normal": [
           0.0,
           1.0,
           0.0
         ],
-        "normal_force_n": 9091.768097218288,
+        "normal_force_n": 14595.814896249969,
         "suspension_rest_length_m": 0.4300000071525574,
-        "suspension_compression_m": 0.09091779189308746,
+        "suspension_compression_m": 0.04865592600107571,
         "tire_force_n": [
           -0.0,
           0.0,
-          4.1829800260906325
+          1734.4075448019148
         ],
         "ray_hit_count": 1,
         "valid_ray_hit_count": 1,
@@ -392,69 +395,92 @@
         "raycast_filter_exclusions": [
           {
             "api_id_available": true,
-            "api_id": 8121685727246494,
+            "api_id": 229991504954483,
             "usd_prim_path_available": true,
-            "usd_prim_path": "/World/Roadster/Wheel_RR"
+            "usd_prim_path": "/World/Roadster"
           },
           {
             "api_id_available": true,
-            "api_id": 5160213805625131,
+            "api_id": 6102001096468538,
             "usd_prim_path_available": true,
-            "usd_prim_path": "/World/Roadster"
+            "usd_prim_path": "/World/Roadster/Wheel_RR"
           }
         ],
         "ray_origin": [
           0.8600000143051147,
-          0.3390822152594699,
-          -15.614221179831963
+          0.3813440129618461,
+          184.76928266919225
         ],
         "ray_direction": [
           0.0,
-          -1.0,
-          7.224458386190236e-06
+          -0.9999998211860657,
+          0.0005501324194483459
         ],
         "ray_max_distance_m": 0.43000100715255735,
-        "sample_tick": 97606
+        "sample_tick": 60453
       }
     ]
   },
   "hud": {
-    "revision": 1456148,
+    "revision": 1685188,
     "surfaces": {
       "vessel-hud": {
         "state": "ready",
         "error": null,
         "visible": true,
         "properties": {
-          "caution_width": "100.00%",
-          "program_label": "MANUAL",
-          "tilt_color": "var(--ok-color)",
-          "roll": "+0\u00b0",
-          "heading": "0\u00b0",
-          "tilt": "0\u00b0",
-          "runtime_status": "31.0 km/h \u00b7 19.3 mph\nAIR 250.0 kg \u00b7 437.0 bar\nBATTERY 89.9% \u00b7 SUCTION 17.2 kN\nI BOOST 0.0 kN \u00b7 J/L YAW 0.0 kN\nU LIFT 0.0 kN \u00b7 K/O INHIBIT",
           "comms_display": "none",
-          "local_position": "E +0  \u00b7  N +17",
-          "speed": "8.6",
-          "telemetry_summary": "TELEMETRY UNAVAILABLE",
-          "local_display": "flex",
-          "program_color": "var(--accent-color)",
-          "tilt_status": "STABLE",
-          "comms_range": "\u2014",
-          "tilt_limits": "slip 54\u00b0 \u00b7 tip 65\u00b0",
-          "telemetry_display": "none",
-          "geo_display": "none",
-          "pitch": "-0\u00b0",
+          "rr_air_width": "100.0%",
+          "rr_service": "Earth g = 9.80665 m/s2",
+          "rr_speed": "30.0",
+          "rr_fan_label": "TURN FANS OFF",
+          "tilt_color": "var(--ok-color)",
+          "tilt_marker": "0.04%",
+          "tilt": "0\u00b0",
+          "rr_course_hint": "W + Space: reach 60 mph at the blue gate. Shift brakes before green zone.",
           "comms_los_display": "none",
-          "comms_color": "var(--muted-color)",
-          "comms_peer": "\u2014",
-          "danger_start": "100.00%",
-          "tilt_marker": "0.00%",
+          "rr_fill_temperature": "293.1 K",
+          "rr_suction": "40.0 kN suction",
+          "rr_fan_state": "FANS ON / SEALED",
+          "pitch": "-0\u00b0",
           "label": "ROADSTER",
+          "rr_air_mass": "250.0 kg",
+          "rr_air_pressure": "437.0 bar",
+          "tilt_status": "STABLE",
           "comms_elevation": "\u2014",
+          "rr_air_color": "#68e0b2",
+          "rr_aero": "Drag 0.05 kN / Aero load 0.2 kN",
+          "rr_air_fill": "100.0%",
+          "rr_force": "Lift 0.0 kN / Boost 0.0 kN",
           "danger_width": "22.33%",
+          "rr_rates": "Pitch 0.0 / Roll 0.0 deg/s",
+          "rr_refill_label": "REFILL AIR",
+          "rr_course_title": "01 / LAUNCH",
+          "tilt_limits": "slip 54\u00b0 \u00b7 tip 65\u00b0",
+          "program_label": "MANUAL",
+          "speed": "8.4",
+          "runtime_status": "AIR READY",
+          "roll": "+0\u00b0",
+          "rr_temperature": "293.1 K",
+          "local_display": "flex",
+          "rr_fan_detail": "20.0 kPa / 20.7 kW",
+          "comms_peer": "\u2014",
+          "comms_range": "\u2014",
+          "comms_color": "var(--muted-color)",
+          "telemetry_display": "none",
+          "rr_course_metrics": "276.2 s  /  Target 44.0 m  /  Blocks 0 of 3  /  Air pitch 0.0 deg",
+          "rr_mph": "18.9 mph",
+          "telemetry_summary": "TELEMETRY UNAVAILABLE",
+          "rr_mode": "DRIVE",
+          "rr_air_status": "AIR READY",
+          "altitude": "0.5",
+          "heading": "0\u00b0",
+          "geo_display": "none",
+          "rr_battery": "88.3% battery",
+          "caution_width": "100.00%",
           "comms_status": "NO LINK",
-          "altitude": "0.5"
+          "local_position": "E +0  \u00b7  N -184",
+          "danger_start": "100.00%"
         }
       }
     }

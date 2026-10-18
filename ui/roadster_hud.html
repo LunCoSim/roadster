@@ -1,0 +1,46 @@
+<template>
+  <property name="rr_course_title">FREE DRIVE</property><property name="rr_course_hint">Ctrl+P pause / inspect</property><property name="rr_course_metrics">Course measurements loading</property>
+  <property name="rr_steering">Wheels L 0 / R 0 deg</property>
+  <property name="rr_speed">0</property><property name="rr_mph">0 mph</property>
+  <property name="rr_air_mass">250.0 kg</property><property name="rr_air_pressure">437 bar</property>
+  <property name="rr_air_fill">100%</property><property name="rr_air_width">100%</property>
+  <property name="rr_air_status">AIR READY</property><property name="rr_air_color">#68e0b2</property>
+  <property name="rr_fill_temperature">293.2 K</property>
+  <property name="rr_temperature">293 K</property><property name="rr_refill_label">REFILL AIR</property>
+  <property name="rr_fan_state">FANS ON</property><property name="rr_fan_label">TURN FANS OFF</property>
+  <property name="rr_suction">0.0 kN suction</property><property name="rr_fan_detail">0 kPa / 0 kW</property>
+  <property name="rr_aero">Drag 0.0 kN</property><property name="rr_battery">90% battery</property>
+  <property name="rr_mode">DRIVE</property><property name="rr_rates">P 0 / R 0 / Y 0 deg/s</property>
+  <property name="rr_force">Lift 0 kN / Boost 0 kN</property><property name="rr_service">External test air supply</property>
+  <node id="rr-root">
+    <node id="rr-help">
+      <node id="rr-mission-row"><text id="rr-mission-title">{rr_course_title}</text><button id="rr-retry" on_press="runtime_ui_authored_action" tag:action="roadster.restart"><text id="rr-retry-text">RETRY COURSE</text></button></node>
+      <text id="rr-mission-hint">{rr_course_hint}</text><text id="rr-mission-metrics">{rr_course_metrics}</text>
+      <text id="rr-title">ROADSTER / EARTH / {rr_mode}</text>
+      <text id="rr-help-drive">WASD drive · Space boost · Shift brake · K jump · Ctrl+P pause</text>
+      <text id="rr-help-air">Air: W/S pitch · A/D roll · J/L yaw · I/P front jets · ,/. rear jets</text>
+    </node>
+    <node id="rr-bar">
+      <node id="rr-speed-block"><text id="rr-speed">{rr_speed}</text><text id="rr-speed-unit">km/h   /   {rr_mph}</text><text id="rr-battery">{rr_battery}</text><text id="rr-steering">{rr_steering}</text></node>
+      <node id="rr-air-block">
+        <text id="rr-air-title">AIR INVENTORY</text>
+        <text id="rr-air-mass">{rr_air_mass}   /   {rr_air_fill}</text>
+        <node id="rr-air-track"><node id="rr-air-level" /></node>
+        <text id="rr-air-pressure">{rr_air_pressure} absolute   /   {rr_temperature}</text>
+        <text id="rr-air-status">{rr_air_status}</text>
+        <node id="rr-temperature-controls">
+          <button id="rr-temperature-down" on_press="runtime_ui_authored_action" tag:action="roadster.temperature.down"><text id="rr-minus">-</text></button>
+          <text id="rr-target-temperature">Fill: {rr_fill_temperature}</text>
+          <button id="rr-temperature-up" on_press="runtime_ui_authored_action" tag:action="roadster.temperature.up"><text id="rr-plus">+</text></button>
+        </node>
+        <button id="rr-refill" on_press="runtime_ui_authored_action" tag:action="roadster.refill"><text id="rr-refill-text">{rr_refill_label} (TEST)</text></button>
+      </node>
+      <node id="rr-fan-block">
+        <text id="rr-fan-state">{rr_fan_state}</text><text id="rr-suction">{rr_suction}</text>
+        <text id="rr-fan-detail">{rr_fan_detail}</text>
+        <button id="rr-fan" on_press="runtime_ui_authored_action" tag:action="roadster.fans"><text id="rr-fan-text">{rr_fan_label}</text></button>
+      </node>
+      <node id="rr-status-block"><text id="rr-force">{rr_force}</text><text id="rr-aero">{rr_aero}</text><text id="rr-rates">{rr_rates}</text><text id="rr-service">{rr_service}</text></node>
+    </node>
+  </node>
+</template>

@@ -1,0 +1,91 @@
+{
+  "method": "Injected native pointer click on REFILL AIR (TEST)",
+  "cold_mass_before_kg": 136.47058884443774,
+  "cold_temperature_before_k": 199.95494346078243,
+  "readback": [
+    {
+      "name": "service_energy_j",
+      "value": 99302921.24034694,
+      "direction": "out",
+      "metadata": {
+        "type": "scalar",
+        "unit": null,
+        "frame": null,
+        "range": null,
+        "source": "Modelica co-simulation component",
+        "authority": "solver",
+        "writable": false
+      }
+    },
+    {
+      "name": "refill_active",
+      "value": 0.0,
+      "direction": "out",
+      "metadata": {
+        "type": "scalar",
+        "unit": null,
+        "frame": null,
+        "range": null,
+        "source": "Modelica co-simulation component",
+        "authority": "solver",
+        "writable": false
+      }
+    },
+    {
+      "name": "tank_pressure_pa",
+      "value": 43678298.95136084,
+      "direction": "out",
+      "metadata": {
+        "type": "scalar",
+        "unit": null,
+        "frame": null,
+        "range": null,
+        "source": "Modelica co-simulation component",
+        "authority": "solver",
+        "writable": false
+      }
+    },
+    {
+      "name": "gas_mass_kg",
+      "value": 249.9999999999995,
+      "direction": "out",
+      "metadata": {
+        "type": "scalar",
+        "unit": null,
+        "frame": null,
+        "range": null,
+        "source": "Modelica co-simulation component",
+        "authority": "solver",
+        "writable": false
+      }
+    },
+    {
+      "name": "tank_temperature_k",
+      "value": 293.05095530309984,
+      "direction": "out",
+      "metadata": {
+        "type": "scalar",
+        "unit": null,
+        "frame": null,
+        "range": null,
+        "source": "Modelica co-simulation component",
+        "authority": "solver",
+        "writable": false
+      }
+    },
+    {
+      "name": "refill",
+      "value": 0.0,
+      "direction": "in",
+      "metadata": {
+        "type": "scalar",
+        "unit": null,
+        "frame": null,
+        "range": null,
+        "source": "Modelica co-simulation component",
+        "authority": "controller / wire",
+        "writable": true
+      }
+    }
+  ]
+}

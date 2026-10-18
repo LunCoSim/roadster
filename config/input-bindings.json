@@ -1,10 +1,49 @@
 {
   "input_bindings": {
-    "thrust": ["KeyI"],
-    "release": ["KeyK"],
-    "yaw_left": ["KeyJ"],
-    "yaw_right": ["KeyL"],
-    "speed_boost": ["KeyU"],
-    "action": ["KeyO"]
+    "thrust": [
+      "Space"
+    ],
+    "release": [],
+    "yaw_left": [
+      "KeyJ"
+    ],
+    "yaw_right": [
+      "KeyL"
+    ],
+    "speed_boost": [
+      "KeyK"
+    ],
+    "action": [
+      "KeyO"
+    ],
+    "brake": [
+      "ShiftLeft",
+      "ShiftRight"
+    ],
+    "auxiliary_1": [
+      "KeyI"
+    ],
+    "auxiliary_2": [
+      "KeyP"
+    ],
+    "auxiliary_3": [
+      "Comma"
+    ],
+    "auxiliary_4": [
+      "Period"
+    ],
+    "pause": [],
+    "key_chords": {
+      "pause": [
+        [
+          "ControlLeft",
+          "KeyP"
+        ],
+        [
+          "ControlRight",
+          "KeyP"
+        ]
+      ]
+    }
   }
 }

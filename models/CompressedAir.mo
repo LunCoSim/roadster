@@ -109,6 +109,7 @@ package CompressedAir
     output Real pressure(unit="Pa");
     output Real dpdT(unit="Pa/K");
     output Real cv(unit="J/(kg.K)");
+    output Real specific_internal_energy(unit="J/kg") "Helmholtz reference; use consistently for mass exchange";
     Real delta;
     Real tau;
     Real term[19];
@@ -148,6 +149,12 @@ package CompressedAir
     pressure = density*R*temperature*(1+delta*arD);
     dpdT = density*R*(1+delta*arD-delta*tau*arDT);
     cv = R*(cv0-tau*tau*arTT);
+    specific_internal_energy = R*temperature*(2.490888032
+      +sum({n0[i]*t0[i]*tau^t0[i] for i in 1:6})
+      +0.791309509*x1*exp(-x1)/(1-exp(-x1))
+      +0.212236768*x2*exp(-x2)/(1-exp(-x2))
+      +0.197938904*x3*(2.0/3.0)*exp(-x3)/(1+(2.0/3.0)*exp(-x3))
+      +sum({term[i]*t[i] for i in 1:19}));
   end State;
 
   model StorageSizing

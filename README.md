@@ -1,157 +1,145 @@
 # Tesla Roadster Runner
 
-A LunCoSim engineering study of the second-generation Roadster revealed on
-October 15, 2026. Includes original procedural USD geometry, SysML v2 structure
-and requirements, Modelica dynamics, references and production-run evidence.
+A LunCoSim engineering study and driving challenge based on the redesigned
+Roadster revealed October 15, 2026. Original procedural USD geometry, SysML v2,
+Modelica physics, Rhai course policy and an editable HUD are included.
 
-This is **not a calibrated Tesla production model**. Manufacturer statements,
-user inputs and study assumptions are separated in the
+Public facts and uncalibrated engineering assumptions are recorded in the
 [source register](references/README.md) and [input table](references/assumptions.md).
-The old 2017 red concept specifications are excluded.
+This is an engineering/gameplay study, not Tesla CAD or a calibrated production car.
 
-## Open and drive
+## Run
 
 ```sh
-./scripts/start.sh roadster_rocket --api 4198
+./scripts/start.sh roadster_skill_course --api 4198
 ```
 
-The launcher uses LUNCOSIM_BIN, an installed luncosim, or the neighboring checkout's
-existing production binary (or the preserved local `.scratch/luncosim`). It loads an isolated keyboard profile and keeps the
-simulation updating while unfocused. Shared wheels, tires, suspension, controls,
-lighting, cameras and Ackermann equations resolve through lunco:// references.
+Use the second form when supplying simulator options. With no arguments the
+launcher opens the skill course. Set `LUNCOSIM_BIN` to a LunCoSim executable with
+commits `a0a9a0324` and `17cad2934`, or use the locally built `.scratch/luncosim`.
+The launcher composes shared assets and the authored HUD locally and loads the
+isolated keymap. Shared `lunco://` assets resolve from the neighboring checkout.
+No shared application assets are edited.
 
-The manual scenes possess the car and select **ChaseCamera** automatically.
-Use the camera picker at the upper right for **DriverCamera** (forward hood view)
-or the free/follow avatar camera. The speed HUD shows m/s, km/h and mph, plus
-remaining air, pressure and battery charge.
+The native **avatar following** camera is selected automatically. Mouse look and
+zoom use the normal avatar controls. The camera picker also offers DriverCamera
+and RampOverview. **Ctrl+P** pauses the entire physical simulation; use the
+Editor/inspector and Modelica documents to inspect parameters while paused.
 
-| Keys | Function |
+| Keys | Action |
 |---|---|
-| W / S | Forward / reverse motor demand |
-| A / D | Steering through a rate-limited Ackermann rack |
-| Space | Wheel friction brakes |
-| I | Rear forward gas boost |
-| K | Inhibit forward boost; I + K cancel |
-| J / L | Front side jets, yaw left / right |
-| U | Corner-jet lift |
-| O | Inhibit lift; U + O cancel; descend under gravity after release |
+| W / S | Motor forward/reverse; in flight, pitch |
+| A / D | Progressive keyboard steering; in flight, roll |
+| Space | Forward air boost |
+| Shift | Wheel brakes |
+| K | All four bottom jets; short pulse to jump |
+| J / L | Yaw jets |
+| I / P | Front-left / front-right bottom jets |
+| , / . | Rear-left / rear-right bottom jets |
+| O | Inhibit collective lift |
+| Ctrl+P | Pause/resume; P alone remains a corner jet |
 
-Hold to open a valve; release to close it. White animated air streams follow
-delivered force, including valve closure and the cold-tank cutoff. They are
-operator indicators, not a prediction of real condensation. A unique orange
-sidewall stripe makes native wheel rotation easier to follow.
+Fans have a HUD **ON/OFF** button and measured seal, suction and electrical power.
+Four rear extractors sit behind a dark grille. The forward headlights are actual
+USD spot lights, attached to the car; dusk exposure is authored on course cameras.
+The HUD reports speed, physical wheel angles, air mass/percentage, absolute
+pressure, gas temperature, refill target and battery charge.
 
-Rocket has forward, lift and yaw jets. Thrust enables rear forward jets. Performance disables gas actuation.
-There are no invented reverse/downward jets. All enabled jets share a finite
-reservoir and available flow; the model has no airborne attitude controller.
+## Skill course
 
-Opening the folder in an existing application retains that application's keymap.
-Use the launcher for JKLIUO, or select your own LUNCOSIM_CONFIG explicitly.
+1. Reach **60 mph** at the blue launch gate using motor acceleration and boost.
+2. Cross the green waypoint: it immediately restores **250 kg** and the selected
+   tank temperature, including the tank wall. No stop is required.
+3. Build **65–85 km/h**, switch fans off, then pulse **K near the yellow line**.
+   All three 1.2 m blocks must actually be crossed in the air. Going around does
+   not pass the clearance checks. Release W in flight unless pitching deliberately.
+4. Cross the second green waypoint, enable fans and approach the ramp at
+   **35–45 km/h**.
+5. Climb with wheel traction and measured fan sealing to the green upper marker.
+   Follow the long return lip, then switch fans off near its end.
+6. Use **W/S** to pitch through the aerial turn. Release to damp angular rates;
+   **A/D** and **J/L** trim roll/yaw. Align wheels down, land in the green area and
+   brake. Completion requires four wheel contacts, upright attitude and low speed.
+
+**RETRY COURSE** reloads the authored starting state. The timer uses simulation
+time, so pausing does not consume run time. Tests command only the same finite
+actuators as a player; no course script writes pose, velocity or a stunt trajectory.
+
+The instantaneous waypoint is explicitly a **game service boundary**, equivalent
+to externally conditioning/delivering co-moving gas. It is not an onboard Tesla
+refill process. Modelica computes the mass and temperature adjustments, EOS
+pressure, inertia, and stored/mechanical energy exchanges; Rhai copies these
+boundary values together through ordinary inputs. Native velocity is preserved.
+
+## Editable temperature and finite test service
+
+- `inputs:initial_gas_temperature` is a Modelica initialization parameter.
+- HUD **− / +** changes `refill_target_temperature_k` in 5 K steps, 253.15–333.15 K.
+- Green waypoints apply that target immediately.
+- **REFILL AIR (TEST)** manually connects a finite external supply, including
+  while moving or inverted. It delivers up to 20 kg/s with a bounded 2 MW jacket,
+  accounts for compressor/thermal service energy and incoming-air momentum.
+  **STOP REFILL** disconnects it; completion disconnects automatically.
 
 ```sh
-python3 scripts/control.py --camera chase
-python3 scripts/control.py --camera driver
-python3 scripts/control.py --throttle 0.15 --steer 0 --brake 0
-python3 scripts/control.py --throttle 0 --brake 1
-python3 scripts/control.py --status
+python3 scripts/control.py --refill-temperature 303.15 --refill 1
+python3 scripts/control.py --keyboard
 ```
 
-API values persist until changed. Use one control producer at a time.
-Ports include throttle/steer, brake/fan/boost/lift and thrust_x/y/z.
-Fan suction is enabled by default and pays its modeled 30 kW electrical load.
-Use --fan 0 to disable it. API driving releases the keyboard producer; use
-`python3 scripts/control.py --keyboard` to return to keyboard control.
+The service is test equipment, not a claim about Tesla hardware. Public sources
+reviewed do not establish Tesla's tank heating or cold-gas thermal-management
+implementation. Passive tank-wall heat exchange is modeled with stated study
+coefficients. The **200 K discharge guard is a conservative model guard**, not a
+Tesla temperature limit or a fundamental air freezing point.
+
+## Physics ownership
+
+| Layer | Responsibility |
+|---|---|
+| USD | Body compound colliders, roof envelope, wheel mounts, suspension, Earth gravity, lights, ramp and obstacle collision geometry; native port wiring |
+| Modelica | Motors, real-gas EOS, air/energy balance, wall heat transfer, refill, variable mass/inertia, finite jets and moments, fan plenum/leakage, 3D aero, regeneration, steering driver/rack, flight rate assistance and course measurements |
+| Rhai | Input possession, HUD formatting/buttons, checkpoint sequencing and acceptance observations |
+| Shared Rust | Native integration/contact/wheel shafts, generic auxiliary actions/chords and input/pointer transport |
+
+Initial study mass is **1700 kg dry + 250 kg air = 1950 kg**. Two rear motors
+provide **1 MW and 1400 N·m combined**, with an assumed 8.4 reduction. Native
+wheel shafts determine wheel rotation. Full rack travel remains available at all
+speeds; keyboard steering builds more gradually at speed. Tire slip and the
+Coulomb cone determine actual cornering. Steering assistance can be disabled
+with the Modelica parameter `keyboard_steering_assistance=0` for analog commands.
+
+At 600 L and 293.15 K, the reusable Modelica dry-air EOS calculates **437.023 bar
+absolute** for 250 kg. No inventory is silently scaled to 83 kg. Tank placement,
+nozzles, fan maps, aero coefficients, tire curves and thermal coefficients remain
+study assumptions. See [storage](references/gas-storage.md) and
+[dynamics](references/dynamics.md).
+
+## Scenes and reproduction
 
 | Scene | Purpose |
 |---|---|
-| roadster_rocket | Default, one seat, ten nozzles, manual driving and lift/yaw |
-| roadster_thrust | Two seats, rear boost only |
-| roadster_track | Performance, motor driving without gas |
-| roadster_launch | Automatic launch and SysML requirement evaluation |
-| roadster_motor_launch | Automatic motor-only standing start, no gas |
-
-## Physics and reusable calculations
-
-- Two rear motors: **1 MW combined** study baseline, **1400 N·m combined**,
-  provisional 8.4 reduction, 0.97 reduction efficiency.
-- Explicit study mass budget: **1700 kg dry + 250 kg air = 1950 kg charged**.
-  Native mass and inertia decrease as air leaves. The reported under-1700 kg
-  target has unverified trim/fill conditions; 1950 kg is not a Tesla curb-mass claim.
-- Native tires and suspension determine traction, rolling and wheel spin.
-  Slip feedback limits excessive wheelspin. Steering has actuator response and
-  a speed-dependent limit.
-- Native physics alone integrates vehicle motion. Modelica reads measured
-  velocity and shaft speed and supplies torque, forces and mass properties.
-- Gas starts with **250 kg available air**, never 83 kg.
-  At the 600 L / 20°C study point, the Modelica real-gas EOS gives
-  **437.023 bar absolute**. Tank size and operating pressure are not asserted
-  production specifications. See [pressure/volume analysis](references/gas-storage.md).
-- [CompressedAir.mo](models/CompressedAir.mo) provides reusable pressure,
-  density, heat-capacity and storage-sizing functions, a StorageSizing model
-  and an equation-form State model for realtime use.
-  Both the sizing calculation and running tank share the same EOS coefficients.
-  Speed, pressure and force unit conversions for the HUD are also Modelica outputs.
-- Finite gas mass, real-gas adiabatic tank cooling, valve response, battery
-  energy, motor heat, 3D drag and ground-dependent fan sealing are modeled.
-  Nozzle expansion remains an ideal approximation; discharge stops at the
-  200 K study-domain boundary.
-
-Unknown nozzle calibration, actual tank placement, dry/charged mass, tire data
-and thermal behavior limit predictions. See [dynamics](references/dynamics.md).
-
-## Artifacts
-
-| File | Owns |
-|---|---|
-| [twin.toml](twin.toml) | Scenes, SysML sources and verification mapping |
-| [roadster.sysml](requirements/roadster.sysml) | Parts, interfaces, trim structure, requirements, source and satisfy/verify links |
-| [roadster.usda](vehicles/roadster.usda) | Rigid body, four raycast wheels, variants, cameras, HUD and native port wiring |
-| [RoadsterVehicle.mo](models/RoadsterVehicle.mo) | Shared Ackermann composition, steering actuator, mass/inertia, jet moments and engineering readouts |
-| [RoadsterPowertrain.mo](models/RoadsterPowertrain.mo) | Motor envelope, slip control, energy, gas tank, drag and fan |
-| [CompressedAir.mo](models/CompressedAir.mo) | Reusable real-gas thermodynamics and storage sizing |
-| [launch.rhai](scenarios/tests/launch.rhai) | Physical observations and native SysML constraint evaluation |
-| [roadster_ui.rhai](scripting/policy/roadster_ui.rhai) | Twin-scoped HUD presentation from engine facts |
-
-## Reproduce checks
+| roadster_skill_course | Default driving challenge |
+| roadster_ramp | Close practice start at the stunt ramp |
+| roadster_rocket / thrust / track | Flat-track Rocket / rear-boost / motor-only trims |
+| roadster_wall | Pre-spun wall adhesion fixture |
+| roadster_*_check | Authored production acceptance scenes |
+| roadster_launch / roadster_motor_launch | Standing-start measurements |
 
 ```sh
-python3 scripts/run_launch.py
+python3 scripts/run_launch.py --binary .scratch/luncosim
+python3 scripts/run_motor_launch.py --binary .scratch/luncosim
+python3 scripts/run_scene_check.py roadster_course_check ROADSTER_COURSE
 python3 scripts/check_controls.py --port 4198
 python3 scripts/check_driving.py
+python3 scripts/check_effects.py
 ```
 
-The launch runs through production luncosim test and emits the exact runner
-report and CSV trajectory. Its standing-start timing does not subtract rollout.
-Passing the authored requirements is a study result, not independent confirmation
-of Tesla's performance claims. [Validation evidence](results/README.md) records
-the completed checks and boundaries.
+[Recorded validation](results/README.md) distinguishes current evidence from
+historical results. Standing-start timing never subtracts rollout.
+`CompressedAir.mo` provides reusable EOS, sizing and internal-energy calculations;
+CoolProp is only an optional verification dependency.
 
-Keyboard checks exercise native injected key events and reset the Twin for each
-gas command. Driving checks operate the running window and observe native shaft
-speed/angle, ground contact, steering, braking and the HUD. Timing uses simulation
-ticks rather than wall time.
-
-Optional EOS comparison: install CoolProp==8.0.0 and run
-python3 scripts/check_gas_sizing.py --port 4198. The eight production Modelica
-experiments agree with the reference within 1e-8 relative tolerance. CoolProp
-is not a runtime dependency of this Twin.
-
-Regenerate the authored geometry and wiring with python3 scripts/build_assets.py.
-Maintain the generator when changing reproducible USD assets. No external car
-mesh or texture is required.
-
-## Acceleration and realtime behavior
-
-The motor-only Rocket study (1950 kg, suction enabled, no gas) reaches 60 mph
-in **2.677 simulated seconds**. This is an observed study result, not a fit to
-Tesla's claimed time. `python3 scripts/run_motor_launch.py` repeats the native
-standing-start measurement and checks power use, gas isolation and wheel speed.
-
-The earlier startup possessed the car without connecting the local keyboard
-producer; startup now creates that link before selecting the chase camera.
-The previous function-form tank EOS also held the physics clock below realtime.
-`CompressedAir.State` expresses the same EOS as Modelica equations, allowing
-Rumoca to lower it once instead of interpreting the loop on every derivative
-call. The sizing function is retained and cross-checked against State and
-CoolProp. Physics advances at 60 Hz in the recorded live run; rendering FPS
-can be lower on the selected GPU. No wheel animation multiplier is used.
+Maintain generated vehicle assets with `scripts/build_assets.py`. Author the
+ramp/course through the running USD document API with `scripts/author_ramp.py`
+and `scripts/author_ramp.py --course`; those scripts save and read back typed USD
+operations. Curve sampling constructs geometry, not vehicle motion.

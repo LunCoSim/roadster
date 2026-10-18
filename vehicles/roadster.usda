@@ -36,7 +36,26 @@ def Xform "Roadster" (
     float inputs:thrust_x = 0
     float inputs:thrust_y = 0
     float inputs:thrust_z = 0
+    float inputs:refill_target_temperature_k = 293.15 (customData = { double min = 253.15 double max = 333.15 })
+    float inputs:initial_gas_temperature = 293.15
+    float inputs:keyboard_steering_assistance = 1
+    float inputs:course_enabled = 0
+    float inputs:course_phase = 0
+    float inputs:course_blocks_passed = 0
+    float inputs:course_position_y = 0.66
+    float inputs:instant_mass_offset = 0
+    float inputs:instant_temperature_offset = 0
+    float inputs:instant_wall_temperature_offset = 0
+    float inputs:instant_refill_count = 0
+    float inputs:instant_mechanical_energy_j = 0
+    float inputs:instant_stored_energy_j = 0
+    float inputs:refill = 0
+    float inputs:headlights = 1
     float inputs:fan = 1
+    float inputs:lift_fl = 0
+    float inputs:lift_fr = 0
+    float inputs:lift_rl = 0
+    float inputs:lift_rr = 0
     float inputs:brake = 0
     float inputs:wheel_speed_left.connect = </Roadster/Wheel_RL.outputs:shaft_speed>
     float inputs:wheel_speed_right.connect = </Roadster/Wheel_RR.outputs:shaft_speed>
@@ -45,6 +64,9 @@ def Xform "Roadster" (
     float inputs:measured_vy.connect = </Roadster.outputs:velocity_y>
     float inputs:ground_gap.connect = </Roadster/GroundSeal.outputs:ray_distance>
     float inputs:ground_valid.connect = </Roadster/GroundSeal.outputs:ray_hit_valid>
+    float inputs:measured_wx.connect = </Roadster.outputs:angvel_x>
+    float inputs:measured_wy.connect = </Roadster.outputs:angvel_y>
+    float inputs:measured_wz.connect = </Roadster.outputs:angvel_z>
     float inputs:attitude_w.connect = </Roadster.outputs:quat_w>
     float inputs:attitude_x.connect = </Roadster.outputs:quat_x>
     float inputs:attitude_y.connect = </Roadster.outputs:quat_y>
@@ -76,6 +98,7 @@ def Xform "Roadster" (
     float inputs:torque_y.connect = </Roadster.outputs:torque_y>
     float inputs:torque_z.connect = </Roadster.outputs:torque_z>
     float inputs:initial_fill = 1
+    float inputs:fan_initial_fraction = 0
     float inputs:mass.connect = </Roadster.outputs:vehicle_mass_kg>
     float inputs:inertia_xx.connect = </Roadster.outputs:vehicle_inertia_xx>
     float inputs:inertia_yy.connect = </Roadster.outputs:vehicle_inertia_yy>
@@ -102,7 +125,10 @@ def Xform "Roadster" (
     float outputs:tank_volume_m3
     def "Controls" (prepend references = @lunco://vessels/control_profiles.usda@</RoverControls>) {
         def "thrust" { uniform string lunco:port = "thrust_z" uniform double lunco:factor = 1 }
-        def "release" { uniform string lunco:port = "thrust_z" uniform double lunco:factor = -1 }
+        def "auxiliary_1" { uniform string lunco:port = "lift_fl" uniform double lunco:factor = 1 }
+        def "auxiliary_2" { uniform string lunco:port = "lift_fr" uniform double lunco:factor = 1 }
+        def "auxiliary_3" { uniform string lunco:port = "lift_rl" uniform double lunco:factor = 1 }
+        def "auxiliary_4" { uniform string lunco:port = "lift_rr" uniform double lunco:factor = 1 }
         def "yaw_left" { uniform string lunco:port = "thrust_x" uniform double lunco:factor = -1 }
         def "yaw_right" { uniform string lunco:port = "thrust_x" uniform double lunco:factor = 1 }
         def "speed_boost" { uniform string lunco:port = "thrust_y" uniform double lunco:factor = 1 }
@@ -127,7 +153,88 @@ def Xform "Roadster" (
         float focalLength = 24
         float2 clippingRange = (0.05,10000)
     }
-    def Xform "Body" (prepend references = @../components/body.usda@</Body>) {}
+    def Xform "Body" (prepend references = @../components/body.usda@</Body>) {
+        over "Fan0" { float inputs:angle.connect = </Roadster.outputs:fan_angle_left> float inputs:rpm.connect = </Roadster.outputs:fan_rpm> }
+        over "Fan1" { float inputs:angle.connect = </Roadster.outputs:fan_angle_right> float inputs:rpm.connect = </Roadster.outputs:fan_rpm> }
+        over "Fan2" { float inputs:angle.connect = </Roadster.outputs:fan_angle_left> float inputs:rpm.connect = </Roadster.outputs:fan_rpm> }
+        over "Fan3" { float inputs:angle.connect = </Roadster.outputs:fan_angle_right> float inputs:rpm.connect = </Roadster.outputs:fan_rpm> }
+    }
+    def SphereLight "HeadlampL" (prepend apiSchemas = ["ShapingAPI", "ShadowAPI", "LunCoLightAPI"]) {
+        double3 xformOp:translate = (-0.7,0.065,-2.27)
+        double3 xformOp:rotateXYZ = (-2,0,0)
+        uniform token[] xformOpOrder = ["xformOp:translate","xformOp:rotateXYZ"]
+        float inputs:intensity = 133000
+        float inputs:light_intensity.connect = </Roadster.outputs:headlight_intensity_lm>
+        bool inputs:normalize = true
+        float inputs:radius = 0.045
+        color3f inputs:color = (0.9,0.95,1)
+        float inputs:shaping:cone:angle = 22
+        float inputs:shaping:cone:softness = 0.35
+        bool inputs:shadow:enable = true
+        float lunco:light:range = 120
+    }
+    def SphereLight "HeadlampR" (prepend apiSchemas = ["ShapingAPI", "ShadowAPI", "LunCoLightAPI"]) {
+        double3 xformOp:translate = (0.7,0.065,-2.27)
+        double3 xformOp:rotateXYZ = (-2,0,0)
+        uniform token[] xformOpOrder = ["xformOp:translate","xformOp:rotateXYZ"]
+        float inputs:intensity = 133000
+        float inputs:light_intensity.connect = </Roadster.outputs:headlight_intensity_lm>
+        bool inputs:normalize = true
+        float inputs:radius = 0.045
+        color3f inputs:color = (0.9,0.95,1)
+        float inputs:shaping:cone:angle = 22
+        float inputs:shaping:cone:softness = 0.35
+        bool inputs:shadow:enable = true
+        float lunco:light:range = 120
+    }
+    def Xform "Seal0" (prepend references = @lunco://vessels/sensors/altimeter.usda@</Altimeter>) {
+        double3 xformOp:translate = (-0.6,-.3,-1.1)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float lunco:raycast:maxDistance = 1.0
+        over "Model" (active = false) {}
+        over "Beam" (active = false) {}
+    }
+    float inputs:surface_gap_0.connect = </Roadster/Seal0.outputs:ray_distance>
+    float inputs:surface_valid_0.connect = </Roadster/Seal0.outputs:ray_hit_valid>
+    float inputs:surface_nx_0.connect = </Roadster/Seal0.outputs:ray_hit_normal_x>
+    float inputs:surface_ny_0.connect = </Roadster/Seal0.outputs:ray_hit_normal_y>
+    float inputs:surface_nz_0.connect = </Roadster/Seal0.outputs:ray_hit_normal_z>
+    def Xform "Seal1" (prepend references = @lunco://vessels/sensors/altimeter.usda@</Altimeter>) {
+        double3 xformOp:translate = (-0.6,-.3,1.1)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float lunco:raycast:maxDistance = 1.0
+        over "Model" (active = false) {}
+        over "Beam" (active = false) {}
+    }
+    float inputs:surface_gap_1.connect = </Roadster/Seal1.outputs:ray_distance>
+    float inputs:surface_valid_1.connect = </Roadster/Seal1.outputs:ray_hit_valid>
+    float inputs:surface_nx_1.connect = </Roadster/Seal1.outputs:ray_hit_normal_x>
+    float inputs:surface_ny_1.connect = </Roadster/Seal1.outputs:ray_hit_normal_y>
+    float inputs:surface_nz_1.connect = </Roadster/Seal1.outputs:ray_hit_normal_z>
+    def Xform "Seal2" (prepend references = @lunco://vessels/sensors/altimeter.usda@</Altimeter>) {
+        double3 xformOp:translate = (0.6,-.3,-1.1)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float lunco:raycast:maxDistance = 1.0
+        over "Model" (active = false) {}
+        over "Beam" (active = false) {}
+    }
+    float inputs:surface_gap_2.connect = </Roadster/Seal2.outputs:ray_distance>
+    float inputs:surface_valid_2.connect = </Roadster/Seal2.outputs:ray_hit_valid>
+    float inputs:surface_nx_2.connect = </Roadster/Seal2.outputs:ray_hit_normal_x>
+    float inputs:surface_ny_2.connect = </Roadster/Seal2.outputs:ray_hit_normal_y>
+    float inputs:surface_nz_2.connect = </Roadster/Seal2.outputs:ray_hit_normal_z>
+    def Xform "Seal3" (prepend references = @lunco://vessels/sensors/altimeter.usda@</Altimeter>) {
+        double3 xformOp:translate = (0.6,-.3,1.1)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float lunco:raycast:maxDistance = 1.0
+        over "Model" (active = false) {}
+        over "Beam" (active = false) {}
+    }
+    float inputs:surface_gap_3.connect = </Roadster/Seal3.outputs:ray_distance>
+    float inputs:surface_valid_3.connect = </Roadster/Seal3.outputs:ray_hit_valid>
+    float inputs:surface_nx_3.connect = </Roadster/Seal3.outputs:ray_hit_normal_x>
+    float inputs:surface_ny_3.connect = </Roadster/Seal3.outputs:ray_hit_normal_y>
+    float inputs:surface_nz_3.connect = </Roadster/Seal3.outputs:ray_hit_normal_z>
     float outputs:torque_left
     float outputs:torque_right
     float outputs:freewheel_torque
@@ -151,6 +258,90 @@ def Xform "Roadster" (
     float outputs:yaw_force_kn
     float outputs:suction_force_kn
     float outputs:air_discharge_enabled
+    float outputs:fan_angle_left
+    float outputs:fan_angle_right
+    float outputs:fan_rpm
+    float outputs:fan_pressure_pa
+    float outputs:fan_power_w
+    float outputs:fan_seal
+    float outputs:wall_friction_margin_n
+    float outputs:jet_lift_0
+    float outputs:jet_lift_1
+    float outputs:jet_lift_2
+    float outputs:jet_lift_3
+    float outputs:jet_rear_each_n
+    float outputs:lift_fl_kn
+    float outputs:lift_fr_kn
+    float outputs:lift_rl_kn
+    float outputs:lift_rr_kn
+    float outputs:recovered_power_w
+    float outputs:steer_left_degrees
+    float outputs:steer_right_degrees
+    float outputs:headlight_intensity_lm
+    float outputs:headlight_power_w
+    float outputs:headlight_peak_candela
+    float outputs:skill_course_active
+    float outputs:course_stage
+    float outputs:course_blocks
+    float outputs:course_time_s
+    float outputs:course_air_rotation_degrees
+    float outputs:target_distance_m
+    float outputs:launch_gate
+    float outputs:refill_zone
+    float outputs:refill_ready
+    float outputs:jump_clearance
+    float outputs:climb_gate
+    float outputs:landing_gate
+    float outputs:instant_services
+    float outputs:instant_air_added_kg
+    float outputs:next_mass_offset
+    float outputs:next_temperature_offset
+    float outputs:next_wall_temperature_offset
+    float outputs:next_refill_count
+    float outputs:next_mechanical_energy_j
+    float outputs:next_stored_energy_j
+    float outputs:refill_target_k
+    float outputs:refill_target_pressure_pa
+    float outputs:up_alignment
+    float outputs:refill_momentum_force_n
+    float outputs:refill_loading_power_w
+    float outputs:thermal_guard_active
+    float outputs:tank_wall_temperature_k
+    float outputs:tank_heat_flow_w
+    float outputs:aerodynamic_drag_kn
+    float outputs:aerodynamic_downforce_kn
+    float outputs:aerodynamic_power_kw
+    float outputs:wing_deployment_percent
+    float outputs:steering_limit_degrees
+    float outputs:fan_requested
+    float outputs:fan_vacuum_kpa
+    float outputs:fan_power_kw
+    float outputs:flight_control_weight
+    float outputs:pitch_rate_deg_s
+    float outputs:roll_rate_deg_s
+    float outputs:yaw_rate_deg_s
+    float outputs:air_fill_percent
+    float outputs:refill_allowed
+    float outputs:refill_active
+    float outputs:refill_complete
+    float outputs:refill_finished
+    float outputs:refill_flow_kg_s
+    float outputs:service_power_w
+    float outputs:service_power_mw
+    float outputs:service_air_used_kg
+    float outputs:service_energy_j
+    float outputs:plume_rear_radius_start
+    float outputs:plume_rear_radius_expanded
+    float outputs:plume_rear_expansion_length
+    float outputs:plume_rear_mixing_length
+    float outputs:plume_rear_radius_end
+    float outputs:plume_rear_exit_velocity
+    float outputs:plume_side_radius_start
+    float outputs:plume_side_radius_expanded
+    float outputs:plume_side_expansion_length
+    float outputs:plume_side_mixing_length
+    float outputs:plume_side_radius_end
+    float outputs:plume_side_exit_velocity
     def Cylinder "Wheel_FL" (
         prepend apiSchemas = ["PhysxVehicleWheelAttachmentAPI", "PhysxVehicleWheelAPI"]
         prepend references = [@lunco://components/mobility/wheel.usda@</Wheel>, @lunco://components/mobility/suspensions/standard.usda@</Suspension>]
@@ -169,8 +360,8 @@ def Xform "Roadster" (
         float physxVehicleWheel:maxBrakeTorque = 4000
         int physxVehicleWheelAttachment:index = 0
         float lunco:suspension:restLength = 0.43
-        float physxVehicleSuspension:springStrength = 100000
-        float physxVehicleSuspension:springDamperRate = 8000
+        float physxVehicleSuspension:springStrength = 300000 (customData = { double max = 1000000 })
+        float physxVehicleSuspension:springDamperRate = 14000
         float inputs:drive.connect = </Roadster.outputs:freewheel_torque>
         float inputs:heading.connect = </Roadster.outputs:heading_fl>
         variantSet "tire" = { "road" (prepend references = @../components/road_tire.usda@</RoadTire>) {} }
@@ -196,8 +387,8 @@ def Xform "Roadster" (
         float physxVehicleWheel:maxBrakeTorque = 4000
         int physxVehicleWheelAttachment:index = 1
         float lunco:suspension:restLength = 0.43
-        float physxVehicleSuspension:springStrength = 100000
-        float physxVehicleSuspension:springDamperRate = 8000
+        float physxVehicleSuspension:springStrength = 300000 (customData = { double max = 1000000 })
+        float physxVehicleSuspension:springDamperRate = 14000
         float inputs:drive.connect = </Roadster.outputs:freewheel_torque>
         float inputs:heading.connect = </Roadster.outputs:heading_fr>
         variantSet "tire" = { "road" (prepend references = @../components/road_tire.usda@</RoadTire>) {} }
@@ -223,8 +414,8 @@ def Xform "Roadster" (
         float physxVehicleWheel:maxBrakeTorque = 4000
         int physxVehicleWheelAttachment:index = 2
         float lunco:suspension:restLength = 0.43
-        float physxVehicleSuspension:springStrength = 100000
-        float physxVehicleSuspension:springDamperRate = 8000
+        float physxVehicleSuspension:springStrength = 300000 (customData = { double max = 1000000 })
+        float physxVehicleSuspension:springDamperRate = 14000
         float inputs:drive.connect = </Roadster.outputs:torque_left>
         float inputs:heading = 0
         variantSet "tire" = { "road" (prepend references = @../components/road_tire.usda@</RoadTire>) {} }
@@ -250,14 +441,20 @@ def Xform "Roadster" (
         float physxVehicleWheel:maxBrakeTorque = 4000
         int physxVehicleWheelAttachment:index = 3
         float lunco:suspension:restLength = 0.43
-        float physxVehicleSuspension:springStrength = 100000
-        float physxVehicleSuspension:springDamperRate = 8000
+        float physxVehicleSuspension:springStrength = 300000 (customData = { double max = 1000000 })
+        float physxVehicleSuspension:springDamperRate = 14000
         float inputs:drive.connect = </Roadster.outputs:torque_right>
         float inputs:heading = 0
         variantSet "tire" = { "road" (prepend references = @../components/road_tire.usda@</RoadTire>) {} }
         over "SuspensionCasing" { token visibility = "invisible" }
         over "SuspensionPiston" { token visibility = "invisible" }
         over "SuspensionSpring" { token visibility = "invisible" }
+    }
+
+    def LunCoEvent "AirRefilled" {
+        uniform token lunco:event:name = "roadster_air_refilled"
+        uniform bool lunco:event:latched = false
+        float inputs:trigger.connect = </Roadster.outputs:refill_finished>
     }
     variantSet "trim" = {
         "Performance" {
@@ -269,10 +466,38 @@ def Xform "Roadster" (
             float inputs:boost_available = 1
             float inputs:gas_capacity_kg = 250
             def Xform "RearThrusters" (prepend references = @../components/RearThrusters.usda@</RearThrusters>) {
-                over "Jet0" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
-                over "Jet1" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
-                over "Jet2" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
-                over "Jet3" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+                over "Jet0" { float inputs:force.connect = </Roadster.outputs:jet_rear_each_n>
+                    float inputs:radius_start.connect = </Roadster.outputs:plume_rear_radius_start>
+                    float inputs:radius_expanded.connect = </Roadster.outputs:plume_rear_radius_expanded>
+                    float inputs:expansion_length.connect = </Roadster.outputs:plume_rear_expansion_length>
+                    float inputs:mixing_length.connect = </Roadster.outputs:plume_rear_mixing_length>
+                    float inputs:radius_end.connect = </Roadster.outputs:plume_rear_radius_end>
+                    float inputs:exit_velocity.connect = </Roadster.outputs:plume_rear_exit_velocity>
+                }
+                over "Jet1" { float inputs:force.connect = </Roadster.outputs:jet_rear_each_n>
+                    float inputs:radius_start.connect = </Roadster.outputs:plume_rear_radius_start>
+                    float inputs:radius_expanded.connect = </Roadster.outputs:plume_rear_radius_expanded>
+                    float inputs:expansion_length.connect = </Roadster.outputs:plume_rear_expansion_length>
+                    float inputs:mixing_length.connect = </Roadster.outputs:plume_rear_mixing_length>
+                    float inputs:radius_end.connect = </Roadster.outputs:plume_rear_radius_end>
+                    float inputs:exit_velocity.connect = </Roadster.outputs:plume_rear_exit_velocity>
+                }
+                over "Jet2" { float inputs:force.connect = </Roadster.outputs:jet_rear_each_n>
+                    float inputs:radius_start.connect = </Roadster.outputs:plume_rear_radius_start>
+                    float inputs:radius_expanded.connect = </Roadster.outputs:plume_rear_radius_expanded>
+                    float inputs:expansion_length.connect = </Roadster.outputs:plume_rear_expansion_length>
+                    float inputs:mixing_length.connect = </Roadster.outputs:plume_rear_mixing_length>
+                    float inputs:radius_end.connect = </Roadster.outputs:plume_rear_radius_end>
+                    float inputs:exit_velocity.connect = </Roadster.outputs:plume_rear_exit_velocity>
+                }
+                over "Jet3" { float inputs:force.connect = </Roadster.outputs:jet_rear_each_n>
+                    float inputs:radius_start.connect = </Roadster.outputs:plume_rear_radius_start>
+                    float inputs:radius_expanded.connect = </Roadster.outputs:plume_rear_radius_expanded>
+                    float inputs:expansion_length.connect = </Roadster.outputs:plume_rear_expansion_length>
+                    float inputs:mixing_length.connect = </Roadster.outputs:plume_rear_mixing_length>
+                    float inputs:radius_end.connect = </Roadster.outputs:plume_rear_radius_end>
+                    float inputs:exit_velocity.connect = </Roadster.outputs:plume_rear_exit_velocity>
+                }
             }
         }
         "Rocket" {
@@ -281,18 +506,88 @@ def Xform "Roadster" (
             float inputs:gas_capacity_kg = 250
             over "Body" { over "PassengerSeat" { token visibility = "invisible" } }
             def Xform "RearThrusters" (prepend references = @../components/RearThrusters.usda@</RearThrusters>) {
-                over "Jet0" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
-                over "Jet1" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
-                over "Jet2" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
-                over "Jet3" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+                over "Jet0" { float inputs:force.connect = </Roadster.outputs:jet_rear_each_n>
+                    float inputs:radius_start.connect = </Roadster.outputs:plume_rear_radius_start>
+                    float inputs:radius_expanded.connect = </Roadster.outputs:plume_rear_radius_expanded>
+                    float inputs:expansion_length.connect = </Roadster.outputs:plume_rear_expansion_length>
+                    float inputs:mixing_length.connect = </Roadster.outputs:plume_rear_mixing_length>
+                    float inputs:radius_end.connect = </Roadster.outputs:plume_rear_radius_end>
+                    float inputs:exit_velocity.connect = </Roadster.outputs:plume_rear_exit_velocity>
+                }
+                over "Jet1" { float inputs:force.connect = </Roadster.outputs:jet_rear_each_n>
+                    float inputs:radius_start.connect = </Roadster.outputs:plume_rear_radius_start>
+                    float inputs:radius_expanded.connect = </Roadster.outputs:plume_rear_radius_expanded>
+                    float inputs:expansion_length.connect = </Roadster.outputs:plume_rear_expansion_length>
+                    float inputs:mixing_length.connect = </Roadster.outputs:plume_rear_mixing_length>
+                    float inputs:radius_end.connect = </Roadster.outputs:plume_rear_radius_end>
+                    float inputs:exit_velocity.connect = </Roadster.outputs:plume_rear_exit_velocity>
+                }
+                over "Jet2" { float inputs:force.connect = </Roadster.outputs:jet_rear_each_n>
+                    float inputs:radius_start.connect = </Roadster.outputs:plume_rear_radius_start>
+                    float inputs:radius_expanded.connect = </Roadster.outputs:plume_rear_radius_expanded>
+                    float inputs:expansion_length.connect = </Roadster.outputs:plume_rear_expansion_length>
+                    float inputs:mixing_length.connect = </Roadster.outputs:plume_rear_mixing_length>
+                    float inputs:radius_end.connect = </Roadster.outputs:plume_rear_radius_end>
+                    float inputs:exit_velocity.connect = </Roadster.outputs:plume_rear_exit_velocity>
+                }
+                over "Jet3" { float inputs:force.connect = </Roadster.outputs:jet_rear_each_n>
+                    float inputs:radius_start.connect = </Roadster.outputs:plume_rear_radius_start>
+                    float inputs:radius_expanded.connect = </Roadster.outputs:plume_rear_radius_expanded>
+                    float inputs:expansion_length.connect = </Roadster.outputs:plume_rear_expansion_length>
+                    float inputs:mixing_length.connect = </Roadster.outputs:plume_rear_mixing_length>
+                    float inputs:radius_end.connect = </Roadster.outputs:plume_rear_radius_end>
+                    float inputs:exit_velocity.connect = </Roadster.outputs:plume_rear_exit_velocity>
+                }
             }
             def Xform "PerimeterThrusters" (prepend references = @../components/PerimeterThrusters.usda@</PerimeterThrusters>) {
-                over "Jet0" { float inputs:force.connect = </Roadster.outputs:jet_force_y> }
-                over "Jet1" { float inputs:force.connect = </Roadster.outputs:jet_force_y> }
-                over "Jet2" { float inputs:force.connect = </Roadster.outputs:jet_force_y> }
-                over "Jet3" { float inputs:force.connect = </Roadster.outputs:jet_force_y> }
-                over "Jet4" { float inputs:force.connect = </Roadster.outputs:jet_force_x> }
-                over "Jet5" { float inputs:force.connect = </Roadster.outputs:jet_force_x> }
+                over "Jet0" { float inputs:force.connect = </Roadster.outputs:jet_lift_0>
+                    float inputs:radius_start.connect = </Roadster.outputs:plume_rear_radius_start>
+                    float inputs:radius_expanded.connect = </Roadster.outputs:plume_rear_radius_expanded>
+                    float inputs:expansion_length.connect = </Roadster.outputs:plume_rear_expansion_length>
+                    float inputs:mixing_length.connect = </Roadster.outputs:plume_rear_mixing_length>
+                    float inputs:radius_end.connect = </Roadster.outputs:plume_rear_radius_end>
+                    float inputs:exit_velocity.connect = </Roadster.outputs:plume_rear_exit_velocity>
+                }
+                over "Jet1" { float inputs:force.connect = </Roadster.outputs:jet_lift_1>
+                    float inputs:radius_start.connect = </Roadster.outputs:plume_rear_radius_start>
+                    float inputs:radius_expanded.connect = </Roadster.outputs:plume_rear_radius_expanded>
+                    float inputs:expansion_length.connect = </Roadster.outputs:plume_rear_expansion_length>
+                    float inputs:mixing_length.connect = </Roadster.outputs:plume_rear_mixing_length>
+                    float inputs:radius_end.connect = </Roadster.outputs:plume_rear_radius_end>
+                    float inputs:exit_velocity.connect = </Roadster.outputs:plume_rear_exit_velocity>
+                }
+                over "Jet2" { float inputs:force.connect = </Roadster.outputs:jet_lift_2>
+                    float inputs:radius_start.connect = </Roadster.outputs:plume_rear_radius_start>
+                    float inputs:radius_expanded.connect = </Roadster.outputs:plume_rear_radius_expanded>
+                    float inputs:expansion_length.connect = </Roadster.outputs:plume_rear_expansion_length>
+                    float inputs:mixing_length.connect = </Roadster.outputs:plume_rear_mixing_length>
+                    float inputs:radius_end.connect = </Roadster.outputs:plume_rear_radius_end>
+                    float inputs:exit_velocity.connect = </Roadster.outputs:plume_rear_exit_velocity>
+                }
+                over "Jet3" { float inputs:force.connect = </Roadster.outputs:jet_lift_3>
+                    float inputs:radius_start.connect = </Roadster.outputs:plume_rear_radius_start>
+                    float inputs:radius_expanded.connect = </Roadster.outputs:plume_rear_radius_expanded>
+                    float inputs:expansion_length.connect = </Roadster.outputs:plume_rear_expansion_length>
+                    float inputs:mixing_length.connect = </Roadster.outputs:plume_rear_mixing_length>
+                    float inputs:radius_end.connect = </Roadster.outputs:plume_rear_radius_end>
+                    float inputs:exit_velocity.connect = </Roadster.outputs:plume_rear_exit_velocity>
+                }
+                over "Jet4" { float inputs:force.connect = </Roadster.outputs:jet_force_x>
+                    float inputs:radius_start.connect = </Roadster.outputs:plume_side_radius_start>
+                    float inputs:radius_expanded.connect = </Roadster.outputs:plume_side_radius_expanded>
+                    float inputs:expansion_length.connect = </Roadster.outputs:plume_side_expansion_length>
+                    float inputs:mixing_length.connect = </Roadster.outputs:plume_side_mixing_length>
+                    float inputs:radius_end.connect = </Roadster.outputs:plume_side_radius_end>
+                    float inputs:exit_velocity.connect = </Roadster.outputs:plume_side_exit_velocity>
+                }
+                over "Jet5" { float inputs:force.connect = </Roadster.outputs:jet_force_x>
+                    float inputs:radius_start.connect = </Roadster.outputs:plume_side_radius_start>
+                    float inputs:radius_expanded.connect = </Roadster.outputs:plume_side_radius_expanded>
+                    float inputs:expansion_length.connect = </Roadster.outputs:plume_side_expansion_length>
+                    float inputs:mixing_length.connect = </Roadster.outputs:plume_side_mixing_length>
+                    float inputs:radius_end.connect = </Roadster.outputs:plume_side_radius_end>
+                    float inputs:exit_velocity.connect = </Roadster.outputs:plume_side_exit_velocity>
+                }
             }
         }
     }

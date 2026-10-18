@@ -13,12 +13,24 @@ def Xform "World" (kind = "assembly") {
     def DistantLight "Sun" (prepend references = @lunco://lighting/sun.usda@</Sun>) {
         float inputs:intensity = 128000
         color3f inputs:color = (1,0.95,0.87)
-        double3 xformOp:rotateXYZ = (-42,135,0)
+        double3 xformOp:rotateXYZ = (-50,-35,0)
         uniform token[] xformOpOrder = ["xformOp:rotateXYZ"]
     }
     def DomeLight "Fill" {
         float inputs:intensity = 700
         color3f inputs:color = (0.55,0.68,0.85)
+    }
+    def Xform "EarthSky" (prepend apiSchemas = ["LunCoProceduralSkyAPI","MaterialBindingAPI"]) {
+        rel material:binding = </World/EarthSky/Look>
+        def Material "Look" {
+            token outputs:surface.connect = </World/EarthSky/Look/Shader.outputs:surface>
+            def Shader "Shader" {
+                uniform token info:implementationSource = "sourceAsset"
+                asset info:wgsl:sourceAsset = @../shaders/earth_sky.wgsl@
+                float inputs:brightness = 1
+                token outputs:surface
+            }
+        }
     }
     def Material "AsphaltContact" (prepend apiSchemas = ["PhysicsMaterialAPI"]) {
         float physics:staticFriction = 1.4
@@ -460,7 +472,7 @@ def Cube "Marker41"
         double3 xformOp:translate = (4.8,2.4,6.5)
         double3 lunco:cameraLookAt = (0,0.65,0)
         uniform token[] xformOpOrder = ["xformOp:translate"]
-        float focalLength = 40
+        float focalLength = 16
         float2 clippingRange = (0.05,10000)
         def "Controls" (prepend references = @lunco://vessels/control_profiles.usda@</AvatarControls>) {}
     }

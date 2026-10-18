@@ -6,7 +6,7 @@ def ports(entity,names): return q("ReadPorts",dict(api_id=entity,port_names=name
 from pathlib import Path
 import time,json
 root=Path(__file__).resolve().parents[1]
-def key(k,s): q('InjectWindowInput',{'event':{'Key':dict(key='Key'+k,state=s,text=None,repeat=False)}})
+def key(k,s): q('InjectWindowInput',{'event':{'Key':dict(key=('Key'+k if len(k)==1 else k),state=s,text=None,repeat=False)}})
 def fresh():
  old=q('RunRhai',{'code':'twin_name()'})['stdout'];q('OpenTwin',{'path':str(root)})
  for i in range(100):
@@ -18,7 +18,7 @@ def fresh():
  raise RuntimeError('Fresh scene unavailable')
 def main():
     results=[]
-    for k,group,idx,port in [('I','RearThrusters',0,'jet_force_z'),('J','PerimeterThrusters',5,'jet_force_x'),('L','PerimeterThrusters',4,'jet_force_x'),('U','PerimeterThrusters',0,'jet_force_y')]:
+    for k,group,idx,port in [('Space','RearThrusters',0,'jet_force_z'),('J','PerimeterThrusters',5,'jet_force_x'),('L','PerimeterThrusters',4,'jet_force_x'),('K','PerimeterThrusters',0,'jet_lift_0')]:
      car=fresh();time.sleep(.3)
      jet=find('/World/Roadster/'+group+'/Jet'+str(idx))
      key(k,'Pressed');time.sleep(.10)
@@ -26,7 +26,7 @@ def main():
      sink=ports(jet,['force'])
      (root/f'results/jet-{k}-0.png').write_bytes(q('CaptureScreenshot'))
      time.sleep(.1)
-     if k=='I': (root/'results/jet-I-1.png').write_bytes(q('CaptureScreenshot'))
+     if k=='Space': (root/'results/jet-Space-1.png').write_bytes(q('CaptureScreenshot'))
      key(k,'Released');time.sleep(.3)
      released=ports(jet,['force'])
      results.append(dict(key=k,delivered=held,render_sink=sink,released_sink=released))

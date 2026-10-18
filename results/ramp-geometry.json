@@ -1,0 +1,11 @@
+{
+  "width_m": 14,
+  "transition_arc_length_m": 50,
+  "vertical_extension_m": 10,
+  "height_m": 64.46293199539446,
+  "wall_z_m": -68.05143688800142,
+  "mesh_samples": 541,
+  "thickness_m": 0.6,
+  "authoring": "ApplyUsdOps + SaveDocument",
+  "reference": "User supplied stunt-ramp image; study dimensions, not measured replica"
+}

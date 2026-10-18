@@ -26,10 +26,11 @@ fi
 if [[ -z "${LUNCO_ASSET_ROOT:-}" && -d "$roadster_checkout/assets" ]]; then
     export LUNCO_ASSET_ROOT="$roadster_checkout/assets"
 fi
-roadster_scene="${1:-roadster_rocket}"
+export LUNCO_ASSET_ROOT="$(python3 "$roadster_root/scripts/prepare_runtime_assets.py")"
+roadster_scene="${1:-roadster_skill_course}"
 if (($#)); then shift; fi
 case "$roadster_scene" in
-    roadster_track|roadster_thrust|roadster_rocket|roadster_launch|roadster_motor_launch) ;;
-    *) echo 'Scene must be roadster_track, roadster_thrust, roadster_rocket, roadster_launch or roadster_motor_launch.' >&2; exit 1 ;;
+    roadster_track|roadster_thrust|roadster_rocket|roadster_launch|roadster_motor_launch|roadster_wall|roadster_wall_check|roadster_coast_check|roadster_ramp|roadster_skill_course|roadster_ramp_check|roadster_refill_check|roadster_earth_check) ;;
+    *) echo 'Scene must be roadster_track, roadster_thrust, roadster_rocket, roadster_launch roadster_motor_launch, roadster_wall or roadster_wall_check.' >&2; exit 1 ;;
 esac
 exec "$roadster_bin" --no-vsync --no-throttle --scene "$roadster_root/scenes/$roadster_scene.usda" "$@"

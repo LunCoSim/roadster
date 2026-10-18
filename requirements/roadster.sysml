@@ -28,18 +28,45 @@ package Roadster {
         in attribute thrustX : Real;
         in attribute thrustY : Real;
         in attribute thrustZ : Real;
+        in attribute liftFrontLeft : Real;
+        in attribute liftFrontRight : Real;
+        in attribute liftRearLeft : Real;
+        in attribute liftRearRight : Real;
+        in attribute refill : Real;
+        in attribute refillTemperatureK : Real;
     }
     part def Battery { port supply : ElectricalPort; }
     part def DriveUnit { port supply : ~ElectricalPort; port axle : TorquePort; }
     part def Wheel { port hub : ~TorquePort; }
     part def Body;
-    part def FanSystem;
+    part def FanSystem {
+        doc /* Four rear extractors evacuate a skirted plenum. Count and position follow S10; pressure, area, power and performance maps are study assumptions. */
+        attribute extractorCount : Integer = 4;
+        attribute studyPlenumAreaM2 : Real = 2.0;
+        attribute studyPressureDropPa : Real = 20000;
+        attribute studyElectricalLimitW : Real = 80000;
+    }
     part def ActiveAerodynamics;
     part def ColdGasSystem {
         doc /* Study dry-air tank using a reusable real-gas EOS, adiabatic energy balance, compressible nozzle closure and finite valve response. Rear boost, corner lift and front side/yaw commands share one 250 kg starting reservoir. Parameters and validity limits are recorded in references/dynamics.md. */
     }
-    part def ThermalSystem;
+    part def ThermalSystem {
+        doc /* Finite Modelica tank-wall heat storage and passive exchange; editable initial/refill temperature. No assertion of Tesla's undisclosed cold-gas heating design. */
+    }
     part def DriverStation;
+    part def GameRefillWaypoint {
+        doc /* Explicit game service boundary. Modelica computes immediate inventory/thermal ledger adjustments, native mass/inertia and EOS pressure. Co-moving supply preserves velocity and accounts external mechanical/stored energy exchange. Not a real instantaneous refill mechanism. */
+        attribute targetAirMass : MassValue = 250[kg];
+    }
+    part def SkillTrack {
+        doc /* Native Earth contact geometry; measured launch speed, three airborne block crossings, fan-sealed upper ramp and a manual aerial turn ending upright on four wheel contacts. Pause freezes course simulation time. */
+        part firstRefill : GameRefillWaypoint;
+        part secondRefill : GameRefillWaypoint;
+        attribute jumpBlockCount : Integer = 3;
+        attribute rampWidth : LengthValue = 14[m];
+        attribute studyRampHeight : LengthValue = 64.46[m];
+    }
+    part skillTrack : SkillTrack;
 
     part def RoadsterVehicle {
         doc /* October 2026 study architecture. Runtime geometry and physics are owned by USD; equations by Modelica. Assumed geometry and drivetrain topology are documented in references/assumptions.md. */
@@ -109,7 +136,7 @@ package Roadster {
     constraint def SubsecondLaunch {
         in elapsedS : Real;
         in reachedSpeedMps : Real;
-        elapsedS > 0.0 and elapsedS < 1.0 and reachedSpeedMps >= 26.8224;
+        elapsedS > 0.0 and elapsedS <= 0.59 and reachedSpeedMps >= 26.8224;
     }
 
     requirement def Seating {
@@ -137,7 +164,7 @@ package Roadster {
         require FiniteImpulse;
     }
     requirement def ThrustAcceleration {
-        doc /* The Thrust variant shall accelerate from rest to 60 mph in less than one second. Source S01 manufacturer claim. The study records standing-start timing without rollout subtraction on its level dry track. Verification: sampled physical body velocity. */
+        doc /* The gas-assisted study runner shall accelerate from rest to 60 mph in no more than 0.59 seconds. Source: user-selected study acceptance target; this is stricter than the Thrust manufacturer claim. The study records standing-start timing without rollout subtraction on its level dry track. Verification: sampled physical body velocity. */
         require SubsecondLaunch;
     }
     requirement <'RR-001'> seating : Seating { subject vehicle : ThrustVehicle; }
