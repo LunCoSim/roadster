@@ -21,7 +21,10 @@ model RoadsterPowertrain
   parameter Real initial_gas_temperature(unit="K") = 293.15;
   parameter Real gas_constant = CompressedAir.R;
   parameter Real initial_gas_mass = gas_capacity_kg*initial_fill;
-  parameter Real tank_volume(unit="m3") = 0.6 "Study total volume; independently sourced, not inferred from gas mass";
+  parameter Real rear_tank_volume(unit="m3") = 0.2 "S05 rear COPV internal volume";
+  parameter Real cabin_tank_volume(unit="m3") = 0.4 "S05 Rocket COPV replacing passenger seat";
+  parameter Real tank_volume(unit="m3") = rear_tank_volume+cabin_tank_volume
+    "Common-pressure, common-temperature manifold approximation";
   parameter Real initial_pressure = CompressedAir.pressureFromDensity(initial_gas_mass/tank_volume,initial_gas_temperature);
   parameter Real gamma = 1.4;
   parameter Real minimum_discharge_temperature(unit="K") = 200 "Model guard, not a Tesla hardware threshold";
@@ -177,6 +180,8 @@ model RoadsterPowertrain
   output Real downforce(unit="N");
   output Real vehicle_mass_kg(unit="kg");
   output Real tank_temperature_k(unit="K");
+  output Real rear_tank_air_kg(unit="kg");
+  output Real cabin_tank_air_kg(unit="kg");
   output Real tank_volume_m3(unit="m3");
 equation
   // Explicit GAME service boundary jumps, prescribed through ordinary inputs.
@@ -272,6 +277,9 @@ equation
   vehicle_mass_kg = dry_mass_kg+boost_available*gas_mass_kg;
   tank_temperature_k = gas_temperature;
   tank_volume_m3 = tank_volume;
+  // At the assumed shared rho/T, masses partition by internal volume.
+  rear_tank_air_kg = gas_mass_kg*rear_tank_volume/tank_volume;
+  cabin_tank_air_kg = gas_mass_kg*cabin_tank_volume/tank_volume;
   gas_density = gas_mass_kg/tank_volume;
   raw_pressure = air.pressure;
   pressure_temperature_derivative = air.dpdT;

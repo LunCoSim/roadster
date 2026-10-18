@@ -37,6 +37,8 @@ def Xform "Roadster" (
     float inputs:thrust_y = 0
     float inputs:thrust_z = 0
     float inputs:refill_target_temperature_k = 293.15 (customData = { double min = 253.15 double max = 333.15 })
+    float inputs:rear_tank_volume = 0.2
+    float inputs:cabin_tank_volume = 0.4
     float inputs:initial_gas_temperature = 293.15
     float inputs:keyboard_steering_assistance = 1
     float inputs:course_enabled = 0
@@ -312,6 +314,8 @@ def Xform "Roadster" (
     float outputs:aerodynamic_power_kw
     float outputs:wing_deployment_percent
     float outputs:steering_limit_degrees
+    float outputs:rear_tank_air_kg
+    float outputs:cabin_tank_air_kg
     float outputs:fan_requested
     float outputs:fan_vacuum_kpa
     float outputs:fan_power_kw

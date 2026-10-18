@@ -275,6 +275,8 @@ def vehicle():
     float inputs:thrust_y = 0
     float inputs:thrust_z = 0
     float inputs:refill_target_temperature_k = 293.15 (customData = { double min = 253.15 double max = 333.15 })
+    float inputs:rear_tank_volume = 0.2
+    float inputs:cabin_tank_volume = 0.4
     float inputs:initial_gas_temperature = 293.15
     float inputs:keyboard_steering_assistance = 1
     float inputs:course_enabled = 0
@@ -432,6 +434,7 @@ def vehicle():
     outputs += ['refill_target_k','refill_target_pressure_pa','up_alignment','refill_momentum_force_n','refill_loading_power_w']
     outputs += ['thermal_guard_active','tank_wall_temperature_k','tank_heat_flow_w']
     outputs += ['aerodynamic_drag_kn','aerodynamic_downforce_kn','aerodynamic_power_kw','wing_deployment_percent','steering_limit_degrees']
+    outputs += ['rear_tank_air_kg','cabin_tank_air_kg']
     outputs += ['fan_requested','fan_vacuum_kpa','fan_power_kw']
     outputs += ['flight_control_weight','pitch_rate_deg_s','roll_rate_deg_s','yaw_rate_deg_s']
     outputs += ['air_fill_percent', 'refill_allowed', 'refill_active', 'refill_complete','refill_finished', 'refill_flow_kg_s', 'service_power_w', 'service_power_mw', 'service_air_used_kg', 'service_energy_j']
@@ -702,7 +705,7 @@ if __name__ == '__main__':
     scene('roadster_track','Performance')
     scene('roadster_thrust','Thrust')
     scene('roadster_rocket','Rocket')
-    scene('roadster_launch','Thrust',launch=True)
+    scene('roadster_launch','Rocket',launch=True)
     scene('roadster_motor_launch','Rocket',launch=True)
     p=ROOT/'scenes/roadster_motor_launch.usda'
     p.write_text(p.read_text().replace('../scenarios/tests/launch.rhai','../scenarios/tests/motor_launch.rhai'))

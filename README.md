@@ -7,6 +7,9 @@ Modelica physics, Rhai course policy and an editable HUD are included.
 Public facts and uncalibrated engineering assumptions are recorded in the
 [source register](references/README.md) and [input table](references/assumptions.md).
 This is an engineering/gameplay study, not Tesla CAD or a calibrated production car.
+The [specification audit](references/spec-audit.md) separates checked hardware facts
+from remaining study assumptions. Rocket has ten nozzles and 250 kg total gas
+across 200 L + 400 L vessels; it does not carry 250 kg in each vessel.
 
 ## Run
 

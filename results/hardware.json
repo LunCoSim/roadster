@@ -1,0 +1,60 @@
+{
+  "ok": true,
+  "nozzles": [
+    {
+      "path": "/World/Roadster/RearThrusters/Nozzle0",
+      "native_id": 4620967632255957
+    },
+    {
+      "path": "/World/Roadster/RearThrusters/Nozzle1",
+      "native_id": 4622067143883014
+    },
+    {
+      "path": "/World/Roadster/RearThrusters/Nozzle2",
+      "native_id": 4623166655508595
+    },
+    {
+      "path": "/World/Roadster/RearThrusters/Nozzle3",
+      "native_id": 4624266167137196
+    },
+    {
+      "path": "/World/Roadster/PerimeterThrusters/Nozzle0",
+      "native_id": 6465656804418795
+    },
+    {
+      "path": "/World/Roadster/PerimeterThrusters/Nozzle1",
+      "native_id": 6464557292793116
+    },
+    {
+      "path": "/World/Roadster/PerimeterThrusters/Nozzle2",
+      "native_id": 6463457781165649
+    },
+    {
+      "path": "/World/Roadster/PerimeterThrusters/Nozzle3",
+      "native_id": 6462358269537410
+    },
+    {
+      "path": "/World/Roadster/PerimeterThrusters/Nozzle4",
+      "native_id": 6461258757907255
+    },
+    {
+      "path": "/World/Roadster/PerimeterThrusters/Nozzle5",
+      "native_id": 6460159246280296
+    }
+  ],
+  "available_seats": [
+    "DriverSeat"
+  ],
+  "modelica": {
+    "tank_temperature_k": 293.1499938964844,
+    "cabin_tank_air_kg": 166.66666666666666,
+    "vehicle_mass_kg": 1950.0,
+    "rear_tank_air_kg": 83.33333333333333,
+    "tank_volume_m3": 0.6000000089406967,
+    "gas_mass_kg": 250.0,
+    "tank_pressure_pa": 43702342.5464219
+  },
+  "native_mass_kg": 1950.0,
+  "failures": [],
+  "assumptions": "Two rigid volumes share uniform density/temperature; cylinder mass split is calculated, not a manufacturer mass specification."
+}

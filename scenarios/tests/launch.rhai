@@ -1,4 +1,4 @@
-// Thrust standing-start launch. Uses actual Avian motion and Modelica samples.
+// Rocket standing-start launch. Uses actual Avian motion and Modelica samples.
 // Requirement limits live in SysML, not in this scenario.
 fn simulation_dependencies(me, ctx) {
     let car = find_path("/World/Roadster");
@@ -87,9 +87,13 @@ fn on_tick(me, ctx) {
     }
     let seat_count = 0;
     for name in ["DriverSeat","PassengerSeat"] {
-        if find_path("/World/Roadster/Body/"+name) >= 0 { seat_count += 1; }
+        let path="/World/Roadster/Body/"+name;
+        if find_path(path)>=0 {
+            let seat=query("QueryUsdPrim",#{path:path,attrs:["visibility"]});
+            if seat.active && seat.attrs.visibility!="invisible" {seat_count+=1;}
+        }
     }
-    checks.push(criterion("RR-001", "seating", "HasTwoSeats", #{count:seat_count}));
+    checks.push(criterion("RR-001", "seating", "HasOneSeat", #{count:seat_count}));
     checks.push(criterion("RR-002", "wheels", "HasFourWheels", #{count:wheel_count}));
     checks.push(criterion("RR-003", "driveResponse", "PositiveMotion", #{travelM:travel}));
     checks.push(criterion("RR-004-min", "batteryBounds", "StateOfChargeBounds", #{soc:this.min_soc}));

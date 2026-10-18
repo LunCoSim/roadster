@@ -50,6 +50,12 @@ package Roadster {
     part def ColdGasSystem {
         doc /* Study dry-air tank using a reusable real-gas EOS, adiabatic energy balance, compressible nozzle closure and finite valve response. Rear boost, corner lift and front side/yaw commands share one 250 kg starting reservoir. Parameters and validity limits are recorded in references/dynamics.md. */
     }
+    part def GasStorage {
+        doc /* Rocket: 200 L rear vessel plus 400 L in place of the passenger seat. The study uses 250 kg TOTAL with a common-pressure/temperature manifold, not 250 kg in each vessel. */
+        attribute rearInternalVolumeM3 : Real = 0.2;
+        attribute cabinInternalVolumeM3 : Real = 0.4;
+        attribute totalStudyAirMass : MassValue = 250[kg];
+    }
     part def ThermalSystem {
         doc /* Finite Modelica tank-wall heat storage and passive exchange; editable initial/refill temperature. No assertion of Tesla's undisclosed cold-gas heating design. */
     }
@@ -105,13 +111,15 @@ package Roadster {
         part rearThrusters : ColdGasSystem;
     }
     part def RocketVehicle :> RoadsterVehicle {
+        part rearThrusters : ColdGasSystem;
         part perimeterThrusters : ColdGasSystem;
+        part storage : GasStorage;
     }
-    part runner : ThrustVehicle;
+    part runner : RocketVehicle;
 
-    constraint def HasTwoSeats {
+    constraint def HasOneSeat {
         in count : Integer;
-        count == 2;
+        count == 1;
     }
     constraint def HasFourWheels {
         in count : Integer;
@@ -142,8 +150,8 @@ package Roadster {
     }
 
     requirement def Seating {
-        doc /* The Thrust vehicle shall provide two occupant seating stations. Verification: inspection of the composed vehicle. Source S01. */
-        require HasTwoSeats;
+        doc /* The Rocket runner shall provide one occupant seating station; its passenger space is allocated to the additional pressure vessel. Verification: inspection of the composed vehicle. Source S01. */
+        require HasOneSeat;
     }
     requirement def WheelAssembly {
         doc /* The runner shall compose four tire-contact wheel stations. Verification: inspection of the composed wheel topology. Source: study runner architecture. */
@@ -166,16 +174,16 @@ package Roadster {
         require FiniteImpulse;
     }
     requirement def ThrustAcceleration {
-        doc /* The gas-assisted study runner shall accelerate from rest to 60 mph in no more than 0.59 seconds. Source: user-selected study acceptance target; this is stricter than the Thrust manufacturer claim. The study records standing-start timing without rollout subtraction on its level dry track. Verification: sampled physical body velocity. */
+        doc /* The gas-assisted study runner shall accelerate from rest to 60 mph in no more than 0.59 seconds. Source: user-selected Rocket study acceptance target; no manufacturer standing-start test is inferred. The study records standing-start timing without rollout subtraction on its level dry track. Verification: sampled physical body velocity. */
         require SubsecondLaunch;
     }
-    requirement <'RR-001'> seating : Seating { subject vehicle : ThrustVehicle; }
+    requirement <'RR-001'> seating : Seating { subject vehicle : RocketVehicle; }
     requirement <'RR-002'> wheels : WheelAssembly { subject vehicle : RoadsterVehicle; }
     requirement <'RR-003'> driveResponse : DriveResponse { subject vehicle : RoadsterVehicle; }
     requirement <'RR-004'> batteryBounds : BatteryBounds { subject vehicle : RoadsterVehicle; }
     requirement <'RR-005'> driveEnergy : DriveEnergy { subject vehicle : RoadsterVehicle; }
-    requirement <'RR-006'> gasBudget : GasBudget { subject vehicle : ThrustVehicle; }
-    requirement <'RR-007'> thrustAcceleration : ThrustAcceleration { subject vehicle : ThrustVehicle; }
+    requirement <'RR-006'> gasBudget : GasBudget { subject vehicle : RocketVehicle; }
+    requirement <'RR-007'> thrustAcceleration : ThrustAcceleration { subject vehicle : RocketVehicle; }
     satisfy seating by runner;
     satisfy wheels by runner;
     satisfy driveResponse by runner;
@@ -185,7 +193,7 @@ package Roadster {
     satisfy thrustAcceleration by runner;
 
     verification def VerifyRunner {
-        subject vehicle : ThrustVehicle;
+        subject vehicle : RocketVehicle;
         objective {
             verify seating;
             verify wheels;

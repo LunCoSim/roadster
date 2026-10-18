@@ -462,7 +462,7 @@ def Cube "Marker41"
 }
     def Xform "Roadster" (
         prepend references = @../vehicles/roadster.usda@</Roadster>
-        variants = { string trim = "Thrust" }
+        variants = { string trim = "Rocket" }
     ) {
         double3 xformOp:translate = (0,0.66,0)
         uniform token[] xformOpOrder = ["xformOp:translate"]

@@ -8,6 +8,7 @@ not current evidence for changed controls/geometry.
 
 | Gate | Current evidence |
 |---|---|
+| Rocket hardware | `hardware.json`: ten native nozzle objects; 250 kg across 200/400 L shared-state volumes, one available seat and 1950 kg native mass. |
 | Complete skill course | `course.json`: 47.22 s with direct jet commands; launch, two instant services, three airborne block crossings, fan climb, manual finite-jet turn and four-wheel landing. Acceptance driver uses commands, no pose/velocity writes. |
 | Moving jump / fixed input meanings | `moving_jump.json`: 89 airborne samples; four driving commands exercised, zero front/rear collective imbalance and at most 0.012 N residual jet force 0.35 s after release. |
 | Steering | `steering.json`: measured steady right turns at approximately 5, 15 and 30 m/s; native yaw within 2–7% of geometric turn rate. Progressive keyboard driver retains full rack travel. |
@@ -18,11 +19,16 @@ not current evidence for changed controls/geometry.
 | Earth gravity | `earth.json`: free-fall acceleration 9.7906 m/s² with drag, authored gravity 9.80665 m/s². |
 | Fan adhesion | `wall.json`: ~40 kN sealed suction; fan-off car falls along wall. A valid ray intersection is not itself proof of adhesion. |
 | Moving finite refill | `moving_refill.json`: no stop, finite 20 kg/s inflow, editable 303.15 K target, native mass returns to 1950 kg and inlet momentum loading is nonzero. |
-| Gas-assisted launch | `launch-report.json`, `launch-telemetry.json`, `launch.csv`: seven SysML requirements/eight checks; approximately 0.515 s standing-start to 60 mph, no rollout subtraction. |
+| Gas-assisted launch | `launch-report.json`, `launch-telemetry.json`, `launch.csv`: Rocket trim, seven SysML requirements/eight checks including one available seat; approximately 0.515 s standing-start to 60 mph, no rollout subtraction. |
 | Motor-only launch | `motor-after.json`: approximately 1.786 s with the current 40 kN fan envelope, 1950 kg and no gas use. Uncalibrated study result. |
 | Jet rendering | `effects.json`: delivered forces reach four shader sinks and close on release; current keys Space/J/L/K. Streams are qualitative indicators. |
 
 ## Validation boundaries
+
+The [hardware audit](../references/spec-audit.md) records unresolved capacity,
+fill-state and calibration details, including the Thrust fixture's common storage
+study envelope. Hardware counts and conservation checks do not establish a
+manufacturer-calibrated vehicle.
 
 Current correction: WASD remains drivetrain control at every altitude; the
 flight-mode remapping and automatic rate controller were removed. `moving_jump.json`

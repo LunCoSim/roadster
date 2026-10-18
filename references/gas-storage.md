@@ -5,7 +5,11 @@
 The user supplied **250 kg available air mass**. Mass alone does not determine
 both pressure and volume: gas composition and temperature are also required.
 The study uses dry air at **20°C**, with **600 L total internal volume** as an
-explicit Rocket baseline from S05. This is gas volume, excluding tank walls,
+explicit Rocket baseline from S05: 200 L rear plus 400 L cabin. The reproduced
+reveal statement identifies about 250 kg **total**, not per vessel; the source
+conflict is documented in [the spec audit](spec-audit.md). Modelica exposes both
+volumes and the common-state inventory split (83.333 + 166.667 kg initially).
+This is gas volume, excluding tank walls,
 valves, mounting and clearance. It is not a verified Tesla operating point.
 
 The reusable [CompressedAir.mo](../models/CompressedAir.mo) calculates:

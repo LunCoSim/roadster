@@ -41,6 +41,8 @@ model RoadsterVehicle
   parameter Real boost_available = 0;
   parameter Real lift_available = 0;
   parameter Real gas_capacity_kg = 250;
+  parameter Real rear_tank_volume(unit="m3") = 0.2;
+  parameter Real cabin_tank_volume(unit="m3") = 0.4;
   parameter Real fan_initial_fraction = 0.0;
   parameter Real initial_fill = 1.0;
   parameter Real initial_gas_temperature(unit="K") = 293.15;
@@ -142,6 +144,7 @@ model RoadsterVehicle
     autopilot_yaw=autopilot_yaw,autopilot_yaw_rate=autopilot_yaw_rate,piloted=piloted);
   RoadsterPowertrain powertrain(
     boost_available=boost_available, lift_available=lift_available,
+    rear_tank_volume=rear_tank_volume,cabin_tank_volume=cabin_tank_volume,
     gas_capacity_kg=gas_capacity_kg,initial_fill=initial_fill,fan_initial_fraction=fan_initial_fraction,initial_gas_temperature=initial_gas_temperature,
     steer=steer,attitude={attitude_w,attitude_x,attitude_y,attitude_z},omega_body=omega_body,headlight_switch=headlights,
     demand=steering.drive_left, brake=brake, boost=boost, lift=lift, fan=fan,refill=refill,instant_mass_offset=instant_mass_offset,instant_temperature_offset=instant_temperature_offset,
@@ -237,6 +240,8 @@ model RoadsterVehicle
   output Real vehicle_inertia_yy;
   output Real vehicle_inertia_zz;
   output Real tank_temperature_k;
+  output Real rear_tank_air_kg(unit="kg");
+  output Real cabin_tank_air_kg(unit="kg");
   output Real tank_volume_m3;
   output Real gas_mass_kg;
   output Real tank_pressure_pa;
@@ -383,6 +388,8 @@ equation
   vehicle_inertia_zz = 708.0+boost_available*gas_mass_kg*(1.2^2+0.5^2)/12.0;
   tank_temperature_k = powertrain.tank_temperature_k;
   tank_volume_m3 = powertrain.tank_volume_m3;
+  rear_tank_air_kg = powertrain.rear_tank_air_kg;
+  cabin_tank_air_kg = powertrain.cabin_tank_air_kg;
   // Each corner lift force has its own lever arm. Symmetric commands cancel
   // moments; individual commands pitch and roll the vehicle physically.
   jet_lift_0 = powertrain.corner_lift[1];
