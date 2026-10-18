@@ -1,0 +1,27 @@
+name = "tesla-roadster-runner"
+description = "October 2026 Tesla Roadster engineering study: Performance, Thrust and Rocket"
+version = "0.1.0"
+
+[usd]
+default_scene = "scenes/roadster_rocket.usda"
+scenes = ["scenes/*.usda"]
+
+[sysml]
+root = "requirements/roadster.sysml"
+paths = ["requirements"]
+
+[verification]
+[[verification.cases]]
+name = "Roadster::VerifyRunner"
+scene = "scenes/roadster_launch.usda"
+script = "scenarios/tests/launch.rhai"
+verdict_channel = "ROADSTER_RUNNER"
+
+[[components]]
+name = "roadster.vehicle"
+requirements = "requirements/roadster.sysml"
+verification = "Roadster::VerifyRunner"
+usd_path = "/World/Roadster"
+
+[settings]
+"usd.runtime_persistence" = false

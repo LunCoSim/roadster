@@ -1,0 +1,45 @@
+#usda 1.0
+(
+    defaultPrim = "RearThrusters"
+    upAxis = "Y"
+    metersPerUnit = 1
+)
+
+def Xform "RearThrusters" (kind = "component") {
+def Cylinder "Nozzle0" {
+    uniform token axis = "Z"
+    double radius = 0.072
+    double height = 0.14
+    double3 xformOp:translate = (-0.55,-0.12,2.2)
+    uniform token[] xformOpOrder = ["xformOp:translate"]
+    color3f[] primvars:displayColor = [(0.15,0.16,0.17)]
+    bool physics:collisionEnabled = false
+}
+def Cylinder "Nozzle1" {
+    uniform token axis = "Z"
+    double radius = 0.072
+    double height = 0.14
+    double3 xformOp:translate = (-0.2,-0.12,2.2)
+    uniform token[] xformOpOrder = ["xformOp:translate"]
+    color3f[] primvars:displayColor = [(0.15,0.16,0.17)]
+    bool physics:collisionEnabled = false
+}
+def Cylinder "Nozzle2" {
+    uniform token axis = "Z"
+    double radius = 0.072
+    double height = 0.14
+    double3 xformOp:translate = (0.2,-0.12,2.2)
+    uniform token[] xformOpOrder = ["xformOp:translate"]
+    color3f[] primvars:displayColor = [(0.15,0.16,0.17)]
+    bool physics:collisionEnabled = false
+}
+def Cylinder "Nozzle3" {
+    uniform token axis = "Z"
+    double radius = 0.072
+    double height = 0.14
+    double3 xformOp:translate = (0.55,-0.12,2.2)
+    uniform token[] xformOpOrder = ["xformOp:translate"]
+    color3f[] primvars:displayColor = [(0.15,0.16,0.17)]
+    bool physics:collisionEnabled = false
+}
+}

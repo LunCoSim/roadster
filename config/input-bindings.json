@@ -1,0 +1,10 @@
+{
+  "input_bindings": {
+    "thrust": ["KeyI"],
+    "release": ["KeyK"],
+    "yaw_left": ["KeyJ"],
+    "yaw_right": ["KeyL"],
+    "speed_boost": ["KeyU"],
+    "action": ["KeyO"]
+  }
+}

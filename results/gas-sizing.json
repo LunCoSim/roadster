@@ -1,0 +1,336 @@
+{
+  "ok": true,
+  "coolprop_version": "8.0.0",
+  "checks": [
+    {
+      "temperature_k": 253.15,
+      "volume_m3": 0.5,
+      "mass_kg": 250,
+      "experiment_id": "07db98fc-621b-42fa-a279-e8d50612acde",
+      "modelica": {
+        "pressure": 47113078.92546289,
+        "requiredVolume": 0.5000000000000004,
+        "dpdT": 346882.9155042391,
+        "cv": 806.2075051412337,
+        "compressibility": 1.2966934615807526,
+        "idealPressure": 36333243.22313542
+      },
+      "reference": {
+        "pressure": 47113078.92546287,
+        "requiredVolume": 0.5,
+        "dpdT": 346882.915504239,
+        "cv": 806.2075051412336
+      },
+      "relative_errors": {
+        "pressure": 3.1628502177543167e-16,
+        "requiredVolume": 8.881784197001252e-16,
+        "dpdT": 3.356040802923665e-16,
+        "cv": 1.4101436292347597e-16
+      },
+      "ok": true
+    },
+    {
+      "temperature_k": 253.15,
+      "volume_m3": 0.6,
+      "mass_kg": 250,
+      "experiment_id": "b1060303-7c67-406c-92c0-c3615042b9fa",
+      "modelica": {
+        "pressure": 33911420.1457501,
+        "requiredVolume": 0.6000000000000004,
+        "dpdT": 246806.74782064022,
+        "cv": 791.9786881242843,
+        "compressibility": 1.1200129843896824,
+        "idealPressure": 30277702.68594619
+      },
+      "reference": {
+        "pressure": 33911420.1457501,
+        "requiredVolume": 0.6,
+        "dpdT": 246806.74782064022,
+        "cv": 791.9786881242841
+      },
+      "relative_errors": {
+        "pressure": 0.0,
+        "requiredVolume": 7.401486830834377e-16,
+        "dpdT": 0.0,
+        "cv": 2.870956994837096e-16
+      },
+      "ok": true
+    },
+    {
+      "temperature_k": 253.15,
+      "volume_m3": 0.8,
+      "mass_kg": 250,
+      "experiment_id": "e3ddf72c-cd36-4f75-87d4-22a8a1a86a97",
+      "modelica": {
+        "pressure": 22640045.619540215,
+        "requiredVolume": 0.8000000000000006,
+        "dpdT": 153398.71823674664,
+        "cv": 777.6940887675297,
+        "compressibility": 0.9969953072672145,
+        "idealPressure": 22708277.01445964
+      },
+      "reference": {
+        "pressure": 22640045.61954021,
+        "requiredVolume": 0.8,
+        "dpdT": 153398.7182367466,
+        "cv": 777.6940887675296
+      },
+      "relative_errors": {
+        "pressure": 1.645442929340515e-16,
+        "requiredVolume": 6.938893903907228e-16,
+        "dpdT": 3.794533721177065e-16,
+        "cv": 1.4618452083361482e-16
+      },
+      "ok": true
+    },
+    {
+      "temperature_k": 293.15,
+      "volume_m3": 0.5,
+      "mass_kg": 250,
+      "experiment_id": "c0a3c33a-c035-4e5e-981b-19dc58325d3a",
+      "modelica": {
+        "pressure": 60837174.51542863,
+        "requiredVolume": 0.49999999999999956,
+        "dpdT": 339432.5879447531,
+        "cv": 800.7256474488092,
+        "compressibility": 1.4459487588450521,
+        "idealPressure": 42074225.75888662
+      },
+      "reference": {
+        "pressure": 60837174.51542867,
+        "requiredVolume": 0.5,
+        "dpdT": 339432.5879447532,
+        "cv": 800.7256474488092
+      },
+      "relative_errors": {
+        "pressure": 6.123378227430924e-16,
+        "requiredVolume": 8.881784197001252e-16,
+        "dpdT": 1.7148518728243446e-16,
+        "cv": 0.0
+      },
+      "ok": true
+    },
+    {
+      "temperature_k": 293.15,
+      "volume_m3": 0.6,
+      "mass_kg": 250,
+      "experiment_id": "f5325c2a-c899-42fa-96c8-29fab2a3f7bc",
+      "modelica": {
+        "pressure": 43702345.09974836,
+        "requiredVolume": 0.6000000000000004,
+        "dpdT": 242775.9488994837,
+        "cv": 785.3284333428896,
+        "compressibility": 1.2464356306930122,
+        "idealPressure": 35061854.79907218
+      },
+      "reference": {
+        "pressure": 43702345.09974838,
+        "requiredVolume": 0.6,
+        "dpdT": 242775.94889948372,
+        "cv": 785.3284333428896
+      },
+      "relative_errors": {
+        "pressure": 5.114540590385887e-16,
+        "requiredVolume": 7.401486830834377e-16,
+        "dpdT": 1.1987938092163953e-16,
+        "cv": 0.0
+      },
+      "ok": true
+    },
+    {
+      "temperature_k": 293.15,
+      "volume_m3": 0.8,
+      "mass_kg": 250,
+      "experiment_id": "2dcd6d37-37fb-47be-85e6-6c600a363d36",
+      "modelica": {
+        "pressure": 28736444.033462085,
+        "requiredVolume": 0.8000000000000006,
+        "dpdT": 151454.78217528568,
+        "cv": 769.8449648876577,
+        "compressibility": 1.092790410856892,
+        "idealPressure": 26296391.099304136
+      },
+      "reference": {
+        "pressure": 28736444.03346208,
+        "requiredVolume": 0.8,
+        "dpdT": 151454.78217528563,
+        "cv": 769.8449648876579
+      },
+      "relative_errors": {
+        "pressure": 1.2963643985052602e-16,
+        "requiredVolume": 6.938893903907228e-16,
+        "dpdT": 3.843236910545419e-16,
+        "cv": 1.4767497730949784e-16
+      },
+      "ok": true
+    },
+    {
+      "temperature_k": 333.15,
+      "volume_m3": 0.6,
+      "mass_kg": 250,
+      "experiment_id": "e35eeea4-a7af-45dd-bd55-7c151cfa9daf",
+      "modelica": {
+        "pressure": 53337786.12431011,
+        "requiredVolume": 0.6000000000000004,
+        "dpdT": 239057.88422301735,
+        "cv": 782.6191917863583,
+        "compressibility": 1.3385980241844924,
+        "idealPressure": 39846006.912198186
+      },
+      "reference": {
+        "pressure": 53337786.124310136,
+        "requiredVolume": 0.6,
+        "dpdT": 239057.88422301732,
+        "cv": 782.6191917863582
+      },
+      "relative_errors": {
+        "pressure": 4.19060171314161e-16,
+        "requiredVolume": 7.401486830834377e-16,
+        "dpdT": 1.2174386363087993e-16,
+        "cv": 1.4526456661779719e-16
+      },
+      "ok": true
+    },
+    {
+      "temperature_k": 333.15,
+      "volume_m3": 0.8,
+      "mass_kg": 250,
+      "experiment_id": "a5ede92e-1767-4eb4-a277-0b62a2c171fd",
+      "modelica": {
+        "pressure": 34759197.040237345,
+        "requiredVolume": 0.8000000000000006,
+        "dpdT": 149716.99767445642,
+        "cv": 766.7471483385231,
+        "compressibility": 1.1631177035072457,
+        "idealPressure": 29884505.18414864
+      },
+      "reference": {
+        "pressure": 34759197.04023734,
+        "requiredVolume": 0.8,
+        "dpdT": 149716.9976744564,
+        "cv": 766.7471483385231
+      },
+      "relative_errors": {
+        "pressure": 2.1434846691938874e-16,
+        "requiredVolume": 6.938893903907228e-16,
+        "dpdT": 1.9439229285118896e-16,
+        "cv": 0.0
+      },
+      "ok": true
+    }
+  ],
+  "pressure_sweep": [
+    {
+      "fluid": "Air",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 200,
+      "density_kg_m3": 231.64753833387277,
+      "volume_for_250kg_litre": 1079.2258005335498
+    },
+    {
+      "fluid": "Air",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 300,
+      "density_kg_m3": 322.8473623794224,
+      "volume_for_250kg_litre": 774.3597412643271
+    },
+    {
+      "fluid": "Air",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 350,
+      "density_kg_m3": 360.7490001805504,
+      "volume_for_250kg_litre": 693.0026136590209
+    },
+    {
+      "fluid": "Air",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 450,
+      "density_kg_m3": 424.0769309339029,
+      "volume_for_250kg_litre": 589.5156792647259
+    },
+    {
+      "fluid": "Air",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 500,
+      "density_kg_m3": 450.7371591367099,
+      "volume_for_250kg_litre": 554.6469709282927
+    },
+    {
+      "fluid": "Air",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 600,
+      "density_kg_m3": 496.5447800329965,
+      "volume_for_250kg_litre": 503.4792632064059
+    },
+    {
+      "fluid": "Air",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 689.475729,
+      "density_kg_m3": 530.9984871802411,
+      "volume_for_250kg_litre": 470.8111341852853
+    },
+    {
+      "fluid": "Air",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 700,
+      "density_kg_m3": 534.724090524574,
+      "volume_for_250kg_litre": 467.5308339946784
+    },
+    {
+      "fluid": "Nitrogen",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 200,
+      "density_kg_m3": 218.54435134947636,
+      "volume_for_250kg_litre": 1143.9325631446893
+    },
+    {
+      "fluid": "Nitrogen",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 300,
+      "density_kg_m3": 302.43875983083257,
+      "volume_for_250kg_litre": 826.6136263084669
+    },
+    {
+      "fluid": "Nitrogen",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 350,
+      "density_kg_m3": 337.2660928137197,
+      "volume_for_250kg_litre": 741.2544733279225
+    },
+    {
+      "fluid": "Nitrogen",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 450,
+      "density_kg_m3": 395.5846898725686,
+      "volume_for_250kg_litre": 631.9759242465465
+    },
+    {
+      "fluid": "Nitrogen",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 500,
+      "density_kg_m3": 420.2096546556945,
+      "volume_for_250kg_litre": 594.941113870507
+    },
+    {
+      "fluid": "Nitrogen",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 600,
+      "density_kg_m3": 462.6478641626858,
+      "volume_for_250kg_litre": 540.367781557703
+    },
+    {
+      "fluid": "Nitrogen",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 689.475729,
+      "density_kg_m3": 494.68351888883694,
+      "volume_for_250kg_litre": 505.37361859467745
+    },
+    {
+      "fluid": "Nitrogen",
+      "temperature_k": 293.15,
+      "pressure_bar_abs": 700,
+      "density_kg_m3": 498.1537163328499,
+      "volume_for_250kg_litre": 501.85312646138766
+    }
+  ]
+}

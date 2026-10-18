@@ -1,0 +1,12 @@
+{
+  "path": "twin://tesla-roadster-runner--mount-2",
+  "kind": "sysml",
+  "ok": true,
+  "errors": [],
+  "warnings": [],
+  "findings": [],
+  "source_files": [
+    "twin://tesla-roadster-runner--mount-2/requirements/roadster.sysml"
+  ],
+  "source_revision": 3924131358373047676
+}

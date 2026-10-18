@@ -1,0 +1,26 @@
+#usda 1.0
+(
+    defaultPrim = "RoadTire"
+    upAxis = "Y"
+    metersPerUnit = 1
+)
+
+over "RoadTire" (
+    prepend references = @lunco://components/mobility/tires/hard.usda@</Tire>
+) {
+    float physics:dynamicFriction = 1.4
+    float physics:staticFriction = 1.4
+    float physxVehicleTire:longitudinalStiffness = 30000
+    float2 physxVehicleTire:lateralStiffnessGraph = (1, 90000)
+    float physxVehicleTire:restLoad = 9000
+    # Steady-state slip-angle denominator floor: avoids the discontinuous
+    # zero-speed lateral saturation of an uncalibrated tire curve.
+    float lunco:tire:minValidatedSpeed = 4.0
+    over "TireLook" { over "Shader" {
+        color3f inputs:rim_color = (0.75,0.78,0.82)
+        float inputs:spoke_count = 5
+        float inputs:spoke_width = 0.22
+        float inputs:tread_lugs = 32
+        float inputs:lug_depth = 0.04
+    } }
+}

@@ -1,0 +1,104 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "key": "U",
+      "axis": "y",
+      "expected_sign": 1,
+      "held_force_n": 88679.0456260744,
+      "released_force_n": 1.8667946834766505,
+      "gas_before_kg": 250.0,
+      "gas_after_kg": 208.49067003510277,
+      "tank_pressure_pa": 29637602.349220965,
+      "position_y_m": 1.283097651274526,
+      "input_value": 1.0,
+      "physical_mass_kg": 1908.490631737485,
+      "ok": true
+    },
+    {
+      "key": "O",
+      "axis": "y",
+      "expected_sign": 0,
+      "held_force_n": 0.0,
+      "released_force_n": 0.0,
+      "gas_before_kg": 250.0,
+      "gas_after_kg": 250.0,
+      "tank_pressure_pa": 43702345.09974836,
+      "position_y_m": 0.47815617760189155,
+      "input_value": -1.0,
+      "physical_mass_kg": 1950.0,
+      "ok": true
+    },
+    {
+      "key": "I",
+      "axis": "z",
+      "expected_sign": -1,
+      "held_force_n": -88679.0456260744,
+      "released_force_n": -1.8667946834766505,
+      "gas_before_kg": 250.0,
+      "gas_after_kg": 208.49067003510277,
+      "tank_pressure_pa": 29637602.349220965,
+      "position_y_m": 0.4936455227753329,
+      "input_value": 1.0,
+      "physical_mass_kg": 1908.490631737485,
+      "ok": true
+    },
+    {
+      "key": "K",
+      "axis": "z",
+      "expected_sign": 0,
+      "held_force_n": -0.0,
+      "released_force_n": -0.0,
+      "gas_before_kg": 250.0,
+      "gas_after_kg": 250.0,
+      "tank_pressure_pa": 43702345.09974836,
+      "position_y_m": 0.5033372456206299,
+      "input_value": -1.0,
+      "physical_mass_kg": 1950.0,
+      "ok": true
+    },
+    {
+      "key": "J",
+      "axis": "x",
+      "expected_sign": -1,
+      "held_force_n": -5200.599967783093,
+      "released_force_n": -0.12059398411280654,
+      "gas_before_kg": 250.0,
+      "gas_after_kg": 247.9577192374119,
+      "tank_pressure_pa": 42925604.764739856,
+      "position_y_m": 0.4930993987844483,
+      "input_value": -1.0,
+      "physical_mass_kg": 1947.9577169774427,
+      "ok": true
+    },
+    {
+      "key": "L",
+      "axis": "x",
+      "expected_sign": 1,
+      "held_force_n": 5200.599967783093,
+      "released_force_n": 0.12059398411280654,
+      "gas_before_kg": 250.0,
+      "gas_after_kg": 247.9577192374119,
+      "tank_pressure_pa": 42925604.764739856,
+      "position_y_m": 0.47814898972806663,
+      "input_value": 1.0,
+      "physical_mass_kg": 1947.9577169774427,
+      "ok": true
+    },
+    {
+      "key": "W",
+      "torque_nm": 4739.615626534558,
+      "ok": true
+    },
+    {
+      "key": "A",
+      "heading_rad": 0.29418948626724395,
+      "ok": true
+    },
+    {
+      "key": "Space",
+      "brake": 1.0,
+      "ok": true
+    }
+  ]
+}
