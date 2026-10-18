@@ -16,7 +16,7 @@ The old 2017 red concept specifications are excluded.
 ```
 
 The launcher uses LUNCOSIM_BIN, an installed luncosim, or the neighboring checkout's
-existing production binary. It loads an isolated keyboard profile and keeps the
+existing production binary (or the preserved local `.scratch/luncosim`). It loads an isolated keyboard profile and keeps the
 simulation updating while unfocused. Shared wheels, tires, suspension, controls,
 lighting, cameras and Ackermann equations resolve through lunco:// references.
 
@@ -36,8 +36,12 @@ remaining air, pressure and battery charge.
 | U | Corner-jet lift |
 | O | Inhibit lift; U + O cancel; descend under gravity after release |
 
-Hold to open a valve; release to close it. Rocket has forward, lift and yaw
-jets. Thrust enables rear forward jets. Performance disables gas actuation.
+Hold to open a valve; release to close it. White animated air streams follow
+delivered force, including valve closure and the cold-tank cutoff. They are
+operator indicators, not a prediction of real condensation. A unique orange
+sidewall stripe makes native wheel rotation easier to follow.
+
+Rocket has forward, lift and yaw jets. Thrust enables rear forward jets. Performance disables gas actuation.
 There are no invented reverse/downward jets. All enabled jets share a finite
 reservoir and available flow; the model has no airborne attitude controller.
 
@@ -54,7 +58,9 @@ python3 scripts/control.py --status
 
 API values persist until changed. Use one control producer at a time.
 Ports include throttle/steer, brake/fan/boost/lift and thrust_x/y/z.
-Fan suction can be enabled through the Ports inspector or --fan 1.
+Fan suction is enabled by default and pays its modeled 30 kW electrical load.
+Use --fan 0 to disable it. API driving releases the keyboard producer; use
+`python3 scripts/control.py --keyboard` to return to keyboard control.
 
 | Scene | Purpose |
 |---|---|
@@ -62,6 +68,7 @@ Fan suction can be enabled through the Ports inspector or --fan 1.
 | roadster_thrust | Two seats, rear boost only |
 | roadster_track | Performance, motor driving without gas |
 | roadster_launch | Automatic launch and SysML requirement evaluation |
+| roadster_motor_launch | Automatic motor-only standing start, no gas |
 
 ## Physics and reusable calculations
 
@@ -80,8 +87,10 @@ Fan suction can be enabled through the Ports inspector or --fan 1.
   **437.023 bar absolute**. Tank size and operating pressure are not asserted
   production specifications. See [pressure/volume analysis](references/gas-storage.md).
 - [CompressedAir.mo](models/CompressedAir.mo) provides reusable pressure,
-  density, heat-capacity and storage-sizing functions and a StorageSizing model.
-  Both the sizing calculation and running tank use this same package.
+  density, heat-capacity and storage-sizing functions, a StorageSizing model
+  and an equation-form State model for realtime use.
+  Both the sizing calculation and running tank share the same EOS coefficients.
+  Speed, pressure and force unit conversions for the HUD are also Modelica outputs.
 - Finite gas mass, real-gas adiabatic tank cooling, valve response, battery
   energy, motor heat, 3D drag and ground-dependent fan sealing are modeled.
   Nozzle expansion remains an ideal approximation; discharge stops at the
@@ -97,11 +106,11 @@ and thermal behavior limit predictions. See [dynamics](references/dynamics.md).
 | [twin.toml](twin.toml) | Scenes, SysML sources and verification mapping |
 | [roadster.sysml](requirements/roadster.sysml) | Parts, interfaces, trim structure, requirements, source and satisfy/verify links |
 | [roadster.usda](vehicles/roadster.usda) | Rigid body, four raycast wheels, variants, cameras, HUD and native port wiring |
-| [RoadsterVehicle.mo](models/RoadsterVehicle.mo) | Shared Ackermann composition, steering actuator, mass/inertia and jet moments |
+| [RoadsterVehicle.mo](models/RoadsterVehicle.mo) | Shared Ackermann composition, steering actuator, mass/inertia, jet moments and engineering readouts |
 | [RoadsterPowertrain.mo](models/RoadsterPowertrain.mo) | Motor envelope, slip control, energy, gas tank, drag and fan |
 | [CompressedAir.mo](models/CompressedAir.mo) | Reusable real-gas thermodynamics and storage sizing |
 | [launch.rhai](scenarios/tests/launch.rhai) | Physical observations and native SysML constraint evaluation |
-| [roadster_ui.rhai](scenarios/roadster_ui.rhai) | Twin-scoped HUD presentation from engine facts |
+| [roadster_ui.rhai](scripting/policy/roadster_ui.rhai) | Twin-scoped HUD presentation from engine facts |
 
 ## Reproduce checks
 
@@ -130,3 +139,19 @@ is not a runtime dependency of this Twin.
 Regenerate the authored geometry and wiring with python3 scripts/build_assets.py.
 Maintain the generator when changing reproducible USD assets. No external car
 mesh or texture is required.
+
+## Acceleration and realtime behavior
+
+The motor-only Rocket study (1950 kg, suction enabled, no gas) reaches 60 mph
+in **2.677 simulated seconds**. This is an observed study result, not a fit to
+Tesla's claimed time. `python3 scripts/run_motor_launch.py` repeats the native
+standing-start measurement and checks power use, gas isolation and wheel speed.
+
+The earlier startup possessed the car without connecting the local keyboard
+producer; startup now creates that link before selecting the chase camera.
+The previous function-form tank EOS also held the physics clock below realtime.
+`CompressedAir.State` expresses the same EOS as Modelica equations, allowing
+Rumoca to lower it once instead of interpreting the loop on every derivative
+call. The sizing function is retained and cross-checked against State and
+CoolProp. Physics advances at 60 Hz in the recorded live run; rendering FPS
+can be lower on the selected GPU. No wheel animation multiplier is used.

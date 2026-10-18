@@ -18,6 +18,7 @@ def main():
     parser.add_argument('--thrust-y',type=float)
     parser.add_argument('--thrust-z',type=float)
     parser.add_argument('--status',action='store_true')
+    parser.add_argument('--keyboard',action='store_true',help='Return control to the native keyboard')
     parser.add_argument('--camera',choices=['chase','driver','free'])
     args = parser.parse_args()
 
@@ -46,7 +47,14 @@ def main():
             if not low <= value <= 1:
                 parser.error(f'{name} must be between {low} and 1')
             writes.append([name,value])
+    if args.keyboard:
+        call('SetPorts',dict(target=target,producer_id=4198001,writes=[
+            [name,0.0] for name in ['throttle','steer','brake','boost','lift','thrust_x','thrust_y','thrust_z']]))
+        call('AcquireControl',dict(target=target,bind_camera=True))
+        call('SetUserCamera',dict(name='ChaseCamera'))
     if writes:
+        avatar=int(call('RunRhai',{'code':'find_path("/World/Avatar")'})['stdout'])
+        if avatar>=0: call('ReleaseControlSource',dict(source=avatar))
         call('AcquireControl',dict(target=target,bind_camera=False))
         print(json.dumps(call('SetPorts',dict(target=target,producer_id=4198001,writes=writes)),indent=2))
     if args.status or not writes:

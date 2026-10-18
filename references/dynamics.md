@@ -55,3 +55,25 @@ Drag opposes full world velocity using an isotropic CdA.
 Unknown nozzle area, real-gas nozzle expansion, heat transfer, regulator behavior,
 gas composition, mass properties and tire calibration limit prediction. Launch
 and flight results are study outputs, not validated vehicle performance.
+
+
+## Interactive acceleration repair
+
+Motor power and vehicle mass were retained. Suction now defaults on, with its
+existing ground seal and electrical power budget. Initial possession explicitly
+links the local keyboard controller before selecting ChaseCamera. A separate
+motor-only production scene observes standing-start acceleration without jets;
+it is not a Tesla calibration gate.
+
+The runtime tank uses `CompressedAir.State`, an algebraic Modelica model of the
+same Lemmon EOS as `CompressedAir.properties`. They share one coefficient set.
+Moving these equations out of an interpreted algorithm function removes repeated
+loop overhead without changing the thermodynamics. The function remains useful
+for sizing and inversion. Both forms are compared with CoolProp in eight cases.
+Engineering speed and unit-conversion readouts are also computed in Modelica.
+
+Native tire shaft integration remains the sole source of wheel rotation. The
+orange sidewall stripe breaks rotational symmetry in the look; it does not
+alter angular speed. White shader air streams are qualitative indicators driven
+by delivered force through USD connections. GPU time only advects their visual
+noise; it never determines mass flow, force, valve response or vehicle motion.

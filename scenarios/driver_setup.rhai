@@ -6,6 +6,6 @@ fn simulation_dependencies(me, ctx) {
 }
 fn on_start(me, ctx) {
     let car = find_path("/World/Roadster");
-    cmd("AcquireControl", #{target:car,bind_camera:false});
+    cmd("AcquireControl", #{target:car,bind_camera:true});
     set_camera("ChaseCamera");
 }

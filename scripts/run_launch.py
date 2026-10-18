@@ -35,7 +35,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--binary', default=os.environ.get('LUNCOSIM_BIN'))
     args = parser.parse_args()
-    binary = args.binary or shutil.which('luncosim') or CHECKOUT/'target/debug/luncosim'
+    binary = args.binary or shutil.which('luncosim') or (CHECKOUT/'target/debug/luncosim' if (CHECKOUT/'target/debug/luncosim').is_file() else ROOT/'.scratch/luncosim')
     if not Path(binary).is_file():
         parser.error('Set LUNCOSIM_BIN or --binary to a production luncosim executable')
     env = os.environ.copy()

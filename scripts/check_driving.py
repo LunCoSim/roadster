@@ -15,8 +15,8 @@ def q(command,params=None):
     return json.loads(raw)['data']
 def main():
     car=int(q('RunRhai',dict(code='find_path("/World/Roadster")'))['stdout'])
-    def write(**values):
-        q('SetPorts',dict(target=car,producer_id=4198001,writes=list(values.items())))
+    def key(name,state):
+        q('InjectWindowInput',{'event':{'Key':dict(key=name,state=state,text=None,repeat=False)}})
     def wait_sim(seconds):
         def tick(): return int(q('RunRhai',dict(code='clock_snapshot().sim_tick'))['stdout'])
         target=tick()+round(seconds*60)
@@ -30,14 +30,16 @@ def main():
         code='let result=[]; for n in ["FL","FR","RL","RR"] { let w=find_path("/World/Roadster/Wheel_"+n); result.push(get(w,"WheelRaycast.spin_velocity")); result.push(get(w,"WheelRaycast.spin_angle")); } result'
         values['wheel_omega_angle']=json.loads(q('RunRhai',dict(code=code))['stdout'])
         return values
-    q('AcquireControl',dict(target=car,bind_camera=False))
     q('SetUserCamera',dict(name='ChaseCamera'))
-    write(throttle=0,steer=0,brake=1)
+    key('Space','Pressed')
     wait_sim(3)
     before=sample()
     try:
-        write(throttle=.06,steer=0,brake=0,fan=0,boost=0,lift=0,thrust_x=0,thrust_y=0,thrust_z=0)
-        wait_sim(3)
+        key('Space','Released')
+        key('KeyW','Pressed')
+        wait_sim(.6)
+        key('KeyW','Released')
+        wait_sim(.8)
         rolling=[]
         for i in range(4):
             rolling.append(sample())
@@ -45,11 +47,13 @@ def main():
             wait_sim(.12)
         hud=q('ReadExposures',dict(surface='vessel-hud'))
         physics=q('QueryPhysicsState',dict(id=car))
-        write(steer=.35)
+        key('KeyA','Pressed')
         wait_sim(.7)
         turning=sample()
     finally:
-        write(throttle=0,steer=0,brake=1)
+        key('KeyW','Released')
+        key('KeyA','Released')
+        key('Space','Pressed')
     wait_sim(3)
     stopped=sample()
     checks=dict(rolls=all(abs(w*.34-rolling[-1]['speed'])<1.5 for w in rolling[-1]['wheel_omega_angle'][::2]),
@@ -64,5 +68,6 @@ def main():
         stopped=stopped,physics=physics,hud=hud)
     (ROOT/'results/driving.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(checks,indent=2))
+    key('Space','Released')
     return 0 if report['ok'] else 1
 if __name__=='__main__': raise SystemExit(main())

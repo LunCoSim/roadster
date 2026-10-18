@@ -6,26 +6,35 @@
       "temperature_k": 253.15,
       "volume_m3": 0.5,
       "mass_kg": 250,
-      "experiment_id": "07db98fc-621b-42fa-a279-e8d50612acde",
+      "experiment_id": "977f0c40-87da-4c6d-98d5-951f32551d99",
       "modelica": {
         "pressure": 47113078.92546289,
         "requiredVolume": 0.5000000000000004,
         "dpdT": 346882.9155042391,
         "cv": 806.2075051412337,
         "compressibility": 1.2966934615807526,
-        "idealPressure": 36333243.22313542
+        "idealPressure": 36333243.22313542,
+        "statePressure": 47113078.925462894,
+        "stateDpdT": 346882.9155042391,
+        "stateCv": 806.2075051412337
       },
       "reference": {
         "pressure": 47113078.92546287,
         "requiredVolume": 0.5,
         "dpdT": 346882.915504239,
-        "cv": 806.2075051412336
+        "cv": 806.2075051412336,
+        "statePressure": 47113078.92546287,
+        "stateDpdT": 346882.915504239,
+        "stateCv": 806.2075051412336
       },
       "relative_errors": {
         "pressure": 3.1628502177543167e-16,
         "requiredVolume": 8.881784197001252e-16,
         "dpdT": 3.356040802923665e-16,
-        "cv": 1.4101436292347597e-16
+        "cv": 1.4101436292347597e-16,
+        "statePressure": 4.744275326631475e-16,
+        "stateDpdT": 3.356040802923665e-16,
+        "stateCv": 1.4101436292347597e-16
       },
       "ok": true
     },
@@ -33,26 +42,35 @@
       "temperature_k": 253.15,
       "volume_m3": 0.6,
       "mass_kg": 250,
-      "experiment_id": "b1060303-7c67-406c-92c0-c3615042b9fa",
+      "experiment_id": "2bbd8878-373b-4bfe-a4f9-3de4d2d21912",
       "modelica": {
         "pressure": 33911420.1457501,
         "requiredVolume": 0.6000000000000004,
         "dpdT": 246806.74782064022,
         "cv": 791.9786881242843,
         "compressibility": 1.1200129843896824,
-        "idealPressure": 30277702.68594619
+        "idealPressure": 30277702.68594619,
+        "statePressure": 33911420.145750105,
+        "stateDpdT": 246806.74782064027,
+        "stateCv": 791.9786881242843
       },
       "reference": {
         "pressure": 33911420.1457501,
         "requiredVolume": 0.6,
         "dpdT": 246806.74782064022,
-        "cv": 791.9786881242841
+        "cv": 791.9786881242841,
+        "statePressure": 33911420.1457501,
+        "stateDpdT": 246806.74782064022,
+        "stateCv": 791.9786881242841
       },
       "relative_errors": {
         "pressure": 0.0,
         "requiredVolume": 7.401486830834377e-16,
         "dpdT": 0.0,
-        "cv": 2.870956994837096e-16
+        "cv": 2.870956994837096e-16,
+        "statePressure": 2.1970712417532185e-16,
+        "stateDpdT": 2.3584306923313204e-16,
+        "stateCv": 2.870956994837096e-16
       },
       "ok": true
     },
@@ -60,26 +78,35 @@
       "temperature_k": 253.15,
       "volume_m3": 0.8,
       "mass_kg": 250,
-      "experiment_id": "e3ddf72c-cd36-4f75-87d4-22a8a1a86a97",
+      "experiment_id": "868bd1e5-c1ea-4693-8c59-ff68fa23d3b8",
       "modelica": {
         "pressure": 22640045.619540215,
         "requiredVolume": 0.8000000000000006,
         "dpdT": 153398.71823674664,
         "cv": 777.6940887675297,
         "compressibility": 0.9969953072672145,
-        "idealPressure": 22708277.01445964
+        "idealPressure": 22708277.01445964,
+        "statePressure": 22640045.619540215,
+        "stateDpdT": 153398.71823674664,
+        "stateCv": 777.6940887675297
       },
       "reference": {
         "pressure": 22640045.61954021,
         "requiredVolume": 0.8,
         "dpdT": 153398.7182367466,
-        "cv": 777.6940887675296
+        "cv": 777.6940887675296,
+        "statePressure": 22640045.61954021,
+        "stateDpdT": 153398.7182367466,
+        "stateCv": 777.6940887675296
       },
       "relative_errors": {
         "pressure": 1.645442929340515e-16,
         "requiredVolume": 6.938893903907228e-16,
         "dpdT": 3.794533721177065e-16,
-        "cv": 1.4618452083361482e-16
+        "cv": 1.4618452083361482e-16,
+        "statePressure": 1.645442929340515e-16,
+        "stateDpdT": 3.794533721177065e-16,
+        "stateCv": 1.4618452083361482e-16
       },
       "ok": true
     },
@@ -87,26 +114,35 @@
       "temperature_k": 293.15,
       "volume_m3": 0.5,
       "mass_kg": 250,
-      "experiment_id": "c0a3c33a-c035-4e5e-981b-19dc58325d3a",
+      "experiment_id": "a2f8b0f3-0009-407e-bc5e-d64dafc02841",
       "modelica": {
         "pressure": 60837174.51542863,
         "requiredVolume": 0.49999999999999956,
         "dpdT": 339432.5879447531,
         "cv": 800.7256474488092,
         "compressibility": 1.4459487588450521,
-        "idealPressure": 42074225.75888662
+        "idealPressure": 42074225.75888662,
+        "statePressure": 60837174.51542864,
+        "stateDpdT": 339432.5879447531,
+        "stateCv": 800.7256474488092
       },
       "reference": {
         "pressure": 60837174.51542867,
         "requiredVolume": 0.5,
         "dpdT": 339432.5879447532,
-        "cv": 800.7256474488092
+        "cv": 800.7256474488092,
+        "statePressure": 60837174.51542867,
+        "stateDpdT": 339432.5879447532,
+        "stateCv": 800.7256474488092
       },
       "relative_errors": {
         "pressure": 6.123378227430924e-16,
         "requiredVolume": 8.881784197001252e-16,
         "dpdT": 1.7148518728243446e-16,
-        "cv": 0.0
+        "cv": 0.0,
+        "statePressure": 4.89870258194474e-16,
+        "stateDpdT": 1.7148518728243446e-16,
+        "stateCv": 0.0
       },
       "ok": true
     },
@@ -114,26 +150,35 @@
       "temperature_k": 293.15,
       "volume_m3": 0.6,
       "mass_kg": 250,
-      "experiment_id": "f5325c2a-c899-42fa-96c8-29fab2a3f7bc",
+      "experiment_id": "15b2e690-b937-4575-ba70-5c1ec16cd738",
       "modelica": {
         "pressure": 43702345.09974836,
         "requiredVolume": 0.6000000000000004,
         "dpdT": 242775.9488994837,
         "cv": 785.3284333428896,
         "compressibility": 1.2464356306930122,
-        "idealPressure": 35061854.79907218
+        "idealPressure": 35061854.79907218,
+        "statePressure": 43702345.09974836,
+        "stateDpdT": 242775.9488994837,
+        "stateCv": 785.3284333428896
       },
       "reference": {
         "pressure": 43702345.09974838,
         "requiredVolume": 0.6,
         "dpdT": 242775.94889948372,
-        "cv": 785.3284333428896
+        "cv": 785.3284333428896,
+        "statePressure": 43702345.09974838,
+        "stateDpdT": 242775.94889948372,
+        "stateCv": 785.3284333428896
       },
       "relative_errors": {
         "pressure": 5.114540590385887e-16,
         "requiredVolume": 7.401486830834377e-16,
         "dpdT": 1.1987938092163953e-16,
-        "cv": 0.0
+        "cv": 0.0,
+        "statePressure": 5.114540590385887e-16,
+        "stateDpdT": 1.1987938092163953e-16,
+        "stateCv": 0.0
       },
       "ok": true
     },
@@ -141,26 +186,35 @@
       "temperature_k": 293.15,
       "volume_m3": 0.8,
       "mass_kg": 250,
-      "experiment_id": "2dcd6d37-37fb-47be-85e6-6c600a363d36",
+      "experiment_id": "25118f9d-506c-492e-9bd2-535ac48751f7",
       "modelica": {
         "pressure": 28736444.033462085,
         "requiredVolume": 0.8000000000000006,
         "dpdT": 151454.78217528568,
         "cv": 769.8449648876577,
         "compressibility": 1.092790410856892,
-        "idealPressure": 26296391.099304136
+        "idealPressure": 26296391.099304136,
+        "statePressure": 28736444.033462085,
+        "stateDpdT": 151454.78217528568,
+        "stateCv": 769.8449648876577
       },
       "reference": {
         "pressure": 28736444.03346208,
         "requiredVolume": 0.8,
         "dpdT": 151454.78217528563,
-        "cv": 769.8449648876579
+        "cv": 769.8449648876579,
+        "statePressure": 28736444.03346208,
+        "stateDpdT": 151454.78217528563,
+        "stateCv": 769.8449648876579
       },
       "relative_errors": {
         "pressure": 1.2963643985052602e-16,
         "requiredVolume": 6.938893903907228e-16,
         "dpdT": 3.843236910545419e-16,
-        "cv": 1.4767497730949784e-16
+        "cv": 1.4767497730949784e-16,
+        "statePressure": 1.2963643985052602e-16,
+        "stateDpdT": 3.843236910545419e-16,
+        "stateCv": 1.4767497730949784e-16
       },
       "ok": true
     },
@@ -168,26 +222,35 @@
       "temperature_k": 333.15,
       "volume_m3": 0.6,
       "mass_kg": 250,
-      "experiment_id": "e35eeea4-a7af-45dd-bd55-7c151cfa9daf",
+      "experiment_id": "57996bff-112e-407a-99d9-00c0733385a4",
       "modelica": {
         "pressure": 53337786.12431011,
         "requiredVolume": 0.6000000000000004,
         "dpdT": 239057.88422301735,
         "cv": 782.6191917863583,
         "compressibility": 1.3385980241844924,
-        "idealPressure": 39846006.912198186
+        "idealPressure": 39846006.912198186,
+        "statePressure": 53337786.12431013,
+        "stateDpdT": 239057.88422301738,
+        "stateCv": 782.6191917863583
       },
       "reference": {
         "pressure": 53337786.124310136,
         "requiredVolume": 0.6,
         "dpdT": 239057.88422301732,
-        "cv": 782.6191917863582
+        "cv": 782.6191917863582,
+        "statePressure": 53337786.124310136,
+        "stateDpdT": 239057.88422301732,
+        "stateCv": 782.6191917863582
       },
       "relative_errors": {
         "pressure": 4.19060171314161e-16,
         "requiredVolume": 7.401486830834377e-16,
         "dpdT": 1.2174386363087993e-16,
-        "cv": 1.4526456661779719e-16
+        "cv": 1.4526456661779719e-16,
+        "statePressure": 1.3968672377138699e-16,
+        "stateDpdT": 2.4348772726175987e-16,
+        "stateCv": 1.4526456661779719e-16
       },
       "ok": true
     },
@@ -195,26 +258,35 @@
       "temperature_k": 333.15,
       "volume_m3": 0.8,
       "mass_kg": 250,
-      "experiment_id": "a5ede92e-1767-4eb4-a277-0b62a2c171fd",
+      "experiment_id": "e933cbd0-6629-4324-9ff3-f47c2b28e101",
       "modelica": {
         "pressure": 34759197.040237345,
         "requiredVolume": 0.8000000000000006,
         "dpdT": 149716.99767445642,
         "cv": 766.7471483385231,
         "compressibility": 1.1631177035072457,
-        "idealPressure": 29884505.18414864
+        "idealPressure": 29884505.18414864,
+        "statePressure": 34759197.040237345,
+        "stateDpdT": 149716.99767445645,
+        "stateCv": 766.7471483385231
       },
       "reference": {
         "pressure": 34759197.04023734,
         "requiredVolume": 0.8,
         "dpdT": 149716.9976744564,
-        "cv": 766.7471483385231
+        "cv": 766.7471483385231,
+        "statePressure": 34759197.04023734,
+        "stateDpdT": 149716.9976744564,
+        "stateCv": 766.7471483385231
       },
       "relative_errors": {
         "pressure": 2.1434846691938874e-16,
         "requiredVolume": 6.938893903907228e-16,
         "dpdT": 1.9439229285118896e-16,
-        "cv": 0.0
+        "cv": 0.0,
+        "statePressure": 2.1434846691938874e-16,
+        "stateDpdT": 3.8878458570237793e-16,
+        "stateCv": 0.0
       },
       "ok": true
     }

@@ -57,6 +57,17 @@ model RoadsterVehicle
     omega_left=wheel_speed_left, omega_right=wheel_speed_right,
     velocity_x=measured_vx, velocity_z=measured_vz, velocity_y=measured_vy,
     ground_gap=ground_gap,ground_valid=ground_valid,yaw=autopilot_yaw);
+  // Reusable engineering readouts; presentation code only formats these.
+  output Real speed_mps(unit="m/s");
+  output Real speed_kmh(unit="km/h");
+  output Real speed_mph(unit="mi/h");
+  output Real pressure_bar(unit="bar");
+  output Real charge_percent(unit="%");
+  output Real boost_force_kn(unit="kN");
+  output Real lift_force_kn(unit="kN");
+  output Real yaw_force_kn(unit="kN");
+  output Real suction_force_kn(unit="kN");
+  output Real air_discharge_enabled;
   output Real torque_left;
   output Real torque_right;
   output Real freewheel_torque;
@@ -91,6 +102,16 @@ model RoadsterVehicle
   output Real heading_fl;
   output Real heading_fr;
 equation
+  speed_mps = sqrt(measured_vx*measured_vx+measured_vy*measured_vy+measured_vz*measured_vz);
+  speed_kmh = 3.6*speed_mps;
+  speed_mph = speed_mps/0.44704;
+  pressure_bar = tank_pressure_pa/100000.0;
+  charge_percent = 100.0*soc;
+  boost_force_kn = -jet_force_z/1000.0;
+  lift_force_kn = jet_force_y/1000.0;
+  yaw_force_kn = jet_force_x/1000.0;
+  suction_force_kn = downforce/1000.0;
+  air_discharge_enabled = powertrain.discharge_enabled;
   // Limit rack slew and high-speed steering authority. No visual-only yaw.
   steering_limit = min(1.0,atan(0.8*9.80665*wheelbase/max(1.0,measured_vx*measured_vx+measured_vz*measured_vz))/max_heading);
   der(steering_position) = max(-2.0,min(2.0,(max(-steering_limit,min(steering_limit,steer))-steering_position)/0.12));

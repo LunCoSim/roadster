@@ -60,4 +60,129 @@ def Cylinder "Nozzle5" {
     color3f[] primvars:displayColor = [(0.15,0.16,0.17)]
     bool physics:collisionEnabled = false
 }
+def Scope "Looks" {
+def Material "Lift" {
+    token outputs:surface.connect = </PerimeterThrusters/Looks/Lift/Surface.outputs:surface>
+    def Shader "Surface" {
+        uniform token info:implementationSource = "sourceAsset"
+        asset info:wgsl:sourceAsset = @../shaders/air_jet.wgsl@
+        float inputs:force = 0
+        float inputs:direction = 1
+        float inputs:reference_force = 30000
+        token outputs:surface
+    }
+}
+def Material "Left" {
+    token outputs:surface.connect = </PerimeterThrusters/Looks/Left/Surface.outputs:surface>
+    def Shader "Surface" {
+        uniform token info:implementationSource = "sourceAsset"
+        asset info:wgsl:sourceAsset = @../shaders/air_jet.wgsl@
+        float inputs:force = 0
+        float inputs:direction = 1
+        float inputs:reference_force = 5000
+        token outputs:surface
+    }
+}
+def Material "Right" {
+    token outputs:surface.connect = </PerimeterThrusters/Looks/Right/Surface.outputs:surface>
+    def Shader "Surface" {
+        uniform token info:implementationSource = "sourceAsset"
+        asset info:wgsl:sourceAsset = @../shaders/air_jet.wgsl@
+        float inputs:force = 0
+        float inputs:direction = -1
+        float inputs:reference_force = 5000
+        token outputs:surface
+    }
+}
+}
+def Cone "Jet0" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+    uniform token axis = "Y"
+    double height = 1
+    double radius = 1
+    double3 xformOp:translate = (-0.8, -1.04, -1.5)
+    double3 xformOp:rotateXYZ = (180, 0, 0)
+    double3 xformOp:scale = (0.16,1.4,0.16)
+    uniform token[] xformOpOrder = ["xformOp:translate","xformOp:rotateXYZ","xformOp:scale"]
+    bool physics:collisionEnabled = false
+    bool primvars:doNotCastShadows = true
+    uniform bool doubleSided = true
+    float[] primvars:displayOpacity = [0.5]
+    rel material:binding = </PerimeterThrusters/Looks/Lift>
+    float inputs:force = 0
+}
+def Cone "Jet1" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+    uniform token axis = "Y"
+    double height = 1
+    double radius = 1
+    double3 xformOp:translate = (-0.8, -1.04, 1.5)
+    double3 xformOp:rotateXYZ = (180, 0, 0)
+    double3 xformOp:scale = (0.16,1.4,0.16)
+    uniform token[] xformOpOrder = ["xformOp:translate","xformOp:rotateXYZ","xformOp:scale"]
+    bool physics:collisionEnabled = false
+    bool primvars:doNotCastShadows = true
+    uniform bool doubleSided = true
+    float[] primvars:displayOpacity = [0.5]
+    rel material:binding = </PerimeterThrusters/Looks/Lift>
+    float inputs:force = 0
+}
+def Cone "Jet2" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+    uniform token axis = "Y"
+    double height = 1
+    double radius = 1
+    double3 xformOp:translate = (0.8, -1.04, -1.5)
+    double3 xformOp:rotateXYZ = (180, 0, 0)
+    double3 xformOp:scale = (0.16,1.4,0.16)
+    uniform token[] xformOpOrder = ["xformOp:translate","xformOp:rotateXYZ","xformOp:scale"]
+    bool physics:collisionEnabled = false
+    bool primvars:doNotCastShadows = true
+    uniform bool doubleSided = true
+    float[] primvars:displayOpacity = [0.5]
+    rel material:binding = </PerimeterThrusters/Looks/Lift>
+    float inputs:force = 0
+}
+def Cone "Jet3" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+    uniform token axis = "Y"
+    double height = 1
+    double radius = 1
+    double3 xformOp:translate = (0.8, -1.04, 1.5)
+    double3 xformOp:rotateXYZ = (180, 0, 0)
+    double3 xformOp:scale = (0.16,1.4,0.16)
+    uniform token[] xformOpOrder = ["xformOp:translate","xformOp:rotateXYZ","xformOp:scale"]
+    bool physics:collisionEnabled = false
+    bool primvars:doNotCastShadows = true
+    uniform bool doubleSided = true
+    float[] primvars:displayOpacity = [0.5]
+    rel material:binding = </PerimeterThrusters/Looks/Lift>
+    float inputs:force = 0
+}
+def Cone "Jet4" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+    uniform token axis = "Y"
+    double height = 1
+    double radius = 1
+    double3 xformOp:translate = (-1.73, -0.1, -1.7)
+    double3 xformOp:rotateXYZ = (0, 0, 90)
+    double3 xformOp:scale = (0.16,1.4,0.16)
+    uniform token[] xformOpOrder = ["xformOp:translate","xformOp:rotateXYZ","xformOp:scale"]
+    bool physics:collisionEnabled = false
+    bool primvars:doNotCastShadows = true
+    uniform bool doubleSided = true
+    float[] primvars:displayOpacity = [0.5]
+    rel material:binding = </PerimeterThrusters/Looks/Left>
+    float inputs:force = 0
+}
+def Cone "Jet5" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+    uniform token axis = "Y"
+    double height = 1
+    double radius = 1
+    double3 xformOp:translate = (1.73, -0.1, -1.7)
+    double3 xformOp:rotateXYZ = (0, 0, -90)
+    double3 xformOp:scale = (0.16,1.4,0.16)
+    uniform token[] xformOpOrder = ["xformOp:translate","xformOp:rotateXYZ","xformOp:scale"]
+    bool physics:collisionEnabled = false
+    bool primvars:doNotCastShadows = true
+    uniform bool doubleSided = true
+    float[] primvars:displayOpacity = [0.5]
+    rel material:binding = </PerimeterThrusters/Looks/Right>
+    float inputs:force = 0
+}
 }

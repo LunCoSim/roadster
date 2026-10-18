@@ -36,7 +36,7 @@ def Xform "Roadster" (
     float inputs:thrust_x = 0
     float inputs:thrust_y = 0
     float inputs:thrust_z = 0
-    float inputs:fan = 0
+    float inputs:fan = 1
     float inputs:brake = 0
     float inputs:wheel_speed_left.connect = </Roadster/Wheel_RL.outputs:shaft_speed>
     float inputs:wheel_speed_right.connect = </Roadster/Wheel_RR.outputs:shaft_speed>
@@ -141,6 +141,16 @@ def Xform "Roadster" (
     float outputs:torque_y
     float outputs:torque_z
     float outputs:downforce
+    float outputs:speed_mps
+    float outputs:speed_kmh
+    float outputs:speed_mph
+    float outputs:pressure_bar
+    float outputs:charge_percent
+    float outputs:boost_force_kn
+    float outputs:lift_force_kn
+    float outputs:yaw_force_kn
+    float outputs:suction_force_kn
+    float outputs:air_discharge_enabled
     def Cylinder "Wheel_FL" (
         prepend apiSchemas = ["PhysxVehicleWheelAttachmentAPI", "PhysxVehicleWheelAPI"]
         prepend references = [@lunco://components/mobility/wheel.usda@</Wheel>, @lunco://components/mobility/suspensions/standard.usda@</Suspension>]
@@ -258,15 +268,32 @@ def Xform "Roadster" (
         "Thrust" {
             float inputs:boost_available = 1
             float inputs:gas_capacity_kg = 250
-            def Xform "RearThrusters" (prepend references = @../components/RearThrusters.usda@</RearThrusters>) {}
+            def Xform "RearThrusters" (prepend references = @../components/RearThrusters.usda@</RearThrusters>) {
+                over "Jet0" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+                over "Jet1" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+                over "Jet2" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+                over "Jet3" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+            }
         }
         "Rocket" {
             float inputs:boost_available = 1
             float inputs:lift_available = 1
             float inputs:gas_capacity_kg = 250
             over "Body" { over "PassengerSeat" { token visibility = "invisible" } }
-            def Xform "RearThrusters" (prepend references = @../components/RearThrusters.usda@</RearThrusters>) {}
-            def Xform "PerimeterThrusters" (prepend references = @../components/PerimeterThrusters.usda@</PerimeterThrusters>) {}
+            def Xform "RearThrusters" (prepend references = @../components/RearThrusters.usda@</RearThrusters>) {
+                over "Jet0" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+                over "Jet1" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+                over "Jet2" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+                over "Jet3" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+            }
+            def Xform "PerimeterThrusters" (prepend references = @../components/PerimeterThrusters.usda@</PerimeterThrusters>) {
+                over "Jet0" { float inputs:force.connect = </Roadster.outputs:jet_force_y> }
+                over "Jet1" { float inputs:force.connect = </Roadster.outputs:jet_force_y> }
+                over "Jet2" { float inputs:force.connect = </Roadster.outputs:jet_force_y> }
+                over "Jet3" { float inputs:force.connect = </Roadster.outputs:jet_force_y> }
+                over "Jet4" { float inputs:force.connect = </Roadster.outputs:jet_force_x> }
+                over "Jet5" { float inputs:force.connect = </Roadster.outputs:jet_force_x> }
+            }
         }
     }
 }

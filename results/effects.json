@@ -1,0 +1,553 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "key": "I",
+      "delivered": [
+        {
+          "name": "speed_mps",
+          "value": 3.1686954991650222,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": {
+              "id": "m/s",
+              "definition": null
+            },
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "speed_kmh",
+          "value": 11.40730379699408,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": {
+              "id": "km/h",
+              "definition": null
+            },
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "gas_mass_kg",
+          "value": 235.53009173080997,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "tank_temperature_k",
+          "value": 280.68583740236494,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "jet_force_z",
+          "value": -109490.49384859855,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "speed_mph",
+          "value": 7.088169960551679,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": {
+              "id": "mi/h",
+              "definition": null
+            },
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        }
+      ],
+      "render_sink": [
+        {
+          "name": "force",
+          "value": -109490.4921875,
+          "direction": "in",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": {
+              "min": -3.4028234663852886e+38,
+              "max": 3.4028234663852886e+38
+            },
+            "source": "shader parameter",
+            "authority": "material owner",
+            "writable": true
+          }
+        }
+      ],
+      "released_sink": [
+        {
+          "name": "force",
+          "value": -0.21533749997615814,
+          "direction": "in",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": {
+              "min": -3.4028234663852886e+38,
+              "max": 3.4028234663852886e+38
+            },
+            "source": "shader parameter",
+            "authority": "material owner",
+            "writable": true
+          }
+        }
+      ],
+      "ok": true
+    },
+    {
+      "key": "J",
+      "delivered": [
+        {
+          "name": "speed_mps",
+          "value": 0.15603580327063865,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": {
+              "id": "m/s",
+              "definition": null
+            },
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "gas_mass_kg",
+          "value": 249.37919250818513,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "speed_mph",
+          "value": 0.3490421511959526,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": {
+              "id": "mi/h",
+              "definition": null
+            },
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "speed_kmh",
+          "value": 0.5617288917742992,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": {
+              "id": "km/h",
+              "definition": null
+            },
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "jet_force_x",
+          "value": -5163.615405987703,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "tank_temperature_k",
+          "value": 292.61013748780937,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        }
+      ],
+      "render_sink": [
+        {
+          "name": "force",
+          "value": -5163.615234375,
+          "direction": "in",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": {
+              "min": -3.4028234663852886e+38,
+              "max": 3.4028234663852886e+38
+            },
+            "source": "shader parameter",
+            "authority": "material owner",
+            "writable": true
+          }
+        }
+      ],
+      "released_sink": [
+        {
+          "name": "force",
+          "value": -0.03168950229883194,
+          "direction": "in",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": {
+              "min": -3.4028234663852886e+38,
+              "max": 3.4028234663852886e+38
+            },
+            "source": "shader parameter",
+            "authority": "material owner",
+            "writable": true
+          }
+        }
+      ],
+      "ok": true
+    },
+    {
+      "key": "L",
+      "delivered": [
+        {
+          "name": "speed_kmh",
+          "value": 0.4215019764489079,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": {
+              "id": "km/h",
+              "definition": null
+            },
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "jet_force_x",
+          "value": 5163.615405987703,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "speed_mps",
+          "value": 0.11708388234691885,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": {
+              "id": "m/s",
+              "definition": null
+            },
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "tank_temperature_k",
+          "value": 292.61013748780937,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "gas_mass_kg",
+          "value": 249.37919250818513,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "speed_mph",
+          "value": 0.26190918563645055,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": {
+              "id": "mi/h",
+              "definition": null
+            },
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        }
+      ],
+      "render_sink": [
+        {
+          "name": "force",
+          "value": 5163.615234375,
+          "direction": "in",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": {
+              "min": -3.4028234663852886e+38,
+              "max": 3.4028234663852886e+38
+            },
+            "source": "shader parameter",
+            "authority": "material owner",
+            "writable": true
+          }
+        }
+      ],
+      "released_sink": [
+        {
+          "name": "force",
+          "value": 0.06152694672346115,
+          "direction": "in",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": {
+              "min": -3.4028234663852886e+38,
+              "max": 3.4028234663852886e+38
+            },
+            "source": "shader parameter",
+            "authority": "material owner",
+            "writable": true
+          }
+        }
+      ],
+      "ok": true
+    },
+    {
+      "key": "U",
+      "delivered": [
+        {
+          "name": "jet_force_y",
+          "value": 109490.49384859855,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "gas_mass_kg",
+          "value": 235.53009173080997,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "speed_kmh",
+          "value": 9.459798240378847,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": {
+              "id": "km/h",
+              "definition": null
+            },
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "speed_mps",
+          "value": 2.6277217334385683,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": {
+              "id": "m/s",
+              "definition": null
+            },
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "tank_temperature_k",
+          "value": 280.68583740236494,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        },
+        {
+          "name": "speed_mph",
+          "value": 5.878046110948837,
+          "direction": "out",
+          "metadata": {
+            "type": "scalar",
+            "unit": {
+              "id": "mi/h",
+              "definition": null
+            },
+            "frame": null,
+            "range": null,
+            "source": "Modelica co-simulation component",
+            "authority": "solver",
+            "writable": false
+          }
+        }
+      ],
+      "render_sink": [
+        {
+          "name": "force",
+          "value": 109490.4921875,
+          "direction": "in",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": {
+              "min": -3.4028234663852886e+38,
+              "max": 3.4028234663852886e+38
+            },
+            "source": "shader parameter",
+            "authority": "material owner",
+            "writable": true
+          }
+        }
+      ],
+      "released_sink": [
+        {
+          "name": "force",
+          "value": 0.45329999923706055,
+          "direction": "in",
+          "metadata": {
+            "type": "scalar",
+            "unit": null,
+            "frame": null,
+            "range": {
+              "min": -3.4028234663852886e+38,
+              "max": 3.4028234663852886e+38
+            },
+            "source": "shader parameter",
+            "authority": "material owner",
+            "writable": true
+          }
+        }
+      ],
+      "ok": true
+    }
+  ]
+}

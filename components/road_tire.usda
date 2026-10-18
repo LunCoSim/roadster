@@ -15,8 +15,9 @@ over "RoadTire" (
     float physxVehicleTire:restLoad = 9000
     # Steady-state slip-angle denominator floor: avoids the discontinuous
     # zero-speed lateral saturation of an uncalibrated tire curve.
-    float lunco:tire:minValidatedSpeed = 4.0
+    float lunco:tire:minValidatedSpeed = 8.0
     over "TireLook" { over "Shader" {
+        uniform asset info:wgsl:sourceAsset = @../shaders/road_tire.wgsl@
         color3f inputs:rim_color = (0.75,0.78,0.82)
         float inputs:spoke_count = 5
         float inputs:spoke_width = 0.22

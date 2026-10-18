@@ -31,6 +31,8 @@ def main():
         return response['data']
     # A fresh immutable source snapshot avoids an old editor compile or run.
     source=(root/'models/CompressedAir.mo').read_text().replace('package CompressedAir','package AirValidation').replace('end CompressedAir;','end AirValidation;')
+    source=source.replace('    output Real density(unit="kg/m3");\n    output Real pressure(unit="Pa");',
+        '    State realtime(density=density,temperature=temperature);\n    output Real statePressure = realtime.pressure;\n    output Real stateDpdT = realtime.dpdT;\n    output Real stateCv = realtime.cv;\n    output Real density(unit="kg/m3");\n    output Real pressure(unit="Pa");')
     doc=q('CreateNewScratchModel',dict(source=source,name='Roadster air EOS verification'))
     doc_id=doc['doc_id']
     deadline=time.monotonic()+30
@@ -58,11 +60,12 @@ def main():
                 time.sleep(.1)
             if status['state']!='done': raise RuntimeError(status)
             result=q('GetExperimentResult',dict(experiment_id=run_id,
-                variables=['pressure','requiredVolume','dpdT','cv','compressibility','idealPressure'],max_points=2))
+                variables=['pressure','requiredVolume','dpdT','cv','compressibility','idealPressure','statePressure','stateDpdT','stateCv'],max_points=2))
             series={name:values[-1] for name,values in result['series'].items()}
             expected=dict(pressure=pressure,requiredVolume=volume,
                 dpdT=CP.PropsSI('d(P)/d(T)|Dmass','Dmass',density,'T',temperature,'Air'),
                 cv=CP.PropsSI('Cvmass','Dmass',density,'T',temperature,'Air'))
+            expected.update(statePressure=pressure,stateDpdT=expected['dpdT'],stateCv=expected['cv'])
             errors={k:abs(series[k]-v)/abs(v) for k,v in expected.items()}
             check=dict(temperature_k=temperature,volume_m3=volume,mass_kg=250,
                 experiment_id=run_id,modelica=series,reference=expected,relative_errors=errors,

@@ -10,12 +10,6 @@ def Xform "World" (kind = "assembly") {
         vector3f physics:gravityDirection = (0,-1,0)
         float physics:gravityMagnitude = 9.80665
     }
-    def LunCoPolicy "RoadsterUiPolicy" {
-        uniform string lunco:policy:seam = "runtime.ui.properties"
-        uniform asset info:sourceAsset = @../scenarios/roadster_ui.rhai@
-        string lunco:policy:entry = "roadster_ui"
-        bool lunco:policy:deterministic = false
-    }
     def DistantLight "Sun" (prepend references = @lunco://lighting/sun.usda@</Sun>) {
         float inputs:intensity = 128000
         color3f inputs:color = (1,0.95,0.87)

@@ -42,4 +42,77 @@ def Cylinder "Nozzle3" {
     color3f[] primvars:displayColor = [(0.15,0.16,0.17)]
     bool physics:collisionEnabled = false
 }
+def Scope "Looks" {
+def Material "Rear" {
+    token outputs:surface.connect = </RearThrusters/Looks/Rear/Surface.outputs:surface>
+    def Shader "Surface" {
+        uniform token info:implementationSource = "sourceAsset"
+        asset info:wgsl:sourceAsset = @../shaders/air_jet.wgsl@
+        float inputs:force = 0
+        float inputs:direction = -1
+        float inputs:reference_force = 30000
+        token outputs:surface
+    }
+}
+}
+def Cone "Jet0" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+    uniform token axis = "Y"
+    double height = 1
+    double radius = 1
+    double3 xformOp:translate = (-0.55, -0.12, 2.97)
+    double3 xformOp:rotateXYZ = (90, 0, 0)
+    double3 xformOp:scale = (0.16,1.4,0.16)
+    uniform token[] xformOpOrder = ["xformOp:translate","xformOp:rotateXYZ","xformOp:scale"]
+    bool physics:collisionEnabled = false
+    bool primvars:doNotCastShadows = true
+    uniform bool doubleSided = true
+    float[] primvars:displayOpacity = [0.5]
+    rel material:binding = </RearThrusters/Looks/Rear>
+    float inputs:force = 0
+}
+def Cone "Jet1" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+    uniform token axis = "Y"
+    double height = 1
+    double radius = 1
+    double3 xformOp:translate = (-0.2, -0.12, 2.97)
+    double3 xformOp:rotateXYZ = (90, 0, 0)
+    double3 xformOp:scale = (0.16,1.4,0.16)
+    uniform token[] xformOpOrder = ["xformOp:translate","xformOp:rotateXYZ","xformOp:scale"]
+    bool physics:collisionEnabled = false
+    bool primvars:doNotCastShadows = true
+    uniform bool doubleSided = true
+    float[] primvars:displayOpacity = [0.5]
+    rel material:binding = </RearThrusters/Looks/Rear>
+    float inputs:force = 0
+}
+def Cone "Jet2" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+    uniform token axis = "Y"
+    double height = 1
+    double radius = 1
+    double3 xformOp:translate = (0.2, -0.12, 2.97)
+    double3 xformOp:rotateXYZ = (90, 0, 0)
+    double3 xformOp:scale = (0.16,1.4,0.16)
+    uniform token[] xformOpOrder = ["xformOp:translate","xformOp:rotateXYZ","xformOp:scale"]
+    bool physics:collisionEnabled = false
+    bool primvars:doNotCastShadows = true
+    uniform bool doubleSided = true
+    float[] primvars:displayOpacity = [0.5]
+    rel material:binding = </RearThrusters/Looks/Rear>
+    float inputs:force = 0
+}
+def Cone "Jet3" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+    uniform token axis = "Y"
+    double height = 1
+    double radius = 1
+    double3 xformOp:translate = (0.55, -0.12, 2.97)
+    double3 xformOp:rotateXYZ = (90, 0, 0)
+    double3 xformOp:scale = (0.16,1.4,0.16)
+    uniform token[] xformOpOrder = ["xformOp:translate","xformOp:rotateXYZ","xformOp:scale"]
+    bool physics:collisionEnabled = false
+    bool primvars:doNotCastShadows = true
+    uniform bool doubleSided = true
+    float[] primvars:displayOpacity = [0.5]
+    rel material:binding = </RearThrusters/Looks/Rear>
+    float inputs:force = 0
+}
 }

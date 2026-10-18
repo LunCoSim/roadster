@@ -134,8 +134,9 @@ def tires():
     float physxVehicleTire:restLoad = 9000
     # Steady-state slip-angle denominator floor: avoids the discontinuous
     # zero-speed lateral saturation of an uncalibrated tire curve.
-    float lunco:tire:minValidatedSpeed = 4.0
+    float lunco:tire:minValidatedSpeed = 8.0
     over "TireLook" { over "Shader" {
+        uniform asset info:wgsl:sourceAsset = @../shaders/road_tire.wgsl@
         color3f inputs:rim_color = (0.75,0.78,0.82)
         float inputs:spoke_count = 5
         float inputs:spoke_width = 0.22
@@ -160,6 +161,47 @@ def nozzles(name, stations):
     uniform token[] xformOpOrder = ["xformOp:translate"]
     color3f[] primvars:displayColor = [(0.15,0.16,0.17)]
     bool physics:collisionEnabled = false
+}}\n'''
+    text += 'def Scope "Looks" {\n'
+    axes = [('Rear', 'z', -1, 30000)] if name == 'RearThrusters' else [('Lift', 'y', 1, 30000),('Left', 'x', 1, 5000),('Right', 'x', -1, 5000)]
+    for label, axis, sign, reference in axes:
+        text += f'''def Material "{label}" {{
+    token outputs:surface.connect = </{name}/Looks/{label}/Surface.outputs:surface>
+    def Shader "Surface" {{
+        uniform token info:implementationSource = "sourceAsset"
+        asset info:wgsl:sourceAsset = @../shaders/air_jet.wgsl@
+        float inputs:force = 0
+        float inputs:direction = {sign}
+        float inputs:reference_force = {reference}
+        token outputs:surface
+    }}
+}}\n'''
+    text += '}\n'
+    for i, station in enumerate(stations):
+        x,y,z = station[:3]
+        if name == 'RearThrusters':
+            label,axis,offset,rotation = 'Rear','z',(0,0,.77),(90,0,0)
+        elif i < 4:
+            label,axis,offset,rotation = 'Lift','y',(0,-.72,0),(180,0,0)
+        elif x < 0:
+            label,axis,offset,rotation = 'Left','x',(-.77,0,0),(0,0,90)
+        else:
+            label,axis,offset,rotation = 'Right','x',(.77,0,0),(0,0,-90)
+        center = tuple(a+b for a,b in zip((x,y,z),offset))
+        text += f'''def Cone "Jet{i}" (prepend apiSchemas = ["MaterialBindingAPI"]) {{
+    uniform token axis = "Y"
+    double height = 1
+    double radius = 1
+    double3 xformOp:translate = {center}
+    double3 xformOp:rotateXYZ = {rotation}
+    double3 xformOp:scale = (0.16,1.4,0.16)
+    uniform token[] xformOpOrder = ["xformOp:translate","xformOp:rotateXYZ","xformOp:scale"]
+    bool physics:collisionEnabled = false
+    bool primvars:doNotCastShadows = true
+    uniform bool doubleSided = true
+    float[] primvars:displayOpacity = [0.5]
+    rel material:binding = </{name}/Looks/{label}>
+    float inputs:force = 0
 }}\n'''
     (ROOT/f'components/{name}.usda').write_text(text+'}\n')
 
@@ -196,7 +238,7 @@ def vehicle():
     float inputs:thrust_x = 0
     float inputs:thrust_y = 0
     float inputs:thrust_z = 0
-    float inputs:fan = 0
+    float inputs:fan = 1
     float inputs:brake = 0
     float inputs:wheel_speed_left.connect = </Roadster/Wheel_RL.outputs:shaft_speed>
     float inputs:wheel_speed_right.connect = </Roadster/Wheel_RR.outputs:shaft_speed>
@@ -290,7 +332,9 @@ def vehicle():
     def Xform "Body" (prepend references = @../components/body.usda@</Body>) {}
 '''
     outputs = ['torque_left','torque_right','freewheel_torque','force_local_z','force_local_y','force_local_x','force_x','force_y','force_z','torque_x','torque_y','torque_z','forward_speed',
-               'battery_power','soc','temperature_k','impulse_remaining','thruster_force','downforce']
+               'battery_power','soc','temperature_k','impulse_remaining','thruster_force','downforce',
+               'speed_mps','speed_kmh','speed_mph','pressure_bar','charge_percent',
+               'boost_force_kn','lift_force_kn','yaw_force_kn','suction_force_kn','air_discharge_enabled']
     text += ''.join(f'    float outputs:{name}\n' for name in outputs if name not in ['battery_power','soc','temperature_k','impulse_remaining','thruster_force','forward_speed'])
     for i, (name,x,z) in enumerate([('FL',-.86,-1.375),('FR',.86,-1.375),('RL',-.86,1.375),('RR',.86,1.375)]):
         width = .25 if i < 2 else .30
@@ -332,15 +376,32 @@ def vehicle():
         "Thrust" {
             float inputs:boost_available = 1
             float inputs:gas_capacity_kg = 250
-            def Xform "RearThrusters" (prepend references = @../components/RearThrusters.usda@</RearThrusters>) {}
+            def Xform "RearThrusters" (prepend references = @../components/RearThrusters.usda@</RearThrusters>) {
+                over "Jet0" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+                over "Jet1" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+                over "Jet2" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+                over "Jet3" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+            }
         }
         "Rocket" {
             float inputs:boost_available = 1
             float inputs:lift_available = 1
             float inputs:gas_capacity_kg = 250
             over "Body" { over "PassengerSeat" { token visibility = "invisible" } }
-            def Xform "RearThrusters" (prepend references = @../components/RearThrusters.usda@</RearThrusters>) {}
-            def Xform "PerimeterThrusters" (prepend references = @../components/PerimeterThrusters.usda@</PerimeterThrusters>) {}
+            def Xform "RearThrusters" (prepend references = @../components/RearThrusters.usda@</RearThrusters>) {
+                over "Jet0" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+                over "Jet1" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+                over "Jet2" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+                over "Jet3" { float inputs:force.connect = </Roadster.outputs:jet_force_z> }
+            }
+            def Xform "PerimeterThrusters" (prepend references = @../components/PerimeterThrusters.usda@</PerimeterThrusters>) {
+                over "Jet0" { float inputs:force.connect = </Roadster.outputs:jet_force_y> }
+                over "Jet1" { float inputs:force.connect = </Roadster.outputs:jet_force_y> }
+                over "Jet2" { float inputs:force.connect = </Roadster.outputs:jet_force_y> }
+                over "Jet3" { float inputs:force.connect = </Roadster.outputs:jet_force_y> }
+                over "Jet4" { float inputs:force.connect = </Roadster.outputs:jet_force_x> }
+                over "Jet5" { float inputs:force.connect = </Roadster.outputs:jet_force_x> }
+            }
         }
     }
 }
@@ -353,12 +414,6 @@ def scene(filename, trim, launch=False):
     def PhysicsScene "PhysicsScene" {
         vector3f physics:gravityDirection = (0,-1,0)
         float physics:gravityMagnitude = 9.80665
-    }
-    def LunCoPolicy "RoadsterUiPolicy" {
-        uniform string lunco:policy:seam = "runtime.ui.properties"
-        uniform asset info:sourceAsset = @../scenarios/roadster_ui.rhai@
-        string lunco:policy:entry = "roadster_ui"
-        bool lunco:policy:deterministic = false
     }
     def DistantLight "Sun" (prepend references = @lunco://lighting/sun.usda@</Sun>) {
         float inputs:intensity = 128000
@@ -436,4 +491,7 @@ if __name__ == '__main__':
     scene('roadster_thrust','Thrust')
     scene('roadster_rocket','Rocket')
     scene('roadster_launch','Thrust',launch=True)
-    print('Authored body, tire, thrusters, vehicle and four scenes.')
+    scene('roadster_motor_launch','Rocket',launch=True)
+    p=ROOT/'scenes/roadster_motor_launch.usda'
+    p.write_text(p.read_text().replace('../scenarios/tests/launch.rhai','../scenarios/tests/motor_launch.rhai'))
+    print('Authored body, tire, thrusters, vehicle and five scenes.')

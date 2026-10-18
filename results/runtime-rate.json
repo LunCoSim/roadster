@@ -1,0 +1,32 @@
+{
+  "ticks": 301,
+  "wall_s": 5.016743282000334,
+  "physics_hz": 59.99908368442202,
+  "worker": {
+    "participants": 1,
+    "samples": 7,
+    "worker_step_mean_ns": 719191.5714285715,
+    "worker_step_max_ns": 982309,
+    "response_latency_max_ns": 20462081,
+    "worker_backlog_count_max": 0
+  },
+  "health": {
+    "revision": 1494707,
+    "surfaces": {
+      "engine-health": {
+        "state": "ready",
+        "error": null,
+        "visible": true,
+        "properties": {
+          "frame_time_raw_ms": 7.57687,
+          "physics_step_ms": 0.416412,
+          "physics_revision": "100608",
+          "frame_time_ms": 7.482530972727604,
+          "fps": 134.20189605039144,
+          "physics_step_number": 100608.0,
+          "engine_revision": "183418"
+        }
+      }
+    }
+  }
+}

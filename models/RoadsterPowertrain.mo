@@ -47,6 +47,7 @@ model RoadsterPowertrain
   input Real yaw(unit="rad");
   input Real ground_gap(unit="m");
   input Real ground_valid;
+  CompressedAir.State air(density=gas_density,temperature=gas_temperature);
   Real energy_j(start=initial_soc*capacity_kwh*3600000, fixed=true);
   Real gas_mass(start=initial_gas_mass, fixed=true);
   Real valve_x(start=0,fixed=true);
@@ -139,7 +140,9 @@ equation
   tank_temperature_k = gas_temperature;
   tank_volume_m3 = tank_volume;
   gas_density = gas_mass_kg/tank_volume;
-  (raw_pressure,pressure_temperature_derivative,gas_cv) = CompressedAir.properties(gas_density,gas_temperature);
+  raw_pressure = air.pressure;
+  pressure_temperature_derivative = air.dpdT;
+  gas_cv = air.cv;
   tank_pressure_pa = max(ambient_pressure,raw_pressure);
   // Fixed-volume adiabatic open-system energy balance with real-gas cv and
   // (dp/dT)_rho. The nozzle remains an ideal-expansion engineering closure.

@@ -9,6 +9,9 @@ fi
 if [[ -z "$roadster_bin" && -x "$roadster_checkout/target/debug/luncosim" ]]; then
     roadster_bin="$roadster_checkout/target/debug/luncosim"
 fi
+if [[ -z "$roadster_bin" && -x "$roadster_root/.scratch/luncosim" ]]; then
+    roadster_bin="$roadster_root/.scratch/luncosim"
+fi
 if [[ -z "$roadster_bin" ]]; then
     echo 'Set LUNCOSIM_BIN to your production luncosim executable.' >&2
     exit 1
@@ -26,7 +29,7 @@ fi
 roadster_scene="${1:-roadster_rocket}"
 if (($#)); then shift; fi
 case "$roadster_scene" in
-    roadster_track|roadster_thrust|roadster_rocket|roadster_launch) ;;
-    *) echo 'Scene must be roadster_track, roadster_thrust, roadster_rocket or roadster_launch.' >&2; exit 1 ;;
+    roadster_track|roadster_thrust|roadster_rocket|roadster_launch|roadster_motor_launch) ;;
+    *) echo 'Scene must be roadster_track, roadster_thrust, roadster_rocket, roadster_launch or roadster_motor_launch.' >&2; exit 1 ;;
 esac
 exec "$roadster_bin" --no-vsync --no-throttle --scene "$roadster_root/scenes/$roadster_scene.usda" "$@"

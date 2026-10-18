@@ -85,3 +85,12 @@ validation of Tesla hardware or nozzle performance.
 Reproduce with `CoolProp==8.0.0` installed for the optional comparison script:
 `python3 scripts/check_gas_sizing.py --port 4198`. CoolProp is not required to
 open the Twin or run the authored Modelica equations.
+
+
+### Realtime reuse
+
+Instantiate `CompressedAir.State(density=..., temperature=...)` for continuous
+simulation. Its pressure, dpdT and cv outputs use the same package coefficients
+as the `properties` function and StorageSizing. The equation form allows the
+solver to lower the EOS into its scalar execution graph. The verification script
+compares both forms against CoolProp, including pressure, dpdT and cv.

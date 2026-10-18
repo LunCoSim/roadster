@@ -1,0 +1,13 @@
+kind = "lunco.policy.v1"
+scope = "twin"
+
+[startup]
+source = "startup.rhai"
+entry = "install_policies"
+
+[[policies]]
+hook = "runtime.ui.properties"
+source = "roadster_ui.rhai"
+entry = "roadster_ui"
+deterministic = false
+required = false

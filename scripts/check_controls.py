@@ -80,7 +80,6 @@ def main():
             # round trips can take seconds on an unfocused window, so sharing
             # one tank would measure depletion before later key checks.
             car=fresh_twin()
-            q('AcquireControl',dict(target=car,bind_camera=True))
             time.sleep(.1)
             before=ports(car)
             key(name,'Pressed')

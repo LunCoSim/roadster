@@ -15,7 +15,7 @@ This is an executable study, not Tesla CAD or production calibration.
 | Wheelbase / track / tire radius | 2.75 / 1.72 / 0.34 m | Study geometry; front/rear tire width 0.25/0.30 m. |
 | Wheel mass / rotational inertia | 24 kg / 1.4 kg·m² each | Complete rotating assembly assumption. |
 | Tire friction / longitudinal stiffness | 1.4 / 30000 N·s/m | Ideal dry surface; no measured supplier curves. |
-| Slip-angle speed floor | 4 m/s | Existing native tire regularization; steady-state curve is uncalibrated below this speed. Bounds its lateral force derivative at the 1/60 s step, avoiding brake/contact sign chatter. |
+| Slip-angle speed floor | 8 m/s | Existing native tire regularization; steady-state curve is uncalibrated below this speed. Bounds its lateral force derivative at the 1/60 s step, avoiding brake/contact sign chatter with suction enabled. The final native turn-and-brake observation settled below 1e-9 m/s; low-speed cornering remains a regularized approximation. |
 | Suspension spring / damper / rest length | 100000 N/m / 8000 N·s/m / 0.43 m | Passive per-wheel suspension. |
 | Steering actuator | 0.12 s, 2 command units/s | Max wheel angle 0.45 rad; speed-dependent rack limit based on 0.8 g lateral acceleration. Study tuning. |
 | Slip control | 0.12 target, gain 30 | Uses measured wheel and body speed; no separate wheel animation. |
