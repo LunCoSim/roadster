@@ -25,6 +25,7 @@ This is an executable study, not Tesla CAD or production calibration.
 | Starting pressure | **43.7023451 MPa absolute** | Modelica real-gas calculation for 250 kg dry air, 600 L and 20°C. Not an asserted Tesla operating pressure. |
 | Gas thermodynamics | Lemmon dry-air Helmholtz EOS | Reusable CompressedAir package. S05 describes nitrogen; dry air follows the user's study input. Nitrogen comparison in gas-storage.md. |
 | Nozzle throat / efficiency / valve response | 0.002 m² / 0.85 / 0.025 s | Uncalibrated aggregate area; ideal nozzle expansion with real-gas tank state. Side/yaw jet area is 4% of aggregate. |
+| Mounts / fixed lift trim | Front lift Z −0.90 m, rear +1.85 m; X ±0.80 m; rear-boost Y −0.02 m; COM Y −0.14 m | Study placement follows observed topology and clears modeled tires. Rear lift valve gain 0.486486 balances collective moment. Full cross-product moments are in Modelica. |
 | Thermal validity cutoff | 200 K | Discharge stops at the study-domain boundary. Conservative model guard, not Tesla hardware data. No calibrated regulator or phase-change closure. Finite wall heat capacity 60 kJ/K, gas-wall 200 W/K, ambient-wall 20 W/K. |
 | Gas inertia / COM | Centered 1.2 × 0.5 × 1.0 m equivalent distribution | Mass and diagonal inertia change. Actual tank placement and COM migration remain unverified. |
 | Motor heat capacity / cooling | 100000 J/K / 300 W/K | Lumped estimate at 298.15 K ambient. |

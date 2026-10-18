@@ -13,6 +13,10 @@ fn on_start(me, ctx) {
 fn on_event(me,evt,ctx) {
     let car=find_path("/World/Roadster");
     let name=evt.name;
+    // Fixed semantic action: one toggle on the press edge, never while held.
+    if name=="intent.edge" && evt.source==car && evt.value.intent=="action" && evt.value.edge=="pressed" {
+        name="roadster_fan_toggle";
+    }
     if name=="runtime.ui.action" {
         if evt.value.action=="roadster.restart" {cmd("OpenTwin",#{path:twin_root()});return;}
         if evt.value.action=="roadster.temperature.up" || evt.value.action=="roadster.temperature.down" {

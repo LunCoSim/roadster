@@ -13,7 +13,9 @@
     "speed_boost": [
       "KeyK"
     ],
-    "action": [],
+    "action": [
+      "KeyF"
+    ],
     "brake": [
       "ShiftLeft",
       "ShiftRight"
@@ -21,22 +23,22 @@
     "auxiliary_1": [
       "KeyI",
       "KeyQ",
-      "KeyO"
+      "KeyR"
     ],
     "auxiliary_2": [
       "KeyP",
-      "KeyQ",
-      "KeyU"
+      "KeyE",
+      "KeyR"
     ],
     "auxiliary_3": [
       "Comma",
-      "KeyE",
-      "KeyO"
+      "KeyQ",
+      "KeyC"
     ],
     "auxiliary_4": [
       "Period",
       "KeyE",
-      "KeyU"
+      "KeyC"
     ],
     "pause": [],
     "key_chords": {

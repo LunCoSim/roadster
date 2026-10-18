@@ -72,13 +72,15 @@ and [nozzle design](https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/noz
 provide the generic basis, not Tesla dimensions.
 
 Rear boost, four bottom jets and two front yaw jets share finite gas/flow.
-Corner lift acts at ±0.8 m and ±1.5 m; yaw lever is 1.7 m. The measured
+Lift mounts are X=±0.8 m, Z=−0.90/+1.85 m; the nose-side yaw arm is
+1.90 m. Rear mounts are Y=−0.02 m above the assumed Y=−0.14 m COM.
+`ThrusterMount.mo` includes each actual (point − COM) × force moment. The measured
 quaternion rotates moments to world axes. Individual corner commands retain
 separate force outputs. There are no invented reverse/downward jet banks.
 
 W/S commands only the motors and A/D only the steering rack, on the ground and
-in flight. K commands all four bottom valves equally, independent of altitude;
-Q/E command the front/rear pairs; U/O command the right/left pairs for roll.
+in flight. K commands all four bottom valves with fixed geometry trim, independent of altitude;
+R/C command the front/rear pairs; Q/E command the left/right pairs for roll.
 I/P/comma/period command individual corner valves and J/L the yaw jets. The
 paired controls are authored key aliases for those same
 corner commands, with no extra controller or flight-only behavior.
@@ -154,3 +156,7 @@ below 2 m/s for 0.5 s. The native pause freezes both physics and course time.
 The acceptance pilot uses ordinary drive, brake, fan and jet commands only.
 Completing this course demonstrates these maneuvers in this assumed model;
 it does not establish a safe real-car stunt envelope or Tesla calibration.
+
+See [propulsion and mounting analysis](propulsion-analysis.md) for native launch
+measurements, Modelica mean-force sizing/impulse, per-bank blowdown and the fixed
+rear lift valve gain of 0.486486 required by the unequal front/rear arms.

@@ -29,8 +29,8 @@ fi
 export LUNCO_ASSET_ROOT="$(python3 "$roadster_root/scripts/prepare_runtime_assets.py")"
 roadster_scene="${1:-roadster_skill_course}"
 if (($#)); then shift; fi
-case "$roadster_scene" in
-    roadster_track|roadster_thrust|roadster_rocket|roadster_launch|roadster_motor_launch|roadster_wall|roadster_wall_check|roadster_coast_check|roadster_ramp|roadster_skill_course|roadster_ramp_check|roadster_refill_check|roadster_earth_check) ;;
-    *) echo 'Scene must be roadster_track, roadster_thrust, roadster_rocket, roadster_launch roadster_motor_launch, roadster_wall or roadster_wall_check.' >&2; exit 1 ;;
-esac
+if [[ ! "$roadster_scene" =~ ^roadster_[a-z0-9_]+$ || ! -f "$roadster_root/scenes/$roadster_scene.usda" ]]; then
+    echo 'Choose an existing roadster_*.usda scene under scenes/ (without the extension).' >&2
+    exit 1
+fi
 exec "$roadster_bin" --no-vsync --no-throttle --scene "$roadster_root/scenes/$roadster_scene.usda" "$@"

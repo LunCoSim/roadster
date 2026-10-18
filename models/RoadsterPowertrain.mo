@@ -36,6 +36,7 @@ model RoadsterPowertrain
   parameter Real valve_tau(unit="s") = 0.025;
   parameter Real boost_available = 0;
   parameter Real lift_available = 0;
+  parameter Real lift_trim[4] = {1,1,1,1} "Fixed per-valve geometry gains, independent of flight/keys";
   parameter Real ambient_k = 298.15;
   parameter Real heat_capacity(unit="J/K") = 100000;
   parameter Real cooling_w_k = 300;
@@ -266,7 +267,7 @@ equation
   // K opens all lift jets; I/P/comma/period select corners. Space opens rear jets.
   der(valve_x) = (0.04*lift_available*max(-1.0,min(1.0,thrust_x))*actuator_enabled-valve_x)/valve_tau;
   for i in 1:4 loop
-    der(valve_lift[i]) = (0.25*lift_available*max(0.0,min(1.0,lift+thrust_y+lift_individual[i]))*actuator_enabled-valve_lift[i])/valve_tau;
+    der(valve_lift[i]) = (0.25*lift_available*lift_trim[i]*max(0.0,min(1.0,lift+thrust_y+lift_individual[i]))*actuator_enabled-valve_lift[i])/valve_tau;
     corner_lift[i] = force_magnitude*valve_lift[i]/max(1e-8,vector_norm);
   end for;
   valve_y = sum(valve_lift);

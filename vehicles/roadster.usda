@@ -26,11 +26,21 @@ def Xform "Roadster" (
     # Native raycast wheels contribute 4 x 24 kg to computed vehicle mass.
     # 1604 + 96 = 1700 kg dry vehicle. Modelica supplies gas mass in operation.
     float physics:mass = 1604
-    float3 physics:centerOfMass = (0,-0.14,0)
+    float3 physics:centerOfMass = (0,-0.14,0.0)
     float3 physics:diagonalInertia = (3022,3494,708)
     float physxRigidBody:linearDamping = 0
     float physxRigidBody:angularDamping = 0.5
     bool physxRigidBody:enableCCD = true
+    float inputs:lift_front_z = -0.9
+    float inputs:lift_rear_z = 1.85
+    float inputs:lift_x = 0.8
+    float inputs:lift_y = -0.32
+    float inputs:rear_jet_y = -0.02
+    float inputs:rear_jet_z = 2.3
+    float inputs:side_jet_y = -0.1
+    float inputs:side_jet_z = -1.9
+    float inputs:mass_center_y = -0.14
+    float inputs:mass_center_z = 0.0
     float inputs:boost = 0
     float inputs:lift = 0
     float inputs:thrust_x = 0
@@ -75,6 +85,7 @@ def Xform "Roadster" (
     float inputs:attitude_z.connect = </Roadster.outputs:quat_z>
     float inputs:throttle = 0
     float inputs:steer = 0
+    float inputs:launch_measurement_active = 0
     float inputs:program_active = 0
     float inputs:autopilot_enable = 0
     float inputs:autopilot_target_x = 0
@@ -314,6 +325,23 @@ def Xform "Roadster" (
     float outputs:aerodynamic_power_kw
     float outputs:wing_deployment_percent
     float outputs:steering_limit_degrees
+    float outputs:launch_recorded_time_s
+    float outputs:launch_rear_impulse_ns
+    float outputs:launch_rear_mean_force_n
+    float outputs:full_rear_force_n
+    float outputs:full_lift_force_n
+    float outputs:full_side_force_n
+    float outputs:full_mass_flow_kg_s
+    float outputs:actual_mass_flow_kg_s
+    float outputs:hover_fraction
+    float outputs:lift_net_acceleration
+    float outputs:side_yaw_acceleration
+    float outputs:thruster_pitch_moment_nm
+    float outputs:thruster_yaw_moment_nm
+    float outputs:thruster_roll_moment_nm
+    float outputs:launch_mean_force_n
+    float outputs:launch_wheel_mean_force_n
+    float outputs:launch_boost_mean_force_n
     float outputs:rear_tank_air_kg
     float outputs:cabin_tank_air_kg
     float outputs:fan_requested

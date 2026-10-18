@@ -50,7 +50,7 @@ fn on_tick(me,ctx) {
  if this.samples.len==0 || this.time-this.samples[this.samples.len-1].time_s>0.2 {
   let row=#{time_s:this.time,stage:stage,position:world_pos(this.car),speed:v.speed_mps,up_y:v.up_alignment,
    gas_kg:v.gas_mass_kg,temperature:v.tank_temperature_k,seal:v.fan_seal,suction:v.downforce,air_rotation:v.course_air_rotation_degrees};
-  this.samples=[row];emit("ROADSTER_COURSE_SAMPLE",row);
+  this.samples=[row];emit("ROADSTER_COURSE_SAMPLE_EVIDENCE",row);
  }
  if stage!=7 && stage!=8 && this.time<150.0 {return;}
  let native=query("QueryPhysicsState",#{id:this.car});

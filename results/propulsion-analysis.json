@@ -1,0 +1,62 @@
+{
+  "wheel_only_s": {
+    "Performance_1700kg": 1.5809441665967883,
+    "Rocket_1950kg": 1.7856431056531614
+  },
+  "boosted_s": 0.5159483021329071,
+  "boost_recorded_window_s": 0.5166666666666658,
+  "boost_mean_n": 80272.85748747765,
+  "boost_impulse_ns": 41474.309701863385,
+  "initial_modelica_analysis": {
+    "actual_mass_flow_kg_s": 0.0,
+    "air_discharge_enabled": 1.0,
+    "full_lift_force_n": 97183.9424395294,
+    "full_mass_flow_kg_s": 206.31553593453728,
+    "full_rear_force_n": 130756.57878558192,
+    "full_side_force_n": 5230.263151423277,
+    "gas_mass_kg": 250.0,
+    "hover_fraction": 0.19677085555464938,
+    "jet_force_x": 0.0,
+    "jet_force_y": 0.0,
+    "jet_force_z": -0.0,
+    "jet_lift_0": 0.0,
+    "jet_lift_1": 0.0,
+    "jet_lift_2": 0.0,
+    "jet_lift_3": 0.0,
+    "launch_boost_mean_force_n": 59359.076711947215,
+    "launch_mean_force_n": 88650.30508474576,
+    "launch_wheel_mean_force_n": 29291.22837279855,
+    "lift_net_acceleration": 40.03126919975867,
+    "pitch_rate_deg_s": 0.0,
+    "roll_rate_deg_s": 0.0,
+    "side_yaw_acceleration": 2.803375766516066,
+    "tank_pressure_pa": 43702342.5464219,
+    "tank_temperature_k": 293.1499938964844,
+    "thruster_pitch_moment_nm": 0.0,
+    "thruster_roll_moment_nm": 0.0,
+    "thruster_yaw_moment_nm": 0.0,
+    "vehicle_mass_kg": 1950.0,
+    "yaw_rate_deg_s": 0.0
+  },
+  "banks": {
+    "rear": {
+      "peak_force_n": 110217.28226999148,
+      "peak_mass_flow_kg_s": 177.28501287574454,
+      "thermal_guard_at_s": 1.1000000000000005,
+      "failures": []
+    },
+    "lift": {
+      "peak_force_n": 84692.44476267377,
+      "peak_mass_flow_kg_s": 135.57737589601967,
+      "thermal_guard_at_s": 1.466666666666666,
+      "failures": []
+    },
+    "side": {
+      "peak_force_n": 5155.619607954826,
+      "peak_mass_flow_kg_s": 8.14859150112447,
+      "thermal_guard_at_s": -1.0,
+      "failures": []
+    }
+  },
+  "note": "Mean force/impulse and sizing budget are Modelica outputs; trajectory and force plots use production observations. No Python dynamics solver."
+}

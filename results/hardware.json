@@ -3,56 +3,150 @@
   "nozzles": [
     {
       "path": "/World/Roadster/RearThrusters/Nozzle0",
-      "native_id": 4620967632255957
+      "native_id": 4620967632255957,
+      "body_position_m": [
+        -0.55,
+        -0.02,
+        2.3
+      ],
+      "exhaust_axis": "Z"
     },
     {
       "path": "/World/Roadster/RearThrusters/Nozzle1",
-      "native_id": 4622067143883014
+      "native_id": 4622067143883014,
+      "body_position_m": [
+        -0.2,
+        -0.02,
+        2.3
+      ],
+      "exhaust_axis": "Z"
     },
     {
       "path": "/World/Roadster/RearThrusters/Nozzle2",
-      "native_id": 4623166655508595
+      "native_id": 4623166655508595,
+      "body_position_m": [
+        0.2,
+        -0.02,
+        2.3
+      ],
+      "exhaust_axis": "Z"
     },
     {
       "path": "/World/Roadster/RearThrusters/Nozzle3",
-      "native_id": 4624266167137196
+      "native_id": 4624266167137196,
+      "body_position_m": [
+        0.55,
+        -0.02,
+        2.3
+      ],
+      "exhaust_axis": "Z"
     },
     {
       "path": "/World/Roadster/PerimeterThrusters/Nozzle0",
-      "native_id": 6465656804418795
+      "native_id": 6465656804418795,
+      "body_position_m": [
+        -0.8,
+        -0.32,
+        -0.9
+      ],
+      "exhaust_axis": "Y"
     },
     {
       "path": "/World/Roadster/PerimeterThrusters/Nozzle1",
-      "native_id": 6464557292793116
+      "native_id": 6464557292793116,
+      "body_position_m": [
+        -0.8,
+        -0.32,
+        1.85
+      ],
+      "exhaust_axis": "Y"
     },
     {
       "path": "/World/Roadster/PerimeterThrusters/Nozzle2",
-      "native_id": 6463457781165649
+      "native_id": 6463457781165649,
+      "body_position_m": [
+        0.8,
+        -0.32,
+        -0.9
+      ],
+      "exhaust_axis": "Y"
     },
     {
       "path": "/World/Roadster/PerimeterThrusters/Nozzle3",
-      "native_id": 6462358269537410
+      "native_id": 6462358269537410,
+      "body_position_m": [
+        0.8,
+        -0.32,
+        1.85
+      ],
+      "exhaust_axis": "Y"
     },
     {
       "path": "/World/Roadster/PerimeterThrusters/Nozzle4",
-      "native_id": 6461258757907255
+      "native_id": 6461258757907255,
+      "body_position_m": [
+        -0.96,
+        -0.1,
+        -1.9
+      ],
+      "exhaust_axis": "X"
     },
     {
       "path": "/World/Roadster/PerimeterThrusters/Nozzle5",
-      "native_id": 6460159246280296
+      "native_id": 6460159246280296,
+      "body_position_m": [
+        0.96,
+        -0.1,
+        -1.9
+      ],
+      "exhaust_axis": "X"
     }
   ],
   "available_seats": [
     "DriverSeat"
   ],
+  "mount_parameters": {
+    "lift_front_z": -0.8999999761581421,
+    "lift_rear_z": 1.850000023841858,
+    "lift_x": 0.800000011920929,
+    "lift_y": -0.3199999928474426,
+    "rear_jet_y": -0.019999999552965164,
+    "rear_jet_z": 2.299999952316284,
+    "side_jet_y": -0.10000000149011612,
+    "side_jet_z": -1.899999976158142,
+    "mass_center_y": -0.14000000059604645,
+    "mass_center_z": 0.0
+  },
+  "wheel_clearances": [
+    {
+      "wheel": "Wheel_FL",
+      "nozzle": 0,
+      "behind_tire_clearance_m": 0.0629999964237213
+    },
+    {
+      "wheel": "Wheel_RL",
+      "nozzle": 1,
+      "behind_tire_clearance_m": 0.06299999642372141
+    },
+    {
+      "wheel": "Wheel_FR",
+      "nozzle": 2,
+      "behind_tire_clearance_m": 0.0629999964237213
+    },
+    {
+      "wheel": "Wheel_RR",
+      "nozzle": 3,
+      "behind_tire_clearance_m": 0.06299999642372141
+    }
+  ],
   "modelica": {
-    "tank_temperature_k": 293.1499938964844,
-    "cabin_tank_air_kg": 166.66666666666666,
-    "vehicle_mass_kg": 1950.0,
-    "rear_tank_air_kg": 83.33333333333333,
     "tank_volume_m3": 0.6000000089406967,
     "gas_mass_kg": 250.0,
-    "tank_pressure_pa": 43702342.5464219
+    "tank_pressure_pa": 43702342.5464219,
+    "vehicle_mass_kg": 1950.0,
+    "tank_temperature_k": 293.1499938964844,
+    "rear_tank_air_kg": 83.33333333333333,
+    "cabin_tank_air_kg": 166.66666666666666
   },
   "native_mass_kg": 1950.0,
   "failures": [],

@@ -23,6 +23,9 @@ Public statements are manufacturer claims, not independently measured performanc
 See the [2026-10-18 specification audit](spec-audit.md) for the ten-nozzle count,
 200/400 L tank split, conflicting 2 x 250 kg report and remaining model deviations.
 
+See also the [propulsion and placement analysis](propulsion-analysis.md), with
+links to inspected reveal/walkaround photos and measured study force curves.
+
 ## Accepted current primary facts
 
 S01 distinguishes Performance, Thrust and Rocket. Performance and Thrust seat two;

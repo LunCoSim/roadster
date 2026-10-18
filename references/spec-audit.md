@@ -48,7 +48,7 @@ plume is not an additional thruster. No combustion or rocket fuel is modeled.
 | Active aero | S10 describes moving surfaces | Effective body-axis drag/lift model and airbrake, not a measured full aero map. |
 | Seating / trims | S01/S05: Performance and Thrust two seats; Rocket one | Rocket hides passenger seat; 10 jets. Performance has no jets; Thrust four rear jets. |
 | Thrust trim storage | S05: one 200 L vessel | **Thrust scene still uses the common 250 kg / 600 L study envelope.** It is not a hardware-faithful Thrust trim; default and launch acceptance now target Rocket. |
-| Acceleration | Reveal demo 0.81 s; published targets and rollout conventions differ | Strict ≤0.59 s is the user's standing-start acceptance target. Current study 0.5150 s; this does not validate a Tesla production claim. |
+| Acceleration | Reveal demo 0.81 s; published targets and rollout conventions differ | Strict ≤0.59 s is the user's standing-start acceptance target. Current study 0.51595 s; this does not validate a Tesla production claim. |
 | Dimensions / tires / inertia | No checked manufacturer drawing or tire curves | All geometry, wheelbase, radius, masses, inertias, friction and slip curves remain assumptions in assumptions.md. |
 | Thermal equipment | No directly checked tank thermal-management design | Passive wall exchange and conservative 200 K guard; external refill equipment is explicitly test service. |
 | Light photometry | No checked manufacturer beam measurements | Modelica-focused 3000 lm per beam; renderer input compensates its angular attenuation. Study optics only. |
@@ -71,3 +71,10 @@ individual gas inventories and native vehicle mass. `results/moving_jump.json`
 checks fixed driving meanings through takeoff; `results/controls.json` checks
 actual injected keys; `results/course.json` checks finite-actuator completion.
 The source and assumption columns above limit what these checks establish.
+
+## Force and placement follow-up
+
+The [propulsion analysis](propulsion-analysis.md) records the revised mount
+positions, clearance, complete cross-product moments, fixed lift-valve trim,
+per-bank forces and thermal limits. These are explicit study choices, not CAD
+measurements. F now toggles fans; Q/E selects left/right lift banks and R/C pitch.

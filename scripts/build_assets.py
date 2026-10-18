@@ -9,6 +9,17 @@ from pathlib import Path
 from math import sqrt, sin, cos, pi
 
 ROOT = Path(__file__).resolve().parents[1]
+# One offline authoring owner feeds USD geometry and Modelica parameter inputs.
+# The layout is a dimensioned study approximation, not Tesla CAD.
+MOUNTS = dict(lift_front_z=-.90,lift_rear_z=1.85,lift_x=.8,lift_y=-.32,
+              rear_jet_y=-.02,rear_jet_z=2.30,side_jet_y=-.1,side_jet_z=-1.90,
+              mass_center_y=-.14,mass_center_z=0.0)
+
+def thruster_stations():
+    return ([(x,MOUNTS['rear_jet_y'],MOUNTS['rear_jet_z']) for x in (-.55,-.2,.2,.55)],
+            [(x,MOUNTS['lift_y'],z,'Y') for x in (-MOUNTS['lift_x'],MOUNTS['lift_x'])
+             for z in (MOUNTS['lift_front_z'],MOUNTS['lift_rear_z'])]+
+            [(x,MOUNTS['side_jet_y'],MOUNTS['side_jet_z'],'X') for x in (-.96,.96)])
 HEADER = '#usda 1.0\n(\n    defaultPrim = "%s"\n    upAxis = "Y"\n    metersPerUnit = 1\n)\n\n'
 
 
@@ -269,6 +280,16 @@ def vehicle():
     float physxRigidBody:linearDamping = 0
     float physxRigidBody:angularDamping = 0.5
     bool physxRigidBody:enableCCD = true
+    float inputs:lift_front_z = -0.90
+    float inputs:lift_rear_z = 1.85
+    float inputs:lift_x = 0.8
+    float inputs:lift_y = -0.32
+    float inputs:rear_jet_y = -0.02
+    float inputs:rear_jet_z = 2.30
+    float inputs:side_jet_y = -0.1
+    float inputs:side_jet_z = -1.90
+    float inputs:mass_center_y = -0.14
+    float inputs:mass_center_z = 0
     float inputs:boost = 0
     float inputs:lift = 0
     float inputs:thrust_x = 0
@@ -313,6 +334,7 @@ def vehicle():
     float inputs:attitude_z.connect = </Roadster.outputs:quat_z>
     float inputs:throttle = 0
     float inputs:steer = 0
+    float inputs:launch_measurement_active = 0
     float inputs:program_active = 0
     float inputs:autopilot_enable = 0
     float inputs:autopilot_target_x = 0
@@ -434,6 +456,8 @@ def vehicle():
     outputs += ['refill_target_k','refill_target_pressure_pa','up_alignment','refill_momentum_force_n','refill_loading_power_w']
     outputs += ['thermal_guard_active','tank_wall_temperature_k','tank_heat_flow_w']
     outputs += ['aerodynamic_drag_kn','aerodynamic_downforce_kn','aerodynamic_power_kw','wing_deployment_percent','steering_limit_degrees']
+    outputs += ['launch_recorded_time_s','launch_rear_impulse_ns','launch_rear_mean_force_n']
+    outputs += ['full_rear_force_n','full_lift_force_n','full_side_force_n','full_mass_flow_kg_s','actual_mass_flow_kg_s','hover_fraction','lift_net_acceleration','side_yaw_acceleration','thruster_pitch_moment_nm','thruster_yaw_moment_nm','thruster_roll_moment_nm','launch_mean_force_n','launch_wheel_mean_force_n','launch_boost_mean_force_n']
     outputs += ['rear_tank_air_kg','cabin_tank_air_kg']
     outputs += ['fan_requested','fan_vacuum_kpa','fan_power_kw']
     outputs += ['flight_control_weight','pitch_rate_deg_s','roll_rate_deg_s','yaw_rate_deg_s']
@@ -609,6 +633,12 @@ def vehicle():
     }
 }
 '''
+    import re
+    for name,value in MOUNTS.items():
+        text,n=re.subn(r'float inputs:'+name+r' = [^\n]+', 'float inputs:'+name+' = '+str(value),text)
+        if n!=1:raise ValueError('Expected one geometry parameter '+name)
+    text=re.sub(r'float3 physics:centerOfMass = \([^\n]+\)',
+                f"float3 physics:centerOfMass = (0,{MOUNTS['mass_center_y']},{MOUNTS['mass_center_z']})",text)
     (ROOT/'vehicles/roadster.usda').write_text(text)
 
 
@@ -698,9 +728,9 @@ def scene(filename, trim, launch=False):
 if __name__ == '__main__':
     body()
     tires()
-    nozzles('RearThrusters', [(x,.20,2.20) for x in (-.55,-.2,.2,.55)])
-    nozzles('PerimeterThrusters', [(x,-.32,z,'Y') for x in (-.8,.8) for z in (-1.5,1.5)] +
-        [(-.96,-.1,-1.7,'X'),(.96,-.1,-1.7,'X')])
+    rear_stations,perimeter_stations=thruster_stations()
+    nozzles('RearThrusters',rear_stations)
+    nozzles('PerimeterThrusters',perimeter_stations)
     vehicle()
     scene('roadster_track','Performance')
     scene('roadster_thrust','Thrust')

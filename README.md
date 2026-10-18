@@ -36,19 +36,20 @@ Editor/inspector and Modelica documents to inspect parameters while paused.
 | Space | Forward air boost |
 | Shift | Wheel brakes |
 | K | All four bottom jets; short pulse to jump |
-| Q / E | Nose-up / nose-down jets (front / rear pairs) |
+| Q / E | Left / right bottom-jet pairs (raise that side for roll) |
+| R / C | Front / rear bottom-jet pairs (nose up / nose down) |
+| F | Toggle fans on/off, once per press |
 | J / L | Yaw jets |
 | I / P | Front-left / front-right bottom jets |
 | , / . | Rear-left / rear-right bottom jets |
-| U / O | Roll left/right (right / left bottom pairs) |
 | Ctrl+P | Pause/resume; P alone remains a corner jet |
 
 **WASD always controls the drivetrain.** It never opens thrusters. In the air,
 wheel torque and steering still operate, but tires cannot generate road forces
-without contact. K commands equal valves on all four bottom jets at any altitude;
+without contact. K commands all four bottom jets with fixed geometry trim at any altitude;
 there is no automatic pitch/roll/yaw correction or airborne control remapping.
 
-Fans have a HUD **ON/OFF** button and measured seal, suction and electrical power.
+Fans toggle with **F** or the HUD **ON/OFF** button and measured seal, suction and electrical power.
 Four rear extractors sit behind a dark grille. The forward headlights are actual
 USD spot lights, attached to the car; dusk exposure is authored on course cameras.
 The HUD reports speed, physical wheel angles, air mass/percentage, absolute
@@ -66,10 +67,10 @@ pressure, gas temperature, refill target and battery charge.
    **35–45 km/h**.
 5. Climb with wheel traction and measured fan sealing to the green upper marker.
    Follow the long return lip, then switch fans off near its end.
-6. Pulse **Q** (front jets) to pitch nose up, or **E** (rear jets)
+6. Pulse **R** (front jets) to pitch nose up, or **C** (rear jets)
    to pitch nose down. Opposing pairs counter rotation; release closes the valves
    rather than automatically leveling the car. Use left/right corner combinations
-   for roll (or **U/O**) and **J/L** for yaw. Align wheels down, land in the green area and brake.
+   for roll (or **Q/E**) and **J/L** for yaw. Align wheels down, land in the green area and brake.
    Completion requires four wheel contacts, upright attitude and low speed.
 
 **RETRY COURSE** reloads the authored starting state. The timer uses simulation
@@ -154,3 +155,11 @@ Maintain generated vehicle assets with `scripts/build_assets.py`. Author the
 ramp/course through the running USD document API with `scripts/author_ramp.py`
 and `scripts/author_ramp.py --course`; those scripts save and read back typed USD
 operations. Curve sampling constructs geometry, not vehicle motion.
+
+## Force and mounting analysis
+
+[Measured launch/force results and placement assumptions](references/propulsion-analysis.md)
+include the rear mounting moment, balanced collective geometry, wheel-only
+Performance/Rocket baselines and finite tank blowdown. The [plots](results/propulsion-analysis.png)
+and [layout](results/thruster-layout.png) are generated from recorded observations
+and the authored study geometry.

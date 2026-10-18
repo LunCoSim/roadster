@@ -47,7 +47,7 @@ fn on_tick(me, ctx) {
         this.initial_impulse = sample(this.car,"impulse_remaining");
         this.launch_at = this.elapsed;
         drive(this.car, 1.0, 0.0);
-        cmd("SetPorts", #{target: this.car, writes: [["brake",0.0],["fan",1.0],["boost",1.0]]});
+        cmd("SetPorts", #{target: this.car, writes: [["launch_measurement_active",1.0],["brake",0.0],["fan",1.0],["boost",1.0]]});
         return;
     }
     let t = this.elapsed-this.launch_at;
@@ -62,6 +62,7 @@ fn on_tick(me, ctx) {
         let fraction = (26.8224-this.previous_speed)/max(0.0000001,velocity-this.previous_speed);
         this.crossing = this.previous_time+fraction*(t-this.previous_time);
         this.crossing_speed = velocity;
+        cmd("SetPorts",#{target:this.car,writes:[["launch_measurement_active",0.0]]});
     }
     if this.samples.len() == 0 || t-this.samples[this.samples.len()-1].time_s >= 0.05 {
         this.samples.push(#{time_s:t, speed_m_s:velocity, soc:soc,
@@ -108,6 +109,9 @@ fn on_tick(me, ctx) {
     let result = sysml_requirements::evaluate(this.source,checks);
     emit("ROADSTER_LAUNCH_EVIDENCE", #{standing_start_0_60_s:this.crossing,
         travel_m:travel, peak_speed_m_s:this.max_speed, initial_soc:this.initial_soc,
+        recorded_boost_window_s:sample(this.car,"launch_recorded_time_s"),
+        boost_impulse_to_60_ns:sample(this.car,"launch_rear_impulse_ns"),
+        mean_boost_to_60_n:sample(this.car,"launch_rear_mean_force_n"),
         final_soc:soc, samples:this.samples});
     print("ROADSTER: 0-60 standing-start="+this.crossing+" s; travel="+travel+" m; SOC="+soc);
     this.done = true;

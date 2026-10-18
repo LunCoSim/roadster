@@ -7,7 +7,7 @@
   <property name="rr_air_status">AIR READY</property><property name="rr_air_color">#68e0b2</property>
   <property name="rr_fill_temperature">293.2 K</property>
   <property name="rr_temperature">293 K</property><property name="rr_refill_label">REFILL AIR</property>
-  <property name="rr_fan_state">FANS ON</property><property name="rr_fan_label">TURN FANS OFF</property>
+  <property name="rr_fan_state">FANS ON</property><property name="rr_fan_label">F · FANS OFF</property>
   <property name="rr_suction">0.0 kN suction</property><property name="rr_fan_detail">0 kPa / 0 kW</property>
   <property name="rr_aero">Drag 0.0 kN</property><property name="rr_battery">90% battery</property>
   <property name="rr_mode">DRIVE</property><property name="rr_rates">P 0 / R 0 / Y 0 deg/s</property>
@@ -17,8 +17,8 @@
       <node id="rr-mission-row"><text id="rr-mission-title">{rr_course_title}</text><button id="rr-retry" on_press="runtime_ui_authored_action" tag:action="roadster.restart"><text id="rr-retry-text">RETRY COURSE</text></button></node>
       <text id="rr-mission-hint">{rr_course_hint}</text><text id="rr-mission-metrics">{rr_course_metrics}</text>
       <text id="rr-title">ROADSTER / EARTH / {rr_mode}</text>
-      <text id="rr-help-drive">WASD drive · Space boost · Shift brake · K jump · Ctrl+P pause</text>
-      <text id="rr-help-air">Jets: Q nose up · E nose down · J/L yaw · U/O roll · K lift</text>
+      <text id="rr-help-drive">WASD drive · Space boost · Shift brake · K jump · F fans · Ctrl+P pause</text>
+      <text id="rr-help-air">Jets: Q/E left/right lift · R/C pitch · J/L yaw · I/P/,/. corners</text>
     </node>
     <node id="rr-bar">
       <node id="rr-speed-block"><text id="rr-speed">{rr_speed}</text><text id="rr-speed-unit">km/h   /   {rr_mph}</text><text id="rr-battery">{rr_battery}</text><text id="rr-steering">{rr_steering}</text></node>

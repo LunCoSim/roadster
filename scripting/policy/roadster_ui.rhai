@@ -49,12 +49,12 @@ fn vehicle_ui(v) {
         out.rr_temperature = text_number(v.tank_temperature_k,10.0)+" K";
         out.rr_refill_label = if servicing {"STOP REFILL"}else{"REFILL AIR"};
         out.rr_fan_state = fan_state;
-        out.rr_fan_label = if v.fan_requested>0.5 {"TURN FANS OFF"}else{"TURN FANS ON"};
+        out.rr_fan_label = if v.fan_requested>0.5 {"F · FANS OFF"}else{"F · FANS ON"};
         out.rr_suction = text_number(v.suction_force_kn,10.0)+" kN suction";
         out.rr_fan_detail = text_number(v.fan_vacuum_kpa,10.0)+" kPa / "+text_number(v.fan_power_kw,10.0)+" kW";
         out.rr_aero = "Drag "+text_number(v.aerodynamic_drag_kn,100.0)+" kN / Aero load "+text_number(v.aerodynamic_downforce_kn,10.0)+" kN";
         out.rr_battery = text_number(v.charge_percent,10.0)+"% battery";
-        out.rr_mode = if v.flight_control_weight>0.5 {"FLIGHT / MANUAL RATE"}else{"DRIVE"};
+        out.rr_mode = if v.flight_control_weight>0.5 {"FLIGHT / DIRECT JETS"}else{"DRIVE"};
         out.rr_rates = "Pitch "+text_number(v.pitch_rate_deg_s,10.0)+" / Roll "+text_number(v.roll_rate_deg_s,10.0)+" deg/s";
         out.rr_force = "Lift "+text_number(v.lift_force_kn,10.0)+" kN / Boost "+text_number(v.boost_force_kn,10.0)+" kN";
         out.rr_service = if servicing {"Test supply: "+text_number(v.refill_flow_kg_s,10.0)+" kg/s"}else{"Earth g = 9.80665 m/s2"};
@@ -70,8 +70,8 @@ fn course_ui(c) {
   "Fans OFF. Build 65–85 km/h. Tap K (~0.4 s) at YELLOW line. Clear all three blocks.",
   "Drive through green posts for immediate refill. Fans ON, then slow to 35–45 km/h for ramp.",
   "Fans ON. Aim for 35–45 km/h at ramp entry. W climbs; keep wheels sealed to ramp.",
-  "Follow the long return lip. At the green crest: fans OFF. Pulse Q/E to flip.",
-  "Q nose up · E nose down · J/L yaw · U/O roll. Counterpulse to stop rotation. Land wheels down, Shift brake.",
+  "Follow the long return lip. At the green crest: fans OFF. Pulse R/C to flip.",
+  "R nose up · C nose down · J/L yaw · Q/E left/right lift. Counterpulse to stop rotation. Land wheels down, Shift brake.",
   "Launch, three blocks, fan climb and manual flip landed on FOUR wheels. Retry for a faster run.",
   "Checkpoint missed. Retry resets course, car, air and the simulation clock."];
  let index=max(0,min(8,c.course_stage.round().to_int()));

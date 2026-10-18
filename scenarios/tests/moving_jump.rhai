@@ -6,13 +6,13 @@ fn simulation_dependencies(me,ctx) {
 }
 fn on_start(me,ctx) {
  this.car=find_path("/World/Roadster");this.time=0.0;this.jump_at= -1.0;
- this.done=false;this.air_ticks=0;this.max_jet_imbalance=0.0;this.max_uncommanded_jet=0.0;
+ this.done=false;this.air_ticks=0;this.max_collective_pitch_moment=0.0;this.max_uncommanded_jet=0.0;
  this.flight_motor_torque=0.0;this.max_rear_height_difference=0.0;this.rows=[];
  this.commands_seen=[false,false,false,false];
 }
 fn on_tick(me,ctx) {
  if this.done {return;}this.time+=dt();let v=#{};
- for p in query("ReadPorts",#{api_id:this.car,port_names:["speed_mps","flight_control_weight","torque_left","jet_lift_0","jet_lift_1","jet_lift_2","jet_lift_3","jet_force_x","jet_force_z","pitch_rate_deg_s","up_alignment","quat_w","quat_x","quat_y","quat_z"]}).ports {
+ for p in query("ReadPorts",#{api_id:this.car,port_names:["thruster_pitch_moment_nm","speed_mps","flight_control_weight","torque_left","jet_lift_0","jet_lift_1","jet_lift_2","jet_lift_3","jet_force_x","jet_force_z","pitch_rate_deg_s","up_alignment","quat_w","quat_x","quat_y","quat_z"]}).ports {
   if p.direction=="out" {v[p.name]=p.value;}
  }
  let throttle=if this.time<1.0 {0.0}else{1.0};let steer=0.0;let lift=0.0;
@@ -25,9 +25,9 @@ fn on_tick(me,ctx) {
   if elapsed>=1.25 && elapsed<1.55 {throttle=0.0;steer=1.0;}
   if v.flight_control_weight>0.99 {
    this.air_ticks+=1;
-   this.max_jet_imbalance=max(this.max_jet_imbalance,abs(v.jet_lift_0+v.jet_lift_2-v.jet_lift_1-v.jet_lift_3));
-   // Rear/front points are +/-1.5 m on the body Z axis; report actual attitude.
-   let rear_minus_front=6.0*(v.quat_y*v.quat_z-v.quat_w*v.quat_x);
+   this.max_collective_pitch_moment=max(this.max_collective_pitch_moment,abs(v.thruster_pitch_moment_nm));
+   // Rear/front axle body points span 2.75 m; report actual attitude.
+   let rear_minus_front=5.5*(v.quat_y*v.quat_z-v.quat_w*v.quat_x);
    this.max_rear_height_difference=max(this.max_rear_height_difference,abs(rear_minus_front));
    if elapsed>0.1 && elapsed<0.4 {this.flight_motor_torque=max(this.flight_motor_torque,v.torque_left);this.commands_seen[0]=true;}
    if elapsed>0.75 && elapsed<0.9 {this.commands_seen[1]=true;}
@@ -50,11 +50,11 @@ fn on_tick(me,ctx) {
  let failures=[];
  if this.air_ticks<30 {failures.push("Insufficient real airborne samples");}
  for seen in this.commands_seen {if !seen {failures.push("A driving command was not exercised in flight");}}
- if this.max_jet_imbalance>0.01 {failures.push("Collective lift created a front/rear thrust imbalance");}
+ if this.max_collective_pitch_moment>0.01 {failures.push("Collective lift created an uncommanded pitch moment");}
  if this.max_uncommanded_jet>1.0 {failures.push("WASD opened an uncommanded thruster");}
  if this.flight_motor_torque<1.0 {failures.push("W stopped controlling the motors in flight");}
  emit("ROADSTER_MOVING_JUMP_EVIDENCE",#{jump_at_s:this.jump_at,airborne_ticks:this.air_ticks,
-  maximum_front_rear_force_difference_n:this.max_jet_imbalance,maximum_uncommanded_jet_n:this.max_uncommanded_jet,
+  maximum_collective_pitch_moment_nm:this.max_collective_pitch_moment,maximum_uncommanded_jet_n:this.max_uncommanded_jet,
   flight_motor_torque_nm:this.flight_motor_torque,maximum_body_front_rear_height_difference_m:this.max_rear_height_difference,
   commands_exercised_in_flight:this.commands_seen,samples:this.rows,failures:failures});
  drive(this.car,0.0,0.0);cmd("SetPorts",#{target:this.car,writes:[["thrust_y",0.0]]});

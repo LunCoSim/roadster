@@ -53,9 +53,9 @@ fn on_tick(me,ctx) {
    if this.blocks==3 {this.stage=3;notify("Three blocks cleared. Continue through the next GREEN waypoint for an immediate refill.");}
   }
  }
- if this.stage==4 && m.climb_gate>0.5 {this.stage=5;notify("Fan climb cleared. Follow the return lip to the green crest, then fans OFF. Use Q/E to pitch.");}
+ if this.stage==4 && m.climb_gate>0.5 {this.stage=5;notify("Fan climb cleared. Follow the return lip to the green crest, then fans OFF. Use R/C to pitch.");}
  if this.stage==5 && v.flight_control_weight>0.8 && v.position_y>20.0 {
-  this.stage=6;notify("Manual flip: Q nose up; E nose down. Pulse opposing jets to stop rotation. J/L yaw, U/O roll, K body-up thrust. WASD stays drivetrain. Land wheels DOWN, Shift to stop.");
+  this.stage=6;notify("Manual flip: R nose up; C nose down. Pulse opposing jets to stop rotation. J/L yaw, Q/E left/right lift, K body-up thrust. WASD stays drivetrain. Land wheels DOWN, Shift to stop.");
  }
  if this.stage==6 {
   if m.landing_gate>0.5 {

@@ -17,7 +17,7 @@ for line in log_text.splitlines():
  if line.startswith('LUNCO_SCENE_TEST_EVIDENCE '):
   event=json.loads(line.split(' ',1)[1])
   if event['name']==a.channel+'_EVIDENCE':events.append(decode(event['data']))
-  if event['name']==a.channel+'_SAMPLE':samples.append(decode(event['data']))
+  if event['name']==a.channel+'_SAMPLE_EVIDENCE':samples.append(decode(event['data']))
 if not events:raise RuntimeError(f'No evidence: results/{key}.log')
 if samples:events[-1]['samples']=samples
 (ROOT/f'results/{key}.json').write_text(json.dumps(events[-1],indent=2)+'\n')

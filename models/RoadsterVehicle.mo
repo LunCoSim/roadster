@@ -21,10 +21,52 @@ model RoadsterVehicle
   output Real jump_clearance;
   output Real climb_gate;
   output Real landing_gate;
+  // Positions are authored in USD body coordinates (forward -Z, up +Y).
+  parameter Real lift_front_z = -0.90;
+  parameter Real lift_rear_z = 1.85;
+  parameter Real lift_x = 0.8;
+  parameter Real lift_y = -0.32;
+  parameter Real rear_jet_y = -0.02;
+  parameter Real rear_jet_z = 2.30;
+  parameter Real side_jet_y = -0.1;
+  parameter Real side_jet_z = -1.90;
+  parameter Real mass_center_y = -0.14;
+  parameter Real mass_center_z = 0.0;
+  parameter Real rear_lift_trim = min(1.0,max(0.0,(mass_center_z-lift_front_z)/(lift_rear_z-mass_center_z)))
+    "Fixed geometry trim for collective and bank commands, not attitude feedback";
+  LaunchSizing launch_sizing(initial_mass=powertrain.dry_mass_kg+boost_available*gas_capacity_kg);
+  ThrusterMount rear_mount(point={0,rear_jet_y,rear_jet_z},center_of_mass={0,mass_center_y,mass_center_z},force={0,0,jet_force_z});
+  ThrusterMount fl_mount(point={-lift_x,lift_y,lift_front_z},center_of_mass={0,mass_center_y,mass_center_z},force={0,jet_lift_0,0});
+  ThrusterMount rl_mount(point={-lift_x,lift_y,lift_rear_z},center_of_mass={0,mass_center_y,mass_center_z},force={0,jet_lift_1,0});
+  ThrusterMount fr_mount(point={lift_x,lift_y,lift_front_z},center_of_mass={0,mass_center_y,mass_center_z},force={0,jet_lift_2,0});
+  ThrusterMount rr_mount(point={lift_x,lift_y,lift_rear_z},center_of_mass={0,mass_center_y,mass_center_z},force={0,jet_lift_3,0});
+  // Opposing nose-side jets share Y/Z. Their X-coordinate is along the force
+  // line and therefore does not alter their moment about the centered X COM.
+  ThrusterMount side_mount(point={0,side_jet_y,side_jet_z},center_of_mass={0,mass_center_y,mass_center_z},force={jet_force_x,0,0});
+  output Real full_rear_force_n;
+  output Real full_lift_force_n;
+  output Real full_side_force_n;
+  output Real full_mass_flow_kg_s;
+  output Real actual_mass_flow_kg_s;
+  output Real hover_fraction;
+  output Real lift_net_acceleration;
+  output Real side_yaw_acceleration;
+  output Real thruster_pitch_moment_nm;
+  output Real thruster_yaw_moment_nm;
+  output Real thruster_roll_moment_nm;
+  output Real launch_mean_force_n;
+  output Real launch_wheel_mean_force_n;
+  output Real launch_boost_mean_force_n;
   parameter Real wheelbase = 2.75;
   parameter Real track = 1.72;
   parameter Real max_heading = 0.45;
   input Real throttle;
+  input Real launch_measurement_active "Acceptance instrumentation only; no physical effect";
+  Real launch_elapsed(start=0,fixed=true);
+  Real launch_rear_impulse(start=0,fixed=true);
+  output Real launch_recorded_time_s;
+  output Real launch_rear_impulse_ns;
+  output Real launch_rear_mean_force_n;
   input Real steer;
   input Real program_active;
   input Real autopilot_enable;
@@ -143,7 +185,7 @@ model RoadsterVehicle
     autopilot_position_x=autopilot_position_x,autopilot_position_z=autopilot_position_z,
     autopilot_yaw=autopilot_yaw,autopilot_yaw_rate=autopilot_yaw_rate,piloted=piloted);
   RoadsterPowertrain powertrain(
-    boost_available=boost_available, lift_available=lift_available,
+    boost_available=boost_available, lift_available=lift_available,lift_trim={1,rear_lift_trim,1,rear_lift_trim},
     rear_tank_volume=rear_tank_volume,cabin_tank_volume=cabin_tank_volume,
     gas_capacity_kg=gas_capacity_kg,initial_fill=initial_fill,fan_initial_fraction=fan_initial_fraction,initial_gas_temperature=initial_gas_temperature,
     steer=steer,attitude={attitude_w,attitude_x,attitude_y,attitude_z},omega_body=omega_body,headlight_switch=headlights,
@@ -259,6 +301,25 @@ model RoadsterVehicle
   output Real heading_fl;
   output Real heading_fr;
 equation
+  der(launch_elapsed) = max(0.0,min(1.0,launch_measurement_active));
+  der(launch_rear_impulse) = max(0.0,min(1.0,launch_measurement_active))*abs(jet_force_z);
+  launch_recorded_time_s = launch_elapsed;
+  launch_rear_impulse_ns = launch_rear_impulse;
+  launch_rear_mean_force_n = launch_rear_impulse/max(1e-9,launch_elapsed);
+  full_rear_force_n = boost_available*powertrain.full_area_force;
+  full_lift_force_n = lift_available*0.5*(1.0+rear_lift_trim)*powertrain.full_area_force;
+  full_side_force_n = lift_available*0.04*powertrain.full_area_force;
+  full_mass_flow_kg_s = max(boost_available,lift_available)*powertrain.throat_area*powertrain.mass_flux*powertrain.discharge_enabled;
+  actual_mass_flow_kg_s = powertrain.mass_flow;
+  hover_fraction = vehicle_mass_kg*9.80665/max(1.0,full_lift_force_n);
+  lift_net_acceleration = full_lift_force_n/vehicle_mass_kg-9.80665;
+  side_yaw_acceleration = abs(side_jet_z-mass_center_z)*full_side_force_n/vehicle_inertia_yy;
+  thruster_pitch_moment_nm = rear_mount.moment[1]+fl_mount.moment[1]+rl_mount.moment[1]+fr_mount.moment[1]+rr_mount.moment[1]+side_mount.moment[1];
+  thruster_yaw_moment_nm = rear_mount.moment[2]+fl_mount.moment[2]+rl_mount.moment[2]+fr_mount.moment[2]+rr_mount.moment[2]+side_mount.moment[2];
+  thruster_roll_moment_nm = rear_mount.moment[3]+fl_mount.moment[3]+rl_mount.moment[3]+fr_mount.moment[3]+rr_mount.moment[3]+side_mount.moment[3];
+  launch_mean_force_n = launch_sizing.required_mean_net_force;
+  launch_wheel_mean_force_n = launch_sizing.estimated_mean_wheel_net_force;
+  launch_boost_mean_force_n = launch_sizing.estimated_additional_mean_boost;
   headlight_intensity_lm = powertrain.headlights.renderer_isotropic_lumens;
   headlight_power_w = powertrain.headlights.electrical_power;
   headlight_peak_candela = powertrain.headlights.peak_candela;
@@ -390,8 +451,8 @@ equation
   tank_volume_m3 = powertrain.tank_volume_m3;
   rear_tank_air_kg = powertrain.rear_tank_air_kg;
   cabin_tank_air_kg = powertrain.cabin_tank_air_kg;
-  // Each corner lift force has its own lever arm. Symmetric commands cancel
-  // moments; individual commands pitch and roll the vehicle physically.
+  // Each corner has its authored lever arm. Fixed rear-valve trim balances
+  // the unequal fore/aft arms; individual commands create real moments.
   jet_lift_0 = powertrain.corner_lift[1];
   jet_lift_1 = powertrain.corner_lift[2];
   jet_lift_2 = powertrain.corner_lift[3];
@@ -406,11 +467,11 @@ equation
   // tank distribution. The native solver receives the corresponding loading
   // torque while its inertia is updated; co-rotating outgoing gas cancels its
   // own inertia-change term. No angular-velocity rescaling is scripted.
-  moment_body_x = 1.5*(jet_lift_0+jet_lift_2-jet_lift_1-jet_lift_3)
+  moment_body_x = thruster_pitch_moment_nm
     -powertrain.mass_inflow*boost_available*(0.5^2+1.0^2)/12.0*omega_body[1];
-  moment_body_y = -1.7*jet_force_x
+  moment_body_y = thruster_yaw_moment_nm
     -powertrain.mass_inflow*boost_available*(1.2^2+1.0^2)/12.0*omega_body[2];
-  moment_body_z = 0.8*(-jet_lift_0-jet_lift_1+jet_lift_2+jet_lift_3)
+  moment_body_z = thruster_roll_moment_nm
     -powertrain.mass_inflow*boost_available*(1.2^2+0.5^2)/12.0*omega_body[3];
   torque_x = (1.0-2.0*(attitude_y^2+attitude_z^2))*moment_body_x
     +2.0*(attitude_x*attitude_y-attitude_w*attitude_z)*moment_body_y
