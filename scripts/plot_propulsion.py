@@ -68,4 +68,9 @@ summary=dict(wheel_only_s={'Performance_1700kg':performance['standing_start_0_60
  banks={b:{k:v[k] for k in ['peak_force_n','peak_mass_flow_kg_s','thermal_guard_at_s','failures']} for b,v in forces.items()},
  note='Mean force/impulse and sizing budget are Modelica outputs; trajectory and force plots use production observations. No Python dynamics solver.')
 (ROOT/'results/propulsion-analysis.json').write_text(json.dumps(summary,indent=2)+'\n')
+# Matplotlib leaves trailing blanks in SVG path data. Normalize generated text
+# while retaining newlines as SVG whitespace separators.
+for name in ['propulsion-analysis','thruster-layout']:
+    path=ROOT/f'results/{name}.svg'
+    path.write_text('\n'.join(line.rstrip() for line in path.read_text().splitlines())+'\n')
 print('Wrote propulsion-analysis and thruster-layout figures plus summary JSON.')

@@ -81,7 +81,7 @@
     "scripts/check_headlights.py": "9806278b0961f5ae20f0841f475f4fc6e8a5b2124f221ed1d86d51a51fec9610",
     "scripts/check_layout_render.py": "bc060946f961b0edc4e1f4d713f38ad8b037b3df669b53a9f8dee5fe612d40c9",
     "scripts/control.py": "0529f2103066ec9503b2b23dc34e11c06566abf13baf23912533babc334ada2a",
-    "scripts/plot_propulsion.py": "d4f87b02cf7400c9745ee2c7cad51268ba87234422b9bc49c17d76deef51363e",
+    "scripts/plot_propulsion.py": "5cf9967e11a1d6d4d47e500b35ec26b1f31aa319a418c955bc168783d48ae5ec",
     "scripts/prepare_runtime_assets.py": "3045e0c79d6b7d2822932b449f5ff550ae433256e02d001abf06296d700c2e06",
     "scripts/run_launch.py": "fbec817f446eeadd545b5f60b10f3a15ba354bdaa44240012919a914816bf07d",
     "scripts/run_motor_launch.py": "73df0270477f5729bc5efd62f9a0c83cc7d667af37e0e842f6bdc2c8ac7b26be",
