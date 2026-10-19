@@ -1,0 +1,31 @@
+#usda 1.0
+(
+    defaultPrim = "SurfaceProbe"
+    upAxis = "Y"
+    metersPerUnit = 1.0
+    documentation = "Simulation geometry query for underbody clearance and surface normal. Not physical Tesla sensor hardware. No visible mesh, measurement noise, controller or force source."
+)
+
+def Xform "SurfaceProbe" (
+    prepend apiSchemas = ["LunCoRaycastAPI"]
+)
+{
+    token lunco:raycast:axis = "-Y"
+    float lunco:raycast:maxDistance = 1.0
+    double3 lunco:raycast:offset = (0.0, 0.0, 0.0)
+    custom float outputs:ray_distance = 0.0
+    custom float outputs:ray_hit_valid = 0.0
+    custom float outputs:ray_hit_position_x = 0.0
+    custom float outputs:ray_hit_position_y = 0.0
+    custom float outputs:ray_hit_position_z = 0.0
+    custom float outputs:ray_hit_normal_x = 0.0
+    custom float outputs:ray_hit_normal_y = 0.0
+    custom float outputs:ray_hit_normal_z = 0.0
+    custom float outputs:ray_sample_time = 0.0
+    custom float outputs:ray_origin_body_local_x = 0.0
+    custom float outputs:ray_origin_body_local_y = 0.0
+    custom float outputs:ray_origin_body_local_z = 0.0
+    custom float outputs:ray_direction_body_local_x = 0.0
+    custom float outputs:ray_direction_body_local_y = 0.0
+    custom float outputs:ray_direction_body_local_z = 0.0
+}

@@ -15,7 +15,6 @@ model RoadsterPowertrain
   parameter Real regen_deceleration(unit="m/s2") = 1.8;
   parameter Real regen_peak_power(unit="W") = 120000;
   parameter Real regen_efficiency = 0.8;
-  parameter Real fan_initial_fraction = 0.0;
   parameter Real gas_capacity_kg = 250 "Available starting air mass supplied by user; no volume scaling";
   parameter Real initial_fill = 1.0;
   parameter Real initial_gas_temperature(unit="K") = 293.15;
@@ -49,7 +48,8 @@ model RoadsterPowertrain
   input Real thrust_x;
   input Real thrust_y;
   input Real thrust_z;
-  input Real fan;
+  input Real adhesion_force_body[3](each unit="N");
+  input Real adhesion_power_w(unit="W");
   input Real headlight_switch;
   input Real refill;
   input Real instant_mass_offset;
@@ -67,14 +67,9 @@ model RoadsterPowertrain
   input Real velocity_y(unit="m/s");
   input Real velocity_forward(unit="m/s");
   input Real omega_body[3](each unit="rad/s");
-  input Real surface_gap[4];
-  input Real surface_valid[4];
-  input Real surface_alignment[4];
   input Real body_up_y;
   input Real ground_gap(unit="m");
   input Real ground_valid;
-  SuctionFan suction(command=fan,enabled=enabled,ambient_pressure=ambient_pressure,initial_speed_fraction=fan_initial_fraction,
-    air_density=rho,gap=surface_gap,valid=surface_valid,alignment=surface_alignment);
   JetExpansion rear_nozzle(gamma=gamma,gas_constant=gas_constant,throat_area=throat_area,
     nozzle_count=4,nozzle_efficiency=nozzle_efficiency,tank_pressure=tank_pressure_pa,
     tank_temperature=gas_temperature,ambient_pressure=ambient_pressure);
@@ -133,7 +128,6 @@ model RoadsterPowertrain
   Real regen_torque_right;
   Real drive_power;
   Real recovered_power;
-  Real fan_command;
   Real forward_force;
   Real vertical_force;
   Real side_force;
@@ -260,8 +254,7 @@ equation
   recovered_power = max(0.0,-mechanical_power)*regen_efficiency;
   recovered_power_w = recovered_power;
   seal_fraction = max(0.0,min(1.0,ground_valid))*exp(-(max(0.0,ground_gap)/0.35)^4);
-  fan_command = max(0.0,min(1.0,fan))*enabled;
-  downforce = suction.suction_force;
+  downforce = max(0.0,-adhesion_force_body[2]);
   // Rear forward jets, four downward lift jets, two front side/yaw jets.
   // Side jets have 4% of aggregate throat area (study assumption).
   // K opens all lift jets; I/P/comma/period select corners. Space opens rear jets.
@@ -319,10 +312,10 @@ equation
   force_x = aero.force_world[1]+inlet_force[1];
   force_y = aero.force_world[2]+inlet_force[2];
   force_z = aero.force_world[3]+inlet_force[3];
-  force_local_z = rolling_coefficient*(vehicle_mass_kg*9.80665*abs(body_up_y)+downforce+aero.downforce)*tanh(forward_speed/0.5)*seal_fraction-forward_force;
-  force_local_y = vertical_force-downforce-aero.downforce;
-  force_local_x = side_force;
-  battery_power = drive_power/efficiency-recovered_power+800.0*enabled+headlights.electrical_power+suction.electrical_power;
+  force_local_z = rolling_coefficient*(vehicle_mass_kg*9.80665*abs(body_up_y)+downforce+aero.downforce)*tanh(forward_speed/0.5)*seal_fraction-forward_force+adhesion_force_body[3];
+  force_local_y = vertical_force+adhesion_force_body[2]-aero.downforce;
+  force_local_x = side_force+adhesion_force_body[1];
+  battery_power = drive_power/efficiency-recovered_power+800.0*enabled+headlights.electrical_power+adhesion_power_w;
   der(energy_j) = -battery_power;
   der(motor_temperature) = (drive_power*(1.0/efficiency-1.0)+max(0.0,-mechanical_power)*(1.0-regen_efficiency)
     -cooling_w_k*(motor_temperature-ambient_k))/heat_capacity;

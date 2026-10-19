@@ -187,9 +187,9 @@ model RoadsterVehicle
   RoadsterPowertrain powertrain(
     boost_available=boost_available, lift_available=lift_available,lift_trim={1,rear_lift_trim,1,rear_lift_trim},
     rear_tank_volume=rear_tank_volume,cabin_tank_volume=cabin_tank_volume,
-    gas_capacity_kg=gas_capacity_kg,initial_fill=initial_fill,fan_initial_fraction=fan_initial_fraction,initial_gas_temperature=initial_gas_temperature,
+    gas_capacity_kg=gas_capacity_kg,initial_fill=initial_fill,initial_gas_temperature=initial_gas_temperature,
     steer=steer,attitude={attitude_w,attitude_x,attitude_y,attitude_z},omega_body=omega_body,headlight_switch=headlights,
-    demand=steering.drive_left, brake=brake, boost=boost, lift=lift, fan=fan,refill=refill,instant_mass_offset=instant_mass_offset,instant_temperature_offset=instant_temperature_offset,
+    demand=steering.drive_left, brake=brake, boost=boost, lift=lift, adhesion_force_body=adhesion.force_body,adhesion_power_w=adhesion.electrical_power,refill=refill,instant_mass_offset=instant_mass_offset,instant_temperature_offset=instant_temperature_offset,
     instant_wall_temperature_offset=instant_wall_temperature_offset,instant_refill_count=instant_refill_count,
     instant_mechanical_energy_j=instant_mechanical_energy_j,instant_stored_energy_j=instant_stored_energy_j,refill_target_temperature_k=refill_target_temperature_k,
     lift_individual={lift_fl,lift_rl,lift_fr,lift_rr},
@@ -197,13 +197,17 @@ model RoadsterVehicle
     omega_left=wheel_speed_left, omega_right=wheel_speed_right,
     velocity_x=measured_vx, velocity_z=measured_vz, velocity_y=measured_vy,
     ground_gap=ground_gap,ground_valid=ground_valid,velocity_forward=velocity_forward,
-    body_up_y=body_up_y,
-    surface_gap={surface_gap_0,surface_gap_1,surface_gap_2,surface_gap_3},
-    surface_valid={surface_valid_0,surface_valid_1,surface_valid_2,surface_valid_3},
-    surface_alignment={surface_nx_0*body_up_x+surface_ny_0*body_up_y+surface_nz_0*body_up_z,
-      surface_nx_1*body_up_x+surface_ny_1*body_up_y+surface_nz_1*body_up_z,
-      surface_nx_2*body_up_x+surface_ny_2*body_up_y+surface_nz_2*body_up_z,
-      surface_nx_3*body_up_x+surface_ny_3*body_up_y+surface_nz_3*body_up_z});
+    body_up_y=body_up_y);
+  // Assembly adapter only: native geometry binds to the internal adhesion law.
+  // Both components are flattened into ONE Modelica solve; no extra participant,
+  // communication lag, duplicate rotor integration or script physics is added.
+  FanAdhesion adhesion(command=fan,enabled=powertrain.enabled,initial_speed_fraction=fan_initial_fraction,
+    center_of_mass={0,mass_center_y,mass_center_z},body_up={body_up_x,body_up_y,body_up_z},
+    gap={surface_gap_0,surface_gap_1,surface_gap_2,surface_gap_3},
+    valid={surface_valid_0,surface_valid_1,surface_valid_2,surface_valid_3},
+    normal_x={surface_nx_0,surface_nx_1,surface_nx_2,surface_nx_3},
+    normal_y={surface_ny_0,surface_ny_1,surface_ny_2,surface_ny_3},
+    normal_z={surface_nz_0,surface_nz_1,surface_nz_2,surface_nz_3});
   // Reusable engineering readouts; presentation code only formats these.
   output Real air_fill_percent;
   output Real refill_allowed;
@@ -343,12 +347,8 @@ equation
   jump_clearance = course.jump_clearance;
   climb_gate = course.climb_gate;
   landing_gate = course.landing_gate;
-  // Contact proximity is measured in body coordinates, so wall driving remains
-  // ground mode. All four probes must leave the suspension envelope for flight.
-  flight_control_weight = 1.0-max({surface_valid_0*max(0.0,min(1.0,(0.50-surface_gap_0)/0.15)),
-    surface_valid_1*max(0.0,min(1.0,(0.50-surface_gap_1)/0.15)),
-    surface_valid_2*max(0.0,min(1.0,(0.50-surface_gap_2)/0.15)),
-    surface_valid_3*max(0.0,min(1.0,(0.50-surface_gap_3)/0.15))});
+  // This observation only labels course/HUD state. It never changes controls.
+  flight_control_weight = 1.0-adhesion.surface_proximity;
   omega_body[1] = (1.0-2.0*(attitude_y^2+attitude_z^2))*measured_wx
     +2.0*(attitude_x*attitude_y+attitude_w*attitude_z)*measured_wy
     +2.0*(attitude_x*attitude_z-attitude_w*attitude_y)*measured_wz;
@@ -376,15 +376,15 @@ equation
   velocity_forward = -(2.0*(attitude_x*attitude_z+attitude_w*attitude_y)*measured_vx
     +2.0*(attitude_y*attitude_z-attitude_w*attitude_x)*measured_vy
     +(1.0-2.0*(attitude_x^2+attitude_y^2))*measured_vz);
-  fan_angle_left = powertrain.suction.rotor_angle;
-  fan_angle_right = -powertrain.suction.rotor_angle;
-  fan_rpm = powertrain.suction.rotor_rpm;
+  fan_angle_left = adhesion.rotor_angle;
+  fan_angle_right = -adhesion.rotor_angle;
+  fan_rpm = adhesion.rotor_rpm;
   fan_requested = max(0.0,min(1.0,fan));
   fan_vacuum_kpa = fan_pressure_pa/1000.0;
   fan_power_kw = fan_power_w/1000.0;
-  fan_pressure_pa = powertrain.suction.pressure_drop;
-  fan_power_w = powertrain.suction.electrical_power;
-  fan_seal = powertrain.suction.seal;
+  fan_pressure_pa = adhesion.pressure_drop;
+  fan_power_w = adhesion.electrical_power;
+  fan_seal = adhesion.seal;
   wall_friction_margin_n = 1.4*downforce-vehicle_mass_kg*9.80665*sqrt(max(0.0,1.0-body_up_y^2));
   plume_rear_radius_start = powertrain.rear_nozzle.radius_start;
   plume_rear_radius_expanded = powertrain.rear_nozzle.radius_expanded;
@@ -467,11 +467,11 @@ equation
   // tank distribution. The native solver receives the corresponding loading
   // torque while its inertia is updated; co-rotating outgoing gas cancels its
   // own inertia-change term. No angular-velocity rescaling is scripted.
-  moment_body_x = thruster_pitch_moment_nm
+  moment_body_x = thruster_pitch_moment_nm+adhesion.moment_body[1]
     -powertrain.mass_inflow*boost_available*(0.5^2+1.0^2)/12.0*omega_body[1];
-  moment_body_y = thruster_yaw_moment_nm
+  moment_body_y = thruster_yaw_moment_nm+adhesion.moment_body[2]
     -powertrain.mass_inflow*boost_available*(1.2^2+1.0^2)/12.0*omega_body[2];
-  moment_body_z = thruster_roll_moment_nm
+  moment_body_z = thruster_roll_moment_nm+adhesion.moment_body[3]
     -powertrain.mass_inflow*boost_available*(1.2^2+0.5^2)/12.0*omega_body[3];
   torque_x = (1.0-2.0*(attitude_y^2+attitude_z^2))*moment_body_x
     +2.0*(attitude_x*attitude_y-attitude_w*attitude_z)*moment_body_y

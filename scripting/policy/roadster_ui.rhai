@@ -47,7 +47,7 @@ fn vehicle_ui(v) {
         out.rr_air_color = if ready {"#68e0b2"}else{"#ffc66d"};
         out.rr_fill_temperature = text_number(v.refill_target_k,10.0)+" K";
         out.rr_temperature = text_number(v.tank_temperature_k,10.0)+" K";
-        out.rr_refill_label = if servicing {"STOP REFILL"}else{"REFILL AIR"};
+        out.rr_refill_label = "Tab · REFILL AIR";
         out.rr_fan_state = fan_state;
         out.rr_fan_label = if v.fan_requested>0.5 {"F · FANS OFF"}else{"F · FANS ON"};
         out.rr_suction = text_number(v.suction_force_kn,10.0)+" kN suction";

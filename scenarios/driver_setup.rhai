@@ -17,6 +17,9 @@ fn on_event(me,evt,ctx) {
     if name=="intent.edge" && evt.source==car && evt.value.intent=="action" && evt.value.edge=="pressed" {
         name="roadster_fan_toggle";
     }
+    if name=="intent.edge" && evt.source==car && evt.value.intent=="secondary_action" && evt.value.edge=="pressed" {
+        name="roadster_instant_refill";
+    }
     if name=="runtime.ui.action" {
         if evt.value.action=="roadster.restart" {cmd("OpenTwin",#{path:twin_root()});return;}
         if evt.value.action=="roadster.temperature.up" || evt.value.action=="roadster.temperature.down" {
@@ -28,12 +31,7 @@ fn on_event(me,evt,ctx) {
             }
         }
         if evt.value.action=="roadster.fans" {name="roadster_fan_toggle";}
-        if evt.value.action=="roadster.refill" {
-            name="roadster_test_refill_request";
-            for p in query("ReadPorts",#{api_id:car,port_names:["refill_active"]}).ports {
-                if p.direction=="out" && p.value>0.5 {name="roadster_test_refill_cancel";}
-            }
-        }
+        if evt.value.action=="roadster.refill" {name="roadster_instant_refill";}
     }
     if name == "roadster_fan_toggle" {
         let switch_on=false;
@@ -42,14 +40,20 @@ fn on_event(me,evt,ctx) {
         }
         cmd("SetPorts",#{target:car,writes:[["fan",if switch_on {0.0}else{1.0}]]});
     }
-    if name == "roadster_test_refill_request" {
-        let allowed=false;
-        for p in query("ReadPorts",#{api_id:car,port_names:["refill_allowed"]}).ports {
-            if p.direction=="out" && p.value>0.5 {allowed=true;}
+    if name == "roadster_instant_refill" {
+        // The same Modelica-computed co-moving service boundary as green pads.
+        // It restores gas/wall temperature, mass, inertia and energy ledgers.
+        let boundary=#{};
+        for p in query("ReadPorts",#{api_id:car,port_names:["refill_allowed","next_mass_offset","next_temperature_offset","next_wall_temperature_offset","next_refill_count","next_mechanical_energy_j","next_stored_energy_j"]}).ports {
+            if p.direction=="out" {boundary[p.name]=p.value;}
         }
-        if !allowed {notify("Choose a refill target between 253.15 and 333.15 K.");return;}
-        cmd("SetPorts",#{target:car,writes:[["refill",1.0]]});
-        notify("External test air supply connected. Modelica accounts for air mass, temperature and service power.");
+        if boundary.refill_allowed<0.5 {notify("Choose a refill temperature between 253.15 and 333.15 K.");return;}
+        let writes=[["refill",0.0]];
+        for field in ["mass_offset","temperature_offset","wall_temperature_offset","refill_count","mechanical_energy_j","stored_energy_j"] {
+            writes.push(["instant_"+field,boundary["next_"+field]]);
+        }
+        cmd("SetPorts",#{target:car,writes:writes});
+        notify("Air refilled to 250 kg at the selected temperature.");
     }
     if name == "roadster_air_refilled" || name == "roadster_test_refill_cancel" {
         cmd("SetPorts",#{target:car,writes:[["refill",0.0]]});

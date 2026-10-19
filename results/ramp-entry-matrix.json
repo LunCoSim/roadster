@@ -1142,7 +1142,5 @@
       "scene": "roadster_ramp_entry_25_0",
       "exit_code": 0
     }
-  ],
-  "binary_build": "130fc4e27",
-  "binary_sha256": "026b23551e829d27f5f010ddb9697d11c1af09e252e543c74e077de38ae6a4cb"
+  ]
 }

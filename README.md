@@ -39,6 +39,7 @@ Editor/inspector and Modelica documents to inspect parameters while paused.
 | Q / E | Left / right bottom-jet pairs (raise that side for roll) |
 | R / C | Front / rear bottom-jet pairs (nose up / nose down) |
 | F | Toggle fans on/off, once per press |
+| Tab | Refill air instantly to 250 kg at the selected temperature |
 | J / L | Yaw jets |
 | I / P | Front-left / front-right bottom jets |
 | , / . | Rear-left / rear-right bottom jets |
@@ -83,15 +84,16 @@ refill process. Modelica computes the mass and temperature adjustments, EOS
 pressure, inertia, and stored/mechanical energy exchanges; Rhai copies these
 boundary values together through ordinary inputs. Native velocity is preserved.
 
-## Editable temperature and finite test service
+## Editable temperature and refill
 
 - `inputs:initial_gas_temperature` is a Modelica initialization parameter.
 - HUD **− / +** changes `refill_target_temperature_k` in 5 K steps, 253.15–333.15 K.
 - Green waypoints apply that target immediately.
-- **REFILL AIR (TEST)** manually connects a finite external supply, including
-  while moving or inverted. It delivers up to 20 kg/s with a bounded 2 MW jacket,
-  accounts for compressor/thermal service energy and incoming-air momentum.
-  **STOP REFILL** disconnects it; completion disconnects automatically.
+- **Tab** or **REFILL AIR** restores the tank instantly, including while moving
+  or inverted. The same Modelica service boundary as green waypoints updates
+  gas/wall temperature, mass, pressure, inertia and stored/mechanical energy.
+- The finite external supply remains available through `scripts/control.py`
+  for engineering studies (20 kg/s, bounded 2 MW jacket).
 
 ```sh
 python3 scripts/control.py --refill-temperature 303.15 --refill 1
@@ -177,3 +179,11 @@ The local development build uses `.scratch/luncosim-assets`, a companion link
 to the same source checkout's `assets/`. This keeps the shared UI manifest
 compatible with the binary. `LUNCO_ASSET_ROOT` explicitly overrides that source.
 The final native launch was checked with the speed/air/fan HUD visible.
+
+## Internal fan adhesion model
+
+The fan component contains its geometry probes and seal/plenum math; the
+drivetrain consumes its force and electrical demand, and the chassis receives
+its moment. The assembly is flattened into one Modelica solve. These are
+simulation queries, not added Tesla sensor hardware, and they have no visible
+markers. See the [component boundary](references/dynamics.md#adhesion-component-boundary).

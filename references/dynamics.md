@@ -160,3 +160,33 @@ it does not establish a safe real-car stunt envelope or Tesla calibration.
 See [propulsion and mounting analysis](propulsion-analysis.md) for native launch
 measurements, Modelica mean-force sizing/impulse, per-bank blowdown and the fixed
 rear lift valve gain of 0.486486 required by the unequal front/rear arms.
+
+## Adhesion component boundary
+
+`components/FanAdhesion.usda` contains four invisible native collision-geometry
+queries. They are computational probes, not asserted Tesla instruments.
+`models/FanAdhesion.mo` owns the surface alignment, seal/leakage, rotor/plenum
+law and pressure-center moment. Its mechanical interface is a body-frame force
+and moment; its electrical interface is consumed power. Pressure/seal/rpm and
+surface proximity are observation outputs for the HUD and course only.
+
+`RoadsterVehicle.mo` is the composition adapter that connects the internal
+native observations to that component. `RoadsterPowertrain.mo` receives only
+adhesion force and electrical demand: it no longer knows about the four gaps,
+surface normals, ray validity or the suction implementation. The native solver
+still owns tire reactions, friction and chassis movement. Suction enters the
+force sum once; it does not create an attachment, pose correction or gravity
+change. The pressure-center moment is `(center_of_pressure-COM) × force`.
+
+The Modelica compiler flattens the nested components into **one participant**.
+The extraction adds no communication step and no duplicate rotor state. Four
+rays, one algebraic plenum closure and the existing rotor states are retained.
+The four-point surface approximation and uncalibrated fan/skirt parameters are
+explicit fidelity limits; rough-surface leakage and skirt deformation are not
+resolved. A richer internal seal model can replace this implementation while
+keeping the same force/moment/power interface.
+
+**Manual service:** Tab or the REFILL AIR button now applies the same immediate
+co-moving Modelica service boundary as the green waypoints, including gas/wall
+temperature and mass/inertia/energy bookkeeping. The finite external supply
+remains an explicitly commanded engineering option through the control API.

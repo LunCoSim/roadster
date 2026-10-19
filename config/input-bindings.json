@@ -52,6 +52,9 @@
           "KeyP"
         ]
       ]
-    }
+    },
+    "secondary_action": [
+      "Tab"
+    ]
   }
 }

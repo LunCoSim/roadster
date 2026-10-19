@@ -395,12 +395,10 @@ def vehicle():
         def "yaw_right" { uniform string lunco:port = "thrust_x" uniform double lunco:factor = 1 }
         def "speed_boost" { uniform string lunco:port = "thrust_y" uniform double lunco:factor = 1 }
     }
-    def Xform "GroundSeal" (prepend references = @lunco://vessels/sensors/altimeter.usda@</Altimeter>) {
+    def Xform "GroundSeal" (prepend references = @../components/SurfaceProbe.usda@</SurfaceProbe>) {
         double3 xformOp:translate = (0,-0.3,0)
         uniform token[] xformOpOrder = ["xformOp:translate"]
         float lunco:raycast:maxDistance = 2
-        over "Model" (active = false) {}
-        over "Beam" (active = false) {}
     }
     def Camera "DriverCamera" (prepend references = @lunco://components/cameras/rover_front_camera.usda@</FrontCamera>) {
         double3 xformOp:translate = (-0.37,0.82,-0.80)
@@ -436,16 +434,10 @@ def vehicle():
         bool inputs:shadow:enable = true
         float lunco:light:range = 120
     }}\n'''
-    for i,(x,z) in enumerate([(-.6,-1.1),(-.6,1.1),(.6,-1.1),(.6,1.1)]):
-        text += f'''    def Xform "Seal{i}" (prepend references = @lunco://vessels/sensors/altimeter.usda@</Altimeter>) {{
-        double3 xformOp:translate = ({x},-.3,{z})
-        uniform token[] xformOpOrder = ["xformOp:translate"]
-        float lunco:raycast:maxDistance = 1.0
-        over "Model" (active = false) {{}}
-        over "Beam" (active = false) {{}}
-    }}\n'''
+    text += '    def Xform "Adhesion" (prepend references = @../components/FanAdhesion.usda@</FanAdhesion>) {}\n'
+    for i in range(4):
         for field,port in [('gap','ray_distance'),('valid','ray_hit_valid'),('nx','ray_hit_normal_x'),('ny','ray_hit_normal_y'),('nz','ray_hit_normal_z')]:
-            text += f'    float inputs:surface_{field}_{i}.connect = </Roadster/Seal{i}.outputs:{port}>\n'
+            text += f'    float inputs:surface_{field}_{i}.connect = </Roadster/Adhesion/Probe{i}.outputs:{port}>\n'
     outputs = ['torque_left','torque_right','freewheel_torque','force_local_z','force_local_y','force_local_x','force_x','force_y','force_z','torque_x','torque_y','torque_z','forward_speed',
                'battery_power','soc','temperature_k','impulse_remaining','thruster_force','downforce',
                'speed_mps','speed_kmh','speed_mph','pressure_bar','charge_percent',
