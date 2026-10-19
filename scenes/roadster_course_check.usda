@@ -504,6 +504,8 @@ def Xform "World" (
         float outputs:jump_clearance = 0.0
         float outputs:climb_gate = 0.0
         float outputs:landing_gate = 0.0
+        custom double inputs:course_position_y
+        double inputs:course_position_y.connect = </World/Roadster.outputs:position_y>
         over "DriverCamera"
         {
             float exposure:iso = 400.0

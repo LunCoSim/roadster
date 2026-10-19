@@ -69,7 +69,7 @@ fn on_start(me, ctx) {
     this.car = find_path("/World/Roadster");
     this.phase = 0; this.blocks = 0; this.autopilot = false;
     this.last_controls = [];
-    subscribe("TASK_FAILED");
+    for name in ["TASK_FAILED","runtime.ui.action","roadster.pilot.controls","intent.edge"] {subscribe(name);}
     cmd("SetPorts",#{target:this.car,writes:[["course_phase",0.0],
         ["course_action",0.0],["course_blocks_passed",0.0],["course_autopilot_enable",0.0]]});
 }

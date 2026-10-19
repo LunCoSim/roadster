@@ -1,0 +1,22 @@
+cargo test --locked -p lunco-camera-core --lib -j4
+running 18 tests
+test follow_policy::tests::invalid_decisions_are_errors ... ok
+test follow_policy::tests::validates_partial_decisions_and_custom_easing ... ok
+test math::tests::bodyless_and_invalid_bounds_have_explicit_results ... ok
+test math::tests::clear_follow_ray_eases_outward_recovery ... ok
+test math::tests::close_surface_approach_keeps_a_submetre_near_plane ... ok
+test math::tests::obstruction_retracts_before_the_camera_enters_geometry ... ok
+test math::tests::orbital_distance_scales_near_plane_with_a_precision_ceiling ... ok
+test math::tests::pitched_movement_keeps_forward_and_vertical_components ... ok
+test math::tests::scroll_zoom_limits_one_frame_to_a_safe_factor ... ok
+test tests::camera_follow_accepts_only_canonical_tokens ... ok
+test tests::camera_labels_extend_context_before_exposing_a_full_path ... ok
+test tests::camera_labels_have_a_visible_fallback_for_missing_names ... ok
+test tests::camera_labels_hide_generated_owner_suffixes_and_number_unavoidable_collisions ... ok
+test tests::mode_transition_consumes_until_neutral ... ok
+test tests::return_transition_keeps_scroll_through_direction ... ok
+test tests::camera_labels_use_leaf_names_until_a_collision_requires_context ... ok
+test tests::transition_neutralizes_while_pointer_is_captured ... ok
+test tests::undirected_transition_consumes_until_neutral ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

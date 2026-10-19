@@ -5,6 +5,9 @@ roadster_checkout="$roadster_root/../../luncosim-workspace/main"
 roadster_bin="${LUNCOSIM_BIN:-}"
 # Reuse the locally validated development runtime when present. An explicit
 # LUNCOSIM_BIN remains authoritative; portable bundles can use an installed app.
+if [[ -z "$roadster_bin" && -x "$roadster_root/.scratch/control-target/debug/luncosim" ]]; then
+    roadster_bin="$roadster_root/.scratch/control-target/debug/luncosim"
+fi
 if [[ -z "$roadster_bin" && -x "$roadster_root/.scratch/luncosim" ]]; then
     roadster_bin="$roadster_root/.scratch/luncosim"
 fi

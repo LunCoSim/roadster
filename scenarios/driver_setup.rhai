@@ -73,8 +73,7 @@ fn on_event(me,evt,ctx) {
 // Camera realization and collision avoidance remain in the native camera owner.
 fn configure_follow(me) {
     let avatar=find_path("/World/Avatar");
-    set(avatar,"SpringArmCamera.distance",9.0);
-    set(avatar,"SpringArmCamera.pitch",-0.10);
-    set(avatar,"SpringArmCamera.vertical_offset",0.5);
+    cmd("SetCameraFollow",#{camera:avatar,distance_m:14.0,height_m:0.8,
+        pitch_rad:-0.24,yaw_rad:0.0,mode:"stabilized",damping:0.92});
 }
 fn task(me,ctx) { seq([wait(0.1),once(|m| configure_follow(m))]) }

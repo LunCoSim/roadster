@@ -11,3 +11,10 @@ source = "roadster_ui.rhai"
 entry = "roadster_ui"
 deterministic = false
 required = false
+
+[[policies]]
+hook = "camera.follow"
+source = "roadster_camera.rhai"
+entry = "follow_camera"
+deterministic = false
+required = false

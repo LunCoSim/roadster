@@ -25,7 +25,7 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 KEYS = {'KeyW', 'KeyA', 'KeyS', 'KeyD', 'Space', 'ShiftLeft', 'KeyK',
         'KeyF', 'KeyR', 'KeyC', 'KeyQ', 'KeyE', 'KeyJ', 'KeyL', 'Tab',
-        'ControlLeft', 'ControlRight', 'KeyP'}
+        'ControlLeft', 'ControlRight', 'KeyP', 'KeyV'}
 PORTS = ['course_time_s', 'course_stage', 'course_blocks', 'course_air_rotation_degrees',
          'position_x', 'position_y', 'position_z', 'velocity_y', 'speed_mps', 'yaw',
          'pitch_rate_deg_s', 'roll_rate_deg_s', 'up_alignment', 'flight_control_weight',

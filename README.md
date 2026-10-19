@@ -19,12 +19,16 @@ across 200 L + 400 L vessels; it does not carry 250 kg in each vessel.
 
 Use the second form when supplying simulator options. With no arguments the
 launcher opens the skill course. Set `LUNCOSIM_BIN` to a LunCoSim executable with
-commits `a0a9a0324` and `17cad2934`, or use the locally built `.scratch/luncosim`.
+the shared camera-follow and semantic switch-mode changes (`b88089012`) on main. The current
+development executable is `.scratch/control-target/debug/luncosim`; select it
+with `LUNCOSIM_BIN` explicitly.
 The launcher composes shared assets and the authored HUD locally and loads the
 isolated keymap. Shared `lunco://` assets resolve from the neighboring checkout.
 No shared application assets are edited.
 
-The native **avatar following** camera is selected automatically. Mouse look and
+The native **avatar following** camera is selected automatically. Its stabilized
+view keeps the horizon level and shifts to the open side/below the ramp as the
+car climbs. Mouse look and
 zoom use the normal avatar controls. The camera picker also offers DriverCamera
 and RampOverview. **Ctrl+P** pauses the entire physical simulation; use the
 Editor/inspector and Modelica documents to inspect parameters while paused.
@@ -43,6 +47,7 @@ Editor/inspector and Modelica documents to inspect parameters while paused.
 | J / L | Yaw jets |
 | I / P | Front-left / front-right bottom jets |
 | , / . | Rear-left / rear-right bottom jets |
+| V | Cycle cameras (C only controls rear jets) |
 | Ctrl+P | Pause/resume; P alone remains a corner jet |
 
 **WASD always controls the drivetrain.** It never opens thrusters. In the air,
@@ -147,12 +152,34 @@ study assumptions. See [storage](references/gas-storage.md) and
 python3 scripts/run_launch.py --binary .scratch/luncosim
 python3 scripts/run_motor_launch.py --binary .scratch/luncosim
 python3 scripts/run_ramp_entries.py --binary .scratch/luncosim
-python3 scripts/run_scene_check.py roadster_course_check ROADSTER_COURSE
+python3 scripts/run_scene_check.py roadster_course_check ROADSTER_COURSE --ticks 4800
 python3 scripts/check_controls.py --port 4198
 python3 scripts/check_driving.py
 python3 scripts/check_effects.py
 python3 scripts/check_keyboard_course.py --launch --manual --binary /path/to/luncosim
 ```
+
+The HUD **RUN AUTOPILOT** button uses the same behavior tree and Modelica guidance
+as the keyboard client. Driving or jet keys take over. Add `--autopilot` to the
+keyboard test command to exercise its real HUD button. The standalone course gate
+observes this shared production pilot; it does not carry a separate control law.
+See [manual acceptance steps](tests/manual-course.md) and the
+[review and remaining yaw maneuver](reviews/shared-course-tree.md).
+
+## Tune the following camera live
+
+```sh
+python3 scripts/camera.py --distance 18 --height 1 --tilt -20 --damping .9
+python3 scripts/camera.py --mode stabilized   # also heading or body
+python3 scripts/camera.py --reload-policy
+```
+
+Edit `scripting/policy/roadster_camera.rhai` and replace it through the Twin-owned
+camera tool. Settings and policy updates work with physics paused and preserve the
+vehicle state. The shared `camera.follow` seam exposes selected-vessel identity,
+orientation, motion, rig settings and obstruction facts. Rhai chooses framing and
+custom easing weights; the native camera retains collision and pose ownership.
+Other vessels may select different policies and existing native camera rigs.
 
 The keyboard pilot drives the main course with native press/release events,
 including Ctrl+P. Leave its test window controls alone during acceptance;
@@ -185,8 +212,8 @@ and the authored study geometry.
 
 [Ramp entry investigation and evidence](references/ramp-contact.md) records
 four speed/fan checks, including smooth 144 km/h entry with all body colliders
-enabled, plus full-course completion. This requires core fix `130fc4e27` from
-the local `roadster-aux-controls` branch. The launcher prefers the validated
+enabled, plus full-course completion. The collision fixes are integrated into main; the approved Parry revision is
+published. The launcher prefers the validated
 local `.scratch/luncosim`; use `LUNCOSIM_BIN` to select another runtime explicitly.
 
 The local development build uses `.scratch/luncosim-assets`, a companion link

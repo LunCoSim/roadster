@@ -1,13 +1,27 @@
 # Recorded validation
 
+## Shared course and live camera (2026-10-19)
+
+[Keyboard](shared-keyboard.json): 12/12, 39.9167 s.
+[HUD autopilot](shared-autopilot.json): 12/12, 40.0833 s.
+[Standalone observer](shared-course.json): full shared tree PASS.
+[Camera](camera-follow.json): 11/11 live settings, native C/V, policy replacement,
+rejection/recovery and held-clock checks. Both clients use the same Rhai tree and
+Modelica guidance; the standalone acceptance controller has been removed.
+Selected [crest](shared-keyboard-stage-5.png), [flight](shared-keyboard-stage-6.png)
+and [landing](shared-keyboard-stage-7.png) captures retain the Avatar view.
+The yaw-based backward stunt remains unqualified; see the
+[review](../reviews/shared-course-tree.md) and [manual checks](../tests/manual-course.md).
+
+
 ## Current collision qualification (2026-10-19)
 
 `contact-physics-review.json` and [the investigation](../references/contact-analysis.md)
 record four passing 20-second drop/side/floor gates, 3.064 s motor-only and
 0.554 s boosted 0–60 mph. Local LunCoSim main `d0b091908` contains the shared
-collision/joint correction, with approved local Parry `75b6acc`. Nothing is
-pushed. The dependency pin requires publication before a fresh remote checkout
-can fetch it.
+collision/joint correction, with approved Parry `75b6acc`, now published in its fork. Main integration through
+`8052b8bc2` is pushed. New camera work (`b88089012`) is committed locally and is not pushed.
+The published dependency pin is fetchable.
 
 `ramp-entry-matrix.json` passes all four entries with full throttle after the
 controlled approach. No physical parameter or threshold changed. Native geometry
