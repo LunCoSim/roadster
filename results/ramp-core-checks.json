@@ -1,0 +1,12 @@
+{
+  "core_commit": "130fc4e27",
+  "test": "collider_parity_tests::authored_static_trimeshes_correct_internal_edges",
+  "before": "FAIL: authored static meshes must suppress ghost contacts at internal triangle edges",
+  "after": "PASS: 1 passed, 43 filtered out",
+  "targets": [
+    "exact USD Mesh",
+    "finite USD Plane"
+  ],
+  "command": "cargo test -p lunco-usd-avian -p lunco-luncosim --lib authored_static_trimeshes_correct_internal_edges -j 4",
+  "full_suite_rerun": false
+}

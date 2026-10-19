@@ -140,6 +140,7 @@ study assumptions. See [storage](references/gas-storage.md) and
 ```sh
 python3 scripts/run_launch.py --binary .scratch/luncosim
 python3 scripts/run_motor_launch.py --binary .scratch/luncosim
+python3 scripts/run_ramp_entries.py --binary .scratch/luncosim
 python3 scripts/run_scene_check.py roadster_course_check ROADSTER_COURSE
 python3 scripts/check_controls.py --port 4198
 python3 scripts/check_driving.py
@@ -163,3 +164,16 @@ include the rear mounting moment, balanced collective geometry, wheel-only
 Performance/Rocket baselines and finite tank blowdown. The [plots](results/propulsion-analysis.png)
 and [layout](results/thruster-layout.png) are generated from recorded observations
 and the authored study geometry.
+
+## Ramp contact correction
+
+[Ramp entry investigation and evidence](references/ramp-contact.md) records
+four speed/fan checks, including smooth 144 km/h entry with all body colliders
+enabled, plus full-course completion. This requires core fix `130fc4e27` from
+the local `roadster-aux-controls` branch. The launcher prefers the validated
+local `.scratch/luncosim`; use `LUNCOSIM_BIN` to select another runtime explicitly.
+
+The local development build uses `.scratch/luncosim-assets`, a companion link
+to the same source checkout's `assets/`. This keeps the shared UI manifest
+compatible with the binary. `LUNCO_ASSET_ROOT` explicitly overrides that source.
+The final native launch was checked with the speed/air/fan HUD visible.

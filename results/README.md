@@ -60,8 +60,25 @@ The validation manifest fingerprints the authored milestone. Individual results
 were produced during its development; source changes after a particular result
 must be rerun before claiming fresh acceptance for those changes.
 
-Current content change adds no Rust. `ThrusterMount.mo` owns application-point
+The earlier propulsion content change added no Rust. `ThrusterMount.mo` owns application-point
 moments; `LaunchSizing.mo` owns the first-order force budget; Modelica integrates
 rear impulse in the marked launch measurement window. The full source audit and
 limits are in `references/propulsion-analysis.md`. The optional plot dependency
 is isolated under ignored `.scratch/`; it is not needed to run the Twin.
+
+## Ramp contact correction — 2026-10-19
+
+The [ramp investigation](../references/ramp-contact.md) supersedes the old
+short-run entry coverage. `ramp-entry-before.json` retains the reproducible
+144 km/h stop and diagnostic collider ablations. `ramp-entry-matrix.json` and
+`ramp-entry-traces.csv` record four passing speed/fan cases after the generic
+USD mesh internal-edge correction in core **130fc4e27**. All four chassis
+collision parts remain enabled, and every case reports zero chassis impulse.
+The full `course.json` was rerun on this corrected runtime and still passes at
+46.7833 s. `ramp-live.json` and `ramp-fixed-avatar.png` are headful, native
+avatar-following evidence on the curve.
+
+Earlier propulsion and control results above retain their original binary
+provenance; they were not all rerun for this collider-only correction. The core
+regression is one named Mesh/Plane test, demonstrated failing before and passing
+after; this is not a fresh whole-core test-suite result.

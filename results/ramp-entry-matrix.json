@@ -1,0 +1,1148 @@
+{
+  "ok": true,
+  "binary": "/home/rod/Documents/models/tesla-rr/.scratch/luncosim",
+  "cases": [
+    {
+      "entry_speed_mps": 10.928044523016904,
+      "failures": [],
+      "fan": 1.0,
+      "max_height_m": 30.000536270252134,
+      "maximum_body_contact_impulse_ns": 0.0,
+      "maximum_speed_drop_per_tick": 0.01336012086925642,
+      "min_transition_speed_mps": 9.079774365484433,
+      "target_mps": 11.0,
+      "worst": {
+        "angular_velocity": [
+          0.44056369522279626,
+          0.0,
+          0.0
+        ],
+        "body_contact": {
+          "contact_normal": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "contact_point": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "continuous_normal_impulse_ns": 0.0,
+          "max_normal_speed_mps": 0.0,
+          "max_penetration_m": 0.0,
+          "normal_impulse_ns": 0.0,
+          "normal_impulse_vector": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "brake": 0.0,
+        "position": [
+          0.0,
+          3.7898006981425514,
+          -88.0089738960653
+        ],
+        "quat": [
+          0.9689563598826963,
+          0.24723181964074656,
+          0.0,
+          0.0
+        ],
+        "speed_mps": 10.081146123702066,
+        "suction_n": 39803.66942125435,
+        "throttle": 0.2756561628893802,
+        "time_s": 10.466666666666766,
+        "torque_left_nm": 1370.6518401779156,
+        "up_y": 0.8813153236273251,
+        "velocity": [
+          0.0,
+          4.8232535586726515,
+          -8.840634433384485
+        ],
+        "wheels": [
+          {
+            "contact_valid": true,
+            "distance_available": true,
+            "distance_m": 0.37656120516648706,
+            "hit_api_id": 7083689877352411,
+            "hit_api_id_available": true,
+            "hit_available": true,
+            "hit_usd_prim_path": "/World/StuntRamp",
+            "hit_usd_prim_path_available": true,
+            "normal": [
+              0.0,
+              0.8486005141908243,
+              0.5290341835033618
+            ],
+            "normal_force_n": 15765.662660736592,
+            "ray_direction": [
+              0.0,
+              -0.8777528405189514,
+              -0.47911369800567627
+            ],
+            "ray_hit_count": 1,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              -0.8600000143051147,
+              4.343251646249567,
+              -89.2733777304222
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 6895679916723910,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_FL",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 1578635699013356,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 628,
+            "suspension_compression_m": 0.05343880198607032,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              3.6962894231243104,
+              -5.929055631698066
+            ],
+            "valid_ray_hit_count": 1,
+            "wheel_api_id": 6895679916723910,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_FL"
+          },
+          {
+            "contact_valid": true,
+            "distance_available": true,
+            "distance_m": 0.37656120516648706,
+            "hit_api_id": 7083689877352411,
+            "hit_api_id_available": true,
+            "hit_available": true,
+            "hit_usd_prim_path": "/World/StuntRamp",
+            "hit_usd_prim_path_available": true,
+            "normal": [
+              0.0,
+              0.8486005141908243,
+              0.5290341835033618
+            ],
+            "normal_force_n": 15765.662660736592,
+            "ray_direction": [
+              0.0,
+              -0.8777528405189514,
+              -0.47911369800567627
+            ],
+            "ray_hit_count": 1,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              0.8600000143051147,
+              4.343251646249567,
+              -89.2733777304222
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 6871490660918116,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_FR",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 1578635699013356,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 628,
+            "suspension_compression_m": 0.05343880198607032,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              3.6962894231243104,
+              -5.929055631698066
+            ],
+            "valid_ray_hit_count": 1,
+            "wheel_api_id": 6871490660918116,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_FR"
+          },
+          {
+            "contact_valid": true,
+            "distance_available": true,
+            "distance_m": 0.37403585568787767,
+            "hit_api_id": 7083689877352411,
+            "hit_api_id_available": true,
+            "hit_available": true,
+            "hit_usd_prim_path": "/World/StuntRamp",
+            "hit_usd_prim_path_available": true,
+            "normal": [
+              0.0,
+              0.9036549777021888,
+              0.42826123017856366
+            ],
+            "normal_force_n": 17217.270695274605,
+            "ray_direction": [
+              0.0,
+              -0.8777528405189514,
+              -0.47911369800567627
+            ],
+            "ray_hit_count": 1,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              -0.8600000143051147,
+              3.025689004215065,
+              -86.859557379958
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 4573511354011635,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_RL",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 1578635699013356,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 628,
+            "suspension_compression_m": 0.0559641514646797,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              1728.3599446736969,
+              -3646.9354618307516
+            ],
+            "valid_ray_hit_count": 1,
+            "wheel_api_id": 4573511354011635,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_RL"
+          },
+          {
+            "contact_valid": true,
+            "distance_available": true,
+            "distance_m": 0.37403585568787767,
+            "hit_api_id": 7083689877352411,
+            "hit_api_id_available": true,
+            "hit_available": true,
+            "hit_usd_prim_path": "/World/StuntRamp",
+            "hit_usd_prim_path_available": true,
+            "normal": [
+              0.0,
+              0.9036549777021888,
+              0.42826123017856366
+            ],
+            "normal_force_n": 17217.270695274605,
+            "ray_direction": [
+              0.0,
+              -0.8777528405189514,
+              -0.47911369800567627
+            ],
+            "ray_hit_count": 1,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              0.8600000143051147,
+              3.025689004215065,
+              -86.859557379958
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 4540526005165705,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_RR",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 1578635699013356,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 628,
+            "suspension_compression_m": 0.0559641514646797,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              1728.3599446736969,
+              -3646.9354618307516
+            ],
+            "valid_ray_hit_count": 1,
+            "wheel_api_id": 4540526005165705,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_RR"
+          }
+        ]
+      },
+      "scene": "roadster_ramp_entry_11_1",
+      "exit_code": 0
+    },
+    {
+      "entry_speed_mps": 24.894543330589705,
+      "failures": [],
+      "fan": 1.0,
+      "max_height_m": 30.33583912828084,
+      "maximum_body_contact_impulse_ns": 0.0,
+      "maximum_speed_drop_per_tick": 0.03700827673775464,
+      "min_transition_speed_mps": 23.063994755679804,
+      "target_mps": 25.0,
+      "worst": {
+        "angular_velocity": [
+          1.2045924900676215,
+          0.0,
+          0.0
+        ],
+        "body_contact": {
+          "contact_normal": [
+            0.0,
+            -0.6695508182213841,
+            -0.7427662497845977
+          ],
+          "contact_point": [
+            0.7250000238418578,
+            7.811710935145172,
+            -93.85184813282966
+          ],
+          "continuous_normal_impulse_ns": 0.0,
+          "max_normal_speed_mps": 0.3625029050096984,
+          "max_penetration_m": 0.0,
+          "normal_impulse_ns": 0.0,
+          "normal_impulse_vector": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "brake": 0.0,
+        "position": [
+          0.0,
+          6.8603161288130865,
+          -92.34005745368981
+        ],
+        "quat": [
+          0.9309342600664945,
+          0.36518680621628213,
+          0.0,
+          0.0
+        ],
+        "speed_mps": 23.754014917422317,
+        "suction_n": 39775.986443610236,
+        "throttle": 0.37379552477330474,
+        "time_s": 6.06666666666665,
+        "torque_left_nm": 1638.458542501852,
+        "up_y": 0.7467101152943174,
+        "velocity": [
+          0.0,
+          16.187560951292554,
+          -17.33860437874714
+        ],
+        "wheels": [
+          {
+            "contact_valid": true,
+            "distance_available": true,
+            "distance_m": 0.33933270540996247,
+            "hit_api_id": 2938300305968955,
+            "hit_api_id_available": true,
+            "hit_available": true,
+            "hit_usd_prim_path": "/World/StuntRamp",
+            "hit_usd_prim_path_available": true,
+            "normal": [
+              0.0,
+              0.683404823167365,
+              0.7300396206176638
+            ],
+            "normal_force_n": 26486.096066129598,
+            "ray_direction": [
+              0.0,
+              -0.7332772016525269,
+              -0.679929792881012
+            ],
+            "ray_hit_count": 1,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              -0.8600000143051147,
+              7.7072263406727055,
+              -93.42990519596616
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 7079222259614742,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_FL",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 8141003171329925,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 364,
+            "suspension_compression_m": 0.09066730174259491,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              0.7332928705816054,
+              -0.6864502561185869
+            ],
+            "valid_ray_hit_count": 1,
+            "wheel_api_id": 7079222259614742,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_FL"
+          },
+          {
+            "contact_valid": true,
+            "distance_available": true,
+            "distance_m": 0.33933270540996247,
+            "hit_api_id": 2938300305968955,
+            "hit_api_id_available": true,
+            "hit_available": true,
+            "hit_usd_prim_path": "/World/StuntRamp",
+            "hit_usd_prim_path_available": true,
+            "normal": [
+              0.0,
+              0.683404823167365,
+              0.7300396206176638
+            ],
+            "normal_force_n": 26486.096066129598,
+            "ray_direction": [
+              0.0,
+              -0.7332772016525269,
+              -0.679929792881012
+            ],
+            "ray_hit_count": 1,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              0.8600000143051147,
+              7.7072263406727055,
+              -93.42990519596616
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 7046236910905096,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_FR",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 8141003171329925,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 364,
+            "suspension_compression_m": 0.09066730174259491,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              0.7332928705816054,
+              -0.6864502561185869
+            ],
+            "valid_ray_hit_count": 1,
+            "wheel_api_id": 7046236910905096,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_FR"
+          },
+          {
+            "contact_valid": true,
+            "distance_available": true,
+            "distance_m": 0.3437466294758333,
+            "hit_api_id": 2938300305968955,
+            "hit_api_id_available": true,
+            "hit_available": true,
+            "hit_usd_prim_path": "/World/StuntRamp",
+            "hit_usd_prim_path_available": true,
+            "normal": [
+              0.0,
+              0.7733740157540641,
+              0.6339500230747159
+            ],
+            "normal_force_n": 27568.0553600685,
+            "ray_direction": [
+              0.0,
+              -0.7332772016525269,
+              -0.679929792881012
+            ],
+            "ray_hit_count": 1,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              -0.8600000143051147,
+              5.8374193399022,
+              -91.41339291485562
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 8169937794871904,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_RL",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 8141003171329925,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 364,
+            "suspension_compression_m": 0.08625337767672409,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              3054.916562269557,
+              -3726.781297518081
+            ],
+            "valid_ray_hit_count": 1,
+            "wheel_api_id": 8169937794871904,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_RL"
+          },
+          {
+            "contact_valid": true,
+            "distance_available": true,
+            "distance_m": 0.3437466294758333,
+            "hit_api_id": 2938300305968955,
+            "hit_api_id_available": true,
+            "hit_available": true,
+            "hit_usd_prim_path": "/World/StuntRamp",
+            "hit_usd_prim_path_available": true,
+            "normal": [
+              0.0,
+              0.7733740157540641,
+              0.6339500230747159
+            ],
+            "normal_force_n": 27568.0553600685,
+            "ray_direction": [
+              0.0,
+              -0.7332772016525269,
+              -0.679929792881012
+            ],
+            "ray_hit_count": 1,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              0.8600000143051147,
+              5.8374193399022,
+              -91.41339291485562
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 8198525097197758,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_RR",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 8141003171329925,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 364,
+            "suspension_compression_m": 0.08625337767672409,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              3054.916562269557,
+              -3726.781297518081
+            ],
+            "valid_ray_hit_count": 1,
+            "wheel_api_id": 8198525097197758,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_RR"
+          }
+        ]
+      },
+      "scene": "roadster_ramp_entry_25_1",
+      "exit_code": 0
+    },
+    {
+      "entry_speed_mps": 40.264538228951125,
+      "failures": [],
+      "fan": 1.0,
+      "max_height_m": 30.07517572571082,
+      "maximum_body_contact_impulse_ns": 0.0,
+      "maximum_speed_drop_per_tick": 0.0658931566152674,
+      "min_transition_speed_mps": 37.38205859343227,
+      "target_mps": 40.0,
+      "worst": {
+        "angular_velocity": [
+          1.882330423342284,
+          0.0,
+          0.0
+        ],
+        "body_contact": {
+          "contact_normal": [
+            0.0,
+            -0.8626083406013242,
+            -0.5058723660420976
+          ],
+          "contact_point": [
+            0.5202369869749457,
+            3.7421057903689467,
+            -88.85964440734442
+          ],
+          "continuous_normal_impulse_ns": 0.0,
+          "max_normal_speed_mps": 0.5027730033881035,
+          "max_penetration_m": 0.0,
+          "normal_impulse_ns": 0.0,
+          "normal_impulse_vector": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "brake": 0.0,
+        "position": [
+          0.0,
+          5.619308178120337,
+          -90.99075729553202
+        ],
+        "quat": [
+          0.9462889706792572,
+          0.3233221056018158,
+          0.0,
+          0.0
+        ],
+        "speed_mps": 38.99675773497842,
+        "suction_n": 39719.403954293724,
+        "throttle": 0.30097267950647505,
+        "time_s": 4.933333333333321,
+        "torque_left_nm": 684.9963801562018,
+        "up_y": 0.8095920578236769,
+        "velocity": [
+          0.0,
+          23.860668887641296,
+          -30.76732500367846
+        ],
+        "wheels": [
+          {
+            "contact_valid": true,
+            "distance_available": true,
+            "distance_m": 0.2674395585806703,
+            "hit_api_id": 5625192578149202,
+            "hit_api_id_available": true,
+            "hit_available": true,
+            "hit_usd_prim_path": "/World/StuntRamp",
+            "hit_usd_prim_path_available": true,
+            "normal": [
+              0.0,
+              0.7490437965037061,
+              0.662520483396034
+            ],
+            "normal_force_n": 47890.72738950685,
+            "ray_direction": [
+              0.0,
+              -0.7909256219863892,
+              -0.6119123101234436
+            ],
+            "ray_hit_count": 1,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              -0.8600000143051145,
+              6.365776466826909,
+              -92.15170953496845
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 5006168408466972,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_FL",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 5163359296949192,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 296,
+            "suspension_compression_m": 0.16256044857188706,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              6.842684652924969,
+              -7.736320037128149
+            ],
+            "valid_ray_hit_count": 1,
+            "wheel_api_id": 5006168408466972,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_FL"
+          },
+          {
+            "contact_valid": true,
+            "distance_available": true,
+            "distance_m": 0.2674395585806703,
+            "hit_api_id": 5625192578149202,
+            "hit_api_id_available": true,
+            "hit_available": true,
+            "hit_usd_prim_path": "/World/StuntRamp",
+            "hit_usd_prim_path_available": true,
+            "normal": [
+              0.0,
+              0.7490437965037061,
+              0.662520483396034
+            ],
+            "normal_force_n": 47890.72738950685,
+            "ray_direction": [
+              0.0,
+              -0.7909256219863892,
+              -0.6119123101234436
+            ],
+            "ray_hit_count": 1,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              0.8600000143051145,
+              6.365776466826909,
+              -92.15170953496845
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 4986377199188646,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_FR",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 5163359296949192,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 296,
+            "suspension_compression_m": 0.16256044857188706,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              6.842684652924969,
+              -7.736320037128149
+            ],
+            "valid_ray_hit_count": 1,
+            "wheel_api_id": 4986377199188646,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_FR"
+          },
+          {
+            "contact_valid": true,
+            "distance_available": true,
+            "distance_m": 0.2760142116794256,
+            "hit_api_id": 5625192578149202,
+            "hit_api_id_available": true,
+            "hit_available": true,
+            "hit_usd_prim_path": "/World/StuntRamp",
+            "hit_usd_prim_path_available": true,
+            "normal": [
+              0.0,
+              0.8287491570655005,
+              0.5596202593395118
+            ],
+            "normal_force_n": 46445.278068083404,
+            "ray_direction": [
+              0.0,
+              -0.7909256219863892,
+              -0.6119123101234436
+            ],
+            "ray_hit_count": 1,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              -0.8600000143051145,
+              4.683017683034051,
+              -89.9766640468078
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 3880268583267030,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_RL",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 5163359296949192,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 296,
+            "suspension_compression_m": 0.1539857954731318,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              1129.4540623491202,
+              -1672.6236881073369
+            ],
+            "valid_ray_hit_count": 1,
+            "wheel_api_id": 3880268583267030,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_RL"
+          },
+          {
+            "contact_valid": true,
+            "distance_available": true,
+            "distance_m": 0.2760142116794256,
+            "hit_api_id": 5625192578149202,
+            "hit_api_id_available": true,
+            "hit_available": true,
+            "hit_usd_prim_path": "/World/StuntRamp",
+            "hit_usd_prim_path_available": true,
+            "normal": [
+              0.0,
+              0.8287491570655005,
+              0.5596202593395118
+            ],
+            "normal_force_n": 46445.278068083404,
+            "ray_direction": [
+              0.0,
+              -0.7909256219863892,
+              -0.6119123101234436
+            ],
+            "ray_hit_count": 1,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              0.8600000143051145,
+              4.683017683034051,
+              -89.9766640468078
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 3869273466975188,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_RR",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 5163359296949192,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 296,
+            "suspension_compression_m": 0.1539857954731318,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              1129.4540623491202,
+              -1672.6236881073369
+            ],
+            "valid_ray_hit_count": 1,
+            "wheel_api_id": 3869273466975188,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_RR"
+          }
+        ]
+      },
+      "scene": "roadster_ramp_entry_40_1",
+      "exit_code": 0
+    },
+    {
+      "entry_speed_mps": 24.860744756004372,
+      "failures": [],
+      "fan": 0.0,
+      "max_height_m": 30.010365437404992,
+      "maximum_body_contact_impulse_ns": 0.0,
+      "maximum_speed_drop_per_tick": 0.09582756441755436,
+      "min_transition_speed_mps": 22.607195737832516,
+      "target_mps": 25.0,
+      "worst": {
+        "angular_velocity": [
+          0.052872844583773684,
+          0.0,
+          0.0
+        ],
+        "body_contact": {
+          "contact_normal": [
+            0.0,
+            0.0,
+            -0.9999999999999999
+          ],
+          "contact_point": [
+            0.7250000238418577,
+            31.45718383789062,
+            -100.07634612946022
+          ],
+          "continuous_normal_impulse_ns": 0.0,
+          "max_normal_speed_mps": 0.21631350831978494,
+          "max_penetration_m": 0.0,
+          "normal_impulse_ns": 0.0,
+          "normal_impulse_vector": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "brake": 0.0,
+        "position": [
+          0.0,
+          29.6366242715287,
+          -99.70911683428687
+        ],
+        "quat": [
+          0.7061647629411686,
+          0.708047546129667,
+          0.0,
+          0.0
+        ],
+        "speed_mps": 22.607195737832516,
+        "suction_n": 0.0,
+        "throttle": 0.7178412786502452,
+        "time_s": 8.333333333333327,
+        "torque_left_nm": 372.90471758240574,
+        "up_y": -0.0016289452149516048,
+        "velocity": [
+          0.0,
+          22.498228005992353,
+          0.013511976862465672
+        ],
+        "wheels": [
+          {
+            "contact_valid": false,
+            "distance_available": false,
+            "distance_m": 0.0,
+            "hit_api_id": 0,
+            "hit_api_id_available": false,
+            "hit_available": false,
+            "hit_usd_prim_path": "",
+            "hit_usd_prim_path_available": false,
+            "normal": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "normal_force_n": 0.0,
+            "ray_direction": [
+              0.0,
+              0.002662655198946595,
+              -0.9999964833259583
+            ],
+            "ray_hit_count": 0,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              -0.8600000143051146,
+              31.011938916040272,
+              -99.82545529262707
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 7979694906033889,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_FL",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 57430189417084,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 500,
+            "suspension_compression_m": 0.0,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "valid_ray_hit_count": 0,
+            "wheel_api_id": 7979694906033889,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_FL"
+          },
+          {
+            "contact_valid": false,
+            "distance_available": false,
+            "distance_m": 0.0,
+            "hit_api_id": 0,
+            "hit_api_id_available": false,
+            "hit_available": false,
+            "hit_usd_prim_path": "",
+            "hit_usd_prim_path_available": false,
+            "normal": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "normal_force_n": 0.0,
+            "ray_direction": [
+              0.0,
+              0.002662655198946595,
+              -0.9999964833259583
+            ],
+            "ray_hit_count": 0,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              0.8600000143051146,
+              31.011938916040272,
+              -99.82545529262707
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 8008282208350995,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_FR",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 57430189417084,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 500,
+            "suspension_compression_m": 0.0,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "valid_ray_hit_count": 0,
+            "wheel_api_id": 8008282208350995,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_FR"
+          },
+          {
+            "contact_valid": true,
+            "distance_available": true,
+            "distance_m": 0.4195361879356871,
+            "hit_api_id": 7578457220835997,
+            "hit_api_id_available": true,
+            "hit_available": true,
+            "hit_usd_prim_path": "/World/StuntRamp",
+            "hit_usd_prim_path_available": true,
+            "normal": [
+              0.0,
+              0.0065993832579211405,
+              0.9999782238332069
+            ],
+            "normal_force_n": 1888.618888686266,
+            "ray_direction": [
+              0.0,
+              0.002662655198946595,
+              -0.9999964833259583
+            ],
+            "ray_hit_count": 1,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              -0.8600000143051146,
+              28.261948664439743,
+              -99.8327775943184
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 5516788884315798,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_RL",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 57430189417084,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 500,
+            "suspension_compression_m": 0.010463819216870285,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              2644.0088215016694,
+              -17.44920752726745
+            ],
+            "valid_ray_hit_count": 1,
+            "wheel_api_id": 5516788884315798,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_RL"
+          },
+          {
+            "contact_valid": true,
+            "distance_available": true,
+            "distance_m": 0.4195361879356871,
+            "hit_api_id": 7578457220835997,
+            "hit_api_id_available": true,
+            "hit_available": true,
+            "hit_usd_prim_path": "/World/StuntRamp",
+            "hit_usd_prim_path_available": true,
+            "normal": [
+              0.0,
+              0.0065993832579211405,
+              0.9999782238332069
+            ],
+            "normal_force_n": 1888.618888686266,
+            "ray_direction": [
+              0.0,
+              0.002662655198946595,
+              -0.9999964833259583
+            ],
+            "ray_hit_count": 1,
+            "ray_max_distance_m": 0.43000100715255735,
+            "ray_origin": [
+              0.8600000143051146,
+              28.261948664439743,
+              -99.8327775943184
+            ],
+            "raycast_filter_excluded_entity_count": 2,
+            "raycast_filter_exclusions": [
+              {
+                "api_id": 5536580093611308,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster/Wheel_RR",
+                "usd_prim_path_available": true
+              },
+              {
+                "api_id": 57430189417084,
+                "api_id_available": true,
+                "usd_prim_path": "/World/Roadster",
+                "usd_prim_path_available": true
+              }
+            ],
+            "raycast_filter_exclusions_available": true,
+            "sample_tick": 500,
+            "suspension_compression_m": 0.010463819216870285,
+            "suspension_rest_length_m": 0.4300000071525574,
+            "tire_force_n": [
+              0.0,
+              2644.0088215016694,
+              -17.44920752726745
+            ],
+            "valid_ray_hit_count": 1,
+            "wheel_api_id": 5536580093611308,
+            "wheel_usd_prim_path": "/World/Roadster/Wheel_RR"
+          }
+        ]
+      },
+      "scene": "roadster_ramp_entry_25_0",
+      "exit_code": 0
+    }
+  ],
+  "binary_build": "130fc4e27",
+  "binary_sha256": "026b23551e829d27f5f010ddb9697d11c1af09e252e543c74e077de38ae6a4cb"
+}
