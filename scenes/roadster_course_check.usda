@@ -493,7 +493,6 @@ def Xform "World" (
         float inputs:course_enabled = 1.0
         float inputs:course_phase = 0.0
         float inputs:course_blocks_passed = 0.0
-        float inputs:course_position_y = 0.6600000262260437
         float outputs:course_stage = 0.0
         float outputs:course_blocks = 0.0
         float outputs:course_time_s = 0.0

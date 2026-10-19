@@ -1,4 +1,6 @@
 <template>
+  <property name="rr_autopilot_label">RUN AUTOPILOT</property>
+  <property name="rr_course_controls">Manual controls · Ctrl+P pauses</property>
   <property name="rr_course_title">FREE DRIVE</property><property name="rr_course_hint">Ctrl+P pause / inspect</property><property name="rr_course_metrics">Course measurements loading</property>
   <property name="rr_steering">Wheels L 0 / R 0 deg</property>
   <property name="rr_speed">0</property><property name="rr_mph">0 mph</property>
@@ -15,8 +17,9 @@
   <property name="rr_force">Lift 0 kN / Boost 0 kN</property><property name="rr_service">External test air supply</property>
   <node id="rr-root">
     <node id="rr-help">
-      <node id="rr-mission-row"><text id="rr-mission-title">{rr_course_title}</text><button id="rr-retry" on_press="runtime_ui_authored_action" tag:action="roadster.restart"><text id="rr-retry-text">RETRY COURSE</text></button></node>
+      <node id="rr-mission-row"><text id="rr-mission-title">{rr_course_title}</text><button id="rr-retry" on_press="runtime_ui_authored_action" tag:action="roadster.restart"><text id="rr-retry-text">RETRY COURSE</text></button><button id="rr-autopilot" on_press="runtime_ui_authored_action" tag:action="roadster.autopilot"><text id="rr-autopilot-text">{rr_autopilot_label}</text></button></node>
       <text id="rr-mission-hint">{rr_course_hint}</text><text id="rr-mission-metrics">{rr_course_metrics}</text>
+      <text id="rr-course-controls">{rr_course_controls}</text>
       <text id="rr-title">ROADSTER / EARTH / {rr_mode}</text>
       <text id="rr-help-drive">WASD drive · Space boost · Shift brake · K jump · F fans · Ctrl+P pause</text>
       <text id="rr-help-air">Jets: Q/E left/right lift · R/C pitch · J/L yaw · I/P/,/. corners</text>

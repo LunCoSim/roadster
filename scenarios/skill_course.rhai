@@ -1,74 +1,159 @@
-// High-level checkpoint policy. Never writes pose, velocity, forces or mass.
-fn simulation_dependencies(me,ctx) {
- let car=find_path("/World/Roadster");let metrics=car;let reads=[car,metrics];
- for n in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+n));}
- #{modelica_entities:[car,metrics],entity_reads:reads,entity_writes:[car,metrics],query_reads:["ReadPorts","QueryPhysicsState"],required_inputs:[]}
+// One mission tree for manual play, keyboard acceptance, and autopilot.
+// Modelica owns measurements and control suggestions; this program owns phases
+// and discrete command edges. It never writes forces, poses, velocities or mass.
+fn simulation_dependencies(me, ctx) {
+    let car = find_path("/World/Roadster");
+    let reads=[car];for corner in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+corner));}
+    #{modelica_entities:[car], entity_reads:reads, entity_writes:[car],
+      query_reads:["ReadPorts"], required_inputs:[]}
 }
-fn readings(id,names) {
- let out=#{};
- for p in query("ReadPorts",#{api_id:id,port_names:names}).ports {if p.direction=="out" {out[p.name]=p.value;}}
- out
-}
-fn on_start(me,ctx) {
- this.car=find_path("/World/Roadster");this.metrics=this.car;
- this.stage=0;this.blocks=0;this.previous_z=200.0;this.published_blocks=0;this.auto_supply=false;this.landing_dwell=0.0;
- notify("Skill course: W + Space to reach 60 mph at the blue gate. Shift brakes. Green pads refill while rolling. Ctrl+P pauses for inspection.");
-}
-fn on_tick(me,ctx) {
- let v=readings(this.car,["position_z","position_y","flight_control_weight"]);
- let m=readings(this.metrics,["launch_gate","refill_zone","refill_ready","jump_clearance","climb_gate","landing_gate"]);
- cmd("SetPorts",#{target:this.car,writes:[["course_position_y",v.position_y]]});
- let z=v.position_z;let previous=this.stage;
- if this.stage==0 {
-  if m.launch_gate>0.5 {this.stage=1;notify("Launch cleared. Drive through the GREEN waypoint for an immediate tank refill.");}
-  else if z<125.0 {this.stage=8;notify("Missed launch: reach 60 mph with air boost at the BLUE gate. Retry course.");}
- }
- if this.stage==1 || this.stage==3 {
-  if m.refill_zone>0.5 {
-   if !this.auto_supply {
-    let boundary=readings(this.car,["next_mass_offset","next_temperature_offset","next_wall_temperature_offset","next_refill_count","next_mechanical_energy_j","next_stored_energy_j"]);
-    let writes=[];
-    for name in ["mass_offset","temperature_offset","wall_temperature_offset","refill_count","mechanical_energy_j","stored_energy_j"] {
-     writes.push(["instant_"+name,boundary["next_"+name]]);
+fn readings(car, names) {
+    let values = #{};
+    for p in query("ReadPorts", #{api_id:car, port_names:names}).ports {
+        if p.direction == "out" { values[p.name] = p.value; }
     }
-    cmd("SetPorts",#{target:this.car,writes:writes});this.auto_supply=true;
-   }
-   if m.refill_ready>0.5 {
-    this.stage+=1;
-    if this.stage==2 {notify("Refilled. Build 65–85 km/h, turn fans OFF, then tap K at the yellow line to clear all three blocks.");}
-    else {notify("Refilled. Fans ON. Approach ramp at 35–45 km/h and use W to climb to the green crest marker.");}
-   }
-  } else if this.auto_supply {this.auto_supply=false;}
-  if (this.stage==1 && z<32.0) || (this.stage==3 && z< -208.0) {
-   this.stage=8;notify("Green waypoint missed. Drive between its posts; refill is immediate, with no stop. Retry course.");
-  }
- }
- if this.stage!=1 && this.stage!=3 && this.auto_supply {
-  this.auto_supply=false;
- }
- if this.stage==2 && this.blocks<3 {
-  let barrier_z= -100.0-8.0*this.blocks;
-  if this.previous_z>barrier_z && z<=barrier_z {
-   if m.jump_clearance>0.5 {this.blocks+=1;}
-   else {this.stage=8;notify("Block missed. Build speed and time a short K pulse at the yellow takeoff line. Retry course.");}
-   if this.blocks==3 {this.stage=3;notify("Three blocks cleared. Continue through the next GREEN waypoint for an immediate refill.");}
-  }
- }
- if this.stage==4 && m.climb_gate>0.5 {this.stage=5;notify("Fan climb cleared. Follow the return lip to the green crest, then fans OFF. Use R/C to pitch.");}
- if this.stage==5 && v.flight_control_weight>0.8 && v.position_y>20.0 {
-  this.stage=6;notify("Manual flip: R nose up; C nose down. Pulse opposing jets to stop rotation. J/L yaw, Q/E left/right lift, K body-up thrust. WASD stays drivetrain. Land wheels DOWN, Shift to stop.");
- }
- if this.stage==6 {
-  if m.landing_gate>0.5 {
-   let contacts=0;
-   for n in ["FL","FR","RL","RR"] {
-    if contact_debug(find_path("/World/Roadster/Wheel_"+n)).touching_pair_count>0 {contacts+=1;}
-   }
-   if contacts==4 {this.landing_dwell+=dt();}else{this.landing_dwell=0.0;}
-  } else {this.landing_dwell=0.0;}
-  if this.landing_dwell>0.5 {this.stage=7;notify("COURSE COMPLETE: launch, timed jump, fan climb and manual flip landed on four wheels.");}
- }
- if this.stage!=previous {cmd("SetPorts",#{target:this.metrics,writes:[["course_phase",this.stage*1.0]]});}
- if this.blocks!=this.published_blocks {cmd("SetPorts",#{target:this.metrics,writes:[["course_blocks_passed",this.blocks*1.0]]});this.published_blocks=this.blocks;}
- this.previous_z=z;
+    values
+}
+fn phase_node(phase, action, message) {
+    once(|me| {
+        this.phase = phase;
+        cmd("SetPorts", #{target:this.car, writes:[
+            ["course_phase", phase*1.0], ["course_action", action*1.0]]});
+        notify(message);
+    })
+}
+fn action_node(action) {
+    once(|me| { cmd("SetPorts", #{target:this.car, writes:[["course_action",action*1.0]]}); })
+}
+fn healthy(me) { readings(this.car,["course_healthy"]).course_healthy > 0.5 }
+fn launched(me) { readings(this.car,["launch_gate"]).launch_gate > 0.5 }
+fn launch_started(me) { readings(this.car,["course_launch_started"]).course_launch_started > 0.5 }
+fn in_refill_zone(me) { readings(this.car,["refill_zone"]).refill_zone > 0.5 }
+fn tank_ready(me) { readings(this.car,["refill_ready"]).refill_ready > 0.5 }
+fn at_takeoff(me) { readings(this.car,["position_z"]).position_z < -86.0 }
+fn barrier_reached(me) { readings(this.car,["course_block_crossed"]).course_block_crossed > 0.5 }
+fn barrier_cleared(me) { readings(this.car,["jump_clearance"]).jump_clearance > 0.5 }
+fn block_count_published(me) { readings(this.car,["course_blocks"]).course_blocks >= this.blocks*1.0 }
+fn climbed(me) { readings(this.car,["climb_gate"]).climb_gate > 0.5 }
+fn at_crest(me) { readings(this.car,["course_crest_gate"]).course_crest_gate > 0.5 }
+fn in_flight(me) { readings(this.car,["course_airborne_gate"]).course_airborne_gate > 0.5 }
+fn landing_ready(me) {
+    if readings(this.car,["landing_gate"]).landing_gate<0.5 {return false;}
+    for corner in ["FL","FR","RL","RR"] {
+        if contact_debug(find_path("/World/Roadster/Wheel_"+corner)).touching_pair_count<1 {return false;}
+    }
+    true
+}
+fn refill(me) {
+    let fields = ["mass_offset","temperature_offset","wall_temperature_offset",
+        "refill_count","mechanical_energy_j","stored_energy_j"];
+    let names = []; for field in fields { names.push("next_"+field); }
+    let boundary = readings(this.car,names);
+    let writes = [];
+    for field in fields { writes.push(["instant_"+field,boundary["next_"+field]]); }
+    cmd("SetPorts",#{target:this.car,writes:writes});
+}
+fn count_block(me) {
+    this.blocks += 1;
+    cmd("SetPorts",#{target:this.car,writes:[["course_blocks_passed",this.blocks*1.0]]});
+}
+fn refill_node(phase, message) {
+    seq([phase_node(phase,2,message), wait_until(Fn("in_refill_zone")),
+         once(Fn("refill")), wait_until(Fn("tank_ready"))])
+}
+fn barrier_node() {
+    seq([wait_until(Fn("barrier_reached")), check(Fn("barrier_cleared")),
+         once(Fn("count_block")),wait_until(Fn("block_count_published"))])
+}
+fn on_start(me, ctx) {
+    this.car = find_path("/World/Roadster");
+    this.phase = 0; this.blocks = 0; this.autopilot = false;
+    this.last_controls = [];
+    subscribe("TASK_FAILED");
+    cmd("SetPorts",#{target:this.car,writes:[["course_phase",0.0],
+        ["course_action",0.0],["course_blocks_passed",0.0],["course_autopilot_enable",0.0]]});
+}
+fn task(me, ctx) {
+    reactive_seq([
+        check(Fn("healthy")),
+        seq([
+            phase_node(0,0,"LAUNCH: settle, then W + Space to reach 60 mph at the blue gate. Ctrl+P pauses."),
+            wait(2.0), action_node(1), wait_until(Fn("launch_started")), wait(0.65), action_node(2),
+            wait_until(Fn("launched")),
+            refill_node(1,"REFILL 1: drive through the green waypoint; refill is immediate while rolling."),
+            phase_node(2,3,"JUMP: fans OFF, build 65–85 km/h, tap K at the yellow takeoff line."),
+            wait_until(Fn("at_takeoff")), action_node(4), wait(0.45), action_node(5),
+            repeat(3,barrier_node()),
+            refill_node(3,"REFILL 2: drive through green posts, then fans ON and slow for the ramp."),
+            phase_node(4,6,"CLIMB: fans ON, approach at 35–45 km/h, then hold W up the ramp."),
+            wait_until(Fn("climbed")),
+            phase_node(5,7,"CREST: follow the return lip; slow down and switch fans OFF at the crest."),
+            wait_until(Fn("at_crest")), action_node(8), wait_until(Fn("in_flight")),
+            phase_node(6,9,"FLIP + LAND: pulse R/C pitch, J/L yaw, Q/E roll; K cushions descent. Shift brakes."),
+            // Losing any landing condition resets the native task dwell.
+            // This is checkpoint qualification, not a physical contact law.
+            retry(60,seq([wait_until(Fn("landing_ready")),
+                reactive_seq([check(Fn("landing_ready")),wait(0.5)])])),
+            phase_node(7,10,"COURSE COMPLETE: launch, three blocks, fan climb, flip and four-wheel landing."),
+            once(|m| { if this.autopilot { this.apply_pilot(m); } }),
+        ]),
+    ])
+}
+fn pilot_setpoint(car) {
+    let names = ["throttle","steer","brake","thrust_z","thrust_y","thrust_x",
+        "fan","lift_fl","lift_fr","lift_rl","lift_rr"];
+    let ports = []; for name in names { ports.push("pilot_command_"+name); }
+    let p = readings(car,ports);
+    let writes = [["program_active",1.0],["autopilot_enable",0.0]];
+    for name in names { writes.push([name,p["pilot_command_"+name]]); }
+    writes
+}
+
+fn apply_pilot(me) {
+    let writes = pilot_setpoint(this.car);
+    if writes != this.last_controls {
+        cmd("SetPorts",#{target:this.car,writes:writes});
+        this.last_controls = writes;
+    }
+}
+fn stop_setpoint() {
+    [["program_active",0.0],["course_autopilot_enable",0.0],
+     ["throttle",0.0],["steer",0.0],["brake",1.0],["thrust_z",0.0],["thrust_y",0.0],
+     ["thrust_x",0.0],["lift_fl",0.0],["lift_fr",0.0],["lift_rl",0.0],["lift_rr",0.0]]
+}
+fn on_event(me, evt, ctx) {
+    if evt.name == "TASK_FAILED" && evt.source == me {
+        this.phase = 8; this.autopilot = false;
+        let writes = stop_setpoint(); writes.push(["course_phase",8.0]);
+        cmd("SetPorts",#{target:this.car,writes:writes});
+        notify("Course missed or timed out. Retry to reset the car, air and mission tree.");
+    }
+    if evt.name == "runtime.ui.action" && evt.value.action == "roadster.autopilot" {
+        if this.phase >= 7 { notify("Retry the course before starting the autopilot."); return; }
+        this.autopilot = !this.autopilot; this.last_controls = [];
+        if this.autopilot {
+            cmd("SetPorts",#{target:this.car,writes:[["course_autopilot_enable",1.0]]});
+            this.apply_pilot(me);
+            notify("Course autopilot ON. Press any driving or jet key to take over. Ctrl+P still pauses.");
+        } else {
+            cmd("SetPorts",#{target:this.car,writes:stop_setpoint()});
+            notify("Autopilot OFF. Manual controls active.");
+        }
+    }
+    if this.autopilot && evt.name == "roadster.pilot.controls" && evt.source == this.car {
+        this.apply_pilot(me);
+    }
+    if this.autopilot && evt.name == "intent.edge" && evt.source == this.car && evt.value.edge == "pressed" {
+        let movement = ["forward","backward","left","right","brake","thrust","speed_boost",
+            "yaw_left","yaw_right","auxiliary_1","auxiliary_2","auxiliary_3","auxiliary_4"];
+        if movement.contains(evt.value.intent) {
+            this.autopilot = false;
+            // Native input has already written the player's complete frame.
+            cmd("SetPorts",#{target:this.car,writes:[["course_autopilot_enable",0.0],["program_active",0.0]]});
+            notify("Manual takeover: autopilot OFF.");
+        }
+    }
+}
+fn on_stop(me,ctx) {
+    if this.autopilot { cmd("SetPorts",#{target:this.car,writes:stop_setpoint()}); }
 }

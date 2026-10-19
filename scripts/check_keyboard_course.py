@@ -34,7 +34,12 @@ PORTS = ['course_time_s', 'course_stage', 'course_blocks', 'course_air_rotation_
          'vehicle_mass_kg', 'chassis_mass_kg', 'unlimited_air_active', 'heading_fl',
          'quat_w', 'quat_x', 'quat_y', 'quat_z', 'yaw_rate_deg_s',
          'full_lift_force_n', 'lift_net_acceleration', 'velocity_z',
-         'drive_left', 'drive_right', 'jet_force_y', 'jet_force_z']
+         'drive_left', 'drive_right', 'jet_force_y', 'jet_force_z', 'course_autopilot_active']
+PILOT_KEYS = {'forward':'KeyW','reverse':'KeyS','left':'KeyA','right':'KeyD',
+              'boost':'Space','brake':'ShiftLeft','lift':'KeyK','pitch_up':'KeyR',
+              'pitch_down':'KeyC','yaw_left':'KeyJ','yaw_right':'KeyL',
+              'roll_left':'KeyQ','roll_right':'KeyE'}
+PORTS += ['pilot_'+name for name in [*PILOT_KEYS, 'fan']]
 
 
 class Pilot:
@@ -48,10 +53,7 @@ class Pilot:
         self.out = ROOT / args.output
         self.out.parent.mkdir(parents=True, exist_ok=True)
         self.fan_until = self.fan_retry = 0.0
-        self.jump_at = None
-        self.launch_at = None
-        self.throttle = False
-        self.jet_pulses = {}
+        self.autopilot_started = False
         self.native_offset = 0
 
     def q(self, command, **params):
@@ -183,119 +185,34 @@ class Pilot:
             self.fan_until, self.fan_retry = t + .07, t + .35
             keys.add('KeyF')
 
-    def steering(self, keys, t, v):
-        lookahead = max(12.0, v['speed_mps'])
-        # Compare the observed forward direction to the track tangent in the
-        # contact plane. A world-yaw angle becomes singular on the vertical ramp.
-        q = (v['quat_x'], v['quat_y'], v['quat_z'], v['quat_w'])
-        def rotate(vec):
-            x, y, z, w = q
-            a, b, c = vec
-            tx, ty, tz = 2*(y*c-z*b), 2*(z*a-x*c), 2*(x*b-y*a)
-            return (a+w*tx+y*tz-z*ty, b+w*ty+z*tx-x*tz, c+w*tz+x*ty-y*tx)
-        forward, right = rotate((0,0,-1)), rotate((1,0,0))
-        desired = (-v['position_x']/lookahead, forward[1], forward[2])
-        error = math.atan2(-sum(a*b for a,b in zip(right, desired)),
-                           sum(a*b for a,b in zip(forward, desired)))
-        target = math.atan(2 * 2.75 * math.sin(error) / lookahead)
-        rack_error = v['heading_fl'] - target
-        if rack_error > .008:
-            keys.add('KeyD')
-        elif rack_error < -.008:
-            keys.add('KeyA')
-
-    def cruise(self, keys, speed, target):
-        if speed < target - .5:
-            self.throttle = True
-        elif speed > target + .5:
-            self.throttle = False
-        if speed > target + 2.0:
-            keys.add('ShiftLeft')
-        elif self.throttle:
-            keys.add('KeyW')
-
     def commands(self, v):
         t = v['course_time_s'] - self.start
         stage = round(v['course_stage'])
-        keys = set()
-        fan = True
-        if stage == 0:
-            if t < 2:
-                keys.add('ShiftLeft')
-            else:
-                if self.launch_at is None:
-                    self.launch_at = t
-                keys.add('KeyW')
-                if t - self.launch_at < .65:
-                    keys.add('Space')
-        elif stage in [1, 3]:
-            self.cruise(keys, v['speed_mps'], 22.0)
-        elif stage == 2:
-            fan = False
-            if self.jump_at is None and v['position_z'] < -86:
-                self.jump_at = t
-            if self.jump_at is None:
-                self.cruise(keys, v['speed_mps'], 22.0)
-            elif t - self.jump_at < .45:
-                keys.add('KeyK')
-        elif stage in [4, 5]:
-            if v['position_y'] > 52:
-                self.cruise(keys, v['speed_mps'], 10.0)
-            elif stage == 4 and v['position_z'] > -298 and v['position_y'] < .8:
-                self.cruise(keys, v['speed_mps'], 11.0)
-            else:
-                keys.add('KeyW')
-            if stage == 5 and v['position_y'] > 63.5 and v['position_z'] > -304:
-                fan = False
-                keys.discard('KeyW')
-        elif stage == 6:
-            fan = False
-            if v['flight_control_weight'] > .2:
-                # Aim for wheels down using the observed quaternion and rates.
-                # Each correction is an ordinary finite keyboard jet pulse.
-                w = v['quat_w']
-                xyz = [v['quat_x'], v['quat_y'], v['quat_z']]
-                length = math.sqrt(sum(x*x for x in xyz))
-                sign = -1.0 if w >= 0 else 1.0
-                angle = 2*math.atan2(length, abs(w))
-                errors = [sign*x*angle/max(1e-9,length)*180/math.pi for x in xyz]
-                for axis, rate, positive, negative, cap, deadband in [
-                    (0, 'pitch_rate_deg_s', 'KeyR', 'KeyC', 100, 12),
-                    (1, 'yaw_rate_deg_s', 'KeyJ', 'KeyL', 45, 8),
-                    (2, 'roll_rate_deg_s', 'KeyE', 'KeyQ', 60, 10),
-                ]:
-                    target = max(-cap, min(cap, 2.5*errors[axis]))
-                    error = target-v[rate]
-                    until, retry, key = self.jet_pulses.get(axis, (0,0,None))
-                    if t < until:
-                        keys.add(key)
-                    elif abs(error)>deadband and t>=retry:
-                        key = positive if error>0 else negative
-                        duration = min(.065, max(.025, abs(error)*.00045))
-                        self.jet_pulses[axis] = (t+duration,t+duration+.045,key)
-                        keys.add(key)
-                if v['up_alignment']>.94 and v['velocity_z']>16 and abs(v['yaw'])<.25 and not keys:
-                    keys.add('Space')
-                # Available thrust comes from the live Modelica gas/nozzle model.
-                accel = v['full_lift_force_n']*v['up_alignment']/v['vehicle_mass_kg']-9.80665
-                if accel>1 and v['up_alignment']>.94 and v['velocity_y'] < -2:
-                    stopping_height = v['velocity_y']**2/(2*accel)
-                    if v['position_y'] < stopping_height+12 and not (keys-{'Space'}):
-                        keys.add('KeyK')
-            else:
-                # A human can finish parking after touchdown using the motors.
-                if v['up_alignment']>.95 and v['speed_mps']<3 and v['position_z']< -292:
-                    keys.add('KeyS')
-                elif v['up_alignment']>.95 and v['speed_mps']<3 and v['position_z']> -236:
-                    keys.add('KeyW')
-                else:
-                    keys.add('ShiftLeft')
-        elif stage in [7, 8]:
-            keys.add('ShiftLeft')
-        self.fan(keys, t, v['fan_requested'], fan)
-        if stage < 6 and v['flight_control_weight'] < .2:
-            self.steering(keys, t, v)
+        if self.args.autopilot:
+            return set(), t, stage
+        # The same Modelica guidance feeds the event-driven in-app autopilot.
+        # This adapter translates its digital suggestions to native keys only.
+        keys = {key for name,key in PILOT_KEYS.items() if v['pilot_'+name]>.5}
+        self.fan(keys, t, v['fan_requested'], v['pilot_fan']>.5)
         return keys, t, stage
+
+    def start_autopilot(self, t):
+        self.keys(set(), t)
+        if self.args.manual:
+            self.step(2)
+        for state in ['Pressed','Released']:
+            self.q('InjectWindowInput', event={'PointerButton': dict(
+                button='Primary',state=state,x=330,y=78)})
+        deadline = time.monotonic()+5
+        while time.monotonic()<deadline:
+            if self.args.manual:
+                self.step(2)
+            if self.snapshot()['course_autopilot_active']>.5:
+                self.autopilot_started = True
+                self.report['autopilot_button'] = True
+                return
+            time.sleep(.02)
+        raise RuntimeError('HUD autopilot button did not enable the course program')
 
     def check_pause(self, t):
         def tick():
@@ -376,7 +293,9 @@ class Pilot:
                     upright=v['up_alignment'] > .95, stopped=v['speed_mps'] < 2,
                     four_wheels=all(n > 0 for n in contacts.values()),
                     native_mass=abs(native['mass_kg'] - v['chassis_mass_kg']) < .05,
-                    pause=self.report.get('pause', {}).get('ok', False))
+                    pause=self.report.get('pause', {}).get('ok', False),
+                    control_mode=(self.autopilot_started and v['course_autopilot_active']>.5)
+                        if self.args.autopilot else v['course_autopilot_active']<.5)
                 self.report['checks'] = checks
                 self.report['ok'] = all(checks.values())
                 self.report['failures'] = [name for name, ok in checks.items() if not ok]
@@ -386,7 +305,9 @@ class Pilot:
                 paused = True
                 if self.args.manual:
                     self.q('StepSimulation', hold=True)
-                    self.report['execution_mode'] = 'Native fixed cycles; keyboard actuation only'
+                    self.report['execution_mode'] = 'Native fixed cycles'
+                if self.args.autopilot:
+                    self.start_autopilot(t)
             if t >= progress_at:
                 print(f'{t:.1f}s stage={stage} z={v["position_z"]:.1f} speed={v["speed_mps"]:.1f} air={v["gas_mass_kg"]:.1f}', flush=True)
                 progress_at = t + 2
@@ -403,6 +324,8 @@ def main():
     ap.add_argument('--port', type=int, default=4198)
     ap.add_argument('--launch', action='store_true')
     ap.add_argument('--keep-open', action='store_true')
+    ap.add_argument('--autopilot', action='store_true',
+                    help='Start the shared in-app course pilot through its HUD button')
     ap.add_argument('--manual', action='store_true',
                     help='Admit exact native fixed cycles between keyboard observations')
     ap.add_argument('--binary', default=str(ROOT / '.scratch/luncosim'))
@@ -413,6 +336,8 @@ def main():
                     help='Wall-clock playback rate; physical timestep and course are unchanged')
     args = ap.parse_args()
     pilot = Pilot(args)
+    pilot.report.update(control_mode='autopilot' if args.autopilot else 'keyboard',
+                        sequence='scenarios/skill_course.rhai', guidance='models/CoursePilot.mo')
     process = log = None
     try:
         if args.launch:

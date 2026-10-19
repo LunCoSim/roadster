@@ -49,6 +49,9 @@ fn vehicle_ui(v) {
         out.rr_temperature = text_number(v.tank_temperature_k,10.0)+" K";
         out.rr_unlimited_label = if v.unlimited_air_active>0.5 {"UNLIMITED AIR · ON"}else{"UNLIMITED AIR · OFF"};
         out.rr_refill_label = "Tab · REFILL AIR";
+        out.rr_autopilot_label = if v.course_autopilot_active>0.5 {"STOP AUTOPILOT"}else{"RUN AUTOPILOT"};
+        out.rr_course_controls = if v.course_autopilot_active>0.5 {"AUTOPILOT · driving or jet keys take over · Ctrl+P pauses"}
+            else {suggested_controls(v)};
         out.rr_fan_state = fan_state;
         out.rr_fan_label = if v.fan_requested>0.5 {"F · FANS OFF"}else{"F · FANS ON"};
         out.rr_suction = text_number(v.suction_force_kn,10.0)+" kN suction";
@@ -60,6 +63,19 @@ fn vehicle_ui(v) {
         out.rr_force = "Lift "+text_number(v.lift_force_kn,10.0)+" kN / Boost "+text_number(v.boost_force_kn,10.0)+" kN";
         out.rr_service = if servicing {"Test supply: "+text_number(v.refill_flow_kg_s,10.0)+" kg/s"}else{"Earth g = 9.80665 m/s2"};
         out
+}
+
+fn suggested_controls(v) {
+    if v.skill_course_active<0.5 {return "Manual controls · Ctrl+P pauses";}
+    let names=["forward","reverse","left","right","boost","brake","lift",
+        "pitch_up","pitch_down","yaw_left","yaw_right","roll_left","roll_right"];
+    let keys=["W","S","A","D","Space","Shift","K","R","C","J","L","Q","E"];
+    let hint="";
+    for i in 0..names.len() {
+        if v["pilot_"+names[i]]>0.5 {if hint!="" {hint+=" + ";} hint+=keys[i];}
+    }
+    if hint=="" {hint="coast";}
+    "Suggested: "+hint+" · fans "+(if v.pilot_fan>0.5 {"ON"}else{"OFF"})
 }
 
 fn course_ui(c) {
