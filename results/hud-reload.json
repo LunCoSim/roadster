@@ -1,0 +1,93 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "kind": "template_reload",
+      "marker": "AIR CHECK ONE",
+      "changed_fraction": {
+        "speed": 0.0,
+        "fans": 0.0,
+        "air": 0.0
+      },
+      "ok": true
+    },
+    {
+      "kind": "template_reload",
+      "marker": "AIR CHECK TWO",
+      "changed_fraction": {
+        "speed": 0.0,
+        "fans": 0.0,
+        "air": 0.0
+      },
+      "ok": true
+    },
+    {
+      "kind": "template_reload",
+      "marker": "AIR INVENTORY",
+      "changed_fraction": {
+        "speed": 0.0,
+        "fans": 0.0,
+        "air": 0.0
+      },
+      "ok": true
+    },
+    {
+      "kind": "negative_layout_fixture",
+      "changed_fraction": 0.842807881773399,
+      "ok": true
+    },
+    {
+      "kind": "stylesheet_recovery",
+      "changed_fraction": {
+        "speed": 0.0,
+        "fans": 0.0,
+        "air": 0.0
+      },
+      "ok": true
+    },
+    {
+      "kind": "scene_restart",
+      "background_pixel_delta": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": true
+    },
+    {
+      "kind": "scene_restart",
+      "background_pixel_delta": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": true
+    }
+  ],
+  "limits": [
+    "A focused HUI ownership regression reproduced the overwrite; ordinary live reloads did not reproduce the original whole-HUD screenshot.",
+    "Pixel regions are specific to the recorded 1280x720 viewport.",
+    "Transient missing CSS variable diagnostics occur during stylesheet/restart transitions; the captured settled HUD recovers."
+  ],
+  "binary_sha256": "b9125a7b54c45489fef38272582772b2c03c226c4c8b214d2f8e4c8ef7de1351",
+  "core_commit": "f1fd3188c",
+  "preparation_scenario": {
+    "named_verdict": "RUNTIME_UI_PREPARATION PASS",
+    "check_count": 9,
+    "harness_exit_code": 1,
+    "harness_failure": "Separate shared-scene AUTHORED_RUNTIME_CONTRACTS ground-height assertion failed (1/14).",
+    "settled_ground_inspection": {
+      "ready": true,
+      "faulted": false,
+      "height_m": 0.0,
+      "ray_distance_m": 10.0,
+      "note": "A separate settled launch returned the expected ground height; the first-cycle shared-fixture assertion remains unqualified."
+    }
+  }
+}

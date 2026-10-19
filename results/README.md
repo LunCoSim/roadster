@@ -17,8 +17,14 @@ W hold without repeats and Ctrl+P pause/resume, using local core `ad9cb26f6`.
 `b91dae75b`: three blocks, both refills, fan climb, 185.86-degree air turn and
 four-wheel upright landing in 39.4167 s. Final speed is 0.932 m/s and 136.24 kg
 of finite air remains. Native manual stepping bounds observation latency;
-realtime pacing is not established by this run. The intermittent HUD reload
-issue remains open.
+realtime pacing is not established by this run.
+
+`hud-reload.json` records seven passing visual checks on local core `f1fd3188c`:
+three template reloads, negative-layout detection, stylesheet recovery and two
+scene restarts. A focused regression reproduced HUI overwriting retained CSS
+layout and passes after the composition fix. The original whole-HUD screenshot
+was not reproduced by ordinary reloads; transient CSS-variable diagnostics and
+a separate shared-scene ground-height test failure remain qualification limits.
 The schema audit covers 30 vehicle scenes; Omniverse execution is untested.
 `usd-physics-review.json` is a historical pre-correction failure report.
 

@@ -4,7 +4,8 @@ The collision correction is committed on local LunCoSim main as `d0b091908`.
 [Measured results](../results/contact-physics-review.json) retain the collision
 qualification and an earlier extreme-impact failure. Held input is committed as
 `ad9cb26f6`; resumed-cycle braking is `b91dae75b`. The keyboard course now passes.
-The separate intermittent HUD reload issue remains open. Nothing has been pushed.
+Runtime style ownership is corrected in `f1fd3188c`, with bounded reload
+qualification below. Nothing has been pushed.
 
 ## Corrected causes and ownership
 
@@ -92,4 +93,20 @@ low-level regression failed before and passes after the correction.
 An earlier fast sideways impact caused a hard-joint convergence hold. The
 passing controlled landing does not qualify every extreme impact.
 The composed USD audit is separate from NVIDIA Omniverse execution, which has
-not been performed. The intermittent HUD reload issue is also open.
+not been performed.
+
+## Separate HUD style ownership
+
+Core `f1fd3188c` removes runtime HUI inline style context before HUI's style pass,
+after tree/property/collection updates. The real HUI regression reproduced a
+retained width becoming Auto and passes after the fix; unrelated HUI inline
+styles still work. The change adds no per-vehicle Rust layout or dependency edit.
+
+[Seven visual checks](../results/hud-reload.json) pass: three marked template
+reloads, a negative narrowed-card fixture, stylesheet recovery and two scene
+restarts. Card regions stay unchanged during template reloads. The nine authored
+UI preparation assertions also pass. Their broader Python harness exits 1 due
+to a separate shared-scene ground-height assertion. Transient CSS-variable
+diagnostics during reload still occur and recover in the settled capture.
+The original whole-HUD screenshot was not reproduced by ordinary reloads before
+the fix; this qualifies the ownership correction and these bounded transitions.

@@ -1,5 +1,5 @@
 {
-  "status": "Collision, held input and keyboard course qualified; intermittent HUD reload remains open",
+  "status": "Collision, held input, keyboard course and bounded HUD style reloads qualified",
   "core_commit": "ad9cb26f6",
   "parry_revision": "75b6acccdc42151995d0a653c576e65248164447",
   "parry_publication": "Local only; publication not authorized",
@@ -665,11 +665,20 @@
       "maximum_observation_gap_s": 0.09999999999999964,
       "core_commit": "b91dae75b",
       "report": "keyboard-course.json"
+    },
+    "hud_reload": {
+      "core_commit": "f1fd3188c",
+      "report": "hud-reload.json",
+      "ok": true,
+      "visual_checks": 7,
+      "preparation_checks": 9,
+      "broader_harness_exit_code": 1
     }
   },
   "open_failures": [
     "Earlier fast sideways landing triggered a hard-joint convergence hold; extreme-impact envelope remains unqualified.",
-    "Intermittent HUD styling on reload remains queued."
+    "Original whole-HUD screenshot not reproduced by ordinary reloads; style ownership regression repaired, bounded reload gates pass. Transient CSS-variable diagnostics remain.",
+    "Shared authored-runtime fixture fails its ground-height assertion; UI preparation itself passes nine checks."
   ],
   "unit_checks": {
     "parry_library": "60 passed",
