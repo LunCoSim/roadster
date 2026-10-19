@@ -9,10 +9,13 @@ def Xform "World" (
     kind = "assembly"
 )
 {
-    def PhysicsScene "PhysicsScene"
+    def PhysicsScene "PhysicsScene" (
+        prepend apiSchemas = ["PhysxSceneAPI"]
+    )
     {
         vector3f physics:gravityDirection = (0.0, -1.0, 0.0)
         float physics:gravityMagnitude = 9.806650161743164
+        custom bool physxScene:enableCCD = true
     }
     def DistantLight "Sun" (
         prepend references = @lunco://lighting/sun.usda@</Sun>
@@ -487,6 +490,66 @@ def Xform "World" (
     {
         double3 xformOp:translate = (0.0, 0.66, 0.0)
         uniform token[] xformOpOrder = ["xformOp:translate"]
+        over "Wheel_FL"
+        {
+            double3 xformOp:translate = (-0.86, 0.45000000000000007, -1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "Suspension_FL"
+        {
+            custom double3 xformOp:translate = (-0.86, 0.45000000000000007, -1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "SteeringKnuckle_FL"
+        {
+            custom double3 xformOp:translate = (-0.86, 0.45000000000000007, -1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "Wheel_FR"
+        {
+            double3 xformOp:translate = (0.86, 0.45000000000000007, -1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "Suspension_FR"
+        {
+            custom double3 xformOp:translate = (0.86, 0.45000000000000007, -1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "SteeringKnuckle_FR"
+        {
+            custom double3 xformOp:translate = (0.86, 0.45000000000000007, -1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "Wheel_RL"
+        {
+            double3 xformOp:translate = (-0.86, 0.45000000000000007, 1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "Suspension_RL"
+        {
+            custom double3 xformOp:translate = (-0.86, 0.45000000000000007, 1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "Wheel_RR"
+        {
+            double3 xformOp:translate = (0.86, 0.45000000000000007, 1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "Suspension_RR"
+        {
+            custom double3 xformOp:translate = (0.86, 0.45000000000000007, 1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
     }
     def Camera "Avatar" (
         prepend apiSchemas = ["LunCoCameraAPI", "LunCoAvatarAPI"]

@@ -5,6 +5,7 @@
   <property name="rr_air_mass">250.0 kg</property><property name="rr_air_pressure">437 bar</property>
   <property name="rr_air_fill">100%</property><property name="rr_air_width">100%</property>
   <property name="rr_air_status">AIR READY</property><property name="rr_air_color">#68e0b2</property>
+  <property name="rr_unlimited_label">UNLIMITED AIR · OFF</property>
   <property name="rr_fill_temperature">293.2 K</property>
   <property name="rr_temperature">293 K</property><property name="rr_refill_label">Tab · REFILL AIR</property>
   <property name="rr_fan_state">FANS ON</property><property name="rr_fan_label">F · FANS OFF</property>
@@ -33,6 +34,7 @@
           <text id="rr-target-temperature">Fill: {rr_fill_temperature}</text>
           <button id="rr-temperature-up" on_press="runtime_ui_authored_action" tag:action="roadster.temperature.up"><text id="rr-plus">+</text></button>
         </node>
+        <button id="rr-unlimited" on_press="runtime_ui_authored_action" tag:action="roadster.unlimited"><text id="rr-unlimited-text">{rr_unlimited_label}</text></button>
         <button id="rr-refill" on_press="runtime_ui_authored_action" tag:action="roadster.refill"><text id="rr-refill-text">{rr_refill_label}</text></button>
       </node>
       <node id="rr-fan-block">

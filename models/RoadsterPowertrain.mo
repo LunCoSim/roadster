@@ -52,6 +52,15 @@ model RoadsterPowertrain
   input Real adhesion_power_w(unit="W");
   input Real headlight_switch;
   input Real refill;
+  input Real unlimited_air;
+  output Real unlimited_air_active;
+  output Real ideal_supply_flow_kg_s;
+  output Real ideal_supply_heat_w;
+  output Real ideal_supply_air_kg;
+  output Real ideal_supply_power_w;
+  output Real ideal_supply_energy_j;
+  Real ideal_energy_ledger(start=0,fixed=true);
+  Real ideal_air_ledger(start=0,fixed=true);
   input Real instant_mass_offset;
   input Real instant_temperature_offset;
   input Real instant_wall_temperature_offset;
@@ -202,7 +211,21 @@ equation
   // jacket, compressor eta=0.7. This is not an onboard Tesla compressor.
   refill_allowed = noEvent(if refill_target_temperature_k>=253.15 and refill_target_temperature_k<=333.15 then 1.0 else 0.0);
   refill_complete = noEvent(if gas_mass>=gas_capacity_kg-0.005 and abs(gas_temperature-refill_target_temperature_k)<0.01 then 1.0 else 0.0);
-  service_gate = max(0.0,min(1.0,refill))*refill_allowed;
+  unlimited_air_active = noEvent(if unlimited_air>0.5 then 1.0 else 0.0);
+  ideal_supply_flow_kg_s = unlimited_air_active*mass_flow;
+  // Ideal co-moving, same-state laboratory reservoir. Enthalpy from makeup
+  // cancels blowdown cooling; the jacket cancels wall exchange exactly.
+  // This supply is external, unbounded, and explicitly reported.
+  ideal_supply_heat_w = -unlimited_air_active*tank_heat.heat_to_gas;
+  der(ideal_air_ledger) = ideal_supply_flow_kg_s;
+  ideal_supply_air_kg = ideal_air_ledger;
+  // The laboratory source carries the replacement air's enthalpy and the
+  // vehicle's co-moving kinetic energy. Its energy is not drawn from the car.
+  ideal_supply_power_w = ideal_supply_flow_kg_s*(air.specific_internal_energy+tank_pressure_pa/gas_density
+    +0.5*free_stream_speed^2)+ideal_supply_heat_w;
+  der(ideal_energy_ledger) = ideal_supply_power_w;
+  ideal_supply_energy_j = ideal_energy_ledger;
+  service_gate = (1.0-unlimited_air_active)*max(0.0,min(1.0,refill))*refill_allowed;
   refill_active = service_gate*(1.0-refill_complete);
   actuator_enabled = enabled;
   mass_inflow = service_gate*min(refill_max_flow,max(0.0,(gas_capacity_kg-gas_mass)/0.2));
@@ -282,8 +305,8 @@ equation
   // Fixed-volume adiabatic open-system energy balance with real-gas cv and
   // (dp/dT)_rho. The nozzle remains an ideal-expansion engineering closure.
   discharge_enabled = noEvent(if gas_temperature > minimum_discharge_temperature and raw_pressure > ambient_pressure then 1.0 else 0.0);
-  der(temperature_ledger) = ((mass_inflow-mass_flow)*gas_temperature*pressure_temperature_derivative/gas_density
-    -fill_compression_heat+service_heat+tank_heat.heat_to_gas)/(gas_mass_kg*max(1.0,gas_cv));
+  der(temperature_ledger) = ((mass_inflow+ideal_supply_flow_kg_s-mass_flow)*gas_temperature*pressure_temperature_derivative/gas_density
+    -fill_compression_heat+service_heat+ideal_supply_heat_w+tank_heat.heat_to_gas)/(gas_mass_kg*max(1.0,gas_cv));
   residual_mass = tank_volume*ambient_pressure/(gas_constant*gas_temperature);
   pressure_ratio = min(1.0,ambient_pressure/tank_pressure_pa);
   critical_ratio = (2.0/(gamma+1.0))^(gamma/(gamma-1.0));
@@ -291,7 +314,7 @@ equation
       tank_pressure_pa*sqrt(gamma/(gas_constant*gas_temperature))*(2.0/(gamma+1.0))^((gamma+1.0)/(2.0*(gamma-1.0)))
     else tank_pressure_pa*sqrt(max(0.0,2.0*gamma/(gas_constant*gas_temperature*(gamma-1.0))*(pressure_ratio^(2.0/gamma)-pressure_ratio^((gamma+1.0)/gamma)))));
   mass_flow = throat_area*mass_flux*valve_fraction*discharge_enabled;
-  der(net_air_ledger) = mass_inflow-mass_flow;
+  der(net_air_ledger) = mass_inflow+ideal_supply_flow_kg_s-mass_flow;
   exhaust_speed = rear_nozzle.exit_velocity;
   full_area_force = max(0.0,throat_area*mass_flux*rear_nozzle.exit_velocity
     +(rear_nozzle.exit_pressure-ambient_pressure)*rear_nozzle.exit_area)*discharge_enabled;

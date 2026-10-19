@@ -4,8 +4,10 @@ import argparse,json,os,subprocess
 from run_launch import ROOT,CHECKOUT,decode
 ap=argparse.ArgumentParser(description=__doc__)
 ap.add_argument('scene');ap.add_argument('channel');ap.add_argument('--ticks',type=int,default=2400)
+ap.add_argument('--result-name',help='Evidence filename stem; defaults to the verdict channel')
 ap.add_argument('--binary',default=os.environ.get('LUNCOSIM_BIN',str(ROOT/'.scratch/luncosim')))
-a=ap.parse_args();key=a.channel.lower().replace('roadster_','')
+a=ap.parse_args();key=a.result_name or a.channel.lower().replace('roadster_','')
+if not key or any(c not in 'abcdefghijklmnopqrstuvwxyz0123456789_-' for c in key):ap.error('Result name must use lowercase letters, digits, hyphens or underscores')
 env=os.environ.copy();env.update(TMPDIR=str(ROOT/'.scratch'),LUNCO_ASSET_ROOT=str(CHECKOUT/'assets'),LUNCOSIM_EPHEMERAL_SETTINGS='1',LUNCOSIM_ISOLATED_RUN='1')
 with (ROOT/f'results/{key}.log').open('w') as log:
  p=subprocess.run([a.binary,'test','--scene',str(ROOT/f'scenes/{a.scene}.usda'),'--max-ticks',str(a.ticks),'--verdict-channel',a.channel],env=env,stdout=log,stderr=subprocess.STDOUT)

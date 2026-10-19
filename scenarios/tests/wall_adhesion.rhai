@@ -1,7 +1,8 @@
 // A pre-spun vehicle on a real vertical collider. No kinematic attachment.
 fn simulation_dependencies(me,ctx) {
- let car=find_path("/World/Roadster");
- #{modelica_entities:[car],entity_reads:[car],entity_writes:[car],query_reads:["ReadPorts","QueryPhysicsState"],required_inputs:[]}
+ let car=find_path("/World/Roadster");let reads=[car];
+ for n in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+n));}
+ #{modelica_entities:[car],entity_reads:reads,entity_writes:[car],query_reads:["ReadPorts","QueryPhysicsState"],required_inputs:[]}
 }
 fn sample(car,name) {
  for p in query("ReadPorts",#{api_id:car,port_names:[name]}).ports {
@@ -11,7 +12,7 @@ fn sample(car,name) {
 }
 fn contacts(car) {
  let count=0;
- for w in query("QueryPhysicsState",#{id:car}).wheel_contacts {if w.contact_valid {count+=1;}}
+ for n in ["FL","FR","RL","RR"] {if contact_debug(find_path("/World/Roadster/Wheel_"+n)).touching_pair_count>0 {count+=1;}}
  count
 }
 fn on_start(me,ctx) {

@@ -26,7 +26,7 @@ model RoadsterVehicle
   parameter Real lift_rear_z = 1.85;
   parameter Real lift_x = 0.8;
   parameter Real lift_y = -0.32;
-  parameter Real rear_jet_y = -0.02;
+  parameter Real rear_jet_y = -0.14 "Study mount: thrust line through COM, no artificial attitude correction";
   parameter Real rear_jet_z = 2.30;
   parameter Real side_jet_y = -0.1;
   parameter Real side_jet_z = -1.90;
@@ -97,6 +97,13 @@ model RoadsterVehicle
   input Real fan;
   input Real headlights;
   input Real refill;
+  input Real unlimited_air;
+  output Real unlimited_air_active;
+  output Real ideal_supply_flow_kg_s;
+  output Real ideal_supply_heat_w;
+  output Real ideal_supply_air_kg;
+  output Real ideal_supply_power_w;
+  output Real ideal_supply_energy_j;
   input Real instant_mass_offset;
   input Real instant_temperature_offset;
   input Real instant_wall_temperature_offset;
@@ -189,7 +196,7 @@ model RoadsterVehicle
     rear_tank_volume=rear_tank_volume,cabin_tank_volume=cabin_tank_volume,
     gas_capacity_kg=gas_capacity_kg,initial_fill=initial_fill,initial_gas_temperature=initial_gas_temperature,
     steer=steer,attitude={attitude_w,attitude_x,attitude_y,attitude_z},omega_body=omega_body,headlight_switch=headlights,
-    demand=steering.drive_left, brake=brake, boost=boost, lift=lift, adhesion_force_body=adhesion.force_body,adhesion_power_w=adhesion.electrical_power,refill=refill,instant_mass_offset=instant_mass_offset,instant_temperature_offset=instant_temperature_offset,
+    demand=steering.drive_left, brake=brake, boost=boost, lift=lift, adhesion_force_body=adhesion.force_body,adhesion_power_w=adhesion.electrical_power,refill=refill,unlimited_air=unlimited_air,instant_mass_offset=instant_mass_offset,instant_temperature_offset=instant_temperature_offset,
     instant_wall_temperature_offset=instant_wall_temperature_offset,instant_refill_count=instant_refill_count,
     instant_mechanical_energy_j=instant_mechanical_energy_j,instant_stored_energy_j=instant_stored_energy_j,refill_target_temperature_k=refill_target_temperature_k,
     lift_individual={lift_fl,lift_rl,lift_fr,lift_rr},
@@ -282,6 +289,12 @@ model RoadsterVehicle
   output Real torque_y;
   output Real torque_z;
   output Real vehicle_mass_kg;
+  output Real chassis_mass_kg;
+  output Real chassis_com_y;
+  output Real chassis_com_z;
+  output Real chassis_inertia_xx;
+  output Real chassis_inertia_yy;
+  output Real chassis_inertia_zz;
   output Real vehicle_inertia_xx;
   output Real vehicle_inertia_yy;
   output Real vehicle_inertia_zz;
@@ -441,7 +454,24 @@ equation
   force_x = powertrain.force_x;
   force_y = powertrain.force_y;
   force_z = powertrain.force_z;
+  unlimited_air_active = powertrain.unlimited_air_active;
+  ideal_supply_flow_kg_s = powertrain.ideal_supply_flow_kg_s;
+  ideal_supply_heat_w = powertrain.ideal_supply_heat_w;
+  ideal_supply_air_kg = powertrain.ideal_supply_air_kg;
+  ideal_supply_power_w = powertrain.ideal_supply_power_w;
+  ideal_supply_energy_j = powertrain.ideal_supply_energy_j;
   vehicle_mass_kg = powertrain.vehicle_mass_kg;
+  // Six mechanism bodies (4 x 5 kg carriers, 2 x 6 kg knuckles) and
+  // four 24 kg wheels remain separate native bodies. Never count them twice.
+  chassis_mass_kg = vehicle_mass_kg-128.0;
+  chassis_com_y = (vehicle_mass_kg*mass_center_y+128.0*0.21)/chassis_mass_kg;
+  chassis_com_z = (vehicle_mass_kg*mass_center_z+12.0*1.375)/chassis_mass_kg;
+  chassis_inertia_xx = vehicle_inertia_xx-128.0*(0.07^2+1.375^2)-5.6-0.3
+    -chassis_mass_kg*((chassis_com_y-mass_center_y)^2+(chassis_com_z-mass_center_z)^2);
+  chassis_inertia_yy = vehicle_inertia_yy-128.0*(0.86^2+1.375^2)-3.3844-0.3
+    -chassis_mass_kg*(chassis_com_z-mass_center_z)^2;
+  chassis_inertia_zz = vehicle_inertia_zz-128.0*(0.86^2+0.07^2)-3.3844-0.3
+    -chassis_mass_kg*(chassis_com_y-mass_center_y)^2;
   // Homogenized gas distribution centered at COM, 1.2 x 0.5 x 1.0 m.
   // Dry-car inertia includes wheels. Actual tank placement remains unknown.
   vehicle_inertia_xx = 3022.0+boost_available*gas_mass_kg*(0.5^2+1.0^2)/12.0;
@@ -468,10 +498,13 @@ equation
   // torque while its inertia is updated; co-rotating outgoing gas cancels its
   // own inertia-change term. No angular-velocity rescaling is scripted.
   moment_body_x = thruster_pitch_moment_nm+adhesion.moment_body[1]
+    +(mass_center_y-chassis_com_y)*powertrain.force_local_z-(mass_center_z-chassis_com_z)*powertrain.force_local_y
     -powertrain.mass_inflow*boost_available*(0.5^2+1.0^2)/12.0*omega_body[1];
   moment_body_y = thruster_yaw_moment_nm+adhesion.moment_body[2]
+    +(mass_center_z-chassis_com_z)*powertrain.force_local_x
     -powertrain.mass_inflow*boost_available*(1.2^2+1.0^2)/12.0*omega_body[2];
   moment_body_z = thruster_roll_moment_nm+adhesion.moment_body[3]
+    -(mass_center_y-chassis_com_y)*powertrain.force_local_x
     -powertrain.mass_inflow*boost_available*(1.2^2+0.5^2)/12.0*omega_body[3];
   torque_x = (1.0-2.0*(attitude_y^2+attitude_z^2))*moment_body_x
     +2.0*(attitude_x*attitude_y-attitude_w*attitude_z)*moment_body_y

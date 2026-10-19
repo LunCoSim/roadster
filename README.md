@@ -92,6 +92,10 @@ boundary values together through ordinary inputs. Native velocity is preserved.
 - **Tab** or **REFILL AIR** restores the tank instantly, including while moving
   or inverted. The same Modelica service boundary as green waypoints updates
   gas/wall temperature, mass, pressure, inertia and stored/mechanical energy.
+- **UNLIMITED AIR** in the Air inventory toggles an ideal test reservoir. Enabling
+  it fills the tank; Modelica then replaces discharged air at the same state,
+  holding gas mass and temperature steady. Switch it off to resume finite
+  blowdown and cooling. External mass and energy use remain inspectable.
 - The finite external supply remains available through `scripts/control.py`
   for engineering studies (20 kg/s, bounded 2 MW jacket).
 
@@ -154,7 +158,9 @@ historical results. Standing-start timing never subtracts rollout.
 `CompressedAir.mo` provides reusable EOS, sizing and internal-energy calculations;
 CoolProp is only an optional verification dependency.
 
-Maintain generated vehicle assets with `scripts/build_assets.py`. Author the
+Maintain wheel/body mechanics with `scripts/author_contact_upgrade.py` and
+standard rigid-body placement with `scripts/author_usd_physics.py`, using the
+live document API. Mount study data lives in `scripts/study_geometry.py`. Author the
 ramp/course through the running USD document API with `scripts/author_ramp.py`
 and `scripts/author_ramp.py --course`; those scripts save and read back typed USD
 operations. Curve sampling constructs geometry, not vehicle motion.
@@ -187,3 +193,11 @@ drivetrain consumes its force and electrical demand, and the chassis receives
 its moment. The assembly is flattened into one Modelica solve. These are
 simulation queries, not added Tesla sensor hardware, and they have no visible
 markers. See the [component boundary](references/dynamics.md#adhesion-component-boundary).
+
+## USD interoperability
+
+See [USD and Omniverse contracts](references/usd-omniverse.md) and the
+[composed authoring audit](results/usd-standard.json). The explicit rigid-body
+rig follows the standard schema contracts; Omniverse execution has not been
+validated. Modelica, Rhai and custom rendering still require their runtime
+integrations.

@@ -20,7 +20,13 @@ This is not proof of Tesla's operating pressure or actual plumbing state.
 
 ## Wheels and rear boost
 
-Measured standing start to 60 mph, without subtracting rollout:
+The current collision-backed rig records **0.7465 s** with rear boost and does
+not pass the 0.59 s requirement. Its motor-only gate also fails. These are open
+contact/driveline validation failures, not new Tesla specifications.
+
+The following standing-start measurements belong to the earlier raycast-wheel
+configuration. They are retained as a comparison baseline, without subtracting
+rollout. They do not validate the current collision-backed suspension:
 
 | Fixture | Initial operating mass | Fans | Rear boost | Time |
 |---|---:|---|---|---:|
@@ -95,7 +101,7 @@ Body coordinates: +X right, +Y up, **−Z forward**. Assumed native COM is
 
 | Nozzles | Body position in metres | Exhaust | Reaction on car |
 |---|---|---|---|
-| Rear ×4 | X = −0.55, −0.20, 0.20, 0.55; Y = −0.02; Z = 2.30 | +Z | −Z |
+| Rear ×4 | X = −0.55, −0.20, 0.20, 0.55; Y = −0.14; Z = 2.30 | +Z | −Z |
 | Front lift ×2 | X = ±0.80; Y = −0.32; Z = −0.90 | −Y | +Y |
 | Rear lift ×2 | X = ±0.80; Y = −0.32; Z = 1.85 | −Y | +Y |
 | Nose side ×2 | X = ±0.96; Y = −0.10; Z = −1.90 | Outward ±X | Opposite ±X |
@@ -108,8 +114,13 @@ coordinates, nozzle dimensions and COM remain unavailable.
 
 `ThrusterMount.mo` calculates **moment = (mount − COM) × force**. Previously the
 rear bank's height moment and the nose jet's small roll moment were omitted.
-The rear force line is now 0.12 m above COM, so forward boost creates a real
-nose-down moment; native contacts and suspension react to it.
+The former rear force line was 0.12 m above COM and caused a large nose-down
+moment in free flight. The study now places the rear mouths at Y = −0.14 m,
+aligning the combined forward force with the nominal complete-car COM.
+This is an explicit design assumption, not a newly verified Tesla dimension.
+`ThrusterMount` still calculates all real moments; there is no attitude clamp,
+automatic pitch stabilizer or flight-dependent control remapping. The chassis
+wrench accounts for the separate suspension/wheel bodies and its shifted COM.
 
 The lift front/rear arms are 0.90 / 1.85 m. Fixed rear valve gain
 0.90/1.85 = **0.486486** balances collective pitch. K and each Q/E side bank use
@@ -117,7 +128,7 @@ that same gain at every altitude; R/C produce opposite pitch moments. This is
 an explicit geometric mixer, not body-rate feedback or automatic leveling.
 Advanced individual corner keys retain these configured valve gains.
 
-`MOUNTS` in `scripts/build_assets.py` is the single offline authoring data owner
+`MOUNTS` in `scripts/study_geometry.py` is the single offline authoring data owner
 for nozzle geometry, native COM and USD Modelica mount parameters. The resulting
 USD remains inspectable/editable. `check_hardware.py` reads the composed geometry
 and parameters and checks them against the authored layout and native COM;

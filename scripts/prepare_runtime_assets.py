@@ -30,7 +30,7 @@ for p in (ROOT/'ui').glob('*'):
 manifest_target=ui/'runtime_surfaces.json'
 if manifest_target.exists():manifest_target.unlink()
 manifest=json.loads((source/'ui/runtime_surfaces.json').read_text())
-props=['rr_steering','rr_course_title','rr_course_hint','rr_course_metrics','rr_fill_temperature','rr_speed','rr_mph','rr_air_mass','rr_air_pressure','rr_air_fill','rr_air_width','rr_air_status','rr_air_color','rr_temperature','rr_refill_label','rr_fan_state','rr_fan_label','rr_suction','rr_fan_detail','rr_aero','rr_battery','rr_mode','rr_rates','rr_force','rr_service']
+props=['rr_unlimited_label','rr_steering','rr_course_title','rr_course_hint','rr_course_metrics','rr_fill_temperature','rr_speed','rr_mph','rr_air_mass','rr_air_pressure','rr_air_fill','rr_air_width','rr_air_status','rr_air_color','rr_temperature','rr_refill_label','rr_fan_state','rr_fan_label','rr_suction','rr_fan_detail','rr_aero','rr_battery','rr_mode','rr_rates','rr_force','rr_service']
 for surface in manifest['surfaces']:
  if surface['id']=='vessel-hud':
   surface.update(template='ui/roadster_hud.html',stylesheet='ui/roadster_hud.css',bindings={p:{'source':p} for p in props})

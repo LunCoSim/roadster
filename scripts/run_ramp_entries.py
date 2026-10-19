@@ -21,7 +21,7 @@ def main():
     body_normal_impulse_ns=s['body_contact']['normal_impulse_ns'])
    for w in s['wheels']:
     name=w['wheel_usd_prim_path'].rsplit('_',1)[-1]
-    row[name+'_contact']=int(w['contact_valid']);row[name+'_compression_m']=w['suspension_compression_m'];row[name+'_normal_force_n']=w['normal_force_n']
+    row[name+'_contact']=int(w['contact_valid']);row[name+'_compression_m']=w['suspension_compression_m'];row[name+'_normal_impulse_ns']=w['normal_impulse_ns']
    rows.append(row)
   print(f'{scene}: {"PASS" if not report["failures"] else "FAIL"}; max tick speed loss {report["maximum_speed_drop_per_tick"]:.4f} m/s',flush=True)
  with (ROOT/'results/ramp-entry-traces.csv').open('w') as out:

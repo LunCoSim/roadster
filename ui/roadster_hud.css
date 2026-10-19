@@ -18,8 +18,8 @@
 #rr-fan-state { font-size: 16px; font-weight: 700; }
 #rr-suction { font-size: 18px; color: #68e0b2; }
 #rr-fan-detail { font-size: 15px; color: #b4c3d3; }
-#rr-refill, #rr-fan { display: flex; justify-content: center; align-items: center; padding: 8px 10px; border-radius: 6px; background-color: #24574c; border-width: 1px; border-color: #68e0b2; }
-#rr-refill-text, #rr-fan-text { font-size: 16px; font-weight: 700; color: #ffffff; }
+#rr-refill, #rr-fan, #rr-unlimited { display: flex; justify-content: center; align-items: center; padding: 8px 10px; border-radius: 6px; background-color: #24574c; border-width: 1px; border-color: #68e0b2; }
+#rr-refill-text, #rr-fan-text, #rr-unlimited-text { font-size: 16px; font-weight: 700; color: #ffffff; }
 #rr-status-block { display: none; flex-direction: column; width: 310px; row-gap: 12px; }
 #rr-force, #rr-aero, #rr-rates { font-size: 15px; color: #d2deea; }
 #rr-service { font-size: 12px; color: #9eb2c4; }

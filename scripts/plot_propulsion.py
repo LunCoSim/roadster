@@ -6,7 +6,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle,Circle,Polygon
-from build_assets import MOUNTS,thruster_stations
+from study_geometry import MOUNTS,thruster_stations
 
 ROOT=Path(__file__).resolve().parents[1]
 def load(name):return json.loads((ROOT/'results'/name).read_text())

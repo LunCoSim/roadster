@@ -1,0 +1,25 @@
+{
+  "core_commit": "4d6530a39",
+  "binary_sha256": "afc929076c90bdd412895299779cc99f4fda321ea316587dbb90eba1ce15d793",
+  "readiness": {
+    "ready": false,
+    "world_hold": false,
+    "faulted": true,
+    "fault": {
+      "kind": "physics-continuous-contact-invalid",
+      "subject": "continuous contact solve",
+      "detail": "continuous contact and joint constraints did not converge; pose writeback refused (remaining contacts=0, joint position change=1.9806366462209485e-5 m, rotation change=1.0727988558648206e-4 rad): "
+    },
+    "readiness_tracked": true,
+    "pending_count": 0,
+    "pending": []
+  },
+  "participants": [
+    {
+      "name": "/World/Roadster",
+      "status": "Running"
+    }
+  ],
+  "diagnostic_tolerances": "[0.0001, 0.0001]",
+  "interpretation": "No pending load jobs; Modelica prepared. Native contact/joint closure raised a terminal physics fault, which is incorrectly presented as scene-loading progress. This capture follows a temporary tolerance experiment, which did not resolve the fault."
+}

@@ -1,12 +1,22 @@
 # Recorded validation
 
+## Collision-backed rig revision (2026-10-19)
+
+`usd-standard.json` records the composed USD schema/placement audit across all
+29 vehicle scenes. `unlimited-air.json` records actual HUD input and Modelica
+mass/temperature/pressure conservation. Right-side recovery, generic continuous
+contacts and the prismatic spring gates pass. Left-side suspension, full drop, 0.59 s launch and motor-only
+acceleration remain failing; see `usd-physics-review.json`. The earlier launch/course gates below do not validate this changed wheel realization. Omniverse execution has not been tested.
+
+## Earlier runtime baseline
+
 Milestone date: 2026-10-18. Linux production LunCoSim, locally built runtime
 `17cad2934` (including `a0a9a0324`). No push or integration into main is implied.
 The launcher composes the Twin HUD and shared assets locally. Older screenshots
 and reports retained by Git belong to the earlier `22a53afc` milestone and are
 not current evidence for changed controls/geometry.
 
-| Gate | Current evidence |
+| Gate | Earlier evidence |
 |---|---|
 | Rocket hardware | `hardware.json`: ten native nozzles, composed positions/axes, ~63 mm tire clearance, matching native COM; 250 kg across 200/400 L, one available seat and 1950 kg native mass. |
 | Complete skill course | `course.json`: 46.78 s with direct jet commands; launch, two instant services, three airborne block crossings, fan climb, manual finite-jet turn and four-wheel landing. Acceptance driver uses commands, no pose/velocity writes. |

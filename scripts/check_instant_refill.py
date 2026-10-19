@@ -2,7 +2,7 @@
 """Observe native Tab and HUD refill; all physics runs in LunCoSim/Modelica."""
 import json,time,struct
 from check_effects import fresh,find,key,q,ports,root
-NAMES=['thrust_z','boost','refill','jet_force_z','gas_mass_kg','tank_pressure_pa','tank_temperature_k','tank_wall_temperature_k','refill_target_k','instant_services','speed_mps','vehicle_mass_kg','vehicle_inertia_xx','vehicle_inertia_yy','vehicle_inertia_zz','next_stored_energy_j','fan_requested','jet_force_y','surface_valid_0','surface_valid_1','surface_valid_2','surface_valid_3']
+NAMES=['thrust_z','boost','refill','jet_force_z','gas_mass_kg','tank_pressure_pa','tank_temperature_k','tank_wall_temperature_k','refill_target_k','instant_services','speed_mps','vehicle_mass_kg','chassis_mass_kg','vehicle_inertia_xx','vehicle_inertia_yy','vehicle_inertia_zz','next_stored_energy_j','fan_requested','jet_force_y','surface_valid_0','surface_valid_1','surface_valid_2','surface_valid_3']
 def tick():return int(q('RunRhai',{'code':'clock_snapshot().sim_tick'})['stdout'])
 def wait(seconds):
  end=tick()+round(seconds*60);deadline=time.monotonic()+30
@@ -21,7 +21,7 @@ def await_service(car,count):
   time.sleep(.01)
  raise RuntimeError('Refill did not apply')
 def check_fill(s):
- return abs(s['gas_mass_kg']-250)<.01 and abs(s['tank_temperature_k']-303.15)<.1 and abs(s['tank_wall_temperature_k']-303.15)<.1 and abs(s['native']['mass_kg']-1950)<.1
+ return abs(s['gas_mass_kg']-250)<.01 and abs(s['tank_temperature_k']-303.15)<.1 and abs(s['tank_wall_temperature_k']-303.15)<.1 and abs(s['native']['mass_kg']-s['chassis_mass_kg'])<.1
 
 def main():
  car=fresh();rows={};fail=[]

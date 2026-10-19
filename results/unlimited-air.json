@@ -1,0 +1,65 @@
+{
+  "ok": true,
+  "checks": {
+    "hud_enabled": true,
+    "conditioned_refill": true,
+    "full_inventory": true,
+    "mass_constant": true,
+    "temperature_constant": true,
+    "pressure_constant": true,
+    "source_recorded": true,
+    "energy_recorded": true,
+    "hud_disabled": true,
+    "finite_consumes": true,
+    "finite_cools": true,
+    "healthy": true
+  },
+  "before": {
+    "gas_mass_kg": 250.0,
+    "instant_services": 1.0,
+    "tank_pressure_pa": 46125265.61148318,
+    "speed_mps": 0.034374817274011336,
+    "vehicle_mass_kg": 1950.0,
+    "ideal_supply_air_kg": 0.0,
+    "ideal_supply_energy_j": 0.0408158713521116,
+    "tank_wall_temperature_k": 303.1488340816242,
+    "unlimited_air_active": 1.0,
+    "tank_temperature_k": 303.15
+  },
+  "held": {
+    "gas_mass_kg": 250.0,
+    "instant_services": 1.0,
+    "tank_pressure_pa": 46125265.61148318,
+    "speed_mps": 53.29584773024286,
+    "vehicle_mass_kg": 1950.0,
+    "ideal_supply_air_kg": 265.93817117489573,
+    "ideal_supply_energy_j": 244141267.27083325,
+    "tank_wall_temperature_k": 303.14446138522635,
+    "unlimited_air_active": 1.0,
+    "tank_temperature_k": 303.15
+  },
+  "finite_before": {
+    "gas_mass_kg": 249.99999829784514,
+    "instant_services": 1.0,
+    "tank_pressure_pa": 46125264.03743297,
+    "speed_mps": 58.95437750586073,
+    "vehicle_mass_kg": 1949.9999982978452,
+    "ideal_supply_air_kg": 331.8047007169194,
+    "ideal_supply_energy_j": 304695312.15471655,
+    "tank_wall_temperature_k": 303.14109941018796,
+    "unlimited_air_active": 0.0,
+    "tank_temperature_k": 303.1499956348203
+  },
+  "finite_after": {
+    "gas_mass_kg": 203.73291340127008,
+    "instant_services": 1.0,
+    "tank_pressure_pa": 26869222.25443509,
+    "speed_mps": 70.23936159697708,
+    "vehicle_mass_kg": 1903.73291340127,
+    "ideal_supply_air_kg": 331.8047007169194,
+    "ideal_supply_energy_j": 304695312.15471655,
+    "tank_wall_temperature_k": 303.11971942860373,
+    "unlimited_air_active": 0.0,
+    "tank_temperature_k": 262.81306606065027
+  }
+}

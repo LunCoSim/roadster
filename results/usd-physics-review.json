@@ -1,0 +1,613 @@
+{
+  "date_utc": "2026-10-19T10:01:12.724036+00:00",
+  "core_branch": "main",
+  "core_head": "e72a7314668a3f8f18fa6f29f9c28797ceab50d1",
+  "binary_sha256": "649c282d4fae7905abcd01ced345e0146d0eedf4c786bcf912312a5668df9100",
+  "dependency_source_changed": false,
+  "standards": {
+    "failures": [],
+    "bodies": [
+      {
+        "path": "/Roadster/Wheel_FL",
+        "mass_kg": 24.0,
+        "inertia": [
+          1.399999976158142,
+          0.8185999989509583,
+          0.8185999989509583
+        ]
+      },
+      {
+        "path": "/Roadster/Suspension_FL",
+        "mass_kg": 5.0,
+        "inertia": [
+          0.05000000074505806,
+          0.05000000074505806,
+          0.05000000074505806
+        ]
+      },
+      {
+        "path": "/Roadster/SteeringKnuckle_FL",
+        "mass_kg": 6.0,
+        "inertia": [
+          0.05000000074505806,
+          0.05000000074505806,
+          0.05000000074505806
+        ]
+      },
+      {
+        "path": "/Roadster/Wheel_FR",
+        "mass_kg": 24.0,
+        "inertia": [
+          1.399999976158142,
+          0.8185999989509583,
+          0.8185999989509583
+        ]
+      },
+      {
+        "path": "/Roadster/Suspension_FR",
+        "mass_kg": 5.0,
+        "inertia": [
+          0.05000000074505806,
+          0.05000000074505806,
+          0.05000000074505806
+        ]
+      },
+      {
+        "path": "/Roadster/SteeringKnuckle_FR",
+        "mass_kg": 6.0,
+        "inertia": [
+          0.05000000074505806,
+          0.05000000074505806,
+          0.05000000074505806
+        ]
+      },
+      {
+        "path": "/Roadster/Wheel_RL",
+        "mass_kg": 24.0,
+        "inertia": [
+          1.399999976158142,
+          0.8736000061035156,
+          0.8736000061035156
+        ]
+      },
+      {
+        "path": "/Roadster/Suspension_RL",
+        "mass_kg": 5.0,
+        "inertia": [
+          0.05000000074505806,
+          0.05000000074505806,
+          0.05000000074505806
+        ]
+      },
+      {
+        "path": "/Roadster/Wheel_RR",
+        "mass_kg": 24.0,
+        "inertia": [
+          1.399999976158142,
+          0.8736000061035156,
+          0.8736000061035156
+        ]
+      },
+      {
+        "path": "/Roadster/Suspension_RR",
+        "mass_kg": 5.0,
+        "inertia": [
+          0.05000000074505806,
+          0.05000000074505806,
+          0.05000000074505806
+        ]
+      }
+    ],
+    "joints": [
+      {
+        "path": "/Roadster/Suspension_FL_Slider",
+        "frames": {
+          "physics:localPos0": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localPos1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot0": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot1": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:axis": "Y"
+        }
+      },
+      {
+        "path": "/Roadster/Wheel_FL_Hinge",
+        "frames": {
+          "physics:localPos0": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localPos1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot0": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot1": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:axis": "X"
+        }
+      },
+      {
+        "path": "/Roadster/Steering_FL_Hinge",
+        "frames": {
+          "physics:localPos0": [
+            -0.8600000143051147,
+            -0.20999999344348907,
+            -1.375
+          ],
+          "physics:localPos1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot0": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot1": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:axis": "Y"
+        }
+      },
+      {
+        "path": "/Roadster/Suspension_FR_Slider",
+        "frames": {
+          "physics:localPos0": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localPos1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot0": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot1": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:axis": "Y"
+        }
+      },
+      {
+        "path": "/Roadster/Wheel_FR_Hinge",
+        "frames": {
+          "physics:localPos0": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localPos1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot0": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot1": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:axis": "X"
+        }
+      },
+      {
+        "path": "/Roadster/Steering_FR_Hinge",
+        "frames": {
+          "physics:localPos0": [
+            0.8600000143051147,
+            -0.20999999344348907,
+            -1.375
+          ],
+          "physics:localPos1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot0": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot1": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:axis": "Y"
+        }
+      },
+      {
+        "path": "/Roadster/Suspension_RL_Slider",
+        "frames": {
+          "physics:localPos0": [
+            -0.8600000143051147,
+            -0.20999999344348907,
+            1.375
+          ],
+          "physics:localPos1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot0": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot1": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:axis": "Y"
+        }
+      },
+      {
+        "path": "/Roadster/Wheel_RL_Hinge",
+        "frames": {
+          "physics:localPos0": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localPos1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot0": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot1": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:axis": "X"
+        }
+      },
+      {
+        "path": "/Roadster/Suspension_RR_Slider",
+        "frames": {
+          "physics:localPos0": [
+            0.8600000143051147,
+            -0.20999999344348907,
+            1.375
+          ],
+          "physics:localPos1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot0": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot1": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:axis": "Y"
+        }
+      },
+      {
+        "path": "/Roadster/Wheel_RR_Hinge",
+        "frames": {
+          "physics:localPos0": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localPos1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot0": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:localRot1": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics:axis": "X"
+        }
+      }
+    ],
+    "ok": true,
+    "scenes": [
+      {
+        "scene": "roadster_coast_check.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_contact_drop.usda",
+        "maximum_pose_error_m": 3.814697269177714e-08
+      },
+      {
+        "scene": "roadster_contact_left.usda",
+        "maximum_pose_error_m": 5.7220459037665705e-08
+      },
+      {
+        "scene": "roadster_contact_right.usda",
+        "maximum_pose_error_m": 5.7220459037665705e-08
+      },
+      {
+        "scene": "roadster_course_check.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_earth_check.usda",
+        "maximum_pose_error_m": 3.814697180359872e-08
+      },
+      {
+        "scene": "roadster_force_lift.usda",
+        "maximum_pose_error_m": 9.155273446026513e-07
+      },
+      {
+        "scene": "roadster_force_rear.usda",
+        "maximum_pose_error_m": 9.155273446026513e-07
+      },
+      {
+        "scene": "roadster_force_side.usda",
+        "maximum_pose_error_m": 9.155273446026513e-07
+      },
+      {
+        "scene": "roadster_launch.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_motor_launch.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_moving_jump_check.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_moving_refill_check.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_performance_motor_launch.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_ramp.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_ramp_check.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_ramp_entry_11_1.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_ramp_entry_25_0.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_ramp_entry_25_1.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_ramp_entry_40_1.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_refill_check.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_rocket.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_roof_check.usda",
+        "maximum_pose_error_m": 3.814697269177714e-08
+      },
+      {
+        "scene": "roadster_skill_course.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_steering_check.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_thrust.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_track.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_wall.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      },
+      {
+        "scene": "roadster_wall_check.usda",
+        "maximum_pose_error_m": 1.4305114759416426e-08
+      }
+    ],
+    "sources": {
+      "usd_physics": "https://openusd.org/release/api/usd_physics_page_front.html",
+      "omniverse_nested_bodies": "https://docs.omniverse.nvidia.com/kit/docs/asset-requirements/latest/capabilities/physics_bodies/physics_rigid_bodies/requirements/rigid-body-no-nesting.html",
+      "wheel_attachment": "https://docs.omniverse.nvidia.com/kit/docs/omni_usd_schema_physics/latest/physxschema/class_physx_schema_physx_vehicle_wheel_attachment_a_p_i.html"
+    },
+    "scope": "Composed USD authoring audit; Omniverse execution not tested"
+  },
+  "unlimited_air": {
+    "ok": true,
+    "checks": {
+      "hud_enabled": true,
+      "conditioned_refill": true,
+      "full_inventory": true,
+      "mass_constant": true,
+      "temperature_constant": true,
+      "pressure_constant": true,
+      "source_recorded": true,
+      "energy_recorded": true,
+      "hud_disabled": true,
+      "finite_consumes": true,
+      "finite_cools": true,
+      "healthy": true
+    },
+    "before": {
+      "gas_mass_kg": 250.0,
+      "instant_services": 1.0,
+      "tank_pressure_pa": 46125265.61148318,
+      "speed_mps": 0.034374817274011336,
+      "vehicle_mass_kg": 1950.0,
+      "ideal_supply_air_kg": 0.0,
+      "ideal_supply_energy_j": 0.0408158713521116,
+      "tank_wall_temperature_k": 303.1488340816242,
+      "unlimited_air_active": 1.0,
+      "tank_temperature_k": 303.15
+    },
+    "held": {
+      "gas_mass_kg": 250.0,
+      "instant_services": 1.0,
+      "tank_pressure_pa": 46125265.61148318,
+      "speed_mps": 53.29584773024286,
+      "vehicle_mass_kg": 1950.0,
+      "ideal_supply_air_kg": 265.93817117489573,
+      "ideal_supply_energy_j": 244141267.27083325,
+      "tank_wall_temperature_k": 303.14446138522635,
+      "unlimited_air_active": 1.0,
+      "tank_temperature_k": 303.15
+    },
+    "finite_before": {
+      "gas_mass_kg": 249.99999829784514,
+      "instant_services": 1.0,
+      "tank_pressure_pa": 46125264.03743297,
+      "speed_mps": 58.95437750586073,
+      "vehicle_mass_kg": 1949.9999982978452,
+      "ideal_supply_air_kg": 331.8047007169194,
+      "ideal_supply_energy_j": 304695312.15471655,
+      "tank_wall_temperature_k": 303.14109941018796,
+      "unlimited_air_active": 0.0,
+      "tank_temperature_k": 303.1499956348203
+    },
+    "finite_after": {
+      "gas_mass_kg": 203.73291340127008,
+      "instant_services": 1.0,
+      "tank_pressure_pa": 26869222.25443509,
+      "speed_mps": 70.23936159697708,
+      "vehicle_mass_kg": 1903.73291340127,
+      "ideal_supply_air_kg": 331.8047007169194,
+      "ideal_supply_energy_j": 304695312.15471655,
+      "tank_wall_temperature_k": 303.11971942860373,
+      "unlimited_air_active": 0.0,
+      "tank_temperature_k": 262.81306606065027
+    }
+  },
+  "scene_gates": {
+    "continuous_contacts": "pass",
+    "prismatic_spring": "pass",
+    "right_recovery": "pass",
+    "left_recovery": "fail",
+    "drop": "fail",
+    "launch": "fail",
+    "motor_launch": "fail"
+  },
+  "launch_0_60_s": 0.7465115484145988,
+  "scope": "USD schema/placement and application tests; NVIDIA Omniverse execution not tested",
+  "driving": {
+    "rolls": true,
+    "moves": false,
+    "rotates": true,
+    "steers": true,
+    "brakes": true,
+    "ground_contacts": true,
+    "mass": true,
+    "hud": true
+  },
+  "focused_checks": {
+    "joint_projection": 7,
+    "continuous_contact_math": 24,
+    "terminal_loading_fault": 1,
+    "wheel_parameters": 4
+  },
+  "known_exclusion": "Existing degenerate_native_triangle_retains_boundary_geometry native-query test was excluded; no dependency source was changed.",
+  "core_source_commit": "226741aec742f691f930f8e9e1ae23489f50fcb4",
+  "built_from_dirty_worktree": true,
+  "motor_reached_60": false,
+  "overall_runtime_validated": false,
+  "remaining_failures": [
+    "Left-side recovery exceeds suspension droop limit",
+    "6 m combined flight/drop exceeds joint/contact limits",
+    "Rear-boost 0-60 mph takes 0.7465 s instead of <=0.59 s",
+    "Motor-only launch does not reach 60 mph in 7 s",
+    "Windowed driving input gate reports insufficient vehicle movement"
+  ]
+}

@@ -1,6 +1,6 @@
 # Dynamics, control and fidelity
 
-USD supplies SI geometry, wheel mounts, compound chassis/roof colliders, Earth
+USD supplies SI geometry, wheel mounts, separate chassis/roof colliders, Earth
 `g = 9.80665 m/s²`, contact materials and typed port connections. Native LunCoSim
 integrates body position, tire contact, suspension and wheel shafts. Modelica
 reads native motion; it does not integrate a second vehicle trajectory. Rhai
@@ -20,10 +20,11 @@ remains available. Set `keyboard_steering_assistance=0` for direct analog demand
 The shared Ackermann model supplies actual left/right front wheel headings.
 Native tire slip and a single Coulomb cone determine cornering/understeer.
 
-The native parking brake apportions actual computed vehicle mass using measured
-wheel loads. Fan preload increases friction capacity without inventing inertial
-mass. Brakes use one friction cone. Fans-off on a vertical wall permits sliding;
-wheel rays may still intersect the wall while the car falls parallel to it.
+Shift applies bounded opposing axle torque at each physical wheel. The
+per-step bound uses wheel inertia to avoid reversing a wheel through zero.
+Native tire contact transmits the brake torque through its Coulomb friction
+cone. Fan preload changes contact loading without adding inertial mass.
+Fans-off on a vertical wall permits sliding.
 
 Release applies one-pedal regeneration, up to 1.8 m/s² and 120 kW, with 80%
 electrical recovery through native wheel shafts. Shift brakes are separate.
@@ -190,3 +191,32 @@ keeping the same force/moment/power interface.
 co-moving Modelica service boundary as the green waypoints, including gas/wall
 temperature and mass/inertia/energy bookkeeping. The finite external supply
 remains an explicitly commanded engineering option through the control API.
+
+
+## Collision-backed suspension and laboratory air mode
+
+The four wheels are native dynamic cylinder bodies with normal contact and
+CCD. Each has a 5 kg carrier, a Y prismatic spring/damper and an axle revolute
+joint. The front carriers connect through 6 kg yaw knuckles. The Modelica rack
+commands those real steering hinges. At each corner the slider has 55 mm droop
+and 65 mm bump travel; its native end stops constrain the hub, rather than
+clamping only the rendered tire. Body collision boxes leave the wheel wells
+clear, with side sill contacts between the axles. Tire/body contacts are enabled;
+there is no enclosing sphere or pose recovery script.
+
+The complete-car mass remains 1700 kg dry plus stored air. Modelica subtracts
+128 kg of separate wheels/carriers/knuckles from chassis mass, shifts chassis
+COM to preserve the nominal full-car COM, and removes the separate parts'
+nominal parallel-axis inertia. Live native joints carry their actual motion.
+This is a rigid tire and simplified linear strut model, without tire carcass,
+bushing, crash deformation, or manufacturer suspension kinematics.
+
+The Air inventory's unlimited-air switch enables an explicitly ideal external
+laboratory reservoir. Enabling it invokes the existing instantaneous conditioned
+refill. Its co-moving mass flow equals nozzle outflow; same-state enthalpy cancels
+blowdown cooling, and its thermal jacket cancels gas/wall heat exchange. Gas
+mass, density, temperature, pressure and chassis mass therefore stay steady.
+`ideal_supply_air_kg`, `ideal_supply_heat_w`, `ideal_supply_power_w` and
+`ideal_supply_energy_j` expose the added mass and external energy boundary.
+Turning it off resumes the finite tank equations. No Rust air math or physical
+Tesla infinite-air hardware is introduced.

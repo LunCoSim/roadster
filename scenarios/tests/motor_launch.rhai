@@ -27,19 +27,21 @@ fn on_tick(me,ctx) {
  }
  if this.samples.len==0 || t-this.samples[this.samples.len-1].time_s>=0.1 {
   let wheel=find_path("/World/Roadster/Wheel_RL");
-  this.samples.push(#{time_s:t,speed_m_s:v,wheel_rad_s:get(wheel,"WheelRaycast.spin_velocity"),
+  this.samples.push(#{time_s:t,speed_m_s:v,wheel_rad_s:sample(wheel,"shaft_speed"),
    torque_nm:sample(this.car,"torque_left"),battery_power_w:sample(this.car,"battery_power"),
    downforce_n:sample(this.car,"downforce"),gas_mass_kg:sample(this.car,"gas_mass_kg")});
  }
  this.previous_speed=v; this.previous_time=t;
  if t<7.0 {return;}
- emit("ROADSTER_MOTOR_EVIDENCE",#{standing_start_0_60_s:this.crossing,final_speed_m_s:v,samples:this.samples});
+ let evidence=#{reached_60:this.crossing!=(),final_speed_m_s:v,samples:this.samples};
+ if this.crossing!=() {evidence.standing_start_0_60_s=this.crossing;}
+ emit("ROADSTER_MOTOR_EVIDENCE",evidence);
  brake(this.car); this.done=true;
  let failures=[];
  if this.crossing==() {failures.push("Motor-only car failed to reach 60 mph within seven simulated seconds");}
  if this.peak_power<500000.0 {failures.push("Full throttle never used half the rated power");}
  if abs(sample(this.car,"gas_mass_kg")-250.0)>0.000001 {failures.push("Motor-only launch consumed gas");}
  let wheel=find_path("/World/Roadster/Wheel_RL");
- if abs(get(wheel,"WheelRaycast.spin_velocity")*0.34-v)>0.2*v {failures.push("Wheel peripheral speed does not track road speed");}
+ if abs(sample(wheel,"shaft_speed")*0.34-v)>0.2*v {failures.push("Wheel peripheral speed does not track road speed");}
  report_verdict(failures,"ROADSTER MOTOR LAUNCH","ROADSTER_MOTOR");
 }

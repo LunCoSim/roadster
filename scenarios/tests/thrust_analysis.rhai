@@ -5,7 +5,7 @@ fn simulation_dependencies(me,ctx) {
 }
 fn readings(car) {
  let v=#{};
- for p in query("ReadPorts",#{api_id:car,port_names:["full_rear_force_n","full_lift_force_n","full_side_force_n","full_mass_flow_kg_s","actual_mass_flow_kg_s","hover_fraction","lift_net_acceleration","side_yaw_acceleration","launch_mean_force_n","launch_wheel_mean_force_n","launch_boost_mean_force_n","jet_force_x","jet_force_y","jet_force_z","jet_lift_0","jet_lift_1","jet_lift_2","jet_lift_3","thruster_pitch_moment_nm","thruster_yaw_moment_nm","thruster_roll_moment_nm","gas_mass_kg","tank_pressure_pa","tank_temperature_k","vehicle_mass_kg","air_discharge_enabled","pitch_rate_deg_s","yaw_rate_deg_s","roll_rate_deg_s"]}).ports {
+ for p in query("ReadPorts",#{api_id:car,port_names:["full_rear_force_n","full_lift_force_n","full_side_force_n","full_mass_flow_kg_s","actual_mass_flow_kg_s","hover_fraction","lift_net_acceleration","side_yaw_acceleration","launch_mean_force_n","launch_wheel_mean_force_n","launch_boost_mean_force_n","jet_force_x","jet_force_y","jet_force_z","jet_lift_0","jet_lift_1","jet_lift_2","jet_lift_3","thruster_pitch_moment_nm","thruster_yaw_moment_nm","thruster_roll_moment_nm","gas_mass_kg","tank_pressure_pa","tank_temperature_k","vehicle_mass_kg","chassis_mass_kg","air_discharge_enabled","pitch_rate_deg_s","yaw_rate_deg_s","roll_rate_deg_s"]}).ports {
   if p.direction=="out" {v[p.name]=p.value;}
  }
  v
@@ -43,7 +43,7 @@ fn on_tick(me,ctx) {
  if this.max_lift_moment>0.01 {failures.push("Collective lift did not pass through the assumed COM");}
  if v.gas_mass_kg>=249.9 {failures.push("Thrust did not consume gas");}
  let native=query("QueryPhysicsState",#{id:this.car});
- if abs(native.mass_kg-v.vehicle_mass_kg)>0.1 {failures.push("Native mass did not track blowdown");}
+ if abs(native.mass_kg-v.chassis_mass_kg)>0.1 {failures.push("Native mass did not track blowdown");}
  emit(this.channel+"_EVIDENCE",#{bank:this.bank,initial:this.initial,final:v,peak_force_n:this.peak_force,
   peak_mass_flow_kg_s:this.peak_flow,maximum_collective_moment_nm:this.max_lift_moment,thermal_guard_at_s:this.guard_time,
   native_angular_velocity:native.angular_velocity_radps,failures:failures});

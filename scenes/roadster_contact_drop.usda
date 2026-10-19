@@ -1,0 +1,579 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    upAxis = "Y"
+    metersPerUnit = 1.0
+)
+
+def Xform "World" (
+    kind = "assembly"
+)
+{
+    def PhysicsScene "PhysicsScene" (
+        prepend apiSchemas = ["PhysxSceneAPI"]
+    )
+    {
+        vector3f physics:gravityDirection = (0.0, -1.0, 0.0)
+        float physics:gravityMagnitude = 9.806650161743164
+        custom bool physxScene:enableCCD = true
+    }
+    def DistantLight "Sun" (
+        prepend references = @lunco://lighting/sun.usda@</Sun>
+    )
+    {
+        float inputs:intensity = 128000.0
+        color3f inputs:color = (1.0, 0.949999988079071, 0.8700000047683716)
+        double3 xformOp:rotateXYZ = (-50.0, -35.0, 0.0)
+        uniform token[] xformOpOrder = ["xformOp:rotateXYZ"]
+    }
+    def DomeLight "Fill"
+    {
+        float inputs:intensity = 700.0
+        color3f inputs:color = (0.550000011920929, 0.6800000071525574, 0.8500000238418579)
+    }
+    def Xform "EarthSky" (
+        prepend apiSchemas = ["LunCoProceduralSkyAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </World/EarthSky/Look>
+        def Material "Look"
+        {
+            token outputs:surface
+            token outputs:surface.connect = </World/EarthSky/Look/Shader.outputs:surface>
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                asset info:wgsl:sourceAsset = @../shaders/earth_sky.wgsl@
+                float inputs:brightness = 1.0
+                token outputs:surface
+            }
+        }
+    }
+    def Material "AsphaltContact" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:staticFriction = 1.399999976158142
+        float physics:dynamicFriction = 1.399999976158142
+        float physics:restitution = 0.0
+    }
+    def Cube "Ground" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "LunCoTerrainAPI", "MaterialBindingAPI"]
+    )
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, -0.5, 0.0)
+        double3 xformOp:scale = (100000.0, 1.0, 100000.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.15000000596046448, 0.18000000715255737, 0.17000000178813934)]
+        bool physics:collisionEnabled = true
+        rel material:binding:physics = </World/AsphaltContact>
+    }
+    def Cube "Runway"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.006, -500.0)
+        double3 xformOp:scale = (16.0, 0.012, 2600.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.06499999761581421, 0.07500000298023224, 0.09000000357627869)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "EdgeL"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (-7.6, 0.017, -500.0)
+        double3 xformOp:scale = (0.12, 0.008, 2600.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.8999999761581421, 0.9200000166893005, 0.9399999976158142)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "EdgeR"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (7.6, 0.017, -500.0)
+        double3 xformOp:scale = (0.12, 0.008, 2600.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.8999999761581421, 0.9200000166893005, 0.9399999976158142)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "StartLine"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -3.0)
+        double3 xformOp:scale = (15.0, 0.008, 0.22)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.949999988079071, 0.949999988079071, 0.9399999976158142)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker0"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -10.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker1"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -30.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker2"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -50.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker3"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -70.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker4"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -90.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker5"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -110.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker6"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -130.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker7"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -150.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker8"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -170.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker9"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -190.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker10"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -210.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker11"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -230.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker12"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -250.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker13"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -270.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker14"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -290.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker15"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -310.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker16"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -330.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker17"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -350.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker18"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -370.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker19"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -390.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker20"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -410.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker21"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -430.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker22"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -450.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker23"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -470.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker24"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -490.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker25"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -510.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker26"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -530.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker27"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -550.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker28"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -570.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker29"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -590.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker30"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -610.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker31"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -630.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker32"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -650.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker33"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -670.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker34"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -690.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker35"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -710.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker36"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -730.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker37"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -750.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker38"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -770.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker39"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -790.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker40"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -810.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Cube "Marker41"
+    {
+        double size = 1.0
+        double3 xformOp:translate = (0.0, 0.025, -830.0)
+        double3 xformOp:scale = (0.1, 0.008, 8.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.699999988079071, 0.7300000190734863, 0.75)]
+        bool physics:collisionEnabled = false
+    }
+    def Xform "Roadster" (
+        prepend references = @../vehicles/roadster.usda@</Roadster>
+        variants = { string "trim" = "Rocket" }
+    )
+    {
+        double3 xformOp:translate = (0.0, 6.0, 0.0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+        custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+        over "Wheel_FL"
+        {
+            double3 xformOp:translate = (-0.86, 5.79, -1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "Suspension_FL"
+        {
+            custom double3 xformOp:translate = (-0.86, 5.79, -1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "SteeringKnuckle_FL"
+        {
+            custom double3 xformOp:translate = (-0.86, 5.79, -1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "Wheel_FR"
+        {
+            double3 xformOp:translate = (0.86, 5.79, -1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "Suspension_FR"
+        {
+            custom double3 xformOp:translate = (0.86, 5.79, -1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "SteeringKnuckle_FR"
+        {
+            custom double3 xformOp:translate = (0.86, 5.79, -1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "Wheel_RL"
+        {
+            double3 xformOp:translate = (-0.86, 5.79, 1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "Suspension_RL"
+        {
+            custom double3 xformOp:translate = (-0.86, 5.79, 1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "Wheel_RR"
+        {
+            double3 xformOp:translate = (0.86, 5.79, 1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+        over "Suspension_RR"
+        {
+            custom double3 xformOp:translate = (0.86, 5.79, 1.375)
+            custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
+        }
+    }
+    def Camera "Avatar" (
+        prepend apiSchemas = ["LunCoCameraAPI", "LunCoAvatarAPI"]
+    )
+    {
+        uniform bool lunco:avatar = true
+        double3 xformOp:translate = (4.8, 2.4, 6.5)
+        double3 lunco:cameraLookAt = (0.0, 0.65, 0.0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float focalLength = 16.0
+        float2 clippingRange = (0.05000000074505806, 10000.0)
+        def "Controls" (
+            prepend references = @lunco://vessels/control_profiles.usda@</AvatarControls>
+        )
+        {
+        }
+    }
+    def Scope "DriverSetup" (
+        prepend apiSchemas = ["LunCoProgramAPI"]
+    )
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:sourceAsset = @../scenarios/tests/contact_recovery.rhai@
+        custom string study:case = "DROP"
+    }
+}

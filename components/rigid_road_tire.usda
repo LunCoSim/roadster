@@ -1,0 +1,16 @@
+#usda 1.0
+(
+    defaultPrim = "RigidRoadTire"
+    upAxis = "Y"
+    metersPerUnit = 1.0
+    documentation = "Rigid native tire contact. Material Coulomb friction applies to tread and sidewalls; no separate slip-angle force layer, carcass compliance or tire deformation. Study coefficients, not Tesla calibration."
+)
+
+def Material "RigidRoadTire" (
+    prepend apiSchemas = ["PhysicsMaterialAPI"]
+)
+{
+    float physics:staticFriction = 1.399999976158142
+    float physics:dynamicFriction = 1.399999976158142
+    float physics:restitution = 0.0
+}

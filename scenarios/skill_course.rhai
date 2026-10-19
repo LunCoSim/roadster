@@ -1,7 +1,8 @@
 // High-level checkpoint policy. Never writes pose, velocity, forces or mass.
 fn simulation_dependencies(me,ctx) {
- let car=find_path("/World/Roadster");let metrics=car;
- #{modelica_entities:[car,metrics],entity_reads:[car,metrics],entity_writes:[car,metrics],query_reads:["ReadPorts","QueryPhysicsState"],required_inputs:[]}
+ let car=find_path("/World/Roadster");let metrics=car;let reads=[car,metrics];
+ for n in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+n));}
+ #{modelica_entities:[car,metrics],entity_reads:reads,entity_writes:[car,metrics],query_reads:["ReadPorts","QueryPhysicsState"],required_inputs:[]}
 }
 fn readings(id,names) {
  let out=#{};
@@ -60,7 +61,9 @@ fn on_tick(me,ctx) {
  if this.stage==6 {
   if m.landing_gate>0.5 {
    let contacts=0;
-   for w in query("QueryPhysicsState",#{id:this.car}).wheel_contacts {if w.contact_valid {contacts+=1;}}
+   for n in ["FL","FR","RL","RR"] {
+    if contact_debug(find_path("/World/Roadster/Wheel_"+n)).touching_pair_count>0 {contacts+=1;}
+   }
    if contacts==4 {this.landing_dwell+=dt();}else{this.landing_dwell=0.0;}
   } else {this.landing_dwell=0.0;}
   if this.landing_dwell>0.5 {this.stage=7;notify("COURSE COMPLETE: launch, timed jump, fan climb and manual flip landed on four wheels.");}

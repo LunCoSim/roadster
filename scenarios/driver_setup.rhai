@@ -32,6 +32,14 @@ fn on_event(me,evt,ctx) {
         }
         if evt.value.action=="roadster.fans" {name="roadster_fan_toggle";}
         if evt.value.action=="roadster.refill" {name="roadster_instant_refill";}
+        if evt.value.action=="roadster.unlimited" {
+            let active=0.0;
+            for p in query("ReadPorts",#{api_id:car,port_names:["unlimited_air_active"]}).ports {
+                if p.direction=="out" {active=p.value;}
+            }
+            cmd("SetPorts",#{target:car,writes:[["unlimited_air",if active>0.5 {0.0}else{1.0}]]});
+            if active<0.5 {name="roadster_instant_refill";}
+        }
     }
     if name == "roadster_fan_toggle" {
         let switch_on=false;

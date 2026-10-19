@@ -22,13 +22,22 @@ def main():
         target=tick()+round(seconds*60)
         deadline=time.monotonic()+180
         while tick()<target:
+            state=q('GetReadiness')
+            if state['faulted']: raise RuntimeError(state['fault'])
             if time.monotonic()>deadline: raise RuntimeError('Simulation clock stalled')
             time.sleep(.02)
     def sample():
-        p=q('ReadPorts',dict(api_id=car,port_names=['speed','heading_fl','heading_fr','position_y']))['ports']
+        p=q('ReadPorts',dict(api_id=car,port_names=['speed','heading_fl','heading_fr','position_y','chassis_mass_kg','vehicle_mass_kg']))['ports']
         values={r['name']:r['value'] for r in p if r['direction']=='out'}
-        code='let result=[]; for n in ["FL","FR","RL","RR"] { let w=find_path("/World/Roadster/Wheel_"+n); result.push(get(w,"WheelRaycast.spin_velocity")); result.push(get(w,"WheelRaycast.spin_angle")); } result'
-        values['wheel_omega_angle']=json.loads(q('RunRhai',dict(code=code))['stdout'])
+        wheels=[]
+        for n in ['FL','FR','RL','RR']:
+            wid=int(q('RunRhai',dict(code='find_path("/World/Roadster/Wheel_'+n+'")'))['stdout'])
+            shaft=q('ReadPorts',dict(api_id=wid,port_names=['shaft_speed']))['ports']
+            speed=next(p['value'] for p in shaft if p['direction']=='out')
+            rotation=json.loads(q('RunRhai',dict(code='world_rotation('+str(wid)+')'))['stdout'])
+            contacts=int(q('RunRhai',dict(code='contact_debug('+str(wid)+').touching_pair_count'))['stdout'])
+            wheels.append(dict(shaft_rad_s=speed,rotation=rotation,contacts=contacts))
+        values['wheels']=wheels
         return values
     q('ObserveAvatar',{})
     key('ShiftLeft','Pressed')
@@ -56,13 +65,13 @@ def main():
         key('ShiftLeft','Pressed')
     wait_sim(3)
     stopped=sample()
-    checks=dict(rolls=all(abs(w*.34-rolling[-1]['speed'])<1.5 for w in rolling[-1]['wheel_omega_angle'][::2]),
+    checks=dict(rolls=all(abs(abs(w['shaft_rad_s'])*.34-rolling[-1]['speed'])<1.5 for w in rolling[-1]['wheels']),
         moves=rolling[-1]['speed']>1,
-        rotates=all(abs(rolling[-1]['wheel_omega_angle'][i]-before['wheel_omega_angle'][i])>.01 for i in [1,3,5,7]),
+        rotates=all(sum((a-b)**2 for a,b in zip(w['rotation'],b['rotation']))>.0001 for w,b in zip(rolling[-1]['wheels'],before['wheels'])),
         steers=abs(turning['heading_fl'])>.01 and abs(turning['heading_fr'])>.01,
         brakes=stopped['speed']<.2,
-        ground_contacts=all(w['contact_valid'] for w in physics['wheel_contacts']),
-        mass=abs(physics['mass_kg']-1950)<1e-5,
+        ground_contacts=all(w['contacts']>0 for w in rolling[-1]['wheels']),
+        mass=abs(physics['mass_kg']-rolling[-1]['chassis_mass_kg'])<1e-4 and abs(rolling[-1]['vehicle_mass_kg']-1950)<1e-4,
         hud=hud['surfaces']['vessel-hud']['state']=='ready' and hud['surfaces']['vessel-hud']['visible'])
     report=dict(ok=all(checks.values()),checks=checks,before=before,rolling=rolling,turning=turning,
         stopped=stopped,physics=physics,hud=hud)

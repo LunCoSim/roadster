@@ -11,7 +11,7 @@ fn on_start(me,ctx) {
 }
 fn on_tick(me,ctx) {
  if this.done {return;}this.time+=dt();let v=#{};
- for p in query("ReadPorts",#{api_id:this.car,port_names:["yaw","position_x","pitch_rate_deg_s","course_stage","course_blocks","position_z","position_y","speed_mps","up_alignment","flight_control_weight","gas_mass_kg","tank_temperature_k","fan_seal","downforce","course_air_rotation_degrees","instant_services","instant_air_added_kg","vehicle_mass_kg","vehicle_inertia_xx","vehicle_inertia_yy","vehicle_inertia_zz"]}).ports {
+ for p in query("ReadPorts",#{api_id:this.car,port_names:["yaw","position_x","pitch_rate_deg_s","course_stage","course_blocks","position_z","position_y","speed_mps","up_alignment","flight_control_weight","gas_mass_kg","tank_temperature_k","fan_seal","downforce","course_air_rotation_degrees","instant_services","instant_air_added_kg","vehicle_mass_kg","chassis_mass_kg","vehicle_inertia_xx","vehicle_inertia_yy","vehicle_inertia_zz"]}).ports {
   if p.direction=="out" {v[p.name]=p.value;}
  }
  let stage=v.course_stage.round().to_int();
@@ -55,7 +55,7 @@ fn on_tick(me,ctx) {
  if stage!=7 && stage!=8 && this.time<150.0 {return;}
  let native=query("QueryPhysicsState",#{id:this.car});
  let failures=[];
- if abs(native.mass_kg-v.vehicle_mass_kg)>0.01 {failures.push("Native mass did not follow Modelica inventory");}
+ if abs(native.mass_kg-v.chassis_mass_kg)>0.01 {failures.push("Native mass did not follow Modelica inventory");}
  if v.instant_services!=2.0 {failures.push("Both green waypoints did not service the tank");}
  if v.instant_air_added_kg<50.0 {failures.push("Waypoint mass bookkeeping did not replenish consumed air");}
  if stage!=7 {failures.push("Course not completed by finite-actuator acceptance driver");}

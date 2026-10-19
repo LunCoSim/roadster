@@ -1,7 +1,8 @@
 // Drive against the authored collision mesh. Native physics owns the trajectory.
 fn simulation_dependencies(me,ctx) {
- let car=find_path("/World/Roadster");
- #{modelica_entities:[car],entity_reads:[car],entity_writes:[car],query_reads:["ReadPorts","QueryPhysicsState"],required_inputs:[]}
+ let car=find_path("/World/Roadster");let reads=[car];
+ for n in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+n));}
+ #{modelica_entities:[car],entity_reads:reads,entity_writes:[car],query_reads:["ReadPorts","QueryPhysicsState"],required_inputs:[]}
 }
 fn sample(car,name) {
  for p in query("ReadPorts",#{api_id:car,port_names:[name]}).ports {
@@ -26,9 +27,7 @@ fn on_tick(me,ctx) {
  }
  this.previous_speed=speed;this.max_height=max(this.max_height,pos[1]);
  let contacts=0;
- for w in query("QueryPhysicsState",#{id:this.car}).wheel_contacts {
-  if w.contact_valid {contacts+=1;}
- }
+ for n in ["FL","FR","RL","RR"] {if contact_debug(find_path("/World/Roadster/Wheel_"+n)).touching_pair_count>0 {contacts+=1;}}
  // Alignment is measured by the four body-relative surface probes, not
  // assumed from the authored curve or time since launch.
  if contacts>=2 && pos[1]>3.0 && pos[2] < -70.0 {this.slope_contacts+=1;}
