@@ -413,6 +413,11 @@ def Xform "Roadster" (
     custom double outputs:course_forward_z = 0.0
     custom double outputs:pilot_yaw_direction = 0.0
     custom double outputs:course_mid_yaw_gate = 0.0
+    custom double outputs:course_takeoff_gate = 0.0
+    custom double outputs:course_jump_impulse_ready = 0.0
+    custom double outputs:course_air_pitch_degrees = 0.0
+    custom double outputs:course_landing_impact_speed = 0.0
+    custom double inputs:course_jump_timing_offset_s = 0.0
     variantSet "trim" = {
         "Performance" {
             float inputs:boost_available = 0.0

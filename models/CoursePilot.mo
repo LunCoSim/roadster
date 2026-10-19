@@ -6,6 +6,7 @@ model CoursePilot
   input Real position_x;
   input Real velocity_x;
   input Real turn_direction;
+  input Real jump_timing_offset_s;
   input Real position_y;
   input Real position_z;
   input Real speed;
@@ -23,8 +24,10 @@ model CoursePilot
   parameter Real wheelbase = 2.75;
   parameter Real pulse_period = 0.1;
   parameter Real pulse_on = 0.05;
-  parameter Real attitude_gain[3] = {2.5,3.5,3.0};
+  parameter Real attitude_gain[3] = {4.0,3.5,3.0};
   output Real recommended_yaw_direction;
+  output Real jump_impulse_ready;
+  output Real takeoff_gate;
   output Real forward;
   output Real reverse;
   output Real left;
@@ -58,7 +61,7 @@ protected
   Real heading_error;
   Real rack_error;
   Real error_quaternion[4];
-  Real target_yaw;
+  Real target_bank;
   Real landing_time;
   Real predicted_lateral_position;
   Real target_rate[3];
@@ -68,7 +71,9 @@ protected
   Real rate_error[3];
   Real cruise_speed;
   Real lift_acceleration;
+  Real available_lift_acceleration;
   Real stopping_height;
+  Real jump_target_velocity;
   Real pulse[3];
   Real correcting;
   Real on_ground;
@@ -91,42 +96,49 @@ equation
   right_axis = {1-2*(attitude[3]^2+attitude[4]^2),
     2*(attitude[2]*attitude[3]+attitude[1]*attitude[4]),
     2*(attitude[2]*attitude[4]-attitude[1]*attitude[3])};
-  lookahead = max(12.0,speed);
-  desired = {-position_x/lookahead,forward_axis[2],forward_axis[3]};
+  lookahead = max(10.0,0.5*speed);
+  desired = {-(position_x+0.5*velocity_x)/lookahead,forward_axis[2],forward_axis[3]};
   heading_error = atan2(-sum(right_axis.*desired),sum(forward_axis.*desired));
   rack_error = wheel_heading-atan(2*wheelbase*sin(heading_error)/lookahead);
   on_ground = noEvent(if airborne<0.2 then 1.0 else 0.0);
   flight = noEvent(if abs(phase-6)<0.5 and airborne>0.2 then 1.0 else 0.0);
-  left = noEvent(if phase<6 and on_ground>0.5 and rack_error< -0.008 then 1.0 else 0.0);
-  right = noEvent(if phase<6 and on_ground>0.5 and rack_error>0.008 then 1.0 else 0.0);
-  cruise_speed = noEvent(if abs(phase-1)<0.5 or abs(phase-3)<0.5 then 22.0
-    else if abs(phase-2)<0.5 and abs(action-3)<0.5 then 22.0
+  left = noEvent(if phase<6 and on_ground>0.5 and rack_error< -0.0015 then 1.0 else 0.0);
+  right = noEvent(if phase<6 and on_ground>0.5 and rack_error>0.0015 then 1.0 else 0.0);
+  // Target speeds are pilot requests, never physical velocity constraints.
+  // Carry the launch speed through both service pads and the cube corridor.
+  cruise_speed = noEvent(if phase>0.5 and phase<3.5 then 35.0
     else if phase>3.5 and phase<5.5 and action<7.5 then
-      (if position_y>52 then 10.0 else if position_z> -298 and position_y<0.8 then 11.0 else 0.0)
+      (if position_y>10 then 6.5 else if position_z> -298 and position_y<0.8 then 28.0 else 0.0)
     else 0.0);
+  // A narrow ballistic clearance corridor. Valve closing contributes a short
+  // residual impulse; the target is measured velocity, not an assumed K hold.
+  jump_target_velocity = 6.8;
+  jump_impulse_ready = noEvent(if velocity_y>=jump_target_velocity then 1.0 else 0.0);
+  takeoff_gate = noEvent(if position_z< -72.0+35.0*jump_timing_offset_s then 1.0 else 0.0);
   forward = noEvent(if phase<0.5 and action>0.5 then 1.0
-    else if cruise_speed>0 and speed<cruise_speed-0.5 then 1.0
+    else if cruise_speed>0 and speed<cruise_speed-0.5 and on_ground>0.5 then 1.0
     else if phase>3.5 and phase<5.5 and action<7.5 and cruise_speed<0.5 then 1.0
-    else if abs(phase-6)<0.5 and on_ground>0.5 and up_y>0.95 and speed<3 and position_z> -236 then 1.0
     else 0.0);
-  reverse = noEvent(if abs(phase-6)<0.5 and on_ground>0.5 and up_y>0.95 and speed<3 and position_z< -292 then 1.0 else 0.0);
+  reverse = 0.0;
   brake = noEvent(if phase<0.5 and action<0.5 then 1.0
     else if cruise_speed>0 and speed>cruise_speed+2 then 1.0
     else if abs(phase-6)<0.5 and on_ground>0.5 and forward<0.5 and reverse<0.5 then 1.0
     else if phase>6.5 then 1.0 else 0.0);
-  fan = noEvent(if abs(phase-2)<0.5 or phase>5.5 or (abs(phase-5)<0.5 and action>7.5) then 0.0 else 1.0);
+  fan = noEvent(if (phase>0.5 and phase<3.5) or phase>5.5 or (abs(phase-5)<0.5 and action>7.5) then 0.0 else 1.0);
   // q_error = conjugate(q_body) * q_target, expressed in body axes.
-  // First roll to upright facing the return direction (+Z); then yaw to -Z.
+  // Recover wheels-down while retaining the ramp exit heading (+Z).
   landing_time = (velocity_y+sqrt(velocity_y^2+2*9.80665*max(0.0,position_y)))/9.80665;
   predicted_lateral_position = position_x+velocity_x*max(0.5,landing_time);
-  recommended_yaw_direction = noEvent(if predicted_lateral_position>0 then -1.0 else 1.0);
-  target_yaw = noEvent(if abs(phase-6)<0.5 and abs(action-11)<0.5 then -turn_direction*3.141592653589793/2 else 0.0);
-  error_quaternion = noEvent(if abs(phase-6)<0.5 and action<10 then
-    {attitude[3],attitude[4],attitude[1],-attitude[2]}
-    else {attitude[1]*cos(target_yaw/2)+attitude[3]*sin(target_yaw/2),
-      -attitude[2]*cos(target_yaw/2)+attitude[4]*sin(target_yaw/2),
-      attitude[1]*sin(target_yaw/2)-attitude[3]*cos(target_yaw/2),
-      -attitude[2]*sin(target_yaw/2)-attitude[4]*cos(target_yaw/2)});
+  recommended_yaw_direction = noEvent(if predicted_lateral_position>0 then 1.0 else -1.0);
+  // The inverted ramp already points along +Z. Recover with a roll, then
+  // bank the physical lift vector to cancel lateral drift over the road.
+  target_bank = noEvent(if flight>0.5 and up_y>0.8 then
+    max(-0.24,min(0.24,atan2(-1.2*position_x-2.0*velocity_x,
+      max(9.80665,0.6*full_lift_force/max(1.0,mass))))) else 0.0);
+  error_quaternion = {attitude[2]*sin(target_bank/2)+attitude[3]*cos(target_bank/2),
+      attitude[1]*sin(target_bank/2)+attitude[4]*cos(target_bank/2),
+      attitude[1]*cos(target_bank/2)-attitude[4]*sin(target_bank/2),
+      -attitude[2]*cos(target_bank/2)+attitude[3]*sin(target_bank/2)};
   rotation_length = sqrt(error_quaternion[2]^2+error_quaternion[3]^2+error_quaternion[4]^2);
   rotation_scale = noEvent((if error_quaternion[1]>=0 then 1.0 else -1.0)
     *2*atan2(rotation_length,abs(error_quaternion[1]))*180/3.141592653589793/max(1e-9,rotation_length));
@@ -140,7 +152,7 @@ equation
         *(if axis==2 then 1.0 else 0.5)*abs(attitude_error[axis])*3.141592653589793/180)
         *180/3.141592653589793));
   end for;
-  rate_error = {max(-100,min(100,target_rate[1]))-rates[1],
+  rate_error = {max(-220,min(220,target_rate[1]))-rates[1],
     max(-150,min(150,target_rate[2]))-rates[2],
     max(-300,min(300,target_rate[3]))-rates[3]};
   for axis in 1:3 loop
@@ -159,9 +171,15 @@ equation
   correcting = noEvent(if pitch_up+pitch_down+yaw_left+yaw_right+roll_left+roll_right>0.5 then 1.0 else 0.0);
   boost = noEvent(if phase<0.5 and abs(action-1)<0.5 then 1.0
     else if flight>0.5 and up_y>0.94 and velocity_z>16 and abs(yaw)<0.25 and correcting<0.5 then 1.0 else 0.0);
-  lift_acceleration = full_lift_force*up_y/max(1.0,mass)-9.80665;
+  // Conservative terminal-force allowance for cooling and pressure drop.
+  lift_acceleration = 0.65*full_lift_force*up_y/max(1.0,mass)-9.80665;
+  available_lift_acceleration = full_lift_force*up_y/max(1.0,mass)-9.80665;
   stopping_height = velocity_y^2/(2*max(1.0,lift_acceleration));
   lift = noEvent(if abs(phase-2)<0.5 and abs(action-4)<0.5 then 1.0
-    else if flight>0.5 and up_y>0.94 and velocity_y< -2 and lift_acceleration>1
-      and position_y<stopping_height+12 and pitch_up+pitch_down+roll_left+roll_right<0.5 then 1.0 else 0.0);
+    // A second timed collective pulse cushions the fast cube-jump landing.
+    // Momentum carries the car onward; motor torque is released in the air.
+    else if abs(phase-3)<0.5 and airborne>0.8 and up_y>0.94 and velocity_y< -1.5
+      and position_y<stopping_height+1.0 and available_lift_acceleration>0.0 then 1.0
+    else if flight>0.5 and up_y>0.94 and velocity_y< -2 and available_lift_acceleration>0.0
+      and position_y<stopping_height+3.0 and pitch_up+pitch_down+roll_left+roll_right<0.5 then 1.0 else 0.0);
 end CoursePilot;

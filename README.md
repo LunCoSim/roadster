@@ -66,18 +66,19 @@ pressure, gas temperature, refill target and battery charge.
 1. Reach **60 mph** at the blue launch gate using motor acceleration and boost.
 2. Cross the green waypoint: it immediately restores **250 kg** and the selected
    tank temperature, including the tank wall. No stop is required.
-3. Build **65–85 km/h**, switch fans off, then pulse **K near the yellow line**.
-   All three 1.2 m blocks must actually be crossed in the air. Going around does
-   not pass the clearance checks. W continues to control the motors in flight.
-4. Cross the second green waypoint, enable fans and approach the ramp at
-   **35–45 km/h**.
-5. Climb with wheel traction and measured fan sealing to the green upper marker.
-   Follow the long return lip, then switch fans off near its end.
-6. Pulse **R** (front jets) to pitch nose up, or **C** (rear jets)
-   to pitch nose down. Opposing pairs counter rotation; release closes the valves
-   rather than automatically leveling the car. Use left/right corner combinations
-   for roll (or **Q/E**) and **J/L** for yaw. Align wheels down, land in the green area and brake.
-   Completion requires four wheel contacts, upright attitude and low speed.
+3. Carry **126 km/h**, switch fans off and pulse **K at the yellow line**
+   (about 0.3 s). Clear three **3 m** cubes spaced 12 m apart. The whole car must
+   pass; tire/body collisions and airborne clearance matter. Keep at least
+   **90 km/h** through this corridor. W continues to control motors in flight.
+4. Cross the second green waypoint while rolling, enable fans with **F** and
+   approach the ramp near **100 km/h**.
+5. Climb with wheel traction and measured fan sealing. Ease to about **23 km/h**
+   on the upper return curve of the **18.9 m** study ramp, then switch fans off
+   at the green crest.
+6. **Q/E** rolls wheels-down; **R/C** trims pitch and **J/L** trims yaw. Keep the
+   nose **away from the ramp**. Bank toward the road center, use **K** to cushion
+   descent, then **Shift** to stop on contact. Completion requires four wheels,
+   upright attitude, the return heading and speed below **0.2 m/s**.
 
 **RETRY COURSE** reloads the authored starting state. The timer uses simulation
 time, so pausing does not consume run time. Tests command only the same finite
@@ -164,7 +165,7 @@ as the keyboard client. Driving or jet keys take over. Add `--autopilot` to the
 keyboard test command to exercise its real HUD button. The standalone course gate
 observes this shared production pilot; it does not carry a separate control law.
 See [manual acceptance steps](tests/manual-course.md) and the
-[review and remaining yaw maneuver](reviews/shared-course-tree.md).
+[course review](reviews/shared-course-tree.md) and [dynamic-course design](references/dynamic-course.md).
 
 ## Tune the following camera live
 
@@ -197,8 +198,9 @@ Maintain wheel/body mechanics with `scripts/author_contact_upgrade.py` and
 standard rigid-body placement with `scripts/author_usd_physics.py`, using the
 live document API. Mount study data lives in `scripts/study_geometry.py`. Author the
 ramp/course through the running USD document API with `scripts/author_ramp.py`
-and `scripts/author_ramp.py --course`; those scripts save and read back typed USD
-operations. Curve sampling constructs geometry, not vehicle motion.
+and `scripts/author_ramp.py --course`; apply `scripts/author_dynamic_course.py`
+to the base course for the new compact ramp and timing corridor. These scripts
+save typed USD operations and inspect the composed documents. Curve sampling constructs geometry, not vehicle motion.
 
 ## Force and mounting analysis
 

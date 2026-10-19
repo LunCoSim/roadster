@@ -1,5 +1,17 @@
 # Recorded validation
 
+## Dynamic course (2026-10-20)
+
+[Keyboard](dynamic-keyboard.json): **18/18**, **25.267 s**, zero cube contact,
+0.066 m/s final speed, four wheels on the road, nose away from ramp.
+[HUD autopilot](dynamic-autopilot.json): **18/18**, **24.83 s**, zero cube contact.
+[Timing matrix](dynamic-timing.json): nominal PASS; +0.3 s early and -0.2 s late
+produce measured cube impacts and mission misses. [Geometry](dynamic-geometry.json)
+records the 18.873 m retessellated ramp and 3 m timing cubes. The same Modelica
+pilot and production behavior tree drive both adapters. See the
+[course design](../references/dynamic-course.md) for physical and validation limits.
+
+
 ## Roll/yaw checkpoint (2026-10-20)
 
 [Keyboard](yaw-keyboard.json): 15/15, 40.0167 s. [Standalone shared-tree

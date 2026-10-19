@@ -1,0 +1,20 @@
+{
+  "block_height_m": 3.0,
+  "block_length_m": 2.4,
+  "block_centers_z_m": [
+    -100,
+    -112,
+    -124
+  ],
+  "takeoff_z_m": -72.0,
+  "nominal_speed_mps": 35.0,
+  "authoring": "OpenFile / ApplyUsdOps / SaveDocument",
+  "provenance": "Skill-game study geometry; not measured Tesla course dimensions",
+  "ramp_height_m": 18.87276755846748,
+  "ramp_end_z_m": -298.41240523955537,
+  "lower_arc_m": 18,
+  "vertical_m": 0.9,
+  "upper_arc_m": 11.7,
+  "lip_m": 5.4,
+  "transverse_segments": 14
+}

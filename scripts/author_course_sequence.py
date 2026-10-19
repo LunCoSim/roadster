@@ -6,7 +6,7 @@ import argparse
 FIELDS = ['forward','reverse','left','right','boost','brake','lift','fan',
           'pitch_up','pitch_down','yaw_left','yaw_right','roll_left','roll_right']
 
-OBSERVATIONS = ['course_step','course_roll_gate','course_yaw_gate',
+OBSERVATIONS = ['course_takeoff_gate','course_jump_impulse_ready','course_air_pitch_degrees','course_landing_impact_speed','course_step','course_roll_gate','course_yaw_gate',
                 'course_air_yaw_degrees','course_air_roll_degrees',
                 'course_backward_distance_m','course_forward_speed','course_forward_z',
                 'pilot_yaw_direction','course_mid_yaw_gate']
@@ -23,6 +23,7 @@ def main(observations_only=False):
     def connect(path, name, source, kind='float'):
         ops.append({'SetConnection': dict(edit_target='@root@', path=path,
                     name=name, type_name=kind, sources=[source])})
+    attr('/Roadster','inputs:course_jump_timing_offset_s','double','0')
     attr('/Roadster','inputs:course_turn_direction','double','1')
     for name in OBSERVATIONS:
         attr('/Roadster','outputs:'+name,'double','0')

@@ -81,12 +81,12 @@ fn suggested_controls(v) {
 fn course_ui(c) {
  let out=#{rr_course_title:"FREE DRIVE",rr_course_hint:"Ctrl+P pauses physics. Modelica parameters remain available in the inspector.",rr_course_metrics:""};
  if c==() {return out;}
- let titles=["01 / LAUNCH","02 / INSTANT REFILL WAYPOINT","03 / TIMED JUMP","04 / INSTANT REFILL WAYPOINT","05 / FAN CLIMB","06 / CREST RELEASE","07 / ROLL, YAW + LAND","COURSE COMPLETE","RETRY COURSE"];
- let hints=["W + Space: reach 60 mph at the blue gate. Shift brakes before green zone.",
+ let titles=["01 / LAUNCH","02 / INSTANT REFILL WAYPOINT","03 / TIMED JUMP","04 / INSTANT REFILL WAYPOINT","05 / FAN CLIMB","06 / CREST RELEASE","07 / FLIP + RETURN LANDING","COURSE COMPLETE","RETRY COURSE"];
+ let hints=["W + Space: reach 60 mph at blue gate, carry speed through green. No stops.",
   "Drive between green posts: tank mass and temperature refill immediately. No stop.",
-  "Fans OFF. Build 65–85 km/h. Tap K (~0.4 s) at YELLOW line. Clear all three blocks.",
-  "Drive through green posts for immediate refill. Fans ON, then slow to 35–45 km/h for ramp.",
-  "Fans ON. Aim for 35–45 km/h at ramp entry. W climbs; keep wheels sealed to ramp.",
+  "Fans OFF. Carry 126 km/h. Pulse K at YELLOW line (~0.3 s). 3 m cubes: timing is tight.",
+  "K cushions jump landing. Refill while rolling; F fans ON before ramp. Keep at least 90 km/h.",
+  "Fans ON. Carry speed onto ramp, W climbs. Ease to 23 km/h on upper return curve.",
   "Follow the return lip. At the green crest: fans OFF, then Q/E rolls wheels down.",
   "R nose up · C nose down · J/L yaw · Q/E left/right lift. Counterpulse to stop rotation. Land wheels down, Shift brake.",
   "Launch, three blocks, fan climb and manual flip landed on FOUR wheels. Retry for a faster run.",
@@ -94,10 +94,9 @@ fn course_ui(c) {
  let index=max(0,min(8,c.course_stage.round().to_int()));
  out.rr_course_title=titles[index];out.rr_course_hint=hints[index];
  if index==6 {
-  out.rr_course_hint=if c.course_step<10 {"Q/E: roll upright facing the return direction. R/C trims pitch; counterpulse to stop rotation."}
-    else if c.course_step==11 || c.course_step==13 {"J/L: yaw the nose back along the track while airborne. K cushions descent."}
-    else {"Moving backward: Space brakes horizontal motion; K cushions descent. Shift brakes on touchdown."};
+  out.rr_course_hint=if c.course_step<10 {"Q/E: roll wheels-down, nose AWAY from ramp. Counterpulse, J/L yaw trim; K cushions descent."}
+    else {"Nose AWAY from ramp. K cushions descent. Bank Q/E toward road center, Shift on touchdown."};
  }
- out.rr_course_metrics=text_number(c.course_time_s,10.0)+" s  /  Target "+text_number(c.target_distance_m,1.0)+" m  /  Blocks "+c.course_blocks.to_int().to_string()+" of 3  /  Roll "+text_number(c.course_air_roll_degrees,1.0)+" / Yaw "+text_number(c.course_air_yaw_degrees,1.0)+" deg / Back "+text_number(c.course_backward_distance_m,10.0)+" m";
+ out.rr_course_metrics=text_number(c.course_time_s,10.0)+" s  /  Target "+text_number(c.target_distance_m,1.0)+" m  /  Blocks "+c.course_blocks.to_int().to_string()+" of 3  /  Roll "+text_number(c.course_air_roll_degrees,1.0)+" deg / Landing "+text_number(c.course_landing_impact_speed,10.0)+" m/s";
  out
 }

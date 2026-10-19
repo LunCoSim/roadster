@@ -30,7 +30,8 @@ fn launched(me) { readings(this.car,["launch_gate"]).launch_gate > 0.5 }
 fn launch_started(me) { readings(this.car,["course_launch_started"]).course_launch_started > 0.5 }
 fn in_refill_zone(me) { readings(this.car,["refill_zone"]).refill_zone > 0.5 }
 fn tank_ready(me) { readings(this.car,["refill_ready"]).refill_ready > 0.5 }
-fn at_takeoff(me) { readings(this.car,["position_z"]).position_z < -86.0 }
+fn at_takeoff(me) { readings(this.car,["course_takeoff_gate"]).course_takeoff_gate > 0.5 }
+fn jump_impulse_ready(me) {readings(this.car,["course_jump_impulse_ready"]).course_jump_impulse_ready>0.5}
 fn barrier_reached(me) { readings(this.car,["course_block_crossed"]).course_block_crossed > 0.5 }
 fn barrier_cleared(me) { readings(this.car,["jump_clearance"]).jump_clearance > 0.5 }
 fn block_count_published(me) { readings(this.car,["course_blocks"]).course_blocks >= this.blocks*1.0 }
@@ -38,12 +39,6 @@ fn climbed(me) { readings(this.car,["climb_gate"]).climb_gate > 0.5 }
 fn at_crest(me) { readings(this.car,["course_crest_gate"]).course_crest_gate > 0.5 }
 fn in_flight(me) { readings(this.car,["course_airborne_gate"]).course_airborne_gate > 0.5 }
 fn roll_ready(me) {readings(this.car,["course_roll_gate"]).course_roll_gate>0.5}
-fn select_yaw_direction(me) {
-    let direction=readings(this.car,["pilot_yaw_direction"]).pilot_yaw_direction;
-    cmd("SetPorts",#{target:this.car,writes:[["course_turn_direction",direction]]});
-}
-fn mid_yaw(me) {readings(this.car,["course_mid_yaw_gate"]).course_mid_yaw_gate>0.5}
-fn yaw_ready(me) {readings(this.car,["course_yaw_gate"]).course_yaw_gate>0.5}
 fn landing_ready(me) {
     if readings(this.car,["landing_gate"]).landing_gate<0.5 {return false;}
     for corner in ["FL","FR","RL","RR"] {
@@ -88,22 +83,17 @@ fn task(me, ctx) {
             wait(2.0), action_node(1), wait_until(Fn("launch_started")), wait(0.65), action_node(2),
             wait_until(Fn("launched")),
             refill_node(1,"REFILL 1: drive through the green waypoint; refill is immediate while rolling."),
-            phase_node(2,3,"JUMP: fans OFF, build 65–85 km/h, tap K at the yellow takeoff line."),
-            wait_until(Fn("at_takeoff")), action_node(4), wait(0.45), action_node(5),
+            phase_node(2,3,"JUMP: fans OFF, carry 126 km/h, pulse K precisely at the yellow takeoff line."),
+            wait_until(Fn("at_takeoff")), action_node(4), wait_until(Fn("jump_impulse_ready")), action_node(5),
             repeat(3,barrier_node()),
-            refill_node(3,"REFILL 2: drive through green posts, then fans ON and slow for the ramp."),
-            phase_node(4,6,"CLIMB: fans ON, approach at 35–45 km/h, then hold W up the ramp."),
+            refill_node(3,"LAND + REFILL 2: pulse K to cushion the cube landing. Keep rolling through green, F fans ON for ramp."),
+            phase_node(4,6,"CLIMB: fans ON, approach near 100 km/h, then hold W up the ramp."),
             wait_until(Fn("climbed")),
-            phase_node(5,7,"CREST: follow the return lip; slow down and switch fans OFF at the crest."),
+            phase_node(5,7,"CREST: follow the return lip; prepare the flip and switch fans OFF at the crest."),
             wait_until(Fn("at_crest")), action_node(8), wait_until(Fn("in_flight")),
-            phase_node(6,9,"ROLL: Q/E rolls upright. R/C trims pitch. Fans remain OFF."),
+            phase_node(6,9,"FLIP: Q/E rolls wheels-down, keep nose AWAY from ramp. R/C and J/L trim attitude."),
             wait_until(Fn("roll_ready")),
-            once(Fn("select_yaw_direction")),
-            phase_node(6,11,"YAW: J/L turns the nose back along the track; K can cushion descent."),
-            wait_until(Fn("mid_yaw")),
-            phase_node(6,13,"YAW: continue the same turn until the nose points back along the track."),
-            wait_until(Fn("yaw_ready")),
-            phase_node(6,12,"BACKWARD FLIGHT + LAND: Space brakes backward motion; K cushions descent. Shift on touchdown."),
+            phase_node(6,12,"LAND: nose AWAY from ramp. K cushions descent; Shift brakes after touchdown."),
             // Losing any landing condition resets the native task dwell.
             // This is checkpoint qualification, not a physical contact law.
             retry(60,seq([wait_until(Fn("landing_ready")),

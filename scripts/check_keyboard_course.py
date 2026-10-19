@@ -34,7 +34,7 @@ PORTS = ['course_time_s', 'course_stage', 'course_blocks', 'course_air_rotation_
          'vehicle_mass_kg', 'chassis_mass_kg', 'unlimited_air_active', 'heading_fl',
          'quat_w', 'quat_x', 'quat_y', 'quat_z', 'yaw_rate_deg_s',
          'full_lift_force_n', 'lift_net_acceleration', 'velocity_z',
-         'course_step', 'course_forward_speed', 'course_forward_z', 'course_air_yaw_degrees', 'course_air_roll_degrees', 'course_backward_distance_m',
+         'course_landing_impact_speed', 'course_air_pitch_degrees', 'course_step', 'course_forward_speed', 'course_forward_z', 'course_air_yaw_degrees', 'course_air_roll_degrees', 'course_backward_distance_m',
          'drive_left', 'drive_right', 'jet_force_y', 'jet_force_z', 'course_autopilot_active']
 PILOT_KEYS = {'forward':'KeyW','reverse':'KeyS','left':'KeyA','right':'KeyD',
               'boost':'Space','brake':'ShiftLeft','lift':'KeyK','pitch_up':'KeyR',
@@ -267,6 +267,10 @@ class Pilot:
                     self.report.get('maximum_observation_gap_s', 0), t - last)
             self.keys(keys, t)
             self.check_native_input_edges()
+            if stage in [2,3] and -132<v['position_z']<-94:
+                code='let peak=0.0; for name in ["Roadster","Roadster/Wheel_FL","Roadster/Wheel_FR","Roadster/Wheel_RL","Roadster/Wheel_RR"] {let c=contact_debug(find_path("/World/"+name));peak=max(peak,c.total_normal_impulse+c.continuous_normal_impulse);} peak'
+                impulse=float(self.q('RunRhai',code=code)['stdout'])
+                self.report['maximum_cube_contact_impulse_ns']=max(impulse,self.report.get('maximum_cube_contact_impulse_ns',0))
             action=round(v['course_step'])
             if action!=self.previous_action:
                 self.report.setdefault('actions',[]).append(dict(action=action,stage=stage,time_s=t))
@@ -277,6 +281,8 @@ class Pilot:
                     if len(active)!=1 or active[0]['usd_path']!='/World/Avatar':
                         raise RuntimeError('Avatar camera was lost during the aerial maneuver')
                 self.previous_action=action
+            if stage==2 and v['course_blocks']==1 and not self.report.get('cube_flight_capture'):
+                self.screenshot('cube-flight');self.report['cube_flight_capture']=True
             if stage==6 and v['position_y']<2 and v['flight_control_weight']>.8:
                 self.last_airborne=v.copy()
             if stage==6 and v['position_y']<1 and v['flight_control_weight']<.2 and 'touchdown' not in self.report:
@@ -292,7 +298,7 @@ class Pilot:
                 sample_at = t + .1
                 self.out.write_text(json.dumps(self.report, indent=2) + '\n')
             if stage == 8:
-                raise RuntimeError('The unchanged course policy rejected the run')
+                raise RuntimeError('The production course tree rejected the run')
             if stage == 7:
                 self.keys({'ShiftLeft'}, t)
                 native = self.q('QueryPhysicsState', id=self.car)
@@ -302,15 +308,17 @@ class Pilot:
                     contacts[corner] = int(self.q('RunRhai', code=code)['stdout'])
                 self.report.update(final=v, native=native, landing_contacts=contacts,
                     hud=self.q('ReadExposures', surface='vessel-hud'))
-                checks = dict(course_complete=stage == 7, blocks=v['course_blocks'] == 3,
+                checks = dict(no_cube_contact=self.report.get('maximum_cube_contact_impulse_ns',float('inf'))<1.0, course_complete=stage == 7, blocks=v['course_blocks'] == 3,
                     two_waypoint_refills=v['instant_services'] == 2,
                     refill_mass_added=v['instant_air_added_kg'] > 50,
                     finite_air=v['unlimited_air_active'] < .5,
                     air_turn=v['course_air_rotation_degrees'] > 170,
-                    yaw_turn=v['course_air_yaw_degrees']>150,
                     roll_recovery=v['course_air_roll_degrees']>150,
-                    backward_flight=v['course_backward_distance_m']>1.0,
-                    upright=v['up_alignment'] > .95, stopped=v['speed_mps'] < 2,
+                    heading_away=v['course_forward_z']>.94,
+                    on_road=abs(v['position_x'])<6 and -295<v['position_z']<-230,
+                    cushioned_landing=v['course_landing_impact_speed']<5.0 and abs(self.report['touchdown']['last_airborne']['velocity_y'])<5.0,
+                    continuous_run=min(row['speed_mps'] for row in self.report['samples'] if 1<=row['course_stage']<=3)>25,
+                    upright=v['up_alignment'] > .95, stopped=v['speed_mps'] < .2,
                     four_wheels=all(n > 0 for n in contacts.values()),
                     native_mass=abs(native['mass_kg'] - v['chassis_mass_kg']) < .05,
                     pause=self.report.get('pause', {}).get('ok', False),
@@ -333,7 +341,7 @@ class Pilot:
                 progress_at = t + 2
             last = t
             if self.args.manual and paused:
-                self.step(1 if stage==6 else 2)
+                self.step(1 if stage==6 or (stage in [2,3] and -132<v['position_z']<-94) else 2)
             else:
                 time.sleep(.02)
         raise RuntimeError('Course wall-time limit exceeded')

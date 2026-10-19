@@ -49,3 +49,39 @@ is a requested maneuver study, not verified reproduction of the footage.
 
 The camera core unit suite passes 18/18. New runtime sessions are owned on
 explicit port 4198; course drivers close them after acceptance.
+
+## Continuous course (2026-10-20)
+
+The compact 18.873 m course supersedes that checkpoint as the default. It carries
+35 m/s through the service/jump corridor, requires at least 25 m/s until ramp
+approach, clears 3 m cubes, climbs with fans, rolls wheels-down facing away and
+stops after landing. The original 64.46 m ramp was too tall for a reliable
+cushioned finite-air recovery. Fourteen transverse mesh segments also avoid the
+extreme triangle aspect ratios exposed by the compact geometry. No Rust or
+third-party dependency source changed for this course revision.
+
+The stricter native keyboard gate passes **18/18** in **25.267 s**, with **zero cube
+contact impulse**, two rolling refills, four landing contacts and final speed
+0.066 m/s. Last recorded airborne descent is 3.648 m/s; native mass agrees with
+Modelica inventory. `results/dynamic-keyboard.json` retains full keys/samples,
+contact and camera evidence. `results/dynamic-timing.json` records the separate
+standalone nominal and timing-failure cases. +0.3 s early and -0.2 s late both
+produce actual cube contact and mission failure. These samples do not establish
+an exact success-window width.
+
+The new default keeps +Z return heading through roll with yaw trim; it does not
+add the earlier 180-degree yaw reversal that would point toward the ramp. The
+[design and reproduction commands](../references/dynamic-course.md) describe
+Modelica banking/descent guidance, native USD geometry and manual acceptance.
+
+HUD-started autopilot independently passes 18/18 at 24.833 s with zero cube
+contact, a final speed below 0.2 m/s and nose away. Its descent before touchdown is
+2.677 m/s. A hidden descent gate initially left an otherwise completed car waiting;
+completion now uses pose, road position, four contacts and standstill, while
+acceptance separately limits landing descent to 5 m/s. Native keyboard injection
+and HUD pointer delivery are qualified; human OS keyboard delivery remains a
+manual check.
+
+`results/dynamic-mesh.json` records a live USD audit: 15,030 vertices, 15,028 quad
+faces, two faces per edge, consistent winding, no degenerate triangles and maximum
+triangle aspect ratio 17.16. Independent Omniverse execution is untested.

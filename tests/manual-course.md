@@ -37,8 +37,30 @@ from a course acceptance client. `--manual` means exact native stepping between
 observations, not a different physical model. These are injected native window
 events; physical OS keyboard delivery still requires a human check.
 
-The roll/yaw checkpoint is captured in `results/yaw-keyboard.json`: Q/E rolls
-upright toward +Z, J/L yaws through an intermediate heading back to -Z, K
-cushions descent, Space opposes backward travel and Shift brakes on contact.
-This study passes the course but has a hard landing; it is not a safe real-car
-stunt qualification. The next requested revision changes the final nose to +Z.
+## Dynamic run
+
+Use the compact course, finite air and 293.15 K refill. The old roll/yaw/backward
+checkpoint is retained in `df958b5`; the current default must land nose away.
+
+- After the countdown, W + Space through the blue launch gate. Carry speed;
+  both green gates refill mass and temperature immediately without a stop.
+- Fans OFF through the cubes. Aim for 126 km/h and pulse K at the yellow line,
+  about 0.3 s. Release W while airborne to avoid adding wheel-spin reaction.
+  WASD still controls motors directly. The corridor minimum is 90 km/h.
+- Deliberately jump early and late on separate retries. Verify physical cube
+  contact or missed clearance, failure, and a fresh reset after RETRY COURSE.
+- After clearing the cubes, K cushions the fast landing before the second
+  refill. Then F fans ON. Carry speed onto the ramp, then ease to
+  23 km/h on the upper curve. Verify sealed fan state while inverted.
+- At the crest, F OFF. Q/E rolls wheels-down; counterpulse before over-rotation.
+  Keep the nose away from the ramp, use J/L and R/C to trim, and K to cushion.
+  Bank inward if drifting sideways; Shift on contact until stopped.
+- Completion must show four wheel contacts and nose away inside the green road
+  area. Watch for wheel/body penetration, camera clipping and unexpected holds.
+- Run the HUD autopilot from a fresh retry. Use the same visible checkpoints.
+  Test takeover and Ctrl+P separately; both should retain the ordinary physics.
+
+Record manual observations independently: automated native window injection is
+not evidence that a human has completed these steps with OS keyboard delivery.
+See [the dynamic course design](../references/dynamic-course.md) for math,
+measurements and the timing matrix command.

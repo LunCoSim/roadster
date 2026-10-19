@@ -7,6 +7,7 @@ model RoadsterVehicle
   input Real course_position_y;
   input Real course_action;
   input Real course_turn_direction = 1.0 "Positive yaw until the course latches its measured drift decision";
+  input Real course_jump_timing_offset_s = 0.0 "Guidance-only timing perturbation for acceptance; positive fires earlier";
   input Real course_autopilot_enable;
   output Real course_autopilot_active;
   output Real course_block_crossed;
@@ -15,6 +16,10 @@ model RoadsterVehicle
   output Real course_healthy;
   output Real course_launch_started;
   output Real course_step;
+  output Real course_takeoff_gate;
+  output Real course_jump_impulse_ready;
+  output Real course_air_pitch_degrees;
+  output Real course_landing_impact_speed;
   output Real pilot_yaw_direction;
   output Real course_mid_yaw_gate;
   output Real course_forward_speed;
@@ -78,7 +83,7 @@ model RoadsterVehicle
   output Real pilot_roll_right_on;
   output Real pilot_roll_right_off;
   CoursePilot pilot(phase=course_phase,action=course_action,elapsed=course_time_s,
-    position_x=autopilot_position_x,velocity_x=measured_vx,turn_direction=course_turn_direction,
+    position_x=autopilot_position_x,velocity_x=measured_vx,turn_direction=course_turn_direction,jump_timing_offset_s=course_jump_timing_offset_s,
     position_y=course_position_y,position_z=autopilot_position_z,
     speed=speed_mps,velocity_y=measured_vy,velocity_z=measured_vz,
     attitude={attitude_w,attitude_x,attitude_y,attitude_z},
@@ -90,7 +95,7 @@ model RoadsterVehicle
       side_yaw_acceleration,full_lift_force_n*0.4/vehicle_inertia_zz});
   SkillCourse course(enabled=course_enabled,stage=course_phase,blocks=course_blocks_passed,
     position_x=autopilot_position_x,position_y=course_position_y,position_z=autopilot_position_z,
-    speed=speed_mps,pitch_rate_deg_s=pitch_rate_deg_s,yaw_rate_deg_s=yaw_rate_deg_s,
+    speed=speed_mps,velocity_y=measured_vy,pitch_rate_deg_s=pitch_rate_deg_s,yaw_rate_deg_s=yaw_rate_deg_s,
     roll_rate_deg_s=roll_rate_deg_s,forward_z=-1.0+2.0*(attitude_x^2+attitude_y^2),
     forward_speed=velocity_forward,up_y=up_alignment,
     airborne=flight_control_weight,gas_mass=gas_mass_kg,gas_temperature=tank_temperature_k,
@@ -503,6 +508,10 @@ equation
   course_roll_gate = course.roll_gate;
   course_yaw_gate = course.yaw_gate;
   course_step = course_action;
+  course_takeoff_gate = pilot.takeoff_gate;
+  course_jump_impulse_ready = pilot.jump_impulse_ready;
+  course_air_pitch_degrees = course.course_air_pitch_degrees;
+  course_landing_impact_speed = course.landing_impact_speed;
   pilot_yaw_direction = pilot.recommended_yaw_direction;
   course_mid_yaw_gate = course.mid_yaw_gate;
   course_forward_speed = velocity_forward;

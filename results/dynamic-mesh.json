@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "source": "Live native QueryUsdPrim /World/StuntRamp",
+  "checks": {
+    "valid_indices": true,
+    "finite_points": true,
+    "closed_edges": true,
+    "consistent_winding": true,
+    "nondegenerate_triangles": true,
+    "standard_mesh": true
+  },
+  "vertices": 15030,
+  "quad_faces": 15028,
+  "edges": 30056,
+  "euler_characteristic": 2,
+  "minimum_triangle_area_m2": 0.017541633686050773,
+  "maximum_triangle_aspect_ratio": 17.160664313341684,
+  "limitation": "Native USD geometry audit; independent Omniverse execution untested"
+}
