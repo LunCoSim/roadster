@@ -1,5 +1,14 @@
 # Recorded validation
 
+## Roll/yaw checkpoint (2026-10-20)
+
+[Keyboard](yaw-keyboard.json): 15/15, 40.0167 s. [Standalone shared-tree
+observer](yaw-course.json): PASS. Selected action captures retain Avatar.
+This supersedes the earlier pitch-only maneuver, but finishes nose toward the
+ramp and has a hard landing (-15.46 m/s last airborne sample). The next course
+revision targets nose away, continuous pace and tighter jumps. See the
+[review](../reviews/shared-course-tree.md) for limits.
+
 ## Shared course and live camera (2026-10-19)
 
 [Keyboard](shared-keyboard.json): 12/12, 39.9167 s.
@@ -10,7 +19,7 @@ rejection/recovery and held-clock checks. Both clients use the same Rhai tree an
 Modelica guidance; the standalone acceptance controller has been removed.
 Selected [crest](shared-keyboard-stage-5.png), [flight](shared-keyboard-stage-6.png)
 and [landing](shared-keyboard-stage-7.png) captures retain the Avatar view.
-The yaw-based backward stunt remains unqualified; see the
+For the newer yaw-based backward checkpoint, see the
 [review](../reviews/shared-course-tree.md) and [manual checks](../tests/manual-course.md).
 
 

@@ -6,6 +6,7 @@ model RoadsterVehicle
   input Real course_blocks_passed;
   input Real course_position_y;
   input Real course_action;
+  input Real course_turn_direction = 1.0 "Positive yaw until the course latches its measured drift decision";
   input Real course_autopilot_enable;
   output Real course_autopilot_active;
   output Real course_block_crossed;
@@ -13,6 +14,16 @@ model RoadsterVehicle
   output Real course_airborne_gate;
   output Real course_healthy;
   output Real course_launch_started;
+  output Real course_step;
+  output Real pilot_yaw_direction;
+  output Real course_mid_yaw_gate;
+  output Real course_forward_speed;
+  output Real course_forward_z;
+  output Real course_roll_gate;
+  output Real course_yaw_gate;
+  output Real course_air_yaw_degrees;
+  output Real course_air_roll_degrees;
+  output Real course_backward_distance_m;
   output Real pilot_command_throttle;
   output Real pilot_command_steer;
   output Real pilot_command_brake;
@@ -67,17 +78,21 @@ model RoadsterVehicle
   output Real pilot_roll_right_on;
   output Real pilot_roll_right_off;
   CoursePilot pilot(phase=course_phase,action=course_action,elapsed=course_time_s,
-    position_x=autopilot_position_x,
+    position_x=autopilot_position_x,velocity_x=measured_vx,turn_direction=course_turn_direction,
     position_y=course_position_y,position_z=autopilot_position_z,
     speed=speed_mps,velocity_y=measured_vy,velocity_z=measured_vz,
     attitude={attitude_w,attitude_x,attitude_y,attitude_z},
     rates={pitch_rate_deg_s,yaw_rate_deg_s,roll_rate_deg_s},
     yaw=autopilot_yaw,up_y=up_alignment,airborne=flight_control_weight,
     wheel_heading=heading_fl,full_lift_force=full_lift_force_n,mass=vehicle_mass_kg,
-    wheelbase=wheelbase);
+    wheelbase=wheelbase,angular_acceleration={
+      full_lift_force_n*abs(lift_front_z-mass_center_z)/(1.0+rear_lift_trim)/vehicle_inertia_xx,
+      side_yaw_acceleration,full_lift_force_n*0.4/vehicle_inertia_zz});
   SkillCourse course(enabled=course_enabled,stage=course_phase,blocks=course_blocks_passed,
     position_x=autopilot_position_x,position_y=course_position_y,position_z=autopilot_position_z,
-    speed=speed_mps,pitch_rate_deg_s=pitch_rate_deg_s,up_y=up_alignment,
+    speed=speed_mps,pitch_rate_deg_s=pitch_rate_deg_s,yaw_rate_deg_s=yaw_rate_deg_s,
+    roll_rate_deg_s=roll_rate_deg_s,forward_z=-1.0+2.0*(attitude_x^2+attitude_y^2),
+    forward_speed=velocity_forward,up_y=up_alignment,
     airborne=flight_control_weight,gas_mass=gas_mass_kg,gas_temperature=tank_temperature_k,
     target_temperature=refill_target_k,fan_seal=fan_seal,suction=downforce);
   output Real course_stage;
@@ -482,6 +497,16 @@ equation
   course_blocks = course.course_blocks;
   course_time_s = course.course_time_s;
   course_air_rotation_degrees = course.course_air_rotation_degrees;
+  course_air_yaw_degrees = course.course_air_yaw_degrees;
+  course_air_roll_degrees = course.course_air_roll_degrees;
+  course_backward_distance_m = course.course_backward_distance_m;
+  course_roll_gate = course.roll_gate;
+  course_yaw_gate = course.yaw_gate;
+  course_step = course_action;
+  pilot_yaw_direction = pilot.recommended_yaw_direction;
+  course_mid_yaw_gate = course.mid_yaw_gate;
+  course_forward_speed = velocity_forward;
+  course_forward_z = -1.0+2.0*(attitude_x^2+attitude_y^2);
   target_distance_m = course.target_distance_m;
   launch_gate = course.launch_gate;
   refill_zone = course.refill_zone;

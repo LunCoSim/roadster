@@ -37,6 +37,8 @@ from a course acceptance client. `--manual` means exact native stepping between
 observations, not a different physical model. These are injected native window
 events; physical OS keyboard delivery still requires a human check.
 
-The demonstrated yaw-based backward turn is a separate pending maneuver. The
-current passing tree recovers through pitch; do not record it as a verified
-reproduction of Tesla's complete stunt choreography.
+The roll/yaw checkpoint is captured in `results/yaw-keyboard.json`: Q/E rolls
+upright toward +Z, J/L yaws through an intermediate heading back to -Z, K
+cushions descent, Space opposes backward travel and Shift brakes on contact.
+This study passes the course but has a hard landing; it is not a safe real-car
+stunt qualification. The next requested revision changes the final nose to +Z.

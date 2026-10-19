@@ -29,10 +29,23 @@ also cycled cameras; cycling now uses the configured switch-mode intent (V).
 operator tool replaces the policy without reloading the scene or advancing physics.
 The boom remains a point query, so this is not a camera-frustum sweep qualification.
 
-Remaining maneuver work: the passing controller recovers through pitch. It does
-not yet reproduce the user-observed yaw turn into backward travel. That requires
-an explicit yaw/roll phase and its own finite-air acceptance; accumulated pitch
-alone must not be presented as validation of Tesla's complete stunt choreography.
+## Roll/yaw checkpoint (2026-10-20)
 
-The camera core unit suite passes 18/18. All newly created runtime sessions were
-owned on explicit port 4198; course drivers close them after acceptance.
+The updated shared tree explicitly recovers upright with roll, selects yaw
+according to measured lateral drift, turns through an intermediate heading, then
+lands while traveling backward. The keyboard adapter passes 15/15 checks in
+40.0167 course seconds: 195.1 degrees roll path, 185.5 degrees yaw path and
+6.15 m of upright backward flight. `results/yaw-keyboard.json` records the
+selected Avatar camera and four native contacts. `results/yaw-course.json` is
+the separate passing native standalone observer run.
+
+This checkpoint finishes with its nose toward the ramp. The next requested
+course must instead finish pointing away from it, carry more speed through the
+blocks and tighten the jump timing. The checkpoint's last airborne vertical
+speed is -15.46 m/s: four contacts and a stopped car do not qualify a gentle or
+structurally safe landing. The 64.46 m ramp is authored study geometry, not a
+measured Tesla replica. The primary event video download was blocked, so this
+is a requested maneuver study, not verified reproduction of the footage.
+
+The camera core unit suite passes 18/18. New runtime sessions are owned on
+explicit port 4198; course drivers close them after acceptance.

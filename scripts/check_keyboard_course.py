@@ -34,6 +34,7 @@ PORTS = ['course_time_s', 'course_stage', 'course_blocks', 'course_air_rotation_
          'vehicle_mass_kg', 'chassis_mass_kg', 'unlimited_air_active', 'heading_fl',
          'quat_w', 'quat_x', 'quat_y', 'quat_z', 'yaw_rate_deg_s',
          'full_lift_force_n', 'lift_net_acceleration', 'velocity_z',
+         'course_step', 'course_forward_speed', 'course_forward_z', 'course_air_yaw_degrees', 'course_air_roll_degrees', 'course_backward_distance_m',
          'drive_left', 'drive_right', 'jet_force_y', 'jet_force_z', 'course_autopilot_active']
 PILOT_KEYS = {'forward':'KeyW','reverse':'KeyS','left':'KeyA','right':'KeyD',
               'boost':'Space','brake':'ShiftLeft','lift':'KeyK','pitch_up':'KeyR',
@@ -55,6 +56,8 @@ class Pilot:
         self.fan_until = self.fan_retry = 0.0
         self.autopilot_started = False
         self.native_offset = 0
+        self.previous_action = None
+        self.last_airborne = None
 
     def q(self, command, **params):
         request = urllib.request.Request(self.base, data=json.dumps(dict(
@@ -264,6 +267,20 @@ class Pilot:
                     self.report.get('maximum_observation_gap_s', 0), t - last)
             self.keys(keys, t)
             self.check_native_input_edges()
+            action=round(v['course_step'])
+            if action!=self.previous_action:
+                self.report.setdefault('actions',[]).append(dict(action=action,stage=stage,time_s=t))
+                if stage==6:
+                    self.screenshot('action-'+str(action))
+                    cameras=self.q('SceneCameraAudit')['candidates']
+                    active=[c for c in cameras if c['camera_active'] and c['render_target']=='window']
+                    if len(active)!=1 or active[0]['usd_path']!='/World/Avatar':
+                        raise RuntimeError('Avatar camera was lost during the aerial maneuver')
+                self.previous_action=action
+            if stage==6 and v['position_y']<2 and v['flight_control_weight']>.8:
+                self.last_airborne=v.copy()
+            if stage==6 and v['position_y']<1 and v['flight_control_weight']<.2 and 'touchdown' not in self.report:
+                self.report['touchdown']=dict(last_airborne=self.last_airborne,first_grounded=v.copy())
             if stage != previous_stage:
                 self.report['stages'].append(dict(stage=stage, time_s=t,
                     position=[v['position_x'], v['position_y'], v['position_z']]))
@@ -290,6 +307,9 @@ class Pilot:
                     refill_mass_added=v['instant_air_added_kg'] > 50,
                     finite_air=v['unlimited_air_active'] < .5,
                     air_turn=v['course_air_rotation_degrees'] > 170,
+                    yaw_turn=v['course_air_yaw_degrees']>150,
+                    roll_recovery=v['course_air_roll_degrees']>150,
+                    backward_flight=v['course_backward_distance_m']>1.0,
                     upright=v['up_alignment'] > .95, stopped=v['speed_mps'] < 2,
                     four_wheels=all(n > 0 for n in contacts.values()),
                     native_mass=abs(native['mass_kg'] - v['chassis_mass_kg']) < .05,

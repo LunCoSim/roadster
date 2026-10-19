@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
 """Author course observations and discrete controller edges through USD tools."""
 from author_surface_probes import q, ROOT, await_doc
+import argparse
 
 FIELDS = ['forward','reverse','left','right','boost','brake','lift','fan',
           'pitch_up','pitch_down','yaw_left','yaw_right','roll_left','roll_right']
 
-def main():
+OBSERVATIONS = ['course_step','course_roll_gate','course_yaw_gate',
+                'course_air_yaw_degrees','course_air_roll_degrees',
+                'course_backward_distance_m','course_forward_speed','course_forward_z',
+                'pilot_yaw_direction','course_mid_yaw_gate']
+
+def main(observations_only=False):
     q('OpenFile', path=str(ROOT/'vehicles/roadster.usda'))
     doc = await_doc(lambda d: '/vehicles/roadster.usda' in str(d))
     inspected = q('InspectUsdDocument', doc_id=doc, path='/Roadster')
@@ -17,6 +23,18 @@ def main():
     def connect(path, name, source, kind='float'):
         ops.append({'SetConnection': dict(edit_target='@root@', path=path,
                     name=name, type_name=kind, sources=[source])})
+    attr('/Roadster','inputs:course_turn_direction','double','1')
+    for name in OBSERVATIONS:
+        attr('/Roadster','outputs:'+name,'double','0')
+    if observations_only:
+        q('ApplyUsdOps',doc_id=doc,ops=ops)
+        q('SaveDocument',doc_id=doc)
+        saved=q('InspectUsdDocument',doc_id=doc,path='/Roadster')
+        names={a['name'] for a in saved['prim']['attributes']}
+        assert all('outputs:'+name in names for name in OBSERVATIONS)
+        q('CloseDocument',doc_id=doc)
+        print('Saved course observations through the USD journal.')
+        return
     for name in ['course_action','course_autopilot_enable']:
         attr('/Roadster','inputs:'+name,'float','0')
     ops.append({'RemoveAttribute':dict(edit_target='@root@',path='/Roadster',name='outputs:position_y')})
@@ -52,4 +70,6 @@ def main():
     print('Saved shared Modelica control event edges. Author the native Y connection in the mounted course document.')
 
 if __name__ == '__main__':
-    main()
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--observations-only',action='store_true')
+    main(parser.parse_args().observations_only)

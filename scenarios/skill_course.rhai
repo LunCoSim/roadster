@@ -37,6 +37,13 @@ fn block_count_published(me) { readings(this.car,["course_blocks"]).course_block
 fn climbed(me) { readings(this.car,["climb_gate"]).climb_gate > 0.5 }
 fn at_crest(me) { readings(this.car,["course_crest_gate"]).course_crest_gate > 0.5 }
 fn in_flight(me) { readings(this.car,["course_airborne_gate"]).course_airborne_gate > 0.5 }
+fn roll_ready(me) {readings(this.car,["course_roll_gate"]).course_roll_gate>0.5}
+fn select_yaw_direction(me) {
+    let direction=readings(this.car,["pilot_yaw_direction"]).pilot_yaw_direction;
+    cmd("SetPorts",#{target:this.car,writes:[["course_turn_direction",direction]]});
+}
+fn mid_yaw(me) {readings(this.car,["course_mid_yaw_gate"]).course_mid_yaw_gate>0.5}
+fn yaw_ready(me) {readings(this.car,["course_yaw_gate"]).course_yaw_gate>0.5}
 fn landing_ready(me) {
     if readings(this.car,["landing_gate"]).landing_gate<0.5 {return false;}
     for corner in ["FL","FR","RL","RR"] {
@@ -89,7 +96,14 @@ fn task(me, ctx) {
             wait_until(Fn("climbed")),
             phase_node(5,7,"CREST: follow the return lip; slow down and switch fans OFF at the crest."),
             wait_until(Fn("at_crest")), action_node(8), wait_until(Fn("in_flight")),
-            phase_node(6,9,"FLIP + LAND: pulse R/C pitch, J/L yaw, Q/E roll; K cushions descent. Shift brakes."),
+            phase_node(6,9,"ROLL: Q/E rolls upright. R/C trims pitch. Fans remain OFF."),
+            wait_until(Fn("roll_ready")),
+            once(Fn("select_yaw_direction")),
+            phase_node(6,11,"YAW: J/L turns the nose back along the track; K can cushion descent."),
+            wait_until(Fn("mid_yaw")),
+            phase_node(6,13,"YAW: continue the same turn until the nose points back along the track."),
+            wait_until(Fn("yaw_ready")),
+            phase_node(6,12,"BACKWARD FLIGHT + LAND: Space brakes backward motion; K cushions descent. Shift on touchdown."),
             // Losing any landing condition resets the native task dwell.
             // This is checkpoint qualification, not a physical contact law.
             retry(60,seq([wait_until(Fn("landing_ready")),

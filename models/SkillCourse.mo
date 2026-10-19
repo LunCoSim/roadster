@@ -8,6 +8,10 @@ model SkillCourse
   input Real position_z;
   input Real speed;
   input Real pitch_rate_deg_s;
+  input Real yaw_rate_deg_s;
+  input Real roll_rate_deg_s;
+  input Real forward_z;
+  input Real forward_speed;
   input Real up_y;
   input Real airborne;
   input Real gas_mass;
@@ -17,10 +21,19 @@ model SkillCourse
   input Real suction;
   Real elapsed(start=0,fixed=true);
   Real rotation(start=0,fixed=true);
+  Real yaw_rotation(start=0,fixed=true);
+  Real roll_rotation(start=0,fixed=true);
+  Real backward_distance(start=0,fixed=true);
   output Real course_stage;
   output Real course_blocks;
   output Real course_time_s;
   output Real course_air_rotation_degrees;
+  output Real course_air_yaw_degrees;
+  output Real course_air_roll_degrees;
+  output Real course_backward_distance_m;
+  output Real roll_gate;
+  output Real yaw_gate;
+  output Real mid_yaw_gate;
   output Real target_distance_m;
   output Real launch_gate;
   output Real refill_zone;
@@ -38,7 +51,16 @@ equation
   course_stage = stage;
   course_blocks = blocks;
   der(elapsed) = noEvent(if enabled>0.5 and stage<7 then 1.0 else 0.0);
-  der(rotation) = noEvent(if abs(stage-6.0)<0.5 and airborne>0.8 then abs(pitch_rate_deg_s) else 0.0);
+  der(rotation) = noEvent(if abs(stage-6.0)<0.5 and airborne>0.8 then sqrt(pitch_rate_deg_s^2+yaw_rate_deg_s^2+roll_rate_deg_s^2) else 0.0);
+  der(yaw_rotation) = noEvent(if abs(stage-6)<0.5 and airborne>0.8 then abs(yaw_rate_deg_s) else 0.0);
+  der(roll_rotation) = noEvent(if abs(stage-6)<0.5 and airborne>0.8 then abs(roll_rate_deg_s) else 0.0);
+  der(backward_distance) = noEvent(if abs(stage-6)<0.5 and airborne>0.8 and up_y>0.95 and forward_z< -0.9 then max(0.0,-forward_speed) else 0.0);
+  course_air_yaw_degrees = yaw_rotation;
+  course_air_roll_degrees = roll_rotation;
+  course_backward_distance_m = backward_distance;
+  roll_gate = noEvent(if up_y>0.97 and forward_z>0.9 and abs(roll_rate_deg_s)<35 and abs(pitch_rate_deg_s)<35 then 1.0 else 0.0);
+  mid_yaw_gate = noEvent(if up_y>0.94 and forward_z<0.7 and yaw_rotation>35.0 then 1.0 else 0.0);
+  yaw_gate = noEvent(if up_y>0.97 and forward_z< -0.94 and abs(yaw_rate_deg_s)<30 and yaw_rotation>150 and forward_speed< -3 then 1.0 else 0.0);
   course_time_s = elapsed;
   course_air_rotation_degrees = rotation;
   target_z = noEvent(if abs(stage-0.0)<0.5 then 140.0 else if abs(stage-1.0)<0.5 then 40.0 else if abs(stage-2.0)<0.5 then -100.0-8.0*blocks
@@ -55,7 +77,9 @@ equation
   crest_gate = noEvent(if position_y>63.5 and position_z> -304.0 then 1.0 else 0.0);
   airborne_gate = noEvent(if airborne>0.8 and position_y>20.0 then 1.0 else 0.0);
   healthy = noEvent(if elapsed>180.0 or (stage<0.5 and position_z<125.0 and launch_gate<0.5)
+    or (abs(stage-6)<0.5 and position_y<1.0 and airborne<0.2
+      and (roll_rotation<150.0 or yaw_rotation<150.0 or backward_distance<1.0))
     or (abs(stage-1)<0.5 and position_z<32.0) or (abs(stage-3)<0.5 and position_z< -208.0) then 0.0 else 1.0);
   landing_gate = noEvent(if abs(position_x)<6.0 and position_z> -295.0 and position_z< -230.0
-    and position_y<1.5 and up_y>0.95 and speed<2.0 and airborne<0.2 and rotation>170.0 then 1.0 else 0.0);
+    and position_y<1.5 and up_y>0.95 and speed<2.0 and airborne<0.2 and roll_rotation>150.0 and yaw_rotation>150.0 and backward_distance>1.0 then 1.0 else 0.0);
 end SkillCourse;

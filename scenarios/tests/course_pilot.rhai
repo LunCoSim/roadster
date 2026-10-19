@@ -17,6 +17,10 @@ fn on_tick(me,ctx) {
     for p in query("ReadPorts",#{api_id:this.car,port_names:["course_stage","course_blocks",
         "course_time_s","position_x","position_y","position_z","speed_mps","up_alignment",
         "flight_control_weight","gas_mass_kg","tank_temperature_k","course_air_rotation_degrees",
+        "quat_w","quat_x","quat_y","quat_z","pitch_rate_deg_s","yaw_rate_deg_s","roll_rate_deg_s",
+        "pilot_pitch_up","pilot_pitch_down","pilot_yaw_left","pilot_yaw_right","pilot_roll_left","pilot_roll_right",
+        "course_forward_speed","course_forward_z","jet_force_x","jet_force_y","thruster_yaw_moment_nm","thruster_roll_moment_nm",
+        "course_step","course_air_yaw_degrees","course_air_roll_degrees","course_backward_distance_m",
         "instant_services","instant_air_added_kg","chassis_mass_kg","course_autopilot_active","unlimited_air_active"]}).ports {
         if p.direction=="out" {v[p.name]=p.value;}
     }
@@ -25,11 +29,12 @@ fn on_tick(me,ctx) {
         position:world_pos(this.car)});this.last_stage=stage;}
     if this.time>=this.next_sample {
         emit("ROADSTER_COURSE_SAMPLE_EVIDENCE",#{time_s:this.time,stage:stage,position:world_pos(this.car),
-            speed:v.speed_mps,up_y:v.up_alignment,gas_kg:v.gas_mass_kg,temperature:v.tank_temperature_k});
+            speed:v.speed_mps,up_y:v.up_alignment,gas_kg:v.gas_mass_kg,temperature:v.tank_temperature_k,telemetry:v});
         this.next_sample=this.time+0.2;
     }
     if stage!=7 && stage!=8 && this.time<100.0 {return;}
     let native=query("QueryPhysicsState",#{id:this.car});let failures=[];
+    if v.course_air_yaw_degrees<150.0 || v.course_air_roll_degrees<150.0 || v.course_backward_distance_m<1.0 {failures.push("Yaw/roll/backward maneuver not measured");}
     if stage!=7 {failures.push("Shared course tree did not complete");}
     if v.course_autopilot_active<0.5 {failures.push("Shared autopilot was not active");}
     if v.course_blocks!=3.0 {failures.push("Three blocks were not crossed");}
