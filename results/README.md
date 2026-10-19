@@ -13,7 +13,12 @@ can fetch it.
 controlled approach. No physical parameter or threshold changed. Native geometry
 is retained and chassis impulse is zero. `held-input.json` records a 22.2167 s
 W hold without repeats and Ctrl+P pause/resume, using local core `ad9cb26f6`.
-The full keyboard landing and intermittent HUD reload remain open.
+`keyboard-course.json` passes eleven native keyboard-only checks on local core
+`b91dae75b`: three blocks, both refills, fan climb, 185.86-degree air turn and
+four-wheel upright landing in 39.4167 s. Final speed is 0.932 m/s and 136.24 kg
+of finite air remains. Native manual stepping bounds observation latency;
+realtime pacing is not established by this run. The intermittent HUD reload
+issue remains open.
 The schema audit covers 30 vehicle scenes; Omniverse execution is untested.
 `usd-physics-review.json` is a historical pre-correction failure report.
 

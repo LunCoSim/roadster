@@ -1,5 +1,5 @@
 {
-  "status": "Collision and held-input qualification committed; keyboard landing and HUD reload remain open",
+  "status": "Collision, held input and keyboard course qualified; intermittent HUD reload remains open",
   "core_commit": "ad9cb26f6",
   "parry_revision": "75b6acccdc42151995d0a653c576e65248164447",
   "parry_publication": "Local only; publication not authorized",
@@ -632,10 +632,43 @@
         "Native keyboard injection bypasses OS device/compositor delivery.",
         "This diagnostic run was deliberately stopped by API Exit at the ramp. It is not a full-course pass."
       ]
+    },
+    "keyboard_course": {
+      "ok": true,
+      "checks": {
+        "course_complete": true,
+        "blocks": true,
+        "two_waypoint_refills": true,
+        "refill_mass_added": true,
+        "finite_air": true,
+        "air_turn": true,
+        "upright": true,
+        "stopped": true,
+        "four_wheels": true,
+        "native_mass": true,
+        "pause": true
+      },
+      "binary_sha256": "255141fbf0c2f4c4cf7c2a1009cece297e0122e1efbadd7c8784e93ee65411cc",
+      "execution_mode": "Native fixed cycles; keyboard actuation only",
+      "pause": {
+        "before": 36,
+        "held": 36,
+        "resumed": 40,
+        "ok": true
+      },
+      "landing_contacts": {
+        "FL": 1,
+        "FR": 1,
+        "RL": 1,
+        "RR": 1
+      },
+      "maximum_observation_gap_s": 0.09999999999999964,
+      "core_commit": "b91dae75b",
+      "report": "keyboard-course.json"
     }
   },
   "open_failures": [
-    "First keyboard flip lands sideways at high speed and triggers hard-joint convergence hold; full course not yet accepted.",
+    "Earlier fast sideways landing triggered a hard-joint convergence hold; extreme-impact envelope remains unqualified.",
     "Intermittent HUD styling on reload remains queued."
   ],
   "unit_checks": {

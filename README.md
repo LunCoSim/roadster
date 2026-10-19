@@ -151,7 +151,15 @@ python3 scripts/run_scene_check.py roadster_course_check ROADSTER_COURSE
 python3 scripts/check_controls.py --port 4198
 python3 scripts/check_driving.py
 python3 scripts/check_effects.py
+python3 scripts/check_keyboard_course.py --launch --manual --binary /path/to/luncosim
 ```
+
+The keyboard pilot drives the main course with native press/release events,
+including Ctrl+P. Leave its test window controls alone during acceptance;
+additional physical key events reject the run. `--manual` admits exact native
+fixed cycles between observations and leaves all physical equations unchanged.
+Omit it to exercise realtime playback. Reports include key transitions, stage
+screenshots, inventory, mass and four-wheel landing contacts.
 
 [Recorded validation](results/README.md) distinguishes current evidence from
 historical results. Standing-start timing never subtracts rollout.

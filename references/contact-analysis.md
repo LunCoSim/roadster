@@ -1,9 +1,10 @@
 # Suspension and contact investigation — 2026-10-19
 
 The collision correction is committed on local LunCoSim main as `d0b091908`.
-[Measured results](../results/contact-physics-review.json) retain the remaining
-full keyboard landing failure. Held input is committed as `ad9cb26f6`; the full course and the
-separate intermittent HUD reload issue remain open. Nothing has been pushed.
+[Measured results](../results/contact-physics-review.json) retain the collision
+qualification and an earlier extreme-impact failure. Held input is committed as
+`ad9cb26f6`; resumed-cycle braking is `b91dae75b`. The keyboard course now passes.
+The separate intermittent HUD reload issue remains open. Nothing has been pushed.
 
 ## Corrected causes and ownership
 
@@ -69,10 +70,26 @@ no repeats. A headful diagnostic records a 22.2167 s W hold, native Modelica
 command/drive outputs at 1.0, both refills, three blocks and Ctrl+P pause/resume.
 The test pilot no longer synthesizes key repeats.
 
-## Remaining course acceptance
+## Keyboard course acceptance
 
-The keyboard pilot reaches the crest and starts its flip. Its first landing
-attempt arrives sideways at high speed and causes a hard-joint convergence hold.
-The whole course is not yet accepted. Three-axis jet guidance is under test.
+The [keyboard pilot](../scripts/check_keyboard_course.py) uses ordinary native
+press/release events without repeats or actuator/state writes. It observes the
+vehicle and selects finite jet pulses; no flight controller is added to player
+controls. Native manual stepping bounds API observation latency while retaining
+the shared fixed-cycle/Modelica/physics path. Realtime pacing is not qualified
+by this run. Extra physical key events reject unattended acceptance.
+
+All eleven checks pass in [the report](../results/keyboard-course.json): three
+blocks, two rolling refills, fan climb, 185.86 degrees of airborne turn, upright
+landing on four native wheel contacts, native mass agreement and Ctrl+P.
+Completion is 39.4167 s after pilot start; final speed is 0.932 m/s. Air remains
+finite: 136.24 kg at 200.27 K, with 139.32 kg supplied by waypoint services.
+
+The brake limiter now uses the current fixed duration before native integration.
+Using the preceding native delta disabled braking after a manual hold; the
+low-level regression failed before and passes after the correction.
+
+An earlier fast sideways impact caused a hard-joint convergence hold. The
+passing controlled landing does not qualify every extreme impact.
 The composed USD audit is separate from NVIDIA Omniverse execution, which has
 not been performed. The intermittent HUD reload issue is also open.
