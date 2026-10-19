@@ -393,6 +393,10 @@
       "maximum_pose_error_m": 5.7220459037665705e-08
     },
     {
+      "scene": "roadster_contact_small.usda",
+      "maximum_pose_error_m": 3.814697269177714e-08
+    },
+    {
       "scene": "roadster_course_check.usda",
       "maximum_pose_error_m": 1.4305114759416426e-08
     },

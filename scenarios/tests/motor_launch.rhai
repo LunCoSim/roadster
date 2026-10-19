@@ -1,7 +1,7 @@
 // Motor-only standing start: native contact/shaft physics, no gas boost.
 fn simulation_dependencies(me, ctx) {
  let car=find_path("/World/Roadster");
- #{modelica_entities:[car],entity_reads:[car,find_path("/World/Roadster/Wheel_RL")],entity_writes:[car],query_reads:["ReadPorts"],required_inputs:[]}
+ #{modelica_entities:[car],entity_reads:[car,find_path("/World/Roadster/Wheel_RL"),find_path("/World/Roadster/Suspension_RL")],entity_writes:[car],query_reads:["ReadPorts","QueryPhysicsState"],required_inputs:[]}
 }
 fn sample(car,name) {
  for p in query("ReadPorts",#{api_id:car,port_names:[name]}).ports {
@@ -27,6 +27,8 @@ fn on_tick(me,ctx) {
  }
  if this.samples.len==0 || t-this.samples[this.samples.len-1].time_s>=0.1 {
   let wheel=find_path("/World/Roadster/Wheel_RL");
+  let ws=query("QueryPhysicsState",#{id:wheel});let cs=query("QueryPhysicsState",#{id:find_path("/World/Roadster/Suspension_RL")});let c=contact_debug(wheel);
+  emit("ROADSTER_MOTOR_DIAGNOSTIC_EVIDENCE",#{time_s:t,car_position:world_pos(this.car),wheel_position:ws.colliders[0].physics_position_m,car_rotation:world_rotation(this.car),wheel_omega:ws.angular_velocity_radps,carrier_omega:cs.angular_velocity_radps,mu:c.max_friction,normal_impulse:c.total_normal_impulse,continuous_impulse:c.continuous_normal_impulse,tangent_impulse:c.total_warm_start_tangent_impulse,slip:c.max_tangent_speed,normal_speed:c.max_normal_speed,touching:c.touching_pair_count});
   this.samples.push(#{time_s:t,speed_m_s:v,wheel_rad_s:sample(wheel,"shaft_speed"),
    torque_nm:sample(this.car,"torque_left"),battery_power_w:sample(this.car,"battery_power"),
    downforce_n:sample(this.car,"downforce"),gas_mass_kg:sample(this.car,"gas_mass_kg")});

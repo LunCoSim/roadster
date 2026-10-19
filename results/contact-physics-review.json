@@ -1,0 +1,85 @@
+{
+  "status": "Collision correction committed; ramp performance and keyboard course remain open",
+  "core_commit": "d0b091908",
+  "parry_revision": "75b6acccdc42151995d0a653c576e65248164447",
+  "parry_publication": "Local only; publication not authorized",
+  "twin_base": "bb8fb09",
+  "binary_sha256": "8140f47334446aa149f97a57a7ed80b1ee3d1c8871876126b0a5b4535f23d6bc",
+  "numeric_profile": {
+    "physics_hz": 60,
+    "substeps": 8,
+    "position_tolerance_m": 0.0005,
+    "angular_tolerance_rad": 0.002,
+    "max_iterations": 8192
+  },
+  "production_checks": {
+    "drop": {
+      "duration_s": 20.000000000000146,
+      "failures": [],
+      "maximum_ground_penetration_m": 0.0004943104158485756,
+      "maximum_bump_m": 0.06549988830719167,
+      "minimum_bump_m": -3.309968253825679e-05,
+      "maximum_radial_extent_error_m": 5.551115123125783e-17,
+      "maximum_airborne_observation_error": 0.0
+    },
+    "left": {
+      "duration_s": 20.000000000000146,
+      "failures": [],
+      "maximum_ground_penetration_m": 0.0,
+      "maximum_bump_m": 0.0654999487870134,
+      "minimum_bump_m": -0.055467685937163086,
+      "maximum_radial_extent_error_m": 5.551115123125783e-17,
+      "maximum_airborne_observation_error": 0.0
+    },
+    "right": {
+      "duration_s": 20.000000000000146,
+      "failures": [],
+      "maximum_ground_penetration_m": 0.0,
+      "maximum_bump_m": 0.06549991582228967,
+      "minimum_bump_m": -0.055421429503730774,
+      "maximum_radial_extent_error_m": 5.551115123125783e-17,
+      "maximum_airborne_observation_error": 0.0
+    },
+    "small_floor": {
+      "duration_s": 20.000000000000146,
+      "failures": [],
+      "maximum_ground_penetration_m": 0.0004884591874966815,
+      "maximum_bump_m": 0.06550000091616998,
+      "minimum_bump_m": -3.309968253825679e-05,
+      "maximum_radial_extent_error_m": 5.551115123125783e-17,
+      "maximum_airborne_observation_error": 0.0
+    },
+    "motor": {
+      "final_speed_m_s": 62.84497728187424,
+      "reached_60": true,
+      "standing_start_0_60_s": 3.064239129628032
+    },
+    "boost": {
+      "boost_impulse_to_60_ns": 44176.09818687159,
+      "final_soc": 0.8921258532144276,
+      "initial_soc": 0.8997880908040823,
+      "mean_boost_to_60_n": 77957.82032977353,
+      "peak_speed_m_s": 60.69668513736692,
+      "recorded_boost_window_s": 0.5666666666666657,
+      "standing_start_0_60_s": 0.5537723373835228,
+      "travel_m": 129.6120503320486
+    },
+    "generic_continuous_contacts": "12 production checks passed",
+    "generic_prismatic_spring": "26 production checks passed"
+  },
+  "open_failures": [
+    "11 m/s fan-on ramp climbs past 30 m but fails minimum-speed gate.",
+    "40 m/s fan-on ramp loses 0.750522 m/s in one tick against a 0.75 m/s gate.",
+    "Held-key input and full keyboard course remain under investigation.",
+    "Intermittent HUD styling on reload remains queued."
+  ],
+  "unit_checks": {
+    "parry_library": "60 passed",
+    "parry_convex_contracts": "7 passed, including all six recorded poses and 6144 nearby queries",
+    "parry_f32": "Library compiled",
+    "ccd": "28 passed; pre-existing degenerate triangle projection case excluded",
+    "joint_projection": "9 passed",
+    "wheel_axis": "1 passed",
+    "full_suite": "Not claimed; two native automatic-mass-helper tests and degenerate triangle projection remain outside passing subset"
+  }
+}

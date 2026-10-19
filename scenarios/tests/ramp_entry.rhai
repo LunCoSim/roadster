@@ -29,9 +29,9 @@ fn on_tick(me,ctx) {
  let wheels=[];let rot=world_rotation(this.car);let inv=[-rot[0],-rot[1],-rot[2],rot[3]];
  for n in ["FL","FR","RL","RR"] {
   let path="/World/Roadster/Wheel_"+n;let w=find_path(path);let c=contact_debug(w);
-  let hub=qrot(inv,vsub(world_pos(w),pos));
+  let hub=qrot(inv,vsub(world_pos(w),pos));let wn=query("QueryPhysicsState",#{id:w});
   wheels.push(#{wheel_usd_prim_path:path,contact_valid:c.touching_pair_count>0,
-    suspension_compression_m:hub[1]+0.21,normal_impulse_ns:c.total_normal_impulse+c.continuous_normal_impulse});
+    suspension_compression_m:hub[1]+0.21,angular_velocity:wn.angular_velocity_radps,rotation:world_rotation(w),normal_impulse_ns:c.total_normal_impulse+c.continuous_normal_impulse});
  }
  let row=#{time_s:this.time,position:pos,speed_mps:speed,velocity:native.linear_velocity_mps,angular_velocity:native.angular_velocity_radps,
   quat:[v.quat_w,v.quat_x,v.quat_y,v.quat_z],body_contact:contact_summary(this.car),wheels:wheels,suction_n:v.downforce,torque_left_nm:v.torque_left,throttle:throttle,brake:brake,up_y:v.up_alignment};

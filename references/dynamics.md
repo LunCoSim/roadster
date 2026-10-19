@@ -211,6 +211,12 @@ nominal parallel-axis inertia. Live native joints carry their actual motion.
 This is a rigid tire and simplified linear strut model, without tire carcass,
 bushing, crash deformation, or manufacturer suspension kinematics.
 
+The current profile is eight substeps at 60 Hz, 0.5 mm linear tolerance and
+0.002 rad angular tolerance. Local core `d0b091908` passes four 20-second
+contact/drop/side checks. Two ramp speed gates remain open; see
+[contact-analysis.md](contact-analysis.md) for measured limits and ownership.
+No Tesla-specific suspension equations were added to Rust.
+
 The Air inventory's unlimited-air switch enables an explicitly ideal external
 laboratory reservoir. Enabling it invokes the existing instantaneous conditioned
 refill. Its co-moving mass flow equals nozzle outflow; same-state enthalpy cancels

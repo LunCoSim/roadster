@@ -1234,7 +1234,7 @@ def Xform "Roadster" (
         custom token info:implementationSource = "sourceAsset"
         custom asset info:sourceAsset = @../scenarios/physics_accuracy.rhai@
         custom double study:positionToleranceM = 0.0005
-        custom double study:angularToleranceRad = 0.0005
+        custom double study:angularToleranceRad = 0.002
         custom int study:maxIterations = 8192
     }
     def Material "TireMaterial" (

@@ -32,7 +32,7 @@ vehicle slip-force layer.
 Run `python3 scripts/check_usd_standard.py` against the owned native API on
 port 4198. Its composed-stage audit checks ten independent moving parts, ten
 joints, attachment endpoint exclusivity/types, physics material bindings,
-Earth gravity and the initial poses across all 29 vehicle scenes. Results are
+Earth gravity and the initial poses across all 30 vehicle scenes. Results are
 in [usd-standard.json](../results/usd-standard.json).
 
 This is an authored-schema and placement audit. NVIDIA Omniverse/PhysX has not
@@ -43,13 +43,14 @@ integrations; they do not execute merely by opening a USD stage in Omniverse.
 The asset does not apply `PhysxVehicleAPI` to invoke a second vehicle solver on
 top of its explicit rigid-body suspension.
 
-The drop and side-recovery acceptance gates separately check simulated motion.
-Right-side recovery passes. Left-side recovery exceeds droop travel; the 6 m
-combined free-flight/drop case still exceeds joint/contact limits. The current
-launch is 0.747 s to 60 mph, failing the 0.59 s gate, and the motor-only launch
-fails to reach 60 mph in seven seconds. These remain open, recorded failures.
+The drop, both side-recovery and finite-floor gates pass 20-second runs with
+local core `d0b091908`. Boosted 0–60 mph is 0.554 s; motor-only is 3.064 s.
+Two ramp performance gates remain failing, while all four approaches retain
+native query geometry. The approved focused Parry fixes are committed locally
+and have not been published.
 A passing schema audit does not establish landing or driving fidelity.
-See [the review](../results/usd-physics-review.json).
+See [the current review](../results/contact-physics-review.json) and
+[the investigation](contact-analysis.md).
 
 ## Primary references
 

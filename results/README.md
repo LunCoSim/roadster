@@ -1,12 +1,20 @@
 # Recorded validation
 
-## Collision-backed rig revision (2026-10-19)
+## Current collision qualification (2026-10-19)
 
-`usd-standard.json` records the composed USD schema/placement audit across all
-29 vehicle scenes. `unlimited-air.json` records actual HUD input and Modelica
-mass/temperature/pressure conservation. Right-side recovery, generic continuous
-contacts and the prismatic spring gates pass. Left-side suspension, full drop, 0.59 s launch and motor-only
-acceleration remain failing; see `usd-physics-review.json`. The earlier launch/course gates below do not validate this changed wheel realization. Omniverse execution has not been tested.
+`contact-physics-review.json` and [the investigation](../references/contact-analysis.md)
+record four passing 20-second drop/side/floor gates, 3.064 s motor-only and
+0.554 s boosted 0–60 mph. Local LunCoSim main `d0b091908` contains the shared
+collision/joint correction, with approved local Parry `75b6acc`. Nothing is
+pushed. The dependency pin requires publication before a fresh remote checkout
+can fetch it.
+
+`ramp-entry-matrix.json` is complete and retains two failures: minimum speed
+in the 11 m/s fan-on climb and a 0.750522 m/s one-tick loss at 40 m/s. Both
+25 m/s cases pass; all four retain native query geometry and have no chassis
+impact. Held-key input, the keyboard course and HUD reload styling remain open.
+The schema audit covers 30 vehicle scenes; Omniverse execution is untested.
+`usd-physics-review.json` is a historical pre-correction failure report.
 
 ## Earlier runtime baseline
 
