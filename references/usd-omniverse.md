@@ -45,8 +45,8 @@ top of its explicit rigid-body suspension.
 
 The drop, both side-recovery and finite-floor gates pass 20-second runs with
 local core `d0b091908`. Boosted 0–60 mph is 0.554 s; motor-only is 3.064 s.
-Two ramp performance gates remain failing, while all four approaches retain
-native query geometry. The approved focused Parry fixes are committed locally
+All four ramp approaches pass their unchanged gates with full throttle after
+entry. The full keyboard landing remains open. The approved focused Parry fixes are committed locally
 and have not been published.
 A passing schema audit does not establish landing or driving fidelity.
 See [the current review](../results/contact-physics-review.json) and

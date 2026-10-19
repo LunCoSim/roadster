@@ -23,6 +23,9 @@ fn on_tick(me,ctx) {
  let pos=world_pos(this.car);let speed=v.speed_mps;
  let throttle=max(0.021,min(1.0,0.3*(this.target-speed)));let brake=0.0;
  if speed>this.target+0.3 {throttle=0.0;brake=min(1.0,0.3*(speed-this.target));}
+ // Target speed defines the approach. On the ramp, hold the accelerator as
+ // instructed by the course rather than commanding a cruise-speed ceiling.
+ if pos[2]< -67.0 {throttle=1.0;brake=0.0;}
  if this.time<1.0 {throttle=0.0;brake=1.0;}
  drive(this.car,throttle,0.0);cmd("SetPorts",#{target:this.car,writes:[["brake",brake],["fan",this.fan]]});
  let native=query("QueryPhysicsState",#{id:this.car});

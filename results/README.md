@@ -9,10 +9,11 @@ collision/joint correction, with approved local Parry `75b6acc`. Nothing is
 pushed. The dependency pin requires publication before a fresh remote checkout
 can fetch it.
 
-`ramp-entry-matrix.json` is complete and retains two failures: minimum speed
-in the 11 m/s fan-on climb and a 0.750522 m/s one-tick loss at 40 m/s. Both
-25 m/s cases pass; all four retain native query geometry and have no chassis
-impact. Held-key input, the keyboard course and HUD reload styling remain open.
+`ramp-entry-matrix.json` passes all four entries with full throttle after the
+controlled approach. No physical parameter or threshold changed. Native geometry
+is retained and chassis impulse is zero. `held-input.json` records a 22.2167 s
+W hold without repeats and Ctrl+P pause/resume, using local core `ad9cb26f6`.
+The full keyboard landing and intermittent HUD reload remain open.
 The schema audit covers 30 vehicle scenes; Omniverse execution is untested.
 `usd-physics-review.json` is a historical pre-correction failure report.
 

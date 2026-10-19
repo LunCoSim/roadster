@@ -213,7 +213,8 @@ bushing, crash deformation, or manufacturer suspension kinematics.
 
 The current profile is eight substeps at 60 Hz, 0.5 mm linear tolerance and
 0.002 rad angular tolerance. Local core `d0b091908` passes four 20-second
-contact/drop/side checks. Two ramp speed gates remain open; see
+contact/drop/side checks and all four ramp-entry gates. Keyboard landing remains
+open; see
 [contact-analysis.md](contact-analysis.md) for measured limits and ownership.
 No Tesla-specific suspension equations were added to Rust.
 

@@ -1,0 +1,28 @@
+{
+  "status": "Bounded held-input qualification; full course still pending",
+  "binary_sha256": "97836e49eb7ebb9f1ee744586d7fd404c9ddc288a907f6392fedfe268e4350a2",
+  "native_event_path": "InjectWindowInput: ordinary press/release; no key repeats",
+  "physical_repeat_count": 0,
+  "held_forward_duration_s": 22.216666666657794,
+  "native_modelica_command": 0.9999999999999986,
+  "native_drive_left": 0.9999999999999986,
+  "native_drive_right": 0.9999999999999986,
+  "pause": {
+    "before": 36,
+    "held": 36,
+    "resumed": 38,
+    "ok": true
+  },
+  "stages_reached": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "unit_gate": "480 host frames, more than 500 fixed ticks, one press and release, explicit reset-before-unify schedule dependency",
+  "limits": [
+    "Native keyboard injection bypasses OS device/compositor delivery.",
+    "This diagnostic run was deliberately stopped by API Exit at the ramp. It is not a full-course pass."
+  ]
+}

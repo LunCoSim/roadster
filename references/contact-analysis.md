@@ -2,7 +2,7 @@
 
 The collision correction is committed on local LunCoSim main as `d0b091908`.
 [Measured results](../results/contact-physics-review.json) retain the remaining
-ramp performance failures. Held-key input, the full keyboard course and the
+full keyboard landing failure. Held input is committed as `ad9cb26f6`; the full course and the
 separate intermittent HUD reload issue remain open. Nothing has been pushed.
 
 ## Corrected causes and ownership
@@ -54,13 +54,25 @@ passes 26. Focused low-level checks pass 28 CCD, nine joint-projection,
 The pre-existing degenerate-triangle test and two native automatic-mass-helper
 assertions remain outside this passing subset. No full-suite pass is claimed.
 
-## Remaining ramp acceptance
+## Ramp and held-input acceptance
 
-The complete four-case matrix records two passes and two failures. Both 25 m/s
-fan-on/off runs pass. At 11 m/s, fresh rolling contact permits a climb past 30 m,
-but speed falls below its minimum gate. At 40 m/s, maximum one-tick loss is
-0.750522 m/s against the 0.75 m/s limit. All four retain native geometry without
-query faults and report zero chassis contact impulse. No gate was weakened.
-Further traction/control and seam investigation is required before whole-course
-acceptance. The composed USD audit is separate from NVIDIA Omniverse execution,
-which has not been performed.
+All four ramp gates pass: 11/25/40 m/s with fans and 25 m/s without fans.
+Approach speed is controlled before entry; full throttle is then held on the
+ramp, as instructed by the course. The previous driver retained its low cruise
+target throughout the climb. No physical parameter or acceptance threshold
+changed for this correction. Maximum one-tick losses are 0.154489, 0.151282,
+0.702104 and 0.148990 m/s; chassis contact impulse is zero in all four cases.
+
+Local core `ad9cb26f6` orders input-store clearing before physical unification.
+One press/release survives 480 host frames and more than 500 fixed ticks with
+no repeats. A headful diagnostic records a 22.2167 s W hold, native Modelica
+command/drive outputs at 1.0, both refills, three blocks and Ctrl+P pause/resume.
+The test pilot no longer synthesizes key repeats.
+
+## Remaining course acceptance
+
+The keyboard pilot reaches the crest and starts its flip. Its first landing
+attempt arrives sideways at high speed and causes a hard-joint convergence hold.
+The whole course is not yet accepted. Three-axis jet guidance is under test.
+The composed USD audit is separate from NVIDIA Omniverse execution, which has
+not been performed. The intermittent HUD reload issue is also open.
