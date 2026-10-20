@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 KEYS = {'KeyW', 'KeyA', 'KeyS', 'KeyD', 'Space', 'ShiftLeft', 'KeyK',
         'KeyF', 'KeyR', 'KeyC', 'KeyQ', 'KeyE', 'KeyJ', 'KeyL', 'Tab',
         'ControlLeft', 'ControlRight', 'KeyP', 'KeyV'}
-PORTS = ['course_time_s', 'course_stage', 'course_blocks', 'course_air_rotation_degrees',
+PORTS = ['course_failure_reason', 'course_time_s', 'course_stage', 'course_blocks', 'course_air_rotation_degrees',
          'position_x', 'position_y', 'position_z', 'velocity_y', 'speed_mps', 'yaw',
          'pitch_rate_deg_s', 'roll_rate_deg_s', 'up_alignment', 'flight_control_weight',
          'fan_requested', 'fan_seal', 'downforce', 'gas_mass_kg', 'tank_temperature_k',
@@ -237,6 +237,108 @@ class Pilot:
         if not self.report['pause']['ok']:
             raise RuntimeError('Ctrl+P did not pause and resume the native clock')
 
+    def operator_checks(self):
+        """Exercise real HUD/keyboard ownership, then retry into a fresh course."""
+        def tick():
+            return int(self.q('RunRhai', code='clock_snapshot().sim_tick')['stdout'])
+        # Pause while the pilot owns controls. Shift would itself take over.
+        self.q('StepSimulation', hold=False)
+        self.keys({'ControlLeft', 'KeyP'}, 0.0)
+        time.sleep(.12)
+        self.keys(set(), 0.0)
+        a = tick()
+        before = self.snapshot()
+        time.sleep(.3)
+        b = tick()
+        held = self.snapshot()
+        fields = ['course_time_s', 'position_x', 'position_y', 'position_z',
+                  'gas_mass_kg', 'course_autopilot_active']
+        active_pause = a == b and before['course_autopilot_active'] > .5 and all(
+            before[name] == held[name] for name in fields)
+        self.screenshot('active-pause')
+        self.keys({'ControlLeft', 'KeyP'}, 0.0)
+        time.sleep(.12)
+        self.keys(set(), 0.0)
+        deadline = time.monotonic()+5
+        while tick() <= b and time.monotonic() < deadline:
+            time.sleep(.03)
+        resumed = tick()
+        active_pause = active_pause and resumed > b and self.snapshot()['course_autopilot_active'] > .5
+        self.q('StepSimulation', hold=True)
+        self.report['active_pause'] = dict(ok=active_pause, before=a, held=b,
+            resumed=resumed, frozen_fields=fields)
+        if not active_pause:
+            raise RuntimeError('Active pilot did not preserve state and ownership across Ctrl+P')
+        # A real driving key must cancel program ownership immediately.
+        self.keys({'KeyW'}, 0.0)
+        self.step(6)
+        takeover = self.snapshot()
+        program = self.q('ReadPorts', api_id=self.car, port_names=['program_active'])['ports']
+        manual = takeover['course_autopilot_active'] < .5 and any(
+            p['name']=='program_active' and p['direction']=='in' and p['value']<.5 for p in program)
+        self.keys(set(), 0.0)
+        self.step(2)
+        self.report['manual_takeover'] = dict(ok=manual, key='KeyW', telemetry=takeover,
+            program_port=program)
+        if not manual:
+            raise RuntimeError('W did not relinquish autopilot program ownership')
+        # Native HUD retry: no pose, inventory, checkpoint or actuator writes.
+        old_car = self.car
+        old_course = self.snapshot()
+        old_twin = self.q('RunRhai',code='twin_name()')['stdout']
+        self.keys({'ShiftLeft'}, 0.0)
+        for state in ['Pressed', 'Released']:
+            self.q('InjectWindowInput', event={'PointerButton': dict(
+                button='Primary', state=state, x=235, y=78)})
+        deadline = time.monotonic()+120
+        new_lifetime_held = False
+        while time.monotonic() < deadline:
+            current_twin = self.q('RunRhai',code='twin_name()')['stdout']
+            if current_twin != old_twin:
+                # Hold the fresh lifetime before polling full admission. Waiting
+                # for a transient running barrier can advance many model cycles.
+                self.q('StepSimulation',hold=True)
+                new_lifetime_held = True
+            state = self.q('GetReadiness')
+            if state['faulted']:
+                raise RuntimeError(state['fault'])
+            if new_lifetime_held and state['ready'] and not state['world_hold'] and not state['pending_count']:
+                current = int(self.q('RunRhai', code='find_path("/World/Roadster")')['stdout'])
+                models = self.q('CosimStatus', include_values=False)['entities']
+                if current >= 0 and any(e.get('name')=='/World/Roadster' and e.get('status') in ['Idle','Running'] for e in models):
+                    fresh_ports = {p['name']:p['value'] for p in self.q('ReadPorts',
+                        api_id=current,port_names=['course_stage','course_time_s','instant_services'])['ports'] if p['direction']=='out'}
+                    if (fresh_ports.get('course_stage')==0 and fresh_ports.get('instant_services')==0
+                            and fresh_ports.get('course_time_s',float('inf'))<old_course['course_time_s']):
+                        break
+            time.sleep(.03)
+        else:
+            raise RuntimeError('HUD retry did not create a fresh ready course')
+        # An admitted held model is Idle until its first requested cycles.
+        self.car = current
+        self.step(2)
+        self.setup()
+        self.q('StepSimulation',hold=True)
+        self.step(2)
+        fresh = self.snapshot()
+        reset = (fresh['course_stage']==0 and fresh['course_blocks']==0
+                 and fresh['instant_services']==0 and fresh['course_autopilot_active']<.5
+                 and abs(fresh['gas_mass_kg']-250)<.005 and fresh['course_time_s']<old_course['course_time_s']
+                 and fresh['course_failure_reason']==0)
+        self.report['retry_reset'] = dict(ok=reset, old_car=old_car, new_car=self.car,
+            old_twin=old_twin, new_twin=current_twin,
+            before_retry=old_course,telemetry=fresh)
+        if not reset:
+            raise RuntimeError('Retry did not reset the mission, air and pilot')
+        self.screenshot('retry-reset')
+        # Input audit for the completed course starts at the new Twin lifetime.
+        runtime = self.out.with_suffix('.runtime.log')
+        if runtime.exists():
+            self.native_offset = runtime.stat().st_size
+        self.autopilot_started = False
+        self.start_autopilot(0.0)
+        self.report['operator_checks'] = True
+
     def step(self, count):
         before = int(self.q('RunRhai', code='clock_snapshot().sim_tick')['stdout'])
         self.q('StepSimulation', steps=count)
@@ -268,7 +370,7 @@ class Pilot:
             self.keys(keys, t)
             self.check_native_input_edges()
             if stage in [2,3] and -132<v['position_z']<-94:
-                code='let peak=0.0; for name in ["Roadster","Roadster/Wheel_FL","Roadster/Wheel_FR","Roadster/Wheel_RL","Roadster/Wheel_RR"] {let c=contact_debug(find_path("/World/"+name));peak=max(peak,c.total_normal_impulse+c.continuous_normal_impulse);} peak'
+                code='let peak=0.0; for cube in 0..3 {for name in ["Roadster","Roadster/Wheel_FL","Roadster/Wheel_FR","Roadster/Wheel_RL","Roadster/Wheel_RR"] {let c=contact_debug(find_path("/World/"+name),find_path("/World/JumpBlock"+cube.to_string()));peak=max(peak,c.total_normal_impulse+c.continuous_normal_impulse);}} peak'
                 impulse=float(self.q('RunRhai',code=code)['stdout'])
                 self.report['maximum_cube_contact_impulse_ns']=max(impulse,self.report.get('maximum_cube_contact_impulse_ns',0))
             action=round(v['course_step'])
@@ -300,7 +402,7 @@ class Pilot:
             if stage == 8:
                 raise RuntimeError('The production course tree rejected the run')
             if stage == 7:
-                self.keys({'ShiftLeft'}, t)
+                self.keys(set() if self.args.autopilot else {'ShiftLeft'}, t)
                 native = self.q('QueryPhysicsState', id=self.car)
                 contacts = {}
                 for corner in ['FL', 'FR', 'RL', 'RR']:
@@ -324,6 +426,30 @@ class Pilot:
                     pause=self.report.get('pause', {}).get('ok', False),
                     control_mode=(self.autopilot_started and v['course_autopilot_active']>.5)
                         if self.args.autopilot else v['course_autopilot_active']<.5)
+                if self.args.operator_checks:
+                    checks.update(active_pause=self.report.get('active_pause',{}).get('ok',False),
+                        manual_takeover=self.report.get('manual_takeover',{}).get('ok',False),
+                        retry_reset=self.report.get('retry_reset',{}).get('ok',False))
+                # Presentation is asynchronous to fixed physics. Wait for the
+                # completed HUD before capturing it or clicking its stop button.
+                hud_deadline = time.monotonic()+5
+                while time.monotonic()<hud_deadline:
+                    hud = self.q('ReadExposures',surface='vessel-hud')
+                    properties = hud['surfaces']['vessel-hud']['properties']
+                    if properties.get('rr_course_title')=='COURSE COMPLETE':
+                        break
+                    time.sleep(.05)
+                checks['completion_hud'] = properties.get('rr_course_title')=='COURSE COMPLETE'
+                self.report['hud'] = hud
+                self.screenshot('complete')
+                if self.args.operator_checks:
+                    for state in ['Pressed','Released']:
+                        self.q('InjectWindowInput',event={'PointerButton':dict(
+                            button='Primary',state=state,x=360,y=78)})
+                    self.step(2)
+                    stopped = self.snapshot()
+                    checks['completed_pilot_stop'] = stopped['course_autopilot_active']<.5 and stopped['course_stage']==7
+                    self.report['completed_pilot_stop'] = stopped
                 self.report['checks'] = checks
                 self.report['ok'] = all(checks.values())
                 self.report['failures'] = [name for name, ok in checks.items() if not ok]
@@ -336,6 +462,16 @@ class Pilot:
                     self.report['execution_mode'] = 'Native fixed cycles'
                 if self.args.autopilot:
                     self.start_autopilot(t)
+            if self.args.operator_checks and stage==2 and not self.report.get('operator_checks'):
+                # Retry after a real waypoint: the reset must clear existing
+                # service/checkpoint history and a meaningfully elapsed clock.
+                self.operator_checks()
+                last = sample_at = progress_at = -1.0
+                previous_stage = -1
+                self.previous_action = None
+                self.report['samples'] = []
+                self.last_airborne = None
+                continue
             if t >= progress_at:
                 print(f'{t:.1f}s stage={stage} z={v["position_z"]:.1f} speed={v["speed_mps"]:.1f} air={v["gas_mass_kg"]:.1f}', flush=True)
                 progress_at = t + 2
@@ -354,18 +490,29 @@ def main():
     ap.add_argument('--keep-open', action='store_true')
     ap.add_argument('--autopilot', action='store_true',
                     help='Start the shared in-app course pilot through its HUD button')
+    ap.add_argument('--operator-checks',action='store_true',
+                    help='Check active pause, W takeover and HUD retry, then complete the course')
     ap.add_argument('--manual', action='store_true',
                     help='Admit exact native fixed cycles between keyboard observations')
-    ap.add_argument('--binary', default=str(ROOT / '.scratch/luncosim'))
+    ap.add_argument('--binary', default=str(ROOT / '.scratch/control-target/debug/luncosim'))
     ap.add_argument('--output', default='results/keyboard-course.json')
     ap.add_argument('--wall-timeout', type=float, default=900)
     ap.add_argument('--sim-timeout', type=float, default=180)
     ap.add_argument('--rate', type=float, default=.25,
                     help='Wall-clock playback rate; physical timestep and course are unchanged')
     args = ap.parse_args()
+    if args.operator_checks and not (args.autopilot and args.manual and args.launch):
+        ap.error('--operator-checks requires --autopilot --manual --launch for an owned repeatable session')
     pilot = Pilot(args)
     pilot.report.update(control_mode='autopilot' if args.autopilot else 'keyboard',
                         sequence='scenarios/skill_course.rhai', guidance='models/CoursePilot.mo')
+    sources = ['models/CoursePilot.mo','models/SkillCourse.mo','models/RoadsterVehicle.mo',
+               'scenarios/skill_course.rhai','scenes/roadster_skill_course.usda',
+               'vehicles/roadster.usda','config/input-bindings.json',
+               'scripting/policy/roadster_camera.rhai','scripting/policy/roadster_ui.rhai',
+               'scripts/check_keyboard_course.py']
+    pilot.report['source_sha256'] = {name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest()
+                                     for name in sources}
     process = log = None
     try:
         if args.launch:

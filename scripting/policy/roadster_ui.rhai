@@ -93,6 +93,14 @@ fn course_ui(c) {
   "Checkpoint missed. Retry resets course, car, air and the simulation clock."];
  let index=max(0,min(8,c.course_stage.round().to_int()));
  out.rr_course_title=titles[index];out.rr_course_hint=hints[index];
+ if index==8 && c.course_failure_reason!=() {
+  let reasons=["Checkpoint missed.","Course time exceeded 180 s.","Launch gate missed: reach 60 mph before passing blue.",
+    "Lost carry speed: keep at least 90 km/h before the ramp.","Green refill waypoint missed.",
+    "Landed before completing the aerial roll.","Cube impact: adjust K takeoff timing at the yellow line.",
+    "Checkpoint clearance or landing qualification missed."];
+  let reason=max(0,min(7,c.course_failure_reason.round().to_int()));
+  out.rr_course_hint=reasons[reason]+" Retry resets the course, car and air.";
+ }
  if index==6 {
   out.rr_course_hint=if c.course_step<10 {"Q/E: roll wheels-down, nose AWAY from ramp. Counterpulse, J/L yaw trim; K cushions descent."}
     else {"Nose AWAY from ramp. K cushions descent. Bank Q/E toward road center, Shift on touchdown."};

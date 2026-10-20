@@ -72,7 +72,7 @@ package Roadster {
         part secondRefill : GameRefillWaypoint;
         attribute jumpBlockCount : Integer = 3;
         attribute rampWidth : LengthValue = 14[m];
-        attribute studyRampHeight : LengthValue = 64.46[m];
+        attribute studyRampHeight : LengthValue = 18.872767558[m];
     }
     part skillTrack : SkillTrack;
 
@@ -229,4 +229,114 @@ package Roadster {
     part evidenceBattery : RequirementEvidence { ref targetRequirement = batteryBounds; ref sources = (study); }
     part evidenceEnergy : RequirementEvidence { ref targetRequirement = driveEnergy; ref sources = (study); }
     part evidenceGas : RequirementEvidence { ref targetRequirement = gasBudget; ref sources = (study, gasDynamics); }
+
+    // Skill-game acceptance targets, not manufacturer performance claims.
+    constraint def ContinuousCourse {
+        in stage : Real;
+        in blocks : Real;
+        in minimumCarrySpeedMps : Real;
+        stage == 7.0 and blocks == 3.0 and minimumCarrySpeedMps >= 25.0;
+    }
+    constraint def CleanCubeJump {
+        in peakImpulseNs : Real;
+        peakImpulseNs <= 1.0;
+    }
+    constraint def RollingServices {
+        in serviceCount : Real;
+        in addedAirKg : Real;
+        in minimumServiceSpeedMps : Real;
+        serviceCount == 2.0 and addedAirKg > 50.0 and minimumServiceSpeedMps >= 25.0;
+    }
+    constraint def FanSupportedClimb {
+        in heightM : Real;
+        in fanSeal : Real;
+        in suctionN : Real;
+        heightM > 17.0 and fanSeal > 0.4 and suctionN > 20000.0;
+    }
+    constraint def ReturnLanding {
+        in rollDegrees : Real;
+        in forwardZ : Real;
+        in upY : Real;
+        in xM : Real;
+        in zM : Real;
+        in speedMps : Real;
+        in wheelContacts : Integer;
+        rollDegrees > 150.0 and forwardZ > 0.94 and upY > 0.95
+            and xM > -6.0 and xM < 6.0 and zM > -295.0 and zM < -230.0
+            and speedMps < 0.2 and wheelContacts == 4;
+    }
+    constraint def CushionedDescent {
+        in downwardSpeedMps : Real;
+        downwardSpeedMps >= 0.0 and downwardSpeedMps <= 5.0;
+    }
+    constraint def FiniteCourseInventory {
+        in unlimitedAir : Real;
+        in nativeMassErrorKg : Real;
+        unlimitedAir < 0.5 and nativeMassErrorKg >= 0.0 and nativeMassErrorKg < 0.05;
+    }
+    requirement def CourseFlow {
+        doc /* Complete all three cube crossings without stopping before the ramp. Sampled native speed must remain at least 25 m/s in phases 1 through 3. Study game target. */
+        require ContinuousCourse;
+    }
+    requirement def ClearCubes {
+        doc /* Clear every cube without a pair-filtered native body or wheel impact exceeding 1 N s. Ground contacts are excluded. Study game target. */
+        require CleanCubeJump;
+    }
+    requirement def CourseRefills {
+        doc /* Both waypoints shall replenish consumed inventory while moving at least 25 m/s, adding more than 50 kg total across the run. These are explicit game service boundaries. */
+        require RollingServices;
+    }
+    requirement def CourseClimb {
+        doc /* Reach above 17 m while the fan seal exceeds 0.4 and measured suction exceeds 20 kN. This qualifies a fan-supported climb, not an independent fan calibration. */
+        require FanSupportedClimb;
+    }
+    requirement def CourseLanding {
+        doc /* After a measured aerial roll, land on the return road facing away from the ramp, upright on all four native wheel contacts, then stop. */
+        require ReturnLanding;
+    }
+    requirement def LandingSeverity {
+        doc /* Sampled downward speed in the last metre before landing shall not exceed 5 m/s. This is an acceptance quality target; it does not alter contact forces or gate the game checkpoint. */
+        require CushionedDescent;
+    }
+    requirement def CourseInventory {
+        doc /* Use finite air throughout the run and match native chassis mass to the final Modelica inventory within 0.05 kg. */
+        require FiniteCourseInventory;
+    }
+    requirement <'RR-C01'> courseFlow : CourseFlow { subject track : SkillTrack; }
+    requirement <'RR-C02'> clearCubes : ClearCubes { subject track : SkillTrack; }
+    requirement <'RR-C03'> courseRefills : CourseRefills { subject track : SkillTrack; }
+    requirement <'RR-C04'> courseClimb : CourseClimb { subject track : SkillTrack; }
+    requirement <'RR-C05'> courseLanding : CourseLanding { subject track : SkillTrack; }
+    requirement <'RR-C06'> landingSeverity : LandingSeverity { subject track : SkillTrack; }
+    requirement <'RR-C07'> courseInventory : CourseInventory { subject track : SkillTrack; }
+    satisfy courseFlow by skillTrack;
+    satisfy clearCubes by skillTrack;
+    satisfy courseRefills by skillTrack;
+    satisfy courseClimb by skillTrack;
+    satisfy courseLanding by skillTrack;
+    satisfy landingSeverity by skillTrack;
+    satisfy courseInventory by skillTrack;
+    verification def VerifySkillCourse {
+        subject track : SkillTrack;
+        objective {
+            verify courseFlow;
+            verify clearCubes;
+            verify courseRefills;
+            verify courseClimb;
+            verify courseLanding;
+            verify landingSeverity;
+            verify courseInventory;
+        }
+    }
+    part courseStudy : EvidenceSource {
+        attribute role : EvidenceSourceRole = "StudyAssumption";
+        attribute locator : SourceLocator = "../references/dynamic-course.md";
+    }
+    part evidenceCourseFlow : RequirementEvidence { ref targetRequirement = courseFlow; ref sources = (courseStudy); }
+    part evidenceClearCubes : RequirementEvidence { ref targetRequirement = clearCubes; ref sources = (courseStudy); }
+    part evidenceCourseRefills : RequirementEvidence { ref targetRequirement = courseRefills; ref sources = (courseStudy); }
+    part evidenceCourseClimb : RequirementEvidence { ref targetRequirement = courseClimb; ref sources = (courseStudy); }
+    part evidenceCourseLanding : RequirementEvidence { ref targetRequirement = courseLanding; ref sources = (courseStudy); }
+    part evidenceLandingSeverity : RequirementEvidence { ref targetRequirement = landingSeverity; ref sources = (courseStudy); }
+    part evidenceCourseInventory : RequirementEvidence { ref targetRequirement = courseInventory; ref sources = (courseStudy); }
 }

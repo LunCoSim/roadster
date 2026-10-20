@@ -29,6 +29,7 @@ Automated reproduction:
 ```
 python3 scripts/check_keyboard_course.py --launch --manual --binary /path/to/luncosim
 python3 scripts/check_keyboard_course.py --launch --manual --autopilot --binary /path/to/luncosim
+python3 scripts/check_keyboard_course.py --launch --manual --autopilot --operator-checks --binary /path/to/luncosim
 python3 scripts/check_camera.py --port 4198
 ```
 
@@ -64,3 +65,10 @@ Record manual observations independently: automated native window injection is
 not evidence that a human has completed these steps with OS keyboard delivery.
 See [the dynamic course design](../references/dynamic-course.md) for math,
 measurements and the timing matrix command.
+
+The `--operator-checks` run uses the native HUD and keyboard path to pause an
+active autopilot, verify frozen pose/inventory/time, resume without takeover,
+press W to take over, and click RETRY COURSE after the first waypoint. It checks a fresh Twin lifetime,
+reset air/mission/ownership, then completes the full course and stops the pilot through its HUD button. Retry may preserve
+public prim IDs; a new ID is not required. The operator checks run in their own
+window and port. Avoid using that window's keys during automation.

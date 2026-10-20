@@ -153,7 +153,7 @@ study assumptions. See [storage](references/gas-storage.md) and
 python3 scripts/run_launch.py --binary .scratch/luncosim
 python3 scripts/run_motor_launch.py --binary .scratch/luncosim
 python3 scripts/run_ramp_entries.py --binary .scratch/luncosim
-python3 scripts/run_scene_check.py roadster_course_check ROADSTER_COURSE --ticks 4800
+python3 scripts/run_scene_check.py roadster_course_check ROADSTER_COURSE --verification Roadster::VerifySkillCourse --ticks 2400
 python3 scripts/check_controls.py --port 4198
 python3 scripts/check_driving.py
 python3 scripts/check_effects.py
@@ -162,7 +162,9 @@ python3 scripts/check_keyboard_course.py --launch --manual --binary /path/to/lun
 
 The HUD **RUN AUTOPILOT** button uses the same behavior tree and Modelica guidance
 as the keyboard client. Driving or jet keys take over. Add `--autopilot` to the
-keyboard test command to exercise its real HUD button. The standalone course gate
+keyboard test command to exercise its real HUD button. Add `--operator-checks`
+with `--autopilot --manual --launch` to verify active pause, manual takeover,
+HUD retry and then full course completion. The standalone course gate
 observes this shared production pilot; it does not carry a separate control law.
 See [manual acceptance steps](tests/manual-course.md) and the
 [course review](reviews/shared-course-tree.md) and [dynamic-course design](references/dynamic-course.md).

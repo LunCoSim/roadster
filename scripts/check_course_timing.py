@@ -12,7 +12,7 @@ def main():
         started=time.time()
         result=subprocess.run([sys.executable,str(ROOT/'scripts/run_scene_check.py'),
             'roadster_course_'+case,'ROADSTER_COURSE','--ticks','2400',
-            '--result-name','dynamic-'+case,'--binary',str(binary)],cwd=ROOT,
+            '--result-name','dynamic-'+case,'--binary',str(binary)]+(['--verification','Roadster::VerifySkillCourse'] if case=='check' else []),cwd=ROOT,
             stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
         path=ROOT/'results'/f'dynamic-{case}.json'
         record=json.loads(path.read_text()) if path.exists() and path.stat().st_mtime>=started else {}
@@ -22,8 +22,9 @@ def main():
             collision_impulse_ns=record.get('peak_cube_collision_impulse_ns'),report=str(path.relative_to(ROOT))))
         print(json.dumps(rows[-1]),flush=True)
         if result.returncode:print(result.stdout[-2000:],file=sys.stderr)
-    files=['models/CoursePilot.mo','models/SkillCourse.mo','models/RoadsterVehicle.mo',
+    files=['requirements/roadster.sysml','twin.toml','models/CoursePilot.mo','models/SkillCourse.mo','models/RoadsterVehicle.mo',
            'scenarios/skill_course.rhai','scenarios/tests/course_pilot.rhai',
+           'vehicles/roadster.usda',
            'scenes/roadster_skill_course.usda','scenes/roadster_course_check.usda',
            'scenes/roadster_course_early.usda','scenes/roadster_course_late.usda']
     summary=dict(ok=all(row['ok'] for row in rows),cases=rows,

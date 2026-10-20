@@ -87,7 +87,7 @@ qualification.
 ```
 python3 scripts/check_course_timing.py --binary /path/to/luncosim
 python3 scripts/check_keyboard_course.py --launch --manual --binary /path/to/luncosim
-python3 scripts/check_keyboard_course.py --launch --manual --autopilot --binary /path/to/luncosim
+python3 scripts/check_keyboard_course.py --launch --manual --autopilot --operator-checks --binary /path/to/luncosim
 ```
 
 The first command runs the actual shared autopilot and early/late timing cases.
@@ -96,3 +96,25 @@ impulse; merely rejecting a checkpoint is insufficient. Nominal acceptance rejec
 cube contact. Only the listed timing offsets are established, not an exact full
 success window. The two UI clients exercise native Bevy keyboard/pointer delivery
 with the original physics; physical OS keyboard delivery remains a human check.
+
+## Requirements and failure ownership
+
+`Roadster::VerifySkillCourse` is registered in `twin.toml`. Seven source-linked
+SysML constraints cover continuous speed/completion, clean cube clearance,
+rolling services, fan-supported height, upright return-road landing, descent
+severity and finite-air/native-mass consistency. The observer binds measured
+values to those constraints; limits live in `requirements/roadster.sysml`.
+The primary `Roadster::VerifyRunner` launch case remains separate.
+
+The production tree rejects an actual cube impact exceeding 1 N s using native
+pair-filtered contact evidence for the chassis and four wheel bodies. Road
+contact never counts as cube contact. This is mission policy, not a modified
+contact law. Modelica classifies continuous failures (time, launch, carry speed,
+refill miss, incomplete roll); the tree latches their code or its native collision
+failure, and the HUD names the cause until retry. Landing severity remains an
+acceptance quality check, not an additional gameplay failure rule.
+
+The operator acceptance additionally exercises active pause, W takeover and a
+native HUD retry after the first rolling service, then completes the course and
+stops the completed pilot through its HUD button. It reestablishes manual
+stepping after retry because a fresh scene intentionally resets transport state.

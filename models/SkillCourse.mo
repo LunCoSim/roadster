@@ -50,6 +50,7 @@ model SkillCourse
   output Real crest_gate;
   output Real airborne_gate;
   output Real healthy;
+  output Real failure_reason "0 healthy, 1 timeout, 2 launch, 3 carry speed, 4 refill miss, 5 incomplete roll";
   Real target_y;
   Real target_z;
 equation
@@ -87,11 +88,12 @@ equation
   block_crossed = noEvent(if position_z<= -103.6-12.0*blocks then 1.0 else 0.0);
   crest_gate = noEvent(if position_y>17.8 and position_z> -301.0 then 1.0 else 0.0);
   airborne_gate = noEvent(if airborne>0.8 and position_y>10.0 then 1.0 else 0.0);
-  healthy = noEvent(if elapsed>180.0 or (stage<0.5 and position_z<125.0 and launch_gate<0.5)
-    or (stage>0.5 and stage<3.5 and position_z<135.0 and speed<25.0)
-    or (abs(stage-6)<0.5 and position_y<1.0 and airborne<0.2
-      and (roll_rotation<150.0))
-    or (abs(stage-1)<0.5 and position_z<32.0) or (abs(stage-3)<0.5 and position_z< -208.0) then 0.0 else 1.0);
+  failure_reason = noEvent(if elapsed>180.0 then 1.0
+    else if stage<0.5 and position_z<125.0 and launch_gate<0.5 then 2.0
+    else if stage>0.5 and stage<3.5 and position_z<135.0 and speed<25.0 then 3.0
+    else if (abs(stage-1)<0.5 and position_z<32.0) or (abs(stage-3)<0.5 and position_z< -208.0) then 4.0
+    else if abs(stage-6)<0.5 and position_y<1.0 and airborne<0.2 and roll_rotation<150.0 then 5.0 else 0.0);
+  healthy = noEvent(if failure_reason>0.5 then 0.0 else 1.0);
   landing_gate = noEvent(if abs(position_x)<6.0 and position_z> -295.0 and position_z< -230.0
     and position_y<1.5 and up_y>0.95 and speed<0.2 and airborne<0.2 and roll_rotation>150.0 and forward_z>0.94 then 1.0 else 0.0);
 end SkillCourse;

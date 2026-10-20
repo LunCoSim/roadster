@@ -418,6 +418,8 @@ def Xform "Roadster" (
     custom double outputs:course_air_pitch_degrees = 0.0
     custom double outputs:course_landing_impact_speed = 0.0
     custom double inputs:course_jump_timing_offset_s = 0.0
+    custom double inputs:course_failure_code = 0.0
+    custom double outputs:course_failure_reason = 0.0
     variantSet "trim" = {
         "Performance" {
             float inputs:boost_available = 0.0

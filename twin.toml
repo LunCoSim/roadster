@@ -17,6 +17,12 @@ scene = "scenes/roadster_launch.usda"
 script = "scenarios/tests/launch.rhai"
 verdict_channel = "ROADSTER_RUNNER"
 
+[[verification.cases]]
+name = "Roadster::VerifySkillCourse"
+scene = "scenes/roadster_course_check.usda"
+script = "scenarios/tests/course_pilot.rhai"
+verdict_channel = "ROADSTER_COURSE"
+
 [[components]]
 name = "roadster.vehicle"
 requirements = "requirements/roadster.sysml"

@@ -3,6 +3,8 @@ model RoadsterVehicle
   parameter Real course_enabled = 0;
   output Real skill_course_active;
   input Real course_phase;
+  input Real course_failure_code = 0.0 "Latched native task failure: 6 cube impact, 7 checkpoint; 1-5 from SkillCourse";
+  output Real course_failure_reason;
   input Real course_blocks_passed;
   input Real course_position_y;
   input Real course_action;
@@ -444,6 +446,7 @@ equation
   course_crest_gate = course.crest_gate;
   course_airborne_gate = course.airborne_gate;
   course_healthy = course.healthy;
+  course_failure_reason = noEvent(if course_failure_code>0.5 then course_failure_code else course.failure_reason);
   pilot_command_throttle = pilot.command_throttle;
   pilot_command_steer = pilot.command_steer;
   pilot_command_brake = pilot.command_brake;

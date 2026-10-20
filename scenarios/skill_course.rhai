@@ -4,6 +4,7 @@
 fn simulation_dependencies(me, ctx) {
     let car = find_path("/World/Roadster");
     let reads=[car];for corner in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+corner));}
+    for i in 0..3 {reads.push(find_path("/World/JumpBlock"+i.to_string()));}
     #{modelica_entities:[car], entity_reads:reads, entity_writes:[car],
       query_reads:["ReadPorts"], required_inputs:[]}
 }
@@ -25,7 +26,21 @@ fn phase_node(phase, action, message) {
 fn action_node(action) {
     once(|me| { cmd("SetPorts", #{target:this.car, writes:[["course_action",action*1.0]]}); })
 }
-fn healthy(me) { readings(this.car,["course_healthy"]).course_healthy > 0.5 }
+fn healthy(me) {
+    // Mission qualification from native pair evidence; never an extra force law.
+    let z=world_pos(this.car)[2];
+    if this.phase==2 && z< -94.0 && z> -132.0 {
+        for cube in this.cubes { for body in this.contact_bodies {
+            let c=contact_debug(body,cube);
+            if c.total_normal_impulse+c.continuous_normal_impulse>1.0 {
+                this.failure_code=6.0;return false;
+            }
+        }}
+    }
+    let v=readings(this.car,["course_healthy","course_failure_reason"]);
+    if v.course_healthy<0.5 {this.failure_code=v.course_failure_reason;return false;}
+    true
+}
 fn launched(me) { readings(this.car,["launch_gate"]).launch_gate > 0.5 }
 fn launch_started(me) { readings(this.car,["course_launch_started"]).course_launch_started > 0.5 }
 fn in_refill_zone(me) { readings(this.car,["refill_zone"]).refill_zone > 0.5 }
@@ -69,10 +84,13 @@ fn barrier_node() {
 }
 fn on_start(me, ctx) {
     this.car = find_path("/World/Roadster");
+    this.failure_code=7.0;
+    this.cubes=[];for i in 0..3 {this.cubes.push(find_path("/World/JumpBlock"+i.to_string()));}
+    this.contact_bodies=[this.car];for corner in ["FL","FR","RL","RR"] {this.contact_bodies.push(find_path("/World/Roadster/Wheel_"+corner));}
     this.phase = 0; this.blocks = 0; this.autopilot = false;
     this.last_controls = [];
     for name in ["TASK_FAILED","runtime.ui.action","roadster.pilot.controls","intent.edge"] {subscribe(name);}
-    cmd("SetPorts",#{target:this.car,writes:[["course_phase",0.0],
+    cmd("SetPorts",#{target:this.car,writes:[["course_phase",0.0],["course_failure_code",0.0],
         ["course_action",0.0],["course_blocks_passed",0.0],["course_autopilot_enable",0.0]]});
 }
 fn task(me, ctx) {
@@ -128,12 +146,12 @@ fn stop_setpoint() {
 fn on_event(me, evt, ctx) {
     if evt.name == "TASK_FAILED" && evt.source == me {
         this.phase = 8; this.autopilot = false;
-        let writes = stop_setpoint(); writes.push(["course_phase",8.0]);
+        let writes = stop_setpoint(); writes.push(["course_phase",8.0]);writes.push(["course_failure_code",this.failure_code]);
         cmd("SetPorts",#{target:this.car,writes:writes});
-        notify("Course missed or timed out. Retry to reset the car, air and mission tree.");
+        notify("Course missed: see the HUD reason. Retry resets car, air and mission tree.");
     }
     if evt.name == "runtime.ui.action" && evt.value.action == "roadster.autopilot" {
-        if this.phase >= 7 { notify("Retry the course before starting the autopilot."); return; }
+        if this.phase >= 7 && !this.autopilot { notify("Retry the course before starting the autopilot."); return; }
         this.autopilot = !this.autopilot; this.last_controls = [];
         if this.autopilot {
             cmd("SetPorts",#{target:this.car,writes:[["course_autopilot_enable",1.0]]});
