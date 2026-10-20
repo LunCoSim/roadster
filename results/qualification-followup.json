@@ -1,6 +1,6 @@
 {
   "date": "2026-10-20",
-  "status": "Model and native-input checks pass; OS delivery unqualified",
+  "status": "Current counterclockwise course and native-window autopilot checks pass; earlier battery/launch/hold snapshots retained; OS delivery unqualified",
   "reports": [
     {
       "report": "results/battery-study.json",
@@ -14,14 +14,20 @@
         "thrust_no_cabin_air": true,
         "equal_initial_storage_density": true
       },
-      "failures": []
+      "failures": [],
+      "source_mismatches": [
+        "models/CoursePilot.mo"
+      ],
+      "snapshot_scope": "Earlier recorded source snapshot"
     },
     {
       "report": "results/dynamic-timing.json",
-      "sha256": "65ac3af6daa4ba70034fbaea57f45baa7f57364e52ba575a843dde01e459dd5b",
+      "sha256": "999998b64fbd215abe00d8552b88e82105f295246ae75823d9c2542ec33bd53f",
       "ok": true,
       "checks": {},
-      "failures": []
+      "failures": [],
+      "source_mismatches": [],
+      "snapshot_scope": "Current source snapshot"
     },
     {
       "report": "results/jump-window.json",
@@ -34,7 +40,12 @@
         "early_failure": true,
         "late_failure": true
       },
-      "failures": []
+      "failures": [],
+      "source_mismatches": [
+        "models/CoursePilot.mo",
+        "scenarios/skill_course.rhai"
+      ],
+      "snapshot_scope": "Earlier recorded source snapshot"
     },
     {
       "report": "results/native-hold.json",
@@ -46,7 +57,11 @@
         "KeyW_held_through_repeat": true,
         "KeyW_release": true
       },
-      "failures": []
+      "failures": [],
+      "source_mismatches": [
+        "models/CoursePilot.mo"
+      ],
+      "snapshot_scope": "Earlier recorded source snapshot"
     },
     {
       "report": "results/battery-operator.json",
@@ -77,7 +92,12 @@
         "completion_hud": true,
         "completed_pilot_stop": true
       },
-      "failures": []
+      "failures": [],
+      "source_mismatches": [
+        "models/CoursePilot.mo",
+        "scenarios/skill_course.rhai"
+      ],
+      "snapshot_scope": "Earlier recorded source snapshot"
     },
     {
       "report": "results/battery-keyboard.json",
@@ -104,7 +124,12 @@
         "control_mode": true,
         "completion_hud": true
       },
-      "failures": []
+      "failures": [],
+      "source_mismatches": [
+        "models/CoursePilot.mo",
+        "scenarios/skill_course.rhai"
+      ],
+      "snapshot_scope": "Earlier recorded source snapshot"
     },
     {
       "report": "results/os-hold.json",
@@ -113,7 +138,11 @@
       "checks": {},
       "failures": [
         "Owned OS test window did not retain foreground focus for 300 ms; no input sent"
-      ]
+      ],
+      "source_mismatches": [
+        "models/CoursePilot.mo"
+      ],
+      "snapshot_scope": "Earlier recorded source snapshot"
     },
     {
       "report": "results/os-keyboard.json",
@@ -122,7 +151,46 @@
       "checks": {},
       "failures": [
         "Owned OS test window did not retain foreground focus for 300 ms; no input sent"
-      ]
+      ],
+      "source_mismatches": [
+        "models/CoursePilot.mo",
+        "scenarios/skill_course.rhai"
+      ],
+      "snapshot_scope": "Earlier recorded source snapshot"
+    },
+    {
+      "report": "results/counterclockwise-roll.json",
+      "sha256": "90b8ea3f9bed182d2504f086a95bc3d07aa9c4b98fb6194aa9def41374bf9e4c",
+      "ok": true,
+      "snapshot_scope": "Current roll correction",
+      "checks": {}
+    },
+    {
+      "report": "results/counterclockwise-keyboard.json",
+      "sha256": "c4f3b999d463498733228ae78463ef60c5570be8f3c2ccc908ebe1f666425abb",
+      "ok": true,
+      "snapshot_scope": "Current roll correction",
+      "checks": {
+        "no_cube_contact": true,
+        "course_complete": true,
+        "blocks": true,
+        "two_waypoint_refills": true,
+        "refill_mass_added": true,
+        "finite_air": true,
+        "air_turn": true,
+        "roll_recovery": true,
+        "heading_away": true,
+        "on_road": true,
+        "cushioned_landing": true,
+        "continuous_run": true,
+        "upright": true,
+        "stopped": true,
+        "four_wheels": true,
+        "native_mass": true,
+        "pause": true,
+        "control_mode": true,
+        "completion_hud": true
+      }
     }
   ],
   "launch_report": "results/launch-report.json",
@@ -139,5 +207,6 @@
     "Human course completion deferred by user",
     "Compatibility checks excluded by user",
     "Battery and hardware parameters remain source-informed study assumptions"
-  ]
+  ],
+  "previous_qualification_commit": "29fdb24"
 }

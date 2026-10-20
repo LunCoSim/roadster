@@ -109,7 +109,7 @@ fn task(me, ctx) {
             wait_until(Fn("climbed")),
             phase_node(5,7,"CREST: follow the return lip; prepare the flip and switch fans OFF at the crest."),
             wait_until(Fn("at_crest")), action_node(8), wait_until(Fn("in_flight")),
-            phase_node(6,9,"FLIP: Q/E rolls wheels-down, keep nose AWAY from ramp. R/C and J/L trim attitude."),
+            phase_node(6,9,"FLIP: E rolls counterclockwise viewed from behind; Q counterpulses. Keep nose AWAY. R/C and J/L trim."),
             wait_until(Fn("roll_ready")),
             phase_node(6,12,"LAND: nose AWAY from ramp. K cushions descent; Shift brakes after touchdown."),
             // Losing any landing condition resets the native task dwell.

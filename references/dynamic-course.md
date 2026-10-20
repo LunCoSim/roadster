@@ -14,7 +14,7 @@ flowchart LR
   B --> C[Timed K pulse across three cubes]
   C --> D[Rolling refill]
   D --> E[F fans ON: climb and return lip]
-  E --> F[Fans OFF: Q/E roll wheels-down]
+  E --> F[Fans OFF: E counterclockwise roll, Q counterpulse]
   F --> G[Yaw/pitch trim and bank toward road]
   G --> H[K cushion: Shift on contact]
   H --> I[Four wheels, nose away, stopped]
@@ -61,6 +61,13 @@ The pilot uses native body attitude, rates, velocity and measured wheel heading.
 It requests ordinary digital steering and valves. Quaternion error and a
 finite-torque stopping envelope set attitude rates. Short pitch/roll pulses
 approximate angular impulse rather than forcing an orientation.
+
+The default flip is counterclockwise when viewed from behind toward the nose
+(positive body +Z roll). Near the inverted exit, `flip_roll_direction=1` selects
+that quaternion-error branch explicitly. Tiny attitude errors no longer choose
+the opposite half-turn. After leaving the inverted region the pilot resumes
+shortest-path attitude correction for braking and landing trims. E initiates
+the roll; Q counterpulses. Manual key-to-thruster mappings are unchanged.
 
 After roll recovery, lateral position/velocity request a small bank (bounded to
 0.24 rad). The actual lift vector then counters sideways drift. Descent braking

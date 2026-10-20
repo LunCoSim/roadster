@@ -27,6 +27,7 @@ model CoursePilot
   parameter Real pulse_period = 0.1;
   parameter Real pulse_on = 0.05;
   parameter Real attitude_gain[3] = {4.0,3.5,3.0};
+  parameter Real flip_roll_direction = 1.0 "Positive body +Z: counterclockwise viewed from behind toward the nose";
   output Real recommended_yaw_direction;
   output Real jump_impulse_ready;
   output Real takeoff_gate;
@@ -69,6 +70,7 @@ protected
   Real target_rate[3];
   Real rotation_length;
   Real rotation_scale;
+  Real rotation_sign;
   Real attitude_error[3];
   Real rate_error[3];
   Real cruise_speed;
@@ -146,8 +148,15 @@ equation
       attitude[1]*cos(target_bank/2)-attitude[4]*sin(target_bank/2),
       -attitude[2]*cos(target_bank/2)+attitude[3]*sin(target_bank/2)};
   rotation_length = sqrt(error_quaternion[2]^2+error_quaternion[3]^2+error_quaternion[4]^2);
-  rotation_scale = noEvent((if error_quaternion[1]>=0 then 1.0 else -1.0)
-    *2*atan2(rotation_length,abs(error_quaternion[1]))*180/3.141592653589793/max(1e-9,rotation_length));
+  // At an inverted exit both half-turns reach the same upright attitude.
+  // Select the requested roll branch near inversion instead of letting tiny
+  // attitude errors choose clockwise. Once clear, use shortest-path recovery
+  // for normal landing trims. Only digital valve suggestions change.
+  rotation_sign = noEvent(if flight>0.5 and up_y< -0.8 then
+    (if flip_roll_direction*error_quaternion[4]>=0 then 1.0 else -1.0)
+    else if error_quaternion[1]>=0 then 1.0 else -1.0);
+  rotation_scale = noEvent(rotation_sign
+    *2*atan2(rotation_length,rotation_sign*error_quaternion[1])*180/3.141592653589793/max(1e-9,rotation_length));
   attitude_error = rotation_scale*{error_quaternion[2],error_quaternion[3],error_quaternion[4]};
   // Stopping-speed envelope from current finite-gas torque authority. The margin
   // covers valve lag and digital sampling; pitch/roll use half-duty pulses.

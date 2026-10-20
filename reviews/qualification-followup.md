@@ -1,5 +1,10 @@
 # Automated qualification follow-up — 2026-10-20
 
+This records the checks completed for `29fdb24`. See the later
+[counterclockwise flip correction](counterclockwise-roll.md) for the current
+roll direction and course evidence. Older reports retain their own source
+fingerprints; they are not silently relabeled as runs of the later guidance.
+
 ## Battery assumptions with sources
 
 The user requested public-information assumptions and source comments, and

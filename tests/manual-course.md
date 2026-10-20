@@ -53,7 +53,8 @@ checkpoint is retained in `df958b5`; the current default must land nose away.
 - After clearing the cubes, K cushions the fast landing before the second
   refill. Then F fans ON. Carry speed onto the ramp, then ease to
   23 km/h on the upper curve. Verify sealed fan state while inverted.
-- At the crest, F OFF. Q/E rolls wheels-down; counterpulse before over-rotation.
+- At the crest, F OFF. E initiates the counterclockwise roll when viewed from
+  behind toward the nose; Q counterpulses before over-rotation.
   Keep the nose away from the ramp, use J/L and R/C to trim, and K to cushion.
   Bank inward if drifting sideways; Shift on contact until stopped.
 - Completion must show four wheel contacts and nose away inside the green road
