@@ -1,0 +1,38 @@
+{
+  "scope": "Visual shell authoring and native render inspection; no new dynamics qualification",
+  "baseline_commit": "c74aaeb207058e8f54363e09a82bbbebb5b39fff",
+  "screenshots": [
+    "results/body-before-front.png",
+    "results/body-before-side.png",
+    "results/body-after-front.png",
+    "results/body-after-side.png",
+    "results/body-after-rear.png",
+    "results/body-after-front-lit.png"
+  ],
+  "existing_collision_definitions_unchanged": {
+    "BatteryFloorCollider": true,
+    "NoseCollider": true,
+    "RearDeckCollider": true,
+    "CabinCollider": true,
+    "RockerLeft": true,
+    "RockerRight": true,
+    "FrontCrashBar": true
+  },
+  "readiness": {
+    "ready": true,
+    "world_hold": false,
+    "faulted": false,
+    "fault": null,
+    "readiness_tracked": true,
+    "pending_count": 0,
+    "pending": []
+  },
+  "source_sha256": {
+    "components/body.usda": "63ff447a4e976fe4f19aed298809ee9d93e51d985ec1cd4c8b299bd2fd9de0ea",
+    "scripts/author_body_style.py": "6425895251453389cb8c7d15707d1b65be009cd9cba71b2330dea29af78e14f5",
+    "scripts/author_contact_upgrade.py": "dc8a2a03327df56f2ba76055279727e8bc9b1180a496dbac9a4d8fbbb8f95a9a",
+    "references/body-style.md": "9bd7eb75c18d76cd93fd9fe862cfa9e43949cfc4e1d9a73b0093c4e51bbf538c"
+  },
+  "reference": "https://www.motortrend.com/news/first-look-2028-tesla-roadster-performance-thrust-rocket/photos",
+  "authoring": "OpenFile / ApplyUsdOps / SaveDocument"
+}

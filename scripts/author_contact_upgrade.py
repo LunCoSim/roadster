@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Author native wheel bodies, limited spring sliders, and physical steering."""
 from author_surface_probes import q,ROOT,await_doc
-from math import sqrt
-import ast
 
 def edit(file,root,build):
  q('OpenFile',path=str(ROOT/file));doc=await_doc(lambda d:file in str(d));ops=[]
@@ -63,17 +61,9 @@ def vehicle(a,add,s,rel,op,read):
   op('RemoveRelationship',path=wheel,name='physics:filteredPairs')
 
 def body(a,add,s,rel,op,read):
- # Upper swept tire envelope at the mechanical bump stop, plus 30 mm clearance.
- points=[list(p) for p in ast.literal_eval(read('/Body/Skin','points'))]
- for offset in range(0,len(points),6):
-  section=points[offset:offset+6];z=section[0][2];lower=-.30
-  for axle in [-1.375,1.375]:
-   distance=abs(z-axle)
-   if distance<.395:lower=max(lower,-.21+.065+sqrt(.395**2-distance**2))
-  section[0][1]=lower;section[5][1]=lower
-  top=max(section[1][1],lower+.025);section[1][1]=top;section[4][1]=top
-  section[2][1]=max(section[2][1],top+.04);section[3][1]=section[2][1]
- a('/Body/Skin','points','point3f[]',str([tuple(p) for p in points]))
+ # Tire clearance belongs to the collision envelopes below. The independent
+ # visual shell/wheel openings are authored by author_body_style.py; raising
+ # an entire skin section here used to create artificial humps across the hood.
 
  # The old boxes cut across the wheel wells. Leave tire width + native contact
  # margin clear throughout full travel; keep real side support between axles.

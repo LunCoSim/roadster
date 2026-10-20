@@ -59,3 +59,9 @@ The delivered mesh is original procedural study geometry, not Tesla CAD.
 - S11: [2025 primary cell teardown](https://doi.org/10.1016/j.xcrp.2025.102453), earlier 2022 Tesla 4680 cell energy/mass/volume proxies; not Roadster cell calibration.
 - S12: [Tesla battery engineering](https://www.tesla.com/learn/engineering-tesla-vehicle-batteries-safety-durability-longevity), 4680 chemistry and thermal design context.
 - A-B01…A-B06: explicit study choices and calculations in [battery-study.md](battery-study.md) and inline comments in `models/BatteryStudy.mo`. The 120 kWh baseline is inferred, not manufacturer-issued.
+
+## Body appearance follow-up — 2026-10-20
+
+The [body styling note](body-style.md) links the inspected reveal photographs and
+documents the independent hood surface, side-only wheel openings, glazing and
+fascia choices. The delivered mesh is original study geometry.
