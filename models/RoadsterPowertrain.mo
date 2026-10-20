@@ -6,7 +6,10 @@ model RoadsterPowertrain
   parameter Real reduction_ratio = 8.4 "Reported planetary ratio, provisional";
   parameter Real reduction_efficiency = 0.97;
   parameter Real efficiency = 0.93;
-  parameter Real capacity_kwh = 100;
+  // A-B01, references/battery-study.md: 120 kWh selected from >100 kWh and
+  // >300-mile reporting; exact energy is withheld in the firsthand interview:
+  // https://www.motortrend.com/news/first-look-2028-tesla-roadster-performance-thrust-rocket
+  parameter Real capacity_kwh = 120 "Source-informed study assumption; see references/battery-study.md";
   parameter Real initial_soc = 0.90;
   parameter Real dry_mass_kg = 1700 "Study mass excluding gas; published target has unspecified trim/fill state";
   parameter Real rho = 1.225;

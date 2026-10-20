@@ -1,0 +1,503 @@
+{
+  "ok": true,
+  "input_path": "InjectWindowInput/native key and repeat events",
+  "scene": "scenes/roadster_rocket.usda",
+  "keys": [
+    {
+      "time_s": 0.0,
+      "key": "ShiftLeft",
+      "state": "Pressed"
+    },
+    {
+      "time_s": 0.0,
+      "key": "KeyD",
+      "state": "Pressed"
+    },
+    {
+      "time_s": 0.0,
+      "key": "KeyD",
+      "state": "Released"
+    },
+    {
+      "time_s": 0.0,
+      "key": "ShiftLeft",
+      "state": "Released"
+    },
+    {
+      "time_s": 0.0,
+      "key": "KeyW",
+      "state": "Pressed"
+    },
+    {
+      "time_s": 0.0,
+      "key": "KeyW",
+      "state": "Released"
+    },
+    {
+      "time_s": 0.0,
+      "key": "ShiftLeft",
+      "state": "Pressed"
+    }
+  ],
+  "samples": [],
+  "stages": [],
+  "screenshots": [
+    "results/native-hold-complete.png"
+  ],
+  "failures": [],
+  "checks": {
+    "KeyD_held_through_repeat": true,
+    "KeyD_release": true,
+    "KeyW_held_through_repeat": true,
+    "KeyW_release": true
+  },
+  "hold_samples": [
+    {
+      "key": "KeyD",
+      "wall_s": 0.08814310398884118,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 0.19335843899170868,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 0.30176960199605674,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 0.41903264497523196,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 0.5512464079947677,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 0.6647142849978991,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 0.790907784976298,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 0.9033630899793934,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 1.0107970279932488,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 1.16396233800333,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 1.2792023729998618,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 1.411513739003567,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 1.5251470939838327,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 1.6389720070001204,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 1.7417091940005776,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 1.8632399369962513,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 1.9730532389949076,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 2.0851659739855677,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 2.1887125429930165,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 2.302868293976644,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 2.4243918229767587,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 2.528134027001215,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 2.64357364497846,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 2.7546424309839495,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 2.871601858001668,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyD",
+      "wall_s": 2.9799061109952163,
+      "native": {
+        "steer": 1.0,
+        "throttle": 0.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 0.10599301700131036,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 0.22016749301110394,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 0.3604869940027129,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 0.47920828001224436,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 0.6003626200254075,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 0.7400688060151879,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 0.8866203840007074,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 1.036276891012676,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 1.2093848120130133,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 1.3592978780216072,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 1.5115089950268157,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 1.6947863780078478,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 1.8796733460039832,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 2.048105886002304,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 2.207023858005414,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 2.3620100780099165,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 2.521068843023386,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 2.6954460450215265,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 2.8494876800104976,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    },
+    {
+      "key": "KeyW",
+      "wall_s": 2.977424256008817,
+      "native": {
+        "steer": 0.0,
+        "throttle": 1.0
+      },
+      "os_state": null
+    }
+  ],
+  "source_sha256": {
+    "config/input-bindings.json": "8d5ea41b98a31b03401d8d385d6be23884c6ba0be9120bfa77a2bb49446d1323",
+    "models/BatteryStudy.mo": "3c92973ba7778ab29b9412eb44c510d8da18afb6aa15b41b16bab28629e17ace",
+    "models/CompressedAir.mo": "986b6b935f1fe5ffc74bf873e2c59a24d60a7a071338fa318adc9ad2f50a1fd0",
+    "models/CoursePilot.mo": "97417224e565b7cef51c6822c160e639dfe1fb2232b0409f6f7ae9d28c65f489",
+    "models/FanAdhesion.mo": "13311ee9e86b07dfbd683b7632be207ee24409e2ecf28ce06b957da76271e19d",
+    "models/HeadlightOptics.mo": "31ff66c7baabcea45317a31d810d2aeb20719e18b85df659d295ee68548f3cb3",
+    "models/JetExpansion.mo": "d3929e170d602d606f9e1eb99d69384d9bc40bf4572d7164ccd3a223f92616cc",
+    "models/LaunchSizing.mo": "1ed6009fd32b410695e52d26ea1643d7f9aa54fa64928445cff025d47aebb34b",
+    "models/RoadsterPowertrain.mo": "6e9d17cde3f0929e0317582f2005fe11011d22db634184ecb9019d3cfbe4d71e",
+    "models/RoadsterVehicle.mo": "4868c71b8f1ea286e9834bc269c9b8ca34fd796af9a945e394177d0869e51137",
+    "models/SkillCourse.mo": "bd8281d48502ac0991d38fe6476e0111601a1ce9f04ab9a98844e77f3b72d20d",
+    "models/SteeringDriver.mo": "f32362a53c489bf98df8611b3c81f6a6281da273476985ede58a1031c4a5c060",
+    "models/SuctionFan.mo": "472b27e486d20af8dc01c0c76bb2a2d3118b536da6fe2adfcf54e0adddc97b31",
+    "models/TankHeatTransfer.mo": "9eaa122341c83d0a8605619dcd9c3c401616d964c9b578510060f838d381bddb",
+    "models/ThrusterMount.mo": "60742a4225d89ee446a1e8517623956995d82102264a5b428e569a7fd54e4dea",
+    "models/VehicleAerodynamics.mo": "af512167a0532c5cb89d426649847bb900095d75ea3711a9bcac047a6ca62eab",
+    "scenes/roadster_rocket.usda": "ffe1c4c6fe9043f0ecc5e0173d48b6274bc3eb4376d48ccba6ba0666a4fcea6f",
+    "scripts/check_keyboard_course.py": "2d3de6f715bb41b102c6953e7a58d484b1f4697a535a369983b1506a50aec8ab",
+    "scripts/check_os_hold.py": "482417e0003acff49cc4aecc6732913cc9ecd4a2b3b34e8155754d9a4f01384f",
+    "scripts/x11_window_input.py": "1f55eef73a7cdb302c91f65ecdca1017cd12da1c4ecf517d74e3049ada49ee1b",
+    "vehicles/roadster.usda": "69e6f8e72c984b2b97a89c5cf4c5137f73f74fb3d643a4bad4d4bf5b049261c5"
+  },
+  "binary_sha256": "2a06e0f6082bc9bd68ebeebd36e6e2f8024964cf25856ec8444c4b72b1b9b7b9",
+  "transport_rate": 0.25,
+  "input_lifetimes": [
+    {
+      "course_epoch_s": 0.0,
+      "native_epoch_s": 0.21666666666666667,
+      "twin": "tesla-roadster-runner"
+    }
+  ],
+  "repeat_source": "Explicit native Pressed events with repeat=True; not OS delivery"
+}

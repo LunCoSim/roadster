@@ -27,6 +27,7 @@ def main():
            'vehicles/roadster.usda',
            'scenes/roadster_skill_course.usda','scenes/roadster_course_check.usda',
            'scenes/roadster_course_early.usda','scenes/roadster_course_late.usda']
+    files=sorted(set(files)|{str(p.relative_to(ROOT)) for p in (ROOT/'models').glob('*.mo')})
     summary=dict(ok=all(row['ok'] for row in rows),cases=rows,
         binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),
         source_sha256={name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in files},

@@ -118,3 +118,19 @@ The operator acceptance additionally exercises active pause, W takeover and a
 native HUD retry after the first rolling service, then completes the course and
 stops the completed pilot through its HUD button. It reestablishes manual
 stepping after retry because a fresh scene intentionally resets transport state.
+
+## Measured jump timing window — 2026-10-20
+
+`results/jump-window.json` records 25 distinct offsets plus a repeated nominal
+trial. Every native frame from **-6 through +6** (offset **-100 to +100 ms**)
+cleared the three cubes without physical contact at the authored guidance speed.
+The adjacent -7 and +7 frame trials fail with measured cube impacts. Positive
+offset requests earlier lift; negative requests later lift. Resolution is 1/60 s,
+not a subframe or all-speed guarantee. Plant/observer source fingerprints are
+held constant throughout the sweep; each case also retains its USD scene hash.
+
+`results/os-keyboard.json` records the latest actual X11 OS-input attempt. The
+desktop did not retain foreground focus, so the guard aborted before driving;
+this is not current full-course acceptance through OS input. The native-injection
+path and HUD-started autopilot remain available. Synthetic input does not
+establish human completion.

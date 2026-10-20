@@ -49,8 +49,6 @@ def Xform "Roadster" (
     double min = 253.15
 }
     )
-    float inputs:rear_tank_volume = 0.20000000298023224
-    float inputs:cabin_tank_volume = 0.4000000059604645
     float inputs:initial_gas_temperature = 293.1499938964844
     float inputs:keyboard_steering_assistance = 1.0
     float inputs:course_enabled = 0.0
@@ -420,15 +418,36 @@ def Xform "Roadster" (
     custom double inputs:course_jump_timing_offset_s = 0.0
     custom double inputs:course_failure_code = 0.0
     custom double outputs:course_failure_reason = 0.0
+    custom float inputs:battery_capacity_kwh = 120.0 (
+        documentation = "120 kWh study assumption from >100 kWh reporting and 300-mile sizing. Editable preparation parameter. BatteryStudy computes mass/inertia deltas from a 120 kWh / 1700 kg reference. See references/battery-study.md. Not a Tesla capacity specification."
+    )
+    custom double outputs:battery_nominal_energy_kwh = 0.0
+    custom double outputs:battery_range_energy_kwh = 0.0
+    custom double outputs:battery_range_proxy_km = 0.0
+    custom double outputs:battery_inferred_capacity_kwh = 0.0
+    custom double outputs:battery_pack_mass_estimate_kg = 0.0
+    custom double outputs:battery_pack_volume_estimate_l = 0.0
+    custom double outputs:battery_non_pack_reference_mass_kg = 0.0
+    custom double outputs:battery_peak_dc_power_kw = 0.0
+    custom double outputs:battery_peak_equivalent_c = 0.0
+    custom double outputs:battery_charge_10_80_energy_kwh = 0.0
+    custom double outputs:battery_charge_10min_average_kw = 0.0
+    custom double outputs:battery_charge_12min_average_kw = 0.0
+    custom double outputs:battery_energy_remaining_kwh = 0.0
+    custom double outputs:gas_capacity_mass_kg = 0.0
+    custom float inputs:reference_gas_mass_kg = 250.0
+    custom float inputs:reference_storage_volume_m3 = 0.6000000238418579
     variantSet "trim" = {
         "Performance" {
             float inputs:boost_available = 0.0
             float inputs:lift_available = 0.0
-            float inputs:gas_capacity_kg = 250.0
+            custom float inputs:rear_tank_volume = 0.20000000298023224
+            custom float inputs:cabin_tank_volume = 0.4000000059604645
         }
         "Thrust" {
             float inputs:boost_available = 1.0
-            float inputs:gas_capacity_kg = 250.0
+            custom float inputs:cabin_tank_volume = 0.0
+            custom float inputs:rear_tank_volume = 0.20000000298023224
             def Xform "RearThrusters" (
                 prepend references = @../components/RearThrusters.usda@</RearThrusters>
             )
@@ -506,7 +525,8 @@ def Xform "Roadster" (
         "Rocket" {
             float inputs:boost_available = 1.0
             float inputs:lift_available = 1.0
-            float inputs:gas_capacity_kg = 250.0
+            custom float inputs:rear_tank_volume = 0.20000000298023224
+            custom float inputs:cabin_tank_volume = 0.4000000059604645
             over "Body"
             {
                 over "PassengerSeat"

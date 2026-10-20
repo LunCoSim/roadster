@@ -91,7 +91,8 @@ model RoadsterVehicle
     attitude={attitude_w,attitude_x,attitude_y,attitude_z},
     rates={pitch_rate_deg_s,yaw_rate_deg_s,roll_rate_deg_s},
     yaw=autopilot_yaw,up_y=up_alignment,airborne=flight_control_weight,
-    wheel_heading=heading_fl,full_lift_force=full_lift_force_n,mass=vehicle_mass_kg,
+    wheel_heading=heading_fl,wheel_heading_rate=-max_heading*steering_driver.rack_velocity,
+    steering_preview_s=steering_driver.command_tau+steering_driver.rack_tau,full_lift_force=full_lift_force_n,mass=vehicle_mass_kg,
     wheelbase=wheelbase,angular_acceleration={
       full_lift_force_n*abs(lift_front_z-mass_center_z)/(1.0+rear_lift_trim)/vehicle_inertia_xx,
       side_yaw_acceleration,full_lift_force_n*0.4/vehicle_inertia_zz});
@@ -174,7 +175,32 @@ model RoadsterVehicle
   input Real piloted;
   parameter Real boost_available = 0;
   parameter Real lift_available = 0;
-  parameter Real gas_capacity_kg = 250;
+  // A-B01/S10: 120 kWh source-informed assumption, not a released Tesla spec.
+  // https://www.motortrend.com/news/first-look-2028-tesla-roadster-performance-thrust-rocket
+  // BatteryStudy.mo and references/battery-study.md record every inference.
+  parameter Real battery_capacity_kwh = 120 "Study energy, not a published Tesla specification";
+  parameter Real reference_vehicle_dry_mass_kg = 1700;
+  BatteryStudy battery(capacity_kwh=battery_capacity_kwh,
+    reference_vehicle_dry_mass_kg=reference_vehicle_dry_mass_kg);
+  output Real battery_nominal_energy_kwh;
+  output Real battery_range_energy_kwh;
+  output Real battery_range_proxy_km;
+  output Real battery_inferred_capacity_kwh;
+  output Real battery_pack_mass_estimate_kg;
+  output Real battery_pack_volume_estimate_l;
+  output Real battery_non_pack_reference_mass_kg;
+  output Real battery_peak_dc_power_kw;
+  output Real battery_peak_equivalent_c;
+  output Real battery_charge_10_80_energy_kwh;
+  output Real battery_charge_10min_average_kw;
+  output Real battery_charge_12min_average_kw;
+  output Real battery_energy_remaining_kwh;
+  // U01/S05: user-selected 250 kg Rocket inventory in 200+400 L. Thrust's
+  // equal-density mass is derived, not a reported Tesla mass specification.
+  // Sources: references/spec-audit.md and https://www.youtube.com/watch?v=22rvpUecLts
+  parameter Real reference_gas_mass_kg = 250;
+  parameter Real reference_storage_volume_m3 = 0.6;
+  parameter Real gas_capacity_kg = reference_gas_mass_kg*(rear_tank_volume+cabin_tank_volume)/reference_storage_volume_m3;
   parameter Real rear_tank_volume(unit="m3") = 0.2;
   parameter Real cabin_tank_volume(unit="m3") = 0.4;
   parameter Real fan_initial_fraction = 0.0;
@@ -283,7 +309,7 @@ model RoadsterVehicle
     autopilot_radius=autopilot_radius,autopilot_turn_only=autopilot_turn_only,
     autopilot_position_x=autopilot_position_x,autopilot_position_z=autopilot_position_z,
     autopilot_yaw=autopilot_yaw,autopilot_yaw_rate=autopilot_yaw_rate,piloted=piloted);
-  RoadsterPowertrain powertrain(
+  RoadsterPowertrain powertrain(capacity_kwh=battery_capacity_kwh,dry_mass_kg=battery.vehicle_dry_mass_kg,
     boost_available=boost_available, lift_available=lift_available,lift_trim={1,rear_lift_trim,1,rear_lift_trim},
     rear_tank_volume=rear_tank_volume,cabin_tank_volume=cabin_tank_volume,
     gas_capacity_kg=gas_capacity_kg,initial_fill=initial_fill,initial_gas_temperature=initial_gas_temperature,
@@ -395,6 +421,7 @@ model RoadsterVehicle
   output Real cabin_tank_air_kg(unit="kg");
   output Real tank_volume_m3;
   output Real gas_mass_kg;
+  output Real gas_capacity_mass_kg;
   output Real tank_pressure_pa;
   output Real jet_force_x;
   output Real jet_force_y;
@@ -626,6 +653,19 @@ equation
   ideal_supply_air_kg = powertrain.ideal_supply_air_kg;
   ideal_supply_power_w = powertrain.ideal_supply_power_w;
   ideal_supply_energy_j = powertrain.ideal_supply_energy_j;
+  battery_nominal_energy_kwh = battery.nominal_energy_kwh;
+  battery_range_energy_kwh = battery.range_energy_kwh;
+  battery_range_proxy_km = battery.range_proxy_km;
+  battery_inferred_capacity_kwh = battery.inferred_capacity_kwh;
+  battery_pack_mass_estimate_kg = battery.pack_mass_estimate_kg;
+  battery_pack_volume_estimate_l = battery.pack_volume_estimate_l;
+  battery_non_pack_reference_mass_kg = battery.non_pack_reference_mass_kg;
+  battery_peak_dc_power_kw = battery.peak_dc_power_kw;
+  battery_peak_equivalent_c = battery.peak_equivalent_c;
+  battery_charge_10_80_energy_kwh = battery.charge_10_80_energy_kwh;
+  battery_charge_10min_average_kw = battery.charge_10min_average_kw;
+  battery_charge_12min_average_kw = battery.charge_12min_average_kw;
+  battery_energy_remaining_kwh = powertrain.soc*battery_capacity_kwh;
   vehicle_mass_kg = powertrain.vehicle_mass_kg;
   // Six mechanism bodies (4 x 5 kg carriers, 2 x 6 kg knuckles) and
   // four 24 kg wheels remain separate native bodies. Never count them twice.
@@ -638,11 +678,14 @@ equation
     -chassis_mass_kg*(chassis_com_z-mass_center_z)^2;
   chassis_inertia_zz = vehicle_inertia_zz-128.0*(0.86^2+0.07^2)-3.3844-0.3
     -chassis_mass_kg*(chassis_com_y-mass_center_y)^2;
+  // A-B06: battery capacity edits add the equivalent box inertia at the
+  // reference vehicle COM. The 120 kWh reference is already in dry inertia;
+  // add only its mass delta. Source/assumptions: references/battery-study.md.
   // Homogenized gas distribution centered at COM, 1.2 x 0.5 x 1.0 m.
   // Dry-car inertia includes wheels. Actual tank placement remains unknown.
-  vehicle_inertia_xx = 3022.0+boost_available*gas_mass_kg*(0.5^2+1.0^2)/12.0;
-  vehicle_inertia_yy = 3494.0+boost_available*gas_mass_kg*(1.2^2+1.0^2)/12.0;
-  vehicle_inertia_zz = 708.0+boost_available*gas_mass_kg*(1.2^2+0.5^2)/12.0;
+  vehicle_inertia_xx = 3022.0+battery.pack_mass_delta_kg*(battery.pack_height_m^2+battery.pack_length_m^2)/12.0+boost_available*gas_mass_kg*(0.5^2+1.0^2)/12.0;
+  vehicle_inertia_yy = 3494.0+battery.pack_mass_delta_kg*(battery.pack_width_m^2+battery.pack_length_m^2)/12.0+boost_available*gas_mass_kg*(1.2^2+1.0^2)/12.0;
+  vehicle_inertia_zz = 708.0+battery.pack_mass_delta_kg*(battery.pack_width_m^2+battery.pack_height_m^2)/12.0+boost_available*gas_mass_kg*(1.2^2+0.5^2)/12.0;
   tank_temperature_k = powertrain.tank_temperature_k;
   tank_volume_m3 = powertrain.tank_volume_m3;
   rear_tank_air_kg = powertrain.rear_tank_air_kg;
@@ -682,6 +725,7 @@ equation
     +2.0*(attitude_y*attitude_z+attitude_w*attitude_x)*moment_body_y
     +(1.0-2.0*(attitude_x^2+attitude_y^2))*moment_body_z;
   gas_mass_kg = powertrain.gas_mass_kg;
+  gas_capacity_mass_kg = gas_capacity_kg;
   tank_pressure_pa = powertrain.tank_pressure_pa;
   jet_force_x = powertrain.jet_force_x;
   jet_force_y = powertrain.jet_force_y;

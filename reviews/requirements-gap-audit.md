@@ -42,11 +42,11 @@ possession (`results/gap-failure-hud.json` and its screenshot).
 
 | Check | Result |
 |---|---|
-| Registered course verification | 7/7 source-linked requirements pass; complete in 24.8 s |
-| Early +0.3 s / late -0.2 s guidance | Both fail with code 6 and actual cube impulses 34,043 / 78,139 N s |
+| Registered course verification | 7/7 source-linked requirements pass; current follow-up complete in 24.65 s |
+| Early +0.3 s / late -0.2 s guidance | Both fail with code 6 and current cube impulses 24,234 / 133,355 N s |
 | Native keyboard course | 19/19 pass; full route, zero cube impact, four-wheel stop |
 | HUD autopilot + operator sequence | 23/23 pass, including pause, takeover, service reset and completed-pilot Stop |
-| Registered launch verification | Pass; standing-start 0–60 mph 0.552159 s |
+| Registered launch verification | Pass; current standing-start 0–60 mph 0.559312 s |
 | Collision HUD | Correct failure text observed and rendered |
 | Python syntax / git diff whitespace | Pass |
 
@@ -59,15 +59,14 @@ python3 scripts/check_keyboard_course.py --launch --manual --autopilot --operato
 python3 scripts/run_launch.py --binary /path/to/luncosim
 ```
 
-Use one owned port per concurrent native client and avoid typing in its window.
+Run windowed clients sequentially on owned ports and avoid typing in their windows.
 All clients use native physics. Manual stepping controls admission, without
 changing the physical timestep or actuator model.
 
-## Remaining qualification boundaries
+## Follow-up status
 
-The vehicle remains an engineering study, with documented geometry, actuator,
-mass, air-inventory, thermal and fan assumptions. These checks do not establish
-manufacturer calibration or exact reproduction of a presentation stunt.
-Only the listed early/late offsets are demonstrated, not a full timing window.
-Native window injection is not physical OS keyboard delivery. Independent
-Omniverse execution and human completion of the manual guide remain unqualified.
+See [the automated qualification follow-up](qualification-followup.md) for the
+source-commented battery assumptions, corrected Thrust storage, measured timing
+window and OS input checks. Compatibility work is outside scope at the user's
+request, and human completion is deferred. Manufacturer calibration remains an
+external-data boundary; explicit study assumptions are used instead.

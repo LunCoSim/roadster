@@ -16,7 +16,8 @@ fn on_start(me,ctx) {
     this.cubes=[];for i in 0..3 {this.cubes.push(find_path("/World/JumpBlock"+i.to_string()));}
     this.contact_bodies=[this.car];for corner in ["FL","FR","RL","RR"] {this.contact_bodies.push(find_path("/World/Roadster/Wheel_"+corner));}
     this.source=sysml_requirements::source();if this.source.ok!=true {throw(this.source.error);}
-    let fields=query("QueryUsdPrim",#{path:"/World/DriverSetup",attrs:["study:jumpTimingOffset"]}).attrs;
+    let fields=query("QueryUsdPrim",#{path:"/World/DriverSetup",attrs:["study:jumpTimingOffset","study:timingSweep"]}).attrs;
+    this.timing_sweep=fields["study:timingSweep"]==true;
     this.timing_offset=if fields["study:jumpTimingOffset"]==() {0.0}else{fields["study:jumpTimingOffset"]};
     cmd("SetPorts",#{target:this.car,writes:[["course_jump_timing_offset_s",this.timing_offset]]});
 }
@@ -59,6 +60,18 @@ fn on_tick(me,ctx) {
         emit("ROADSTER_COURSE_SAMPLE_EVIDENCE",#{time_s:this.time,stage:stage,position:world_pos(this.car),
             speed:v.speed_mps,up_y:v.up_alignment,gas_kg:v.gas_mass_kg,temperature:v.tank_temperature_k,telemetry:v});
         this.next_sample=this.time+(if stage==2 || stage==6 {0.05}else{0.2});
+    }
+    if this.timing_sweep && (stage>=3 || this.time>=20.0) {
+        let failures=[];
+        if this.time>=20.0 {failures.push("Jump observation did not reach a terminal checkpoint");}
+        emit("ROADSTER_JUMP_WINDOW_EVIDENCE",#{timing_offset_s:this.timing_offset,
+            cleared:stage>=3 && stage!=8 && v.course_blocks==3.0 && this.jump_impulse<=1.0,
+            stage:stage,stage_times:this.stage_times,final:v,
+            peak_cube_collision_impulse_ns:this.jump_impulse,failures:failures});
+        this.done=true;
+        // PASS means a valid measured trial, including a measured mission miss.
+        // The separate cleared field classifies the tested timing sample.
+        report_verdict(failures,"ROADSTER JUMP TIMING MEASUREMENT","ROADSTER_JUMP_WINDOW");return;
     }
     if stage!=7 && stage!=8 && this.time<100.0 {return;}
     let native=query("QueryPhysicsState",#{id:this.car});let failures=[];

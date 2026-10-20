@@ -18,6 +18,8 @@ model CoursePilot
   input Real up_y;
   input Real airborne;
   input Real wheel_heading;
+  input Real wheel_heading_rate "Small-angle rate prediction from the modeled rack";
+  parameter Real steering_preview_s = 0.17 "Controller tuning derived from command smoothing + rack lag";
   input Real full_lift_force;
   input Real mass;
   input Real angular_acceleration[3] "Full-bank pitch/yaw/roll authority, rad/s2";
@@ -99,7 +101,11 @@ equation
   lookahead = max(10.0,0.5*speed);
   desired = {-(position_x+0.5*velocity_x)/lookahead,forward_axis[2],forward_axis[3]};
   heading_error = atan2(-sum(right_axis.*desired),sum(forward_axis.*desired));
-  rack_error = wheel_heading-atan(2*wheelbase*sin(heading_error)/lookahead);
+  // A-C01 study controller: anticipate the actual modeled steering lag.
+  // Source: SteeringDriver.mo command_tau + rack_tau (not Tesla calibration).
+  // This PD/preview term prevents digital pulses chasing an already-moving
+  // rack at speed. It changes guidance keys only; manual plant control is direct.
+  rack_error = wheel_heading+steering_preview_s*wheel_heading_rate-atan(2*wheelbase*sin(heading_error)/lookahead);
   on_ground = noEvent(if airborne<0.2 then 1.0 else 0.0);
   flight = noEvent(if abs(phase-6)<0.5 and airborne>0.2 then 1.0 else 0.0);
   left = noEvent(if phase<6 and on_ground>0.5 and rack_error< -0.0015 then 1.0 else 0.0);

@@ -53,3 +53,9 @@ see [assumptions](assumptions.md).
 The local `.scratch/roadster-reference.jpg` was inspected for silhouette only.
 It is a Tesla reveal image hosted by D01, not redistributed as a project asset.
 The delivered mesh is original procedural study geometry, not Tesla CAD.
+
+## Battery follow-up — 2026-10-20
+
+- S11: [2025 primary cell teardown](https://doi.org/10.1016/j.xcrp.2025.102453), earlier 2022 Tesla 4680 cell energy/mass/volume proxies; not Roadster cell calibration.
+- S12: [Tesla battery engineering](https://www.tesla.com/learn/engineering-tesla-vehicle-batteries-safety-durability-longevity), 4680 chemistry and thermal design context.
+- A-B01…A-B06: explicit study choices and calculations in [battery-study.md](battery-study.md) and inline comments in `models/BatteryStudy.mo`. The 120 kWh baseline is inferred, not manufacturer-issued.

@@ -1,0 +1,100 @@
+{
+  "cleared": true,
+  "failures": [],
+  "final": {
+    "chassis_mass_kg": 1780.7950256679862,
+    "course_air_pitch_degrees": 0.0,
+    "course_air_roll_degrees": 0.0,
+    "course_air_rotation_degrees": 0.0,
+    "course_air_yaw_degrees": 0.0,
+    "course_autopilot_active": 1.0,
+    "course_backward_distance_m": 0.0,
+    "course_blocks": 3.0,
+    "course_failure_reason": 0.0,
+    "course_forward_speed": 34.80352260429874,
+    "course_forward_z": -0.992713576963719,
+    "course_landing_impact_speed": 0.0,
+    "course_stage": 3.0,
+    "course_step": 2.0,
+    "course_time_s": 11.550000000000528,
+    "downforce": 0.0,
+    "fan_seal": 0.0,
+    "flight_control_weight": 1.0,
+    "gas_mass_kg": 208.79502566798618,
+    "heading_fl": -3.403618930094081e-07,
+    "instant_air_added_kg": 88.3033690060717,
+    "instant_services": 1.0,
+    "jet_force_x": 0.0,
+    "jet_force_y": 1.6474206513703662e-31,
+    "pilot_boost": 0.0,
+    "pilot_left": 0.0,
+    "pilot_lift": 0.0,
+    "pilot_pitch_down": 0.0,
+    "pilot_pitch_up": 0.0,
+    "pilot_right": 0.0,
+    "pilot_roll_left": 0.0,
+    "pilot_roll_right": 0.0,
+    "pilot_yaw_left": 0.0,
+    "pilot_yaw_right": 0.0,
+    "pitch_rate_deg_s": -4.6495696019556725,
+    "position_x": -1.56764212939436,
+    "position_y": 3.635874573223295,
+    "position_z": -129.59504567542896,
+    "quat_w": 0.9981278834325605,
+    "quat_x": -0.060998695672317284,
+    "quat_y": -0.0020013558944813725,
+    "quat_z": 0.00398522462307871,
+    "roll_rate_deg_s": 0.1782989323397094,
+    "speed_mps": 34.82943935818306,
+    "tank_temperature_k": 258.31326103442416,
+    "thruster_roll_moment_nm": -2.7369110631344083e-48,
+    "thruster_yaw_moment_nm": 0.0,
+    "unlimited_air_active": 0.0,
+    "up_alignment": 0.9926901700480073,
+    "velocity_x": 0.07253828114932766,
+    "velocity_y": -5.708177235612344,
+    "velocity_z": -34.37842378118864,
+    "yaw_rate_deg_s": -0.033287218591727064
+  },
+  "peak_cube_collision_impulse_ns": 0.0,
+  "stage": 3,
+  "stage_times": [
+    {
+      "position": [
+        0.0,
+        0.6600000262260437,
+        200.0
+      ],
+      "stage": 0,
+      "time_s": 0.016666666666666666
+    },
+    {
+      "position": [
+        -0.7633159638121206,
+        0.4851118327493896,
+        137.99618533920892
+      ],
+      "stage": 1,
+      "time_s": 4.016666666666658
+    },
+    {
+      "position": [
+        -1.4316211340951357,
+        0.4846599338583306,
+        46.131619309443956
+      ],
+      "stage": 2,
+      "time_s": 6.549999999999982
+    },
+    {
+      "position": [
+        -1.56764212939436,
+        3.635874573223295,
+        -129.59504567542896
+      ],
+      "stage": 3,
+      "time_s": 11.566666666666821
+    }
+  ],
+  "timing_offset_s": -0.016666666666666666
+}

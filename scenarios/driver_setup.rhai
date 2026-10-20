@@ -61,7 +61,7 @@ fn on_event(me,evt,ctx) {
             writes.push(["instant_"+field,boundary["next_"+field]]);
         }
         cmd("SetPorts",#{target:car,writes:writes});
-        notify("Air refilled to 250 kg at the selected temperature.");
+        notify("Air refilled to this trim's capacity at the selected temperature.");
     }
     if name == "roadster_air_refilled" || name == "roadster_test_refill_cancel" {
         cmd("SetPorts",#{target:car,writes:[["refill",0.0]]});

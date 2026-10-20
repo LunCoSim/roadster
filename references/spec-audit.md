@@ -40,15 +40,15 @@ plume is not an additional thruster. No combustion or rocket fuel is modeled.
 | Rear-drive motors | S05: two rear motors, over 1 MW and 1400 N·m combined | Two native driven rear shafts; 1 MW / 1400 N·m lower-bound baseline, not each motor. |
 | Transmission ratio | 8.4 reported in interview summaries; direct transcription unavailable | 8.4, provisional. Efficiencies and torque/slip maps are assumptions. |
 | Vehicle mass | S10 firsthand interview: target 1700 kg; trim/fill unspecified | 1700 kg **dry study assumption**, plus 250 kg gas = 1950 kg. Not a confirmed Rocket curb mass. |
-| Battery | S10 says substantially above 100 kWh; exact value withheld | **100 kWh placeholder is below that qualitative claim.** No range/endurance calibration is claimed; exact capacity remains unresolved. |
+| Battery | S10 says substantially above 100 kWh; exact value withheld | **120 kWh study assumption**, with 110–140 kWh sensitivity. Modelica derives sizing, mass/inertia changes and energy bookkeeping; [sources and inference](battery-study.md). Exact capacity remains undisclosed. |
 | Gas species | S05 names nitrogen; reveal calls it air | Active EOS is dry air, following the requested study. Nitrogen comparison is documented; the two fluids are not interchangeable. |
 | Storage pressure | S10 describes vessel rating up to 10000 psi | Rating is not operating pressure. 250 kg dry air / 600 L / 293.15 K solves to 437.023 bar absolute. |
 | Fans | S10: four rear extractors and a skirted underside | Four visible recessed rotors, measured seal; 40 kN / 80 kW map is provisional. |
 | Suspension | S10: adjustable spool-valve dampers and track ride/stiffness changes | Fixed prepared-track spring/damper; no adaptive suspension or ride-height controller. |
 | Active aero | S10 describes moving surfaces | Effective body-axis drag/lift model and airbrake, not a measured full aero map. |
 | Seating / trims | S01/S05: Performance and Thrust two seats; Rocket one | Rocket hides passenger seat; 10 jets. Performance has no jets; Thrust four rear jets. |
-| Thrust trim storage | S05: one 200 L vessel | **Thrust scene still uses the common 250 kg / 600 L study envelope.** It is not a hardware-faithful Thrust trim; default and launch acceptance now target Rocket. |
-| Acceleration | Reveal demo 0.81 s; published targets and rollout conventions differ | Strict ≤0.59 s is the user's standing-start acceptance target. Current study 0.51595 s; this does not validate a Tesla production claim. |
+| Thrust trim storage | S05: one 200 L vessel | Thrust now composes a 200 L rear vessel without cabin storage. Modelica derives 83.33 kg at the Rocket study density; this mass is an inference. Rocket keeps 600 L / 250 kg. |
+| Acceleration | Reveal demo 0.81 s; published targets and rollout conventions differ | Strict ≤0.59 s is the user's standing-start acceptance target. Latest measured study result is in results/launch-telemetry.json; this does not validate a Tesla production claim. |
 | Dimensions / tires / inertia | No checked manufacturer drawing or tire curves | All geometry, wheelbase, radius, masses, inertias, friction and slip curves remain assumptions in assumptions.md. |
 | Thermal equipment | No directly checked tank thermal-management design | Passive wall exchange and conservative 200 K guard; external refill equipment is explicitly test service. |
 | Light photometry | No checked manufacturer beam measurements | Modelica-focused 3000 lm per beam; renderer input compensates its angular attenuation. Study optics only. |

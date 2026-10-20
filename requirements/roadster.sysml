@@ -35,7 +35,13 @@ package Roadster {
         in attribute refill : Real;
         in attribute refillTemperatureK : Real;
     }
-    part def Battery { port supply : ElectricalPort; }
+    part def Battery {
+        doc /* A-B01/S10: 120 kWh nominal study assumption from a >100 kWh disclosed floor and reported >300-mile target; exact capacity withheld. Source: https://www.motortrend.com/news/first-look-2028-tesla-roadster-performance-thrust-rocket . Derivation and uncertainty: references/battery-study.md. */
+        attribute studyNominalEnergyKwh : Real = 120;
+        attribute studySensitivityLowKwh : Real = 110;
+        attribute studySensitivityHighKwh : Real = 140;
+        port supply : ElectricalPort;
+    }
     part def DriveUnit { port supply : ~ElectricalPort; port axle : TorquePort; }
     part def Wheel { port hub : ~TorquePort; }
     part def Body;

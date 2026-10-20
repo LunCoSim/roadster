@@ -1,0 +1,51 @@
+{
+  "ok": false,
+  "input_path": "X11 XTEST -> owned window -> winit -> native intents",
+  "scene": "scenes/roadster_skill_course.usda",
+  "keys": [],
+  "samples": [],
+  "stages": [],
+  "screenshots": [
+    "results/os-keyboard-failed.png"
+  ],
+  "failures": [
+    "Owned OS test window did not retain foreground focus for 300 ms; no input sent"
+  ],
+  "control_mode": "keyboard",
+  "sequence": "scenarios/skill_course.rhai",
+  "guidance": "models/CoursePilot.mo",
+  "source_sha256": {
+    "config/input-bindings.json": "8d5ea41b98a31b03401d8d385d6be23884c6ba0be9120bfa77a2bb49446d1323",
+    "models/BatteryStudy.mo": "3c92973ba7778ab29b9412eb44c510d8da18afb6aa15b41b16bab28629e17ace",
+    "models/CompressedAir.mo": "986b6b935f1fe5ffc74bf873e2c59a24d60a7a071338fa318adc9ad2f50a1fd0",
+    "models/CoursePilot.mo": "97417224e565b7cef51c6822c160e639dfe1fb2232b0409f6f7ae9d28c65f489",
+    "models/FanAdhesion.mo": "13311ee9e86b07dfbd683b7632be207ee24409e2ecf28ce06b957da76271e19d",
+    "models/HeadlightOptics.mo": "31ff66c7baabcea45317a31d810d2aeb20719e18b85df659d295ee68548f3cb3",
+    "models/JetExpansion.mo": "d3929e170d602d606f9e1eb99d69384d9bc40bf4572d7164ccd3a223f92616cc",
+    "models/LaunchSizing.mo": "1ed6009fd32b410695e52d26ea1643d7f9aa54fa64928445cff025d47aebb34b",
+    "models/RoadsterPowertrain.mo": "6e9d17cde3f0929e0317582f2005fe11011d22db634184ecb9019d3cfbe4d71e",
+    "models/RoadsterVehicle.mo": "4868c71b8f1ea286e9834bc269c9b8ca34fd796af9a945e394177d0869e51137",
+    "models/SkillCourse.mo": "bd8281d48502ac0991d38fe6476e0111601a1ce9f04ab9a98844e77f3b72d20d",
+    "models/SteeringDriver.mo": "f32362a53c489bf98df8611b3c81f6a6281da273476985ede58a1031c4a5c060",
+    "models/SuctionFan.mo": "472b27e486d20af8dc01c0c76bb2a2d3118b536da6fe2adfcf54e0adddc97b31",
+    "models/TankHeatTransfer.mo": "9eaa122341c83d0a8605619dcd9c3c401616d964c9b578510060f838d381bddb",
+    "models/ThrusterMount.mo": "60742a4225d89ee446a1e8517623956995d82102264a5b428e569a7fd54e4dea",
+    "models/VehicleAerodynamics.mo": "af512167a0532c5cb89d426649847bb900095d75ea3711a9bcac047a6ca62eab",
+    "scenarios/skill_course.rhai": "67be86018c3dac369c27c7d7ef1f610725343c9963cb95e6395a6f12f6f30d22",
+    "scenes/roadster_skill_course.usda": "8faec3bc9f5a379fb4370235135817a8b196a54c0c964604f101108ae9da9dea",
+    "scripting/policy/roadster_camera.rhai": "e8416bf2c7dac81172c53d461939475e5cf9d208ef784cb51c75d77216d397a6",
+    "scripting/policy/roadster_ui.rhai": "45c135979a23414447f63773efe862d2865ad537a0598ce7bc051f32abdc1fea",
+    "scripts/check_keyboard_course.py": "2d3de6f715bb41b102c6953e7a58d484b1f4697a535a369983b1506a50aec8ab",
+    "scripts/x11_window_input.py": "1f55eef73a7cdb302c91f65ecdca1017cd12da1c4ecf517d74e3049ada49ee1b",
+    "vehicles/roadster.usda": "69e6f8e72c984b2b97a89c5cf4c5137f73f74fb3d643a4bad4d4bf5b049261c5"
+  },
+  "binary_sha256": "2a06e0f6082bc9bd68ebeebd36e6e2f8024964cf25856ec8444c4b72b1b9b7b9",
+  "os_window": {
+    "pid": 1758067,
+    "window_id": 25165826,
+    "display": ":1"
+  },
+  "transport_rate": 0.25,
+  "traceback": "Traceback (most recent call last):\n  File \"/home/rod/Documents/models/tesla-rr/scripts/check_keyboard_course.py\", line 575, in main\n    pilot.run()\n  File \"/home/rod/Documents/models/tesla-rr/scripts/check_keyboard_course.py\", line 378, in run\n    self.setup()\n  File \"/home/rod/Documents/models/tesla-rr/scripts/check_keyboard_course.py\", line 197, in setup\n    if self.os_input:self.os_input.activate()\n                     ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/rod/Documents/models/tesla-rr/scripts/x11_window_input.py\", line 62, in activate\n    raise RuntimeError('Owned OS test window did not retain foreground focus for 300 ms; no input sent')\nRuntimeError: Owned OS test window did not retain foreground focus for 300 ms; no input sent\n",
+  "os_events": []
+}

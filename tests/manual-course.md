@@ -72,3 +72,32 @@ press W to take over, and click RETRY COURSE after the first waypoint. It checks
 reset air/mission/ownership, then completes the full course and stops the pilot through its HUD button. Retry may preserve
 public prim IDs; a new ID is not required. The operator checks run in their own
 window and port. Avoid using that window's keys during automation.
+
+## Automated OS input
+
+`python3 scripts/check_keyboard_course.py --launch --manual --input-backend x11 --binary /path/to/luncosim --output results/os-keyboard.json`
+
+This uses XTEST through the X11 window manager and winit, targeting only the
+owned process/window. It requires python-xlib and XTEST, takes foreground focus,
+checks focus before input, and releases its own held keys on exit. Physical
+keyboard repeat settings remain unchanged. Avoid interacting with this window
+during automation. It is synthetic OS input; human course completion is separate.
+
+`python3 scripts/check_os_hold.py --binary /path/to/luncosim`
+
+This focused OS test holds D and W for three wall-clock seconds each while normal
+key repeat stays enabled, sampling the X server key state and native steering /
+throttle commands. It also checks release. Run it alone so another test window
+cannot take focus; focus loss aborts the run.
+
+For a focused native repeat regression without OS delivery, use
+`python3 scripts/check_os_hold.py --input-backend native --output results/native-hold.json --binary /path/to/luncosim`.
+It injects `Pressed` events with `repeat=True`, checks the live solver's consumed
+steering/throttle aliases throughout each hold, then verifies release. It does
+not qualify the desktop input path. Run windowed tests sequentially.
+
+`python3 scripts/check_jump_window.py --binary /path/to/luncosim` uses an owned
+USD-authoring API on port 4198 to measure the jump window on the native 60 Hz
+frame grid. It stops after the three cubes or a measured mission miss, so its
+result qualifies that jump and authored speed rather than the entire course at
+every tested offset. The nominal whole-course gates remain separate.

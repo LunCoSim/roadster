@@ -47,6 +47,7 @@ class Pilot:
     def __init__(self, args):
         self.args = args
         self.base = f'http://127.0.0.1:{args.port}/api/commands'
+        self.os_input = None
         self.held = set()
         self.report = dict(ok=False, input_path='InjectWindowInput/native keyboard',
                            scene='scenes/roadster_skill_course.usda', keys=[], samples=[],
@@ -75,6 +76,7 @@ class Pilot:
         return response['data']
 
     def keys(self, desired, t):
+        if self.os_input:self.os_input.ensure_focus()
         if not desired <= KEYS:
             raise ValueError(desired - KEYS)
         # Release the chord's letter before its modifier, as a player can.
@@ -82,15 +84,29 @@ class Pilot:
         presses = sorted(desired - self.held, key=lambda k: (not k.startswith('Control'), k))
         for key, state in ([(k, 'Released') for k in releases] +
                            [(k, 'Pressed') for k in presses]):
-            self.q('InjectWindowInput', event={'Key': dict(
-                key=key, state=state, text=None, repeat=False)})
+            if self.os_input:
+                self.os_input.key(key,state)
+            else:
+                self.q('InjectWindowInput', event={'Key': dict(
+                    key=key, state=state, text=None, repeat=False)})
             self.report['keys'].append(dict(time_s=t, key=key, state=state))
             if state == 'Pressed':
                 self.held.add(key)
             else:
                 self.held.remove(key)
 
+    def pointer(self,state,x,y):
+        if self.os_input:
+            self.os_input.pointer(state,x,y)
+        else:
+            self.q('InjectWindowInput',event={'PointerButton':dict(
+                button='Primary',state=state,x=x,y=y)})
+
     def release(self):
+        if self.os_input:
+            self.os_input.release()
+            self.held.clear()
+            return
         for key in sorted(KEYS, key=lambda k: (k.startswith('Control'), k)):
             try:
                 self.q('InjectWindowInput', event={'Key': dict(
@@ -116,7 +132,7 @@ class Pilot:
             if not match or match[2] not in meanings:
                 continue
             key = meanings[match[2]]
-            t = float(match[3])-self.start
+            t = float(match[3])-self.input_epoch
             if t < 0:
                 continue
             transitions = [e for e in self.report['keys'] if e['key']==key]
@@ -125,6 +141,9 @@ class Pilot:
             expected = previous[-1]['state'].lower() if previous else 'released'
             if not nearby and match[1] != expected:
                 detail = dict(time_s=t,key=key,native_state=match[1],expected=expected)
+                if self.os_input:
+                    detail['os_state']=self.os_input.held_state()
+                    detail['native_ports']=self.q('ReadPorts',api_id=self.car,port_names=['steer','throttle','program_active'])['ports']
                 self.report.setdefault('unexpected_native_inputs',[]).append(detail)
                 raise RuntimeError(f'Uncommanded native input: {detail}')
 
@@ -175,11 +194,15 @@ class Pilot:
         self.q('SetTimeTransport', rate=self.args.rate)
         self.report['transport_rate'] = self.args.rate
         self.q('ObserveAvatar')
+        if self.os_input:self.os_input.activate()
         for state in ['Pressed', 'Released']:
-            self.q('InjectWindowInput', event={'PointerButton': dict(
-                button='Primary', state=state, x=640, y=330)})
+            self.pointer(state,640,330)
         self.keys({'ShiftLeft'}, 0.0)
         self.start = self.snapshot()['course_time_s']
+        # Course time resets on retry; the native event clock remains global.
+        self.input_epoch=float(self.q('RunRhai',code='clock_snapshot().sim_tick')['stdout'])/60.0
+        self.report.setdefault('input_lifetimes',[]).append(dict(course_epoch_s=self.start,
+            native_epoch_s=self.input_epoch,twin=self.q('RunRhai',code='twin_name()')['stdout']))
 
     def fan(self, keys, t, observed, desired):
         if t < self.fan_until:
@@ -204,8 +227,7 @@ class Pilot:
         if self.args.manual:
             self.step(2)
         for state in ['Pressed','Released']:
-            self.q('InjectWindowInput', event={'PointerButton': dict(
-                button='Primary',state=state,x=330,y=78)})
+            self.pointer(state,330,78)
         deadline = time.monotonic()+5
         while time.monotonic()<deadline:
             if self.args.manual:
@@ -243,9 +265,9 @@ class Pilot:
             return int(self.q('RunRhai', code='clock_snapshot().sim_tick')['stdout'])
         # Pause while the pilot owns controls. Shift would itself take over.
         self.q('StepSimulation', hold=False)
-        self.keys({'ControlLeft', 'KeyP'}, 0.0)
+        self.keys({'ControlLeft', 'KeyP'}, self.snapshot()['course_time_s']-self.start)
         time.sleep(.12)
-        self.keys(set(), 0.0)
+        self.keys(set(), self.snapshot()['course_time_s']-self.start)
         a = tick()
         before = self.snapshot()
         time.sleep(.3)
@@ -256,9 +278,9 @@ class Pilot:
         active_pause = a == b and before['course_autopilot_active'] > .5 and all(
             before[name] == held[name] for name in fields)
         self.screenshot('active-pause')
-        self.keys({'ControlLeft', 'KeyP'}, 0.0)
+        self.keys({'ControlLeft', 'KeyP'}, self.snapshot()['course_time_s']-self.start)
         time.sleep(.12)
-        self.keys(set(), 0.0)
+        self.keys(set(), self.snapshot()['course_time_s']-self.start)
         deadline = time.monotonic()+5
         while tick() <= b and time.monotonic() < deadline:
             time.sleep(.03)
@@ -270,13 +292,13 @@ class Pilot:
         if not active_pause:
             raise RuntimeError('Active pilot did not preserve state and ownership across Ctrl+P')
         # A real driving key must cancel program ownership immediately.
-        self.keys({'KeyW'}, 0.0)
+        self.keys({'KeyW'}, self.snapshot()['course_time_s']-self.start)
         self.step(6)
         takeover = self.snapshot()
         program = self.q('ReadPorts', api_id=self.car, port_names=['program_active'])['ports']
         manual = takeover['course_autopilot_active'] < .5 and any(
             p['name']=='program_active' and p['direction']=='in' and p['value']<.5 for p in program)
-        self.keys(set(), 0.0)
+        self.keys(set(), self.snapshot()['course_time_s']-self.start)
         self.step(2)
         self.report['manual_takeover'] = dict(ok=manual, key='KeyW', telemetry=takeover,
             program_port=program)
@@ -286,10 +308,9 @@ class Pilot:
         old_car = self.car
         old_course = self.snapshot()
         old_twin = self.q('RunRhai',code='twin_name()')['stdout']
-        self.keys({'ShiftLeft'}, 0.0)
+        self.keys({'ShiftLeft'}, self.snapshot()['course_time_s']-self.start)
         for state in ['Pressed', 'Released']:
-            self.q('InjectWindowInput', event={'PointerButton': dict(
-                button='Primary', state=state, x=235, y=78)})
+            self.pointer(state,235,78)
         deadline = time.monotonic()+120
         new_lifetime_held = False
         while time.monotonic() < deadline:
@@ -444,8 +465,7 @@ class Pilot:
                 self.screenshot('complete')
                 if self.args.operator_checks:
                     for state in ['Pressed','Released']:
-                        self.q('InjectWindowInput',event={'PointerButton':dict(
-                            button='Primary',state=state,x=360,y=78)})
+                        self.pointer(state,360,78)
                     self.step(2)
                     stopped = self.snapshot()
                     checks['completed_pilot_stop'] = stopped['course_autopilot_active']<.5 and stopped['course_stage']==7
@@ -487,6 +507,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--port', type=int, default=4198)
     ap.add_argument('--launch', action='store_true')
+    ap.add_argument('--input-backend',choices=['native','x11'],default='native',
+                    help='Use native injection or real X11 OS delivery to the owned window')
     ap.add_argument('--keep-open', action='store_true')
     ap.add_argument('--autopilot', action='store_true',
                     help='Start the shared in-app course pilot through its HUD button')
@@ -503,14 +525,17 @@ def main():
     args = ap.parse_args()
     if args.operator_checks and not (args.autopilot and args.manual and args.launch):
         ap.error('--operator-checks requires --autopilot --manual --launch for an owned repeatable session')
+    if args.input_backend=='x11' and not args.launch:
+        ap.error('OS delivery requires --launch so the destination PID is owned')
     pilot = Pilot(args)
     pilot.report.update(control_mode='autopilot' if args.autopilot else 'keyboard',
                         sequence='scenarios/skill_course.rhai', guidance='models/CoursePilot.mo')
-    sources = ['models/CoursePilot.mo','models/SkillCourse.mo','models/RoadsterVehicle.mo',
+    sources = ['models/BatteryStudy.mo','models/RoadsterPowertrain.mo','scripts/x11_window_input.py','models/CoursePilot.mo','models/SkillCourse.mo','models/RoadsterVehicle.mo',
                'scenarios/skill_course.rhai','scenes/roadster_skill_course.usda',
                'vehicles/roadster.usda','config/input-bindings.json',
                'scripting/policy/roadster_camera.rhai','scripting/policy/roadster_ui.rhai',
                'scripts/check_keyboard_course.py']
+    sources=sorted(set(sources)|{str(p.relative_to(ROOT)) for p in (ROOT/'models').glob('*.mo')})
     pilot.report['source_sha256'] = {name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest()
                                      for name in sources}
     process = log = None
@@ -541,6 +566,12 @@ def main():
                     time.sleep(.2)
             else:
                 raise RuntimeError('Owned runtime API did not start')
+        if args.input_backend=='x11':
+            from x11_window_input import X11WindowInput
+            pilot.os_input=X11WindowInput(process.pid)
+            pilot.report['input_path']='X11 XTEST -> owned window -> winit -> native intents'
+            pilot.report['os_window']=dict(pid=process.pid,window_id=pilot.os_input.window.id,
+                display=pilot.os_input.display.get_display_name())
         pilot.run()
     except Exception as exc:
         pilot.report['failures'].append(str(exc))
@@ -551,6 +582,9 @@ def main():
             pass
     finally:
         pilot.release()
+        if pilot.os_input:
+            pilot.report['os_events']=pilot.os_input.events
+            pilot.os_input.close()
         if process and process.poll() is None and not args.keep_open:
             try:
                 pilot.q('Exit')

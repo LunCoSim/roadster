@@ -43,7 +43,7 @@ Editor/inspector and Modelica documents to inspect parameters while paused.
 | Q / E | Left / right bottom-jet pairs (raise that side for roll) |
 | R / C | Front / rear bottom-jet pairs (nose up / nose down) |
 | F | Toggle fans on/off, once per press |
-| Tab | Refill air instantly to 250 kg at the selected temperature |
+| Tab | Refill air instantly to the selected trim’s capacity and temperature |
 | J / L | Yaw jets |
 | I / P | Front-left / front-right bottom jets |
 | , / . | Rear-left / rear-right bottom jets |
@@ -133,7 +133,7 @@ Coulomb cone determine actual cornering. Steering assistance can be disabled
 with the Modelica parameter `keyboard_steering_assistance=0` for analog commands.
 
 At 600 L and 293.15 K, the reusable Modelica dry-air EOS calculates **437.023 bar
-absolute** for 250 kg. No inventory is silently scaled to 83 kg. Tank placement,
+absolute** for 250 kg. Rocket retains 250 kg. Thrust’s separate 200 L trim explicitly derives about 83.33 kg at the same initial density. Tank placement,
 nozzles, fan maps, aero coefficients, tire curves and thermal coefficients remain
 study assumptions. See [storage](references/gas-storage.md) and
 [dynamics](references/dynamics.md).
@@ -240,3 +240,12 @@ See [USD and Omniverse contracts](references/usd-omniverse.md) and the
 rig follows the standard schema contracts; Omniverse execution has not been
 validated. Modelica, Rhai and custom rendering still require their runtime
 integrations.
+
+### Battery assumption
+
+The study uses **120 kWh nominal**, inferred from reported >100 kWh energy and
+>300-mile range, with explicit 220 Wh/km and 90% sizing assumptions. It is editable
+as `inputs:battery_capacity_kwh`. Modelica adjusts energy, mass and inertia from
+the 120 kWh / 1700 kg dry reference; the pack is counted once. See
+[battery sources and derivation](references/battery-study.md). Automated sensitivity:
+`python3 scripts/check_battery_study.py --binary /path/to/luncosim`.
