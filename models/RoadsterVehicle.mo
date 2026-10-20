@@ -1,6 +1,8 @@
 model RoadsterVehicle
   "Single solving boundary: shared Ackermann controller plus Roadster EV envelope"
   parameter Real course_enabled = 0;
+  parameter Real course_launch_gate_z(unit="m") = 140.0;
+  parameter Real course_first_refill_z(unit="m") = 40.0;
   output Real skill_course_active;
   input Real course_phase;
   input Real course_failure_code = 0.0 "Latched native task failure: 6 cube impact, 7 checkpoint; 1-5 from SkillCourse";
@@ -10,6 +12,7 @@ model RoadsterVehicle
   input Real course_action;
   input Real course_turn_direction = 1.0 "Positive yaw until the course latches its measured drift decision";
   input Real course_jump_timing_offset_s = 0.0 "Guidance-only timing perturbation for acceptance; positive fires earlier";
+  input Real course_jump_roll_target_deg = 360.0 "Signed obstacle-jump kickflip request; zero selects an upright jump";
   input Real course_autopilot_enable;
   output Real course_autopilot_active;
   output Real course_block_crossed;
@@ -20,6 +23,8 @@ model RoadsterVehicle
   output Real course_step;
   output Real course_takeoff_gate;
   output Real course_jump_impulse_ready;
+  output Real course_jump_roll_degrees;
+  output Real course_jump_roll_ready;
   output Real course_air_pitch_degrees;
   output Real course_landing_impact_speed;
   output Real pilot_yaw_direction;
@@ -85,6 +90,7 @@ model RoadsterVehicle
   output Real pilot_roll_right_on;
   output Real pilot_roll_right_off;
   CoursePilot pilot(phase=course_phase,action=course_action,elapsed=course_time_s,
+    jump_roll_degrees=course_jump_roll_target_deg,
     position_x=autopilot_position_x,velocity_x=measured_vx,turn_direction=course_turn_direction,jump_timing_offset_s=course_jump_timing_offset_s,
     position_y=course_position_y,position_z=autopilot_position_z,
     speed=speed_mps,velocity_y=measured_vy,velocity_z=measured_vz,
@@ -97,6 +103,7 @@ model RoadsterVehicle
       full_lift_force_n*abs(lift_front_z-mass_center_z)/(1.0+rear_lift_trim)/vehicle_inertia_xx,
       side_yaw_acceleration,full_lift_force_n*0.4/vehicle_inertia_zz});
   SkillCourse course(enabled=course_enabled,stage=course_phase,blocks=course_blocks_passed,
+    launch_gate_z=course_launch_gate_z,first_refill_z=course_first_refill_z,
     position_x=autopilot_position_x,position_y=course_position_y,position_z=autopilot_position_z,
     speed=speed_mps,velocity_y=measured_vy,pitch_rate_deg_s=pitch_rate_deg_s,yaw_rate_deg_s=yaw_rate_deg_s,
     roll_rate_deg_s=roll_rate_deg_s,forward_z=-1.0+2.0*(attitude_x^2+attitude_y^2),
@@ -206,6 +213,19 @@ model RoadsterVehicle
   parameter Real fan_initial_fraction = 0.0;
   parameter Real initial_fill = 1.0;
   parameter Real initial_gas_temperature(unit="K") = 293.15;
+  input Real jet_flight_enable = 0.0 "Optional valve-request flight controller; off for normal course/manual play";
+  input Real jet_flight_target_x = 0.0;
+  input Real jet_flight_target_y = 30.0;
+  input Real jet_flight_target_z = -310.0;
+  input Real jet_flight_target_yaw = 0.0;
+  JetFlightPilot jet_flight(position={autopilot_position_x,course_position_y,autopilot_position_z},
+    velocity={measured_vx,measured_vy,measured_vz},attitude={attitude_w,attitude_x,attitude_y,attitude_z},
+    omega=omega_body,target={jet_flight_target_x,jet_flight_target_y,jet_flight_target_z},
+    target_yaw=jet_flight_target_yaw,mass=vehicle_mass_kg,
+    inertia={vehicle_inertia_xx,vehicle_inertia_yy,vehicle_inertia_zz},
+    full_lift_force=full_lift_force_n,full_side_force=full_side_force_n,rear_trim=rear_lift_trim,
+    front_z=lift_front_z,rear_z=lift_rear_z,lift_x=lift_x,side_y=side_jet_y,
+    side_z=side_jet_z,center_y=mass_center_y,center_z=mass_center_z);
   input Real brake;
   input Real boost;
   input Real lift;
@@ -288,7 +308,8 @@ model RoadsterVehicle
   input Real surface_ny_3;
   input Real surface_nz_3;
   parameter Real keyboard_steering_assistance = 1.0 "0 selects direct analog rack commands";
-  SteeringDriver steering_driver(command=steer,speed=speed_mps,assistance=keyboard_steering_assistance);
+  SteeringDriver steering_driver(command=steer,
+    speed=speed_mps,assistance=keyboard_steering_assistance);
   Real steering_position;
   Real steering_limit;
   output Real aerodynamic_drag_kn;
@@ -314,11 +335,13 @@ model RoadsterVehicle
     rear_tank_volume=rear_tank_volume,cabin_tank_volume=cabin_tank_volume,
     gas_capacity_kg=gas_capacity_kg,initial_fill=initial_fill,initial_gas_temperature=initial_gas_temperature,
     steer=steer,attitude={attitude_w,attitude_x,attitude_y,attitude_z},omega_body=omega_body,headlight_switch=headlights,
-    demand=steering.drive_left, brake=brake, boost=boost, lift=lift, adhesion_force_body=adhesion.force_body,adhesion_power_w=adhesion.electrical_power,refill=refill,unlimited_air=unlimited_air,instant_mass_offset=instant_mass_offset,instant_temperature_offset=instant_temperature_offset,
+    demand=steering.drive_left, brake=brake, boost=if noEvent(jet_flight_enable>0.5) then 0.0 else boost, lift=if noEvent(jet_flight_enable>0.5) then 0.0 else lift, adhesion_force_body=adhesion.force_body,adhesion_power_w=adhesion.electrical_power,refill=refill,unlimited_air=unlimited_air,instant_mass_offset=instant_mass_offset,instant_temperature_offset=instant_temperature_offset,
     instant_wall_temperature_offset=instant_wall_temperature_offset,instant_refill_count=instant_refill_count,
     instant_mechanical_energy_j=instant_mechanical_energy_j,instant_stored_energy_j=instant_stored_energy_j,refill_target_temperature_k=refill_target_temperature_k,
-    lift_individual={lift_fl,lift_rl,lift_fr,lift_rr},
-    thrust_x=thrust_x,thrust_y=thrust_y,thrust_z=thrust_z,
+    lift_individual=if noEvent(jet_flight_enable>0.5) then jet_flight.corner else {lift_fl,lift_rl,lift_fr,lift_rr},
+    thrust_x=if noEvent(jet_flight_enable>0.5) then jet_flight.side else thrust_x,
+    thrust_y=if noEvent(jet_flight_enable>0.5) then jet_flight.collective else thrust_y,
+    thrust_z=if noEvent(jet_flight_enable>0.5) then 0.0 else thrust_z,
     omega_left=wheel_speed_left, omega_right=wheel_speed_right,
     velocity_x=measured_vx, velocity_z=measured_vz, velocity_y=measured_vy,
     ground_gap=ground_gap,ground_valid=ground_valid,velocity_forward=velocity_forward,
@@ -326,7 +349,7 @@ model RoadsterVehicle
   // Assembly adapter only: native geometry binds to the internal adhesion law.
   // Both components are flattened into ONE Modelica solve; no extra participant,
   // communication lag, duplicate rotor integration or script physics is added.
-  FanAdhesion adhesion(command=fan,enabled=powertrain.enabled,initial_speed_fraction=fan_initial_fraction,
+  FanAdhesion adhesion(command=if noEvent(jet_flight_enable>0.5) then 0.0 else fan,enabled=powertrain.enabled,initial_speed_fraction=fan_initial_fraction,
     center_of_mass={0,mass_center_y,mass_center_z},body_up={body_up_x,body_up_y,body_up_z},
     gap={surface_gap_0,surface_gap_1,surface_gap_2,surface_gap_3},
     valid={surface_valid_0,surface_valid_1,surface_valid_2,surface_valid_3},
@@ -355,6 +378,8 @@ model RoadsterVehicle
   output Real suction_force_kn(unit="kN");
   output Real air_discharge_enabled;
   output Real thermal_guard_active;
+  output Real thermal_guard_temperature_k(unit="K")
+    "The study's assumed discharge guard, exposed for native telemetry plots";
   output Real up_alignment;
   output Real refill_momentum_force_n;
   output Real refill_loading_power_w;
@@ -540,6 +565,8 @@ equation
   course_step = course_action;
   course_takeoff_gate = pilot.takeoff_gate;
   course_jump_impulse_ready = pilot.jump_impulse_ready;
+  course_jump_roll_degrees = pilot.jump_roll_progress_deg;
+  course_jump_roll_ready = pilot.jump_roll_ready;
   course_air_pitch_degrees = course.course_air_pitch_degrees;
   course_landing_impact_speed = course.landing_impact_speed;
   pilot_yaw_direction = pilot.recommended_yaw_direction;
@@ -620,6 +647,7 @@ equation
   refill_target_k = refill_target_temperature_k;
   refill_target_pressure_pa = powertrain.target_air.pressure;
   thermal_guard_active = noEvent(if tank_temperature_k<=powertrain.minimum_discharge_temperature then 1.0 else 0.0);
+  thermal_guard_temperature_k = powertrain.minimum_discharge_temperature;
   tank_wall_temperature_k = powertrain.tank_heat.wall_temperature;
   tank_heat_flow_w = powertrain.tank_heat.heat_to_gas;
   // Engineering readouts; all vehicle motion is integrated by native physics.

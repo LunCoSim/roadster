@@ -7,6 +7,7 @@ model CoursePilot
   input Real velocity_x;
   input Real turn_direction;
   input Real jump_timing_offset_s;
+  input Real jump_roll_degrees = 0.0 "Requested signed kickflip rotation; zero retains an upright jump";
   input Real position_y;
   input Real position_z;
   input Real speed;
@@ -30,6 +31,8 @@ model CoursePilot
   parameter Real flip_roll_direction = 1.0 "Positive body +Z: counterclockwise viewed from behind toward the nose";
   output Real recommended_yaw_direction;
   output Real jump_impulse_ready;
+  output Real jump_roll_progress_deg(start=0,fixed=true) "Integrated measured body roll during the obstacle jump";
+  output Real jump_roll_ready;
   output Real takeoff_gate;
   output Real forward;
   output Real reverse;
@@ -82,6 +85,11 @@ protected
   Real correcting;
   Real on_ground;
   Real flight;
+  Real ramp_flight;
+  Real jump_flight;
+  Real jump_roll_remaining;
+  Real world_up_x;
+  Real lateral_lift;
 equation
   command_throttle = forward-reverse;
   command_steer = right-left;
@@ -109,7 +117,24 @@ equation
   // rack at speed. It changes guidance keys only; manual plant control is direct.
   rack_error = wheel_heading+steering_preview_s*wheel_heading_rate-atan(2*wheelbase*sin(heading_error)/lookahead);
   on_ground = noEvent(if airborne<0.2 then 1.0 else 0.0);
-  flight = noEvent(if abs(phase-6)<0.5 and airborne>0.2 then 1.0 else 0.0);
+  ramp_flight = noEvent(if abs(phase-6)<0.5 and airborne>0.2 then 1.0 else 0.0);
+  // Start above the takeoff surface, then retain control through recovery.
+  // This is valve guidance: Avian supplies attitude, rates and all motion.
+  jump_flight = noEvent(if abs(jump_roll_degrees)>1 and phase>1.5 and phase<3.5
+    and airborne>0.2 and (position_y>2.5 or abs(jump_roll_progress_deg)>0.01) then 1.0 else 0.0);
+  flight = max(ramp_flight,jump_flight);
+  der(jump_roll_progress_deg) = noEvent(if jump_flight>0.5 then rates[3] else 0.0);
+  jump_roll_remaining = jump_roll_degrees-jump_roll_progress_deg;
+  world_up_x = 2*(attitude[2]*attitude[3]-attitude[1]*attitude[4]);
+  // Corner jets produce a net force as well as a roll moment. Once clear of
+  // the obstacles, use collective thrust while it points toward the road to
+  // remove that lateral impulse. These remain ordinary finite-air valves.
+  lateral_lift = noEvent(if jump_flight>0.5 and phase>2.5 and up_y> -0.1
+    and abs(world_up_x)>0.25 and (-1.2*position_x-2.0*velocity_x)*world_up_x>0 then
+      min(0.3,max(0.0,(-1.2*position_x-2.0*velocity_x)
+        /((full_lift_force/max(1.0,mass))*world_up_x+1e-9))) else 0.0);
+  jump_roll_ready = noEvent(if abs(jump_roll_degrees)<1 then 1.0
+    else if abs(jump_roll_remaining)<10 and up_y>0.97 and abs(rates[3])<35 then 1.0 else 0.0);
   left = noEvent(if phase<6 and on_ground>0.5 and rack_error< -0.0015 then 1.0 else 0.0);
   right = noEvent(if phase<6 and on_ground>0.5 and rack_error>0.0015 then 1.0 else 0.0);
   // Target speeds are pilot requests, never physical velocity constraints.
@@ -132,7 +157,7 @@ equation
     else if cruise_speed>0 and speed>cruise_speed+2 then 1.0
     else if abs(phase-6)<0.5 and on_ground>0.5 and forward<0.5 and reverse<0.5 then 1.0
     else if phase>6.5 then 1.0 else 0.0);
-  fan = noEvent(if (phase>0.5 and phase<3.5) or phase>5.5 or (abs(phase-5)<0.5 and action>7.5) then 0.0 else 1.0);
+  fan = noEvent(if phase<3.5 or phase>5.5 or (abs(phase-5)<0.5 and action>7.5) then 0.0 else 1.0);
   // q_error = conjugate(q_body) * q_target, expressed in body axes.
   // Recover wheels-down while retaining the ramp exit heading (+Z).
   landing_time = (velocity_y+sqrt(velocity_y^2+2*9.80665*max(0.0,position_y)))/9.80665;
@@ -140,13 +165,21 @@ equation
   recommended_yaw_direction = noEvent(if predicted_lateral_position>0 then 1.0 else -1.0);
   // The inverted ramp already points along +Z. Recover with a roll, then
   // bank the physical lift vector to cancel lateral drift over the road.
-  target_bank = noEvent(if flight>0.5 and up_y>0.8 then
+  target_bank = noEvent(if ramp_flight>0.5 and up_y>0.8 then
     max(-0.24,min(0.24,atan2(-1.2*position_x-2.0*velocity_x,
-      max(9.80665,0.6*full_lift_force/max(1.0,mass))))) else 0.0);
-  error_quaternion = {attitude[2]*sin(target_bank/2)+attitude[3]*cos(target_bank/2),
+      max(9.80665,0.6*full_lift_force/max(1.0,mass)))))
+    else if jump_flight>0.5 and abs(jump_roll_remaining)<20 and up_y>0.8 then
+      max(-0.24,min(0.24,atan2(1.2*position_x+2.0*velocity_x,
+        max(9.80665,0.6*full_lift_force/max(1.0,mass))))) else 0.0);
+  error_quaternion = noEvent(if jump_flight>0.5 then
+    {attitude[1]*cos(target_bank/2)+attitude[4]*sin(target_bank/2),
+      -attitude[2]*cos(target_bank/2)-attitude[3]*sin(target_bank/2),
+      -attitude[3]*cos(target_bank/2)+attitude[2]*sin(target_bank/2),
+      attitude[1]*sin(target_bank/2)-attitude[4]*cos(target_bank/2)} else
+    {attitude[2]*sin(target_bank/2)+attitude[3]*cos(target_bank/2),
       attitude[1]*sin(target_bank/2)+attitude[4]*cos(target_bank/2),
       attitude[1]*cos(target_bank/2)-attitude[4]*sin(target_bank/2),
-      -attitude[2]*cos(target_bank/2)+attitude[3]*sin(target_bank/2)};
+      -attitude[2]*cos(target_bank/2)+attitude[3]*sin(target_bank/2)});
   rotation_length = sqrt(error_quaternion[2]^2+error_quaternion[3]^2+error_quaternion[4]^2);
   // At an inverted exit both half-turns reach the same upright attitude.
   // Select the requested roll branch near inversion instead of letting tiny
@@ -161,7 +194,12 @@ equation
   // Stopping-speed envelope from current finite-gas torque authority. The margin
   // covers valve lag and digital sampling; pitch/roll use half-duty pulses.
   for axis in 1:3 loop
-    target_rate[axis] = noEvent((if attitude_error[axis]>=0 then 1.0 else -1.0)
+    target_rate[axis] = noEvent(if axis==3 and jump_flight>0.5
+      and abs(jump_roll_progress_deg)<abs(jump_roll_degrees)-5 then
+      (if jump_roll_remaining>=0 then 1.0 else -1.0)*min(300.0,
+        sqrt(2*0.65*max(0.0,angular_acceleration[axis])*0.5
+          *abs(jump_roll_remaining)*3.141592653589793/180)*180/3.141592653589793)
+      else (if attitude_error[axis]>=0 then 1.0 else -1.0)
       *min(attitude_gain[axis]*abs(attitude_error[axis]),
       sqrt(2*0.65*max(0.0,angular_acceleration[axis])
         *(if axis==2 then 1.0 else 0.5)*abs(attitude_error[axis])*3.141592653589793/180)
@@ -190,11 +228,11 @@ equation
   lift_acceleration = 0.65*full_lift_force*up_y/max(1.0,mass)-9.80665;
   available_lift_acceleration = full_lift_force*up_y/max(1.0,mass)-9.80665;
   stopping_height = velocity_y^2/(2*max(1.0,lift_acceleration));
-  lift = noEvent(if abs(phase-2)<0.5 and abs(action-4)<0.5 then 1.0
+  lift = max(lateral_lift,noEvent(if abs(phase-2)<0.5 and abs(action-4)<0.5 then 1.0
     // A second timed collective pulse cushions the fast cube-jump landing.
     // Momentum carries the car onward; motor torque is released in the air.
     else if abs(phase-3)<0.5 and airborne>0.8 and up_y>0.94 and velocity_y< -1.5
       and position_y<stopping_height+1.0 and available_lift_acceleration>0.0 then 1.0
     else if flight>0.5 and up_y>0.94 and velocity_y< -2 and available_lift_acceleration>0.0
-      and position_y<stopping_height+3.0 and pitch_up+pitch_down+roll_left+roll_right<0.5 then 1.0 else 0.0);
+      and position_y<stopping_height+3.0 and pitch_up+pitch_down+roll_left+roll_right<0.5 then 1.0 else 0.0));
 end CoursePilot;

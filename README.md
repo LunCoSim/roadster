@@ -89,6 +89,9 @@ to externally conditioning/delivering co-moving gas. It is not an onboard Tesla
 refill process. Modelica computes the mass and temperature adjustments, EOS
 pressure, inertia, and stored/mechanical energy exchanges; Rhai copies these
 boundary values together through ordinary inputs. Native velocity is preserved.
+The course acknowledges the service counter from that atomic boundary. It does
+not wait for exact tank fullness afterward: a closing valve can already consume
+some of the replenished gas during the next coupled interval.
 
 ## Editable temperature and refill
 
@@ -168,6 +171,14 @@ HUD retry and then full course completion. The standalone course gate
 observes this shared production pilot; it does not carry a separate control law.
 See [manual acceptance steps](tests/manual-course.md) and the
 [course review](reviews/shared-course-tree.md) and [dynamic-course design](references/dynamic-course.md).
+
+The course pilot requests a full longitudinal kickflip over the obstacles through
+the existing corner valves. `course_jump_roll_target_deg` defaults to 360; set it
+to zero for an upright jump. Guidance uses measured body rates and the current
+finite-air angular authority, then banks slightly to recover toward the road.
+It does not write body state or forces. A recovery counter-rotation can reduce
+the final roll integral after the car has already completed a revolution; inspect
+the trajectory and recovered attitude together. Manual valve controls remain direct.
 
 ## Tune the following camera live
 

@@ -1,5 +1,7 @@
 model SkillCourse
   "Course measurements only. Native vehicle physics owns every maneuver."
+  parameter Real launch_gate_z(unit="m") = 140.0;
+  parameter Real first_refill_z(unit="m") = 40.0;
   input Real stage;
   input Real enabled;
   input Real blocks;
@@ -75,12 +77,12 @@ equation
   yaw_gate = noEvent(if up_y>0.97 and forward_z>0.94 and abs(yaw_rate_deg_s)<30 and yaw_rotation>150 then 1.0 else 0.0);
   course_time_s = elapsed;
   course_air_rotation_degrees = rotation;
-  target_z = noEvent(if abs(stage-0.0)<0.5 then 140.0 else if abs(stage-1.0)<0.5 then 40.0 else if abs(stage-2.0)<0.5 then -100.0-12.0*blocks
+  target_z = noEvent(if abs(stage-0.0)<0.5 then launch_gate_z else if abs(stage-1.0)<0.5 then first_refill_z else if abs(stage-2.0)<0.5 then -100.0-12.0*blocks
     else if abs(stage-3.0)<0.5 then -200.0 else if abs(stage-4.0)<0.5 then -309.0 else if abs(stage-5.0)<0.5 then -300.0 else -260.0);
   target_y = noEvent(if abs(stage-4.0)<0.5 then 17.0 else if abs(stage-5.0)<0.5 then 18.873 else 0.66);
   target_distance_m = sqrt(position_x^2+(position_y-target_y)^2+(position_z-target_z)^2);
-  launch_gate = noEvent(if abs(position_x)<6.0 and position_z<=140.0 and speed>=26.8224 and gas_mass<249.0 then 1.0 else 0.0);
-  refill_zone = noEvent(if abs(position_x)<6.0 and position_y<1.5 and ((abs(stage-1.0)<0.5 and abs(position_z-40.0)<8.0)
+  launch_gate = noEvent(if abs(position_x)<6.0 and position_z<=launch_gate_z and speed>=26.8224 and gas_mass<249.0 then 1.0 else 0.0);
+  refill_zone = noEvent(if abs(position_x)<6.0 and position_y<1.5 and ((abs(stage-1.0)<0.5 and abs(position_z-first_refill_z)<8.0)
     or (abs(stage-3.0)<0.5 and abs(position_z+200.0)<8.0)) then 1.0 else 0.0);
   refill_ready = noEvent(if gas_mass>=249.995 and abs(gas_temperature-target_temperature)<0.1 then 1.0 else 0.0);
   jump_clearance = noEvent(if abs(position_x)<6.0 and position_y>3.0 and airborne>0.8 then 1.0 else 0.0);
@@ -89,9 +91,9 @@ equation
   crest_gate = noEvent(if position_y>17.8 and position_z> -301.0 then 1.0 else 0.0);
   airborne_gate = noEvent(if airborne>0.8 and position_y>10.0 then 1.0 else 0.0);
   failure_reason = noEvent(if elapsed>180.0 then 1.0
-    else if stage<0.5 and position_z<125.0 and launch_gate<0.5 then 2.0
-    else if stage>0.5 and stage<3.5 and position_z<135.0 and speed<25.0 then 3.0
-    else if (abs(stage-1)<0.5 and position_z<32.0) or (abs(stage-3)<0.5 and position_z< -208.0) then 4.0
+    else if stage<0.5 and position_z<launch_gate_z-15.0 and launch_gate<0.5 then 2.0
+    else if stage>0.5 and stage<3.5 and position_z<launch_gate_z-5.0 and speed<25.0 then 3.0
+    else if (abs(stage-1)<0.5 and position_z<first_refill_z-8.0) or (abs(stage-3)<0.5 and position_z< -208.0) then 4.0
     else if abs(stage-6)<0.5 and position_y<1.0 and airborne<0.2 and roll_rotation<150.0 then 5.0 else 0.0);
   healthy = noEvent(if failure_reason>0.5 then 0.0 else 1.0);
   landing_gate = noEvent(if abs(position_x)<6.0 and position_z> -295.0 and position_z< -230.0

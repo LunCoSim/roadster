@@ -62,7 +62,7 @@ def Xform "Roadster" (
     float inputs:instant_stored_energy_j = 0.0
     float inputs:refill = 0.0
     float inputs:headlights = 1.0
-    float inputs:fan = 1.0
+    float inputs:fan = 0.0
     float inputs:lift_fl = 0.0
     float inputs:lift_fr = 0.0
     float inputs:lift_rl = 0.0

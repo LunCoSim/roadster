@@ -44,7 +44,9 @@ fn healthy(me) {
 fn launched(me) { readings(this.car,["launch_gate"]).launch_gate > 0.5 }
 fn launch_started(me) { readings(this.car,["course_launch_started"]).course_launch_started > 0.5 }
 fn in_refill_zone(me) { readings(this.car,["refill_zone"]).refill_zone > 0.5 }
-fn tank_ready(me) { readings(this.car,["refill_ready"]).refill_ready > 0.5 }
+// Completion acknowledges the atomic service boundary. Ongoing nozzle flow
+// can consume gas in the same coupled interval; exact fullness is not a receipt.
+fn tank_ready(me) { readings(this.car,["instant_services"]).instant_services >= this.expected_service_count }
 fn at_takeoff(me) { readings(this.car,["course_takeoff_gate"]).course_takeoff_gate > 0.5 }
 fn jump_impulse_ready(me) {readings(this.car,["course_jump_impulse_ready"]).course_jump_impulse_ready>0.5}
 fn barrier_reached(me) { readings(this.car,["course_block_crossed"]).course_block_crossed > 0.5 }
@@ -57,7 +59,10 @@ fn roll_ready(me) {readings(this.car,["course_roll_gate"]).course_roll_gate>0.5}
 fn landing_ready(me) {
     if readings(this.car,["landing_gate"]).landing_gate<0.5 {return false;}
     for corner in ["FL","FR","RL","RR"] {
-        if contact_debug(find_path("/World/Roadster/Wheel_"+corner)).touching_pair_count<1 {return false;}
+        let contact=contact_debug(find_path("/World/Roadster/Wheel_"+corner));
+        // A fresh continuous reaction is native contact evidence too. The
+        // enclosing landing gate and dwell reject airborne impacts/bounces.
+        if contact.touching_pair_count<1 && contact.continuous_normal_impulse<=0.0 {return false;}
     }
     true
 }
@@ -66,6 +71,7 @@ fn refill(me) {
         "refill_count","mechanical_energy_j","stored_energy_j"];
     let names = []; for field in fields { names.push("next_"+field); }
     let boundary = readings(this.car,names);
+    this.expected_service_count = boundary.next_refill_count;
     let writes = [];
     for field in fields { writes.push(["instant_"+field,boundary["next_"+field]]); }
     cmd("SetPorts",#{target:this.car,writes:writes});
@@ -84,7 +90,7 @@ fn barrier_node() {
 }
 fn on_start(me, ctx) {
     this.car = find_path("/World/Roadster");
-    this.failure_code=7.0;
+    this.failure_code=7.0;this.expected_service_count=0.0;
     this.cubes=[];for i in 0..3 {this.cubes.push(find_path("/World/JumpBlock"+i.to_string()));}
     this.contact_bodies=[this.car];for corner in ["FL","FR","RL","RR"] {this.contact_bodies.push(find_path("/World/Roadster/Wheel_"+corner));}
     this.phase = 0; this.blocks = 0; this.autopilot = false;
