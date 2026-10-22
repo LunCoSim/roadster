@@ -84,5 +84,8 @@ fn on_tick(me,ctx) {
  emit("ROADSTER_CONTACT_RECOVERY_EVIDENCE",#{kind:this.kind,duration_s:this.t,substeps:physics_substeps(),maximum_airborne_observation_error:this.airborne_observation_error,maximum_radial_extent_error_m:this.radial_error,initial_geometry_snapshot_error_m:this.initial_radial_error,maximum_bump_m:this.max_bump,minimum_bump_m:this.min_bump,maximum_ground_penetration_m:this.max_ground_penetration,
   maximum_boost_pitch_rate_deg_s:this.max_pitch,landed:this.landed,upright:this.upright,finite:this.finite,final:v,worst:this.worst,failures:this.fail});
  cmd("SetPorts",#{target:this.car,writes:[["boost",0.0],["lift_fl",0.0],["lift_rl",0.0],["lift_fr",0.0],["lift_rr",0.0]]});
- this.done=true;report_verdict(this.fail,"ROADSTER CONTACT RECOVERY","ROADSTER_CONTACT_RECOVERY");
+ let checks=[t_true(this.fail.len==0,"wheel geometry, jets, air ledger and recovery remain valid"),
+  t_true(this.max_bump<=0.068 && this.min_bump>= -0.058,"physical suspension stops bound measured wheel travel"),
+  t_true(this.max_ground_penetration<=0.003,"fresh query and solved body pose keep tires above the ground")];
+ this.done=true;report_verdict(checks,"ROADSTER CONTACT RECOVERY","ROADSTER_CONTACT_RECOVERY");
 }

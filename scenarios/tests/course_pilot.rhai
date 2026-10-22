@@ -11,6 +11,7 @@ fn simulation_dependencies(me,ctx) {
 fn on_start(me,ctx) {
     this.car=find_path("/World/Roadster");this.time=0.0;this.last_stage= -1;
     this.stage_times=[];this.next_sample=0.0;this.done=false;
+    subscribe("simulation-object-paused");
     this.jump_impulse=0.0;this.touchdown_speed=();
     this.minimum_carry_speed=();this.minimum_service_speed=();
     this.last_services=0.0;this.maximum_unlimited=0.0;this.climb_height=();this.climb_seal=();this.climb_suction=();
@@ -26,6 +27,13 @@ fn on_start(me,ctx) {
 }
 fn task(me,ctx) {
     seq([wait(0.2),once(|m|emit("runtime.ui.action",#{action:"roadster.autopilot"}))])
+}
+fn on_event(me,evt,ctx) {
+    if !this.done && evt.name=="simulation-object-paused" && evt.source==this.car {
+        this.done=true;
+        report_verdict([t_true(false,"Course vehicle paused: "+evt.value)],
+            "ROADSTER COURSE","ROADSTER_COURSE");
+    }
 }
 // Per-tick work is acceptance observation only; no actuator or state writes.
 fn on_tick(me,ctx) {

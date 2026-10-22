@@ -447,6 +447,12 @@ def Xform "Roadster" (
     custom double outputs:tank_temperature_c = 0.0
     custom double outputs:tank_wall_temperature_c = 0.0
     custom double outputs:thermal_guard_temperature_c = 0.0
+    custom double inputs:roof_absorption_capacity_j = 5000.0
+    custom double inputs:roof_impact_normal_speed = 0.0
+    double inputs:roof_impact_normal_speed.connect = </Roadster/Body/CabinCollider.outputs:contact_approach_speed>
+    custom double outputs:roof_impact_energy_j = 0.0
+    custom double outputs:roof_impact_capacity_j = 0.0
+    custom float outputs:roof_impact_overload = 0.0
     variantSet "trim" = {
         "Performance" {
             float inputs:boost_available = 0.0
@@ -829,6 +835,10 @@ def Xform "Roadster" (
             float inputs:rpm
             float inputs:rpm.connect = </Roadster.outputs:fan_rpm>
         }
+        over "CabinCollider"
+        {
+            custom double outputs:contact_approach_speed = 0.0
+        }
     }
     def SphereLight "HeadlampL" (
         prepend apiSchemas = ["ShapingAPI", "ShadowAPI", "LunCoLightAPI"]
@@ -896,6 +906,7 @@ def Xform "Roadster" (
         custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
         uniform token purpose = "default"
         color3f[] primvars:displayColor = [(0.02500000037252903, 0.02500000037252903, 0.02800000086426735)]
+        float physxVehicleSuspension:travelDistance = 0.06499999761581421
         variantSet "tire" = {
             "road" (
                 prepend references = @../components/road_tire.usda@</RoadTire>
@@ -961,6 +972,7 @@ def Xform "Roadster" (
         custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
         uniform token purpose = "default"
         color3f[] primvars:displayColor = [(0.02500000037252903, 0.02500000037252903, 0.02800000086426735)]
+        float physxVehicleSuspension:travelDistance = 0.06499999761581421
         variantSet "tire" = {
             "road" (
                 prepend references = @../components/road_tire.usda@</RoadTire>
@@ -1025,6 +1037,7 @@ def Xform "Roadster" (
         custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
         uniform token purpose = "default"
         color3f[] primvars:displayColor = [(0.02500000037252903, 0.02500000037252903, 0.02800000086426735)]
+        float physxVehicleSuspension:travelDistance = 0.06499999761581421
         variantSet "tire" = {
             "road" (
                 prepend references = @../components/road_tire.usda@</RoadTire>
@@ -1089,6 +1102,7 @@ def Xform "Roadster" (
         custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
         uniform token purpose = "default"
         color3f[] primvars:displayColor = [(0.02500000037252903, 0.02500000037252903, 0.02800000086426735)]
+        float physxVehicleSuspension:travelDistance = 0.06499999761581421
         variantSet "tire" = {
             "road" (
                 prepend references = @../components/road_tire.usda@</RoadTire>
@@ -1334,5 +1348,19 @@ def Xform "Roadster" (
             float inputs:trigger
             float inputs:trigger.connect = </Roadster.outputs:pilot_roll_right_off>
         }
+    }
+    def Scope "ImpactPolicy" (
+        prepend apiSchemas = ["LunCoProgramAPI"]
+    )
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:sourceAsset = @../scenarios/impact_policy.rhai@
+    }
+    def LunCoEvent "RoofOverload"
+    {
+        uniform token lunco:event:name = "roadster.roof-overload"
+        uniform bool lunco:event:latched = true
+        float inputs:trigger = 0.0
+        float inputs:trigger.connect = </Roadster.outputs:roof_impact_overload>
     }
 }

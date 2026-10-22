@@ -488,7 +488,7 @@ def Xform "World" (
         variants = { string "trim" = "Rocket" }
     )
     {
-        double3 xformOp:translate = (0.0, 3.0, 0.0)
+        double3 xformOp:translate = (0.0, 0.72, 0.0)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
         custom double3 xformOp:rotateXYZ = (180.0, 0.0, 0.0)
         float inputs:lift_available = 0.0

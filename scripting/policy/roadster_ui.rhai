@@ -28,6 +28,11 @@ fn roadster_ui(facts) {
             out.runtime_status="ADHESION LOST / VEHICLE PAUSED";
             out.program_label="PAUSED";
         }
+        if facts.pause!=() && facts.pause.condition=="roadster:roof-impact-overload" {
+            out.runtime_status="CABIN IMPACT / VEHICLE PAUSED";
+            out.program_label="FAILED";
+            out.rr_course_hint=facts.pause.detail;
+        }
         return out;
     }
     #{runtime_status:"PHYSICS LOADING",rr_speed:"--",rr_mode:"PREPARING"}

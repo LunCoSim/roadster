@@ -1,5 +1,11 @@
 model RoadsterVehicle
   "Single solving boundary: shared Ackermann controller plus Roadster EV envelope"
+  parameter Real roof_absorption_capacity_j(unit="J",min=0) = 5000
+    "Study validity envelope for cabin impacts; not a calibrated Tesla crash rating";
+  input Real roof_impact_normal_speed(unit="m/s",min=0) = 0;
+  output Real roof_impact_energy_j(unit="J");
+  output Real roof_impact_overload;
+  output Real roof_impact_capacity_j(unit="J");
   parameter Real course_enabled = 0;
   parameter Real course_launch_gate_z(unit="m") = 140.0;
   parameter Real course_first_refill_z(unit="m") = 40.0;
@@ -473,6 +479,10 @@ model RoadsterVehicle
   output Real heading_fl;
   output Real heading_fr;
 equation
+  roof_impact_energy_j = noEvent(if up_alignment < -0.5 then
+    0.5*vehicle_mass_kg*roof_impact_normal_speed^2 else 0.0);
+  roof_impact_capacity_j = roof_absorption_capacity_j;
+  roof_impact_overload = noEvent(if roof_impact_energy_j>roof_absorption_capacity_j then 1.0 else 0.0);
   der(launch_elapsed) = max(0.0,min(1.0,launch_measurement_active));
   der(launch_rear_impulse) = max(0.0,min(1.0,launch_measurement_active))*abs(jet_force_z);
   launch_recorded_time_s = launch_elapsed;
