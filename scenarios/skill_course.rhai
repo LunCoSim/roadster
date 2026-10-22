@@ -1,7 +1,7 @@
 import "twin://tesla-roadster-runner/tools/wheel_state" as wheels;
 // One mission tree for manual play, keyboard acceptance, and autopilot.
-// Modelica owns measurements and control suggestions; this program owns phases
-// and discrete command edges. It never writes forces, poses, velocities or mass.
+// Modelica owns continuous pilot-to-actuator coupling; this program owns phases
+// and discrete service requests. It never writes forces, poses, velocities or mass.
 fn simulation_dependencies(me, ctx) {
     let car = find_path("/World/Roadster");
     let reads=[car];for corner in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+corner));}
@@ -90,8 +90,8 @@ fn on_start(me, ctx) {
     this.cubes=[];for i in 0..3 {this.cubes.push(find_path("/World/JumpBlock"+i.to_string()));}
     this.contact_bodies=[this.car];
     this.phase = 0; this.blocks = 0; this.autopilot = false;
-    this.last_controls = [];
-    for name in ["TASK_FAILED","runtime.ui.action","roadster.pilot.controls","intent.edge"] {subscribe(name);}
+    for name in ["TASK_FAILED","runtime.ui.action","intent.edge",
+        "roadster.service-brake.apply","roadster.service-brake.release"] {subscribe(name);}
     cmd("SetPorts",#{target:this.car,writes:[["course_phase",0.0],["course_failure_code",0.0],
         ["course_action",0.0],["course_blocks_passed",0.0],["course_autopilot_enable",0.0]]});
 }
@@ -119,26 +119,8 @@ fn task(me, ctx) {
             retry(60,seq([wait_until(Fn("landing_ready")),
                 reactive_seq([check(Fn("landing_ready")),wait(0.5)])])),
             phase_node(7,10,"COURSE COMPLETE: launch, three blocks, fan climb, flip and four-wheel landing."),
-            once(|m| { if this.autopilot { this.apply_pilot(m); } }),
         ]),
     ])
-}
-fn pilot_setpoint(car) {
-    let names = ["throttle","brake","thrust_z","thrust_y","thrust_x",
-        "fan","lift_fl","lift_fr","lift_rl","lift_rr"];
-    let ports = []; for name in names { ports.push("pilot_command_"+name); }
-    let p = readings(car,ports);
-    let writes = [["program_active",1.0],["autopilot_enable",0.0]];
-    for name in names { writes.push([name,p["pilot_command_"+name]]); }
-    writes
-}
-
-fn apply_pilot(me) {
-    let writes = pilot_setpoint(this.car);
-    if writes != this.last_controls {
-        cmd("SetPorts",#{target:this.car,writes:writes});
-        this.last_controls = writes;
-    }
 }
 fn stop_setpoint() {
     [["program_active",0.0],["course_autopilot_enable",0.0],
@@ -146,6 +128,12 @@ fn stop_setpoint() {
      ["thrust_x",0.0],["lift_fl",0.0],["lift_fr",0.0],["lift_rl",0.0],["lift_rr",0.0]]
 }
 fn on_event(me, evt, ctx) {
+    if this.autopilot && evt.source==this.car &&
+        (evt.name=="roadster.service-brake.apply" || evt.name=="roadster.service-brake.release") {
+        let value=if evt.name=="roadster.service-brake.apply" {1.0}else{0.0};
+        let result=cmd("SetPorts",#{target:this.car,writes:[["brake",value]]});
+        if result.ok!=true {throw("Service brake request rejected: "+result);}
+    }
     if evt.name == "TASK_FAILED" && evt.source == me {
         this.phase = 8; this.autopilot = false;
         let writes = stop_setpoint(); writes.push(["course_phase",8.0]);writes.push(["course_failure_code",this.failure_code]);
@@ -163,18 +151,14 @@ fn on_event(me, evt, ctx) {
     }
     if evt.name == "runtime.ui.action" && evt.value.action == "roadster.autopilot" {
         if this.phase >= 7 && !this.autopilot { notify("Retry the course before starting the autopilot."); return; }
-        this.autopilot = !this.autopilot; this.last_controls = [];
+        this.autopilot = !this.autopilot;
         if this.autopilot {
             cmd("SetPorts",#{target:this.car,writes:[["course_autopilot_enable",1.0]]});
-            this.apply_pilot(me);
             notify("Course autopilot ON. Press any driving or jet key to take over. Ctrl+P still pauses.");
         } else {
             cmd("SetPorts",#{target:this.car,writes:stop_setpoint()});
             notify("Autopilot OFF. Manual controls active.");
         }
-    }
-    if this.autopilot && evt.name == "roadster.pilot.controls" && evt.source == this.car {
-        this.apply_pilot(me);
     }
     if this.autopilot && evt.name == "intent.edge" && evt.source == this.car && evt.value.edge == "pressed" {
         let movement = ["forward","backward","left","right","brake","thrust","speed_boost",

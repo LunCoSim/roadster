@@ -19,9 +19,9 @@ across 200 L + 400 L vessels; it does not carry 250 kg in each vessel.
 
 Use the second form when supplying simulator options. With no arguments the
 launcher opens the skill course. Set `LUNCOSIM_BIN` to a LunCoSim executable with
-the shared camera-follow and semantic switch-mode changes (`b88089012`) on main. The current
-development executable is `.scratch/control-target/debug/luncosim`; select it
-with `LUNCOSIM_BIN` explicitly.
+the current shared camera, wheel and coupled-object APIs. For source development,
+select the regular checkout build explicitly, for example
+`LUNCOSIM_BIN=../../luncosim-workspace/optimization/target/debug/luncosim`.
 The launcher composes shared assets and the authored HUD locally and loads the
 isolated keymap. Shared `lunco://` assets resolve from the neighboring checkout.
 No shared application assets are edited.
@@ -135,6 +135,11 @@ speeds; keyboard steering builds more gradually at speed. Tire slip and the
 Coulomb cone determine actual cornering. Steering assistance can be disabled
 with the Modelica parameter `keyboard_steering_assistance=0` for analog commands.
 
+The course pilot connects throttle, steering, jets and fan requests inside the
+vehicle's single Modelica solve. Rhai selects ownership, sequences checkpoints
+and services the native sticking brake's discrete apply/release requests using
+their retained producer identity. Manual takeover disables the course pilot.
+
 At 600 L and 293.15 K, the reusable Modelica dry-air EOS calculates **437.023 bar
 absolute** for 250 kg. Rocket retains 250 kg. Thrust’s separate 200 L trim explicitly derives about 83.33 kg at the same initial density. Tank placement,
 nozzles, fan maps, aero coefficients, tire curves and thermal coefficients remain
@@ -231,8 +236,10 @@ and the authored study geometry.
 raycast realization and its measured limits. Nominal driving, wall release,
 steering, ramp entry, moving jump and all seven full-course SysML criteria have
 production evidence. The course uses an explicit flexible-skirt study assumption
-and continuous Modelica steering. Roof impact and suspension travel under drops
-remain open.
+and continuous Modelica actuator coupling. The course passes at 60 Hz and 10 Hz
+outer updates and in the graphical production host, with identical terminal
+physical evidence at tick 1771 (29.52 simulation seconds). Roof-overload and
+gentle-contact controls pass nine and four checks; suspension travel passes three.
 Use `LUNCOSIM_BIN` to select the regular production build explicitly.
 
 ## Internal fan adhesion model

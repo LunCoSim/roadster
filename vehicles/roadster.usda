@@ -358,47 +358,19 @@ def Xform "Roadster" (
     custom float outputs:course_airborne_gate = 0.0
     custom float outputs:course_healthy = 0.0
     custom float outputs:pilot_forward = 0.0
-    custom float outputs:pilot_forward_on = 0.0
-    custom float outputs:pilot_forward_off = 0.0
     custom float outputs:pilot_reverse = 0.0
-    custom float outputs:pilot_reverse_on = 0.0
-    custom float outputs:pilot_reverse_off = 0.0
     custom float outputs:pilot_left = 0.0
-    custom float outputs:pilot_left_on = 0.0
-    custom float outputs:pilot_left_off = 0.0
     custom float outputs:pilot_right = 0.0
-    custom float outputs:pilot_right_on = 0.0
-    custom float outputs:pilot_right_off = 0.0
     custom float outputs:pilot_boost = 0.0
-    custom float outputs:pilot_boost_on = 0.0
-    custom float outputs:pilot_boost_off = 0.0
     custom float outputs:pilot_brake = 0.0
-    custom float outputs:pilot_brake_on = 0.0
-    custom float outputs:pilot_brake_off = 0.0
     custom float outputs:pilot_lift = 0.0
-    custom float outputs:pilot_lift_on = 0.0
-    custom float outputs:pilot_lift_off = 0.0
     custom float outputs:pilot_fan = 0.0
-    custom float outputs:pilot_fan_on = 0.0
-    custom float outputs:pilot_fan_off = 0.0
     custom float outputs:pilot_pitch_up = 0.0
-    custom float outputs:pilot_pitch_up_on = 0.0
-    custom float outputs:pilot_pitch_up_off = 0.0
     custom float outputs:pilot_pitch_down = 0.0
-    custom float outputs:pilot_pitch_down_on = 0.0
-    custom float outputs:pilot_pitch_down_off = 0.0
     custom float outputs:pilot_yaw_left = 0.0
-    custom float outputs:pilot_yaw_left_on = 0.0
-    custom float outputs:pilot_yaw_left_off = 0.0
     custom float outputs:pilot_yaw_right = 0.0
-    custom float outputs:pilot_yaw_right_on = 0.0
-    custom float outputs:pilot_yaw_right_off = 0.0
     custom float outputs:pilot_roll_left = 0.0
-    custom float outputs:pilot_roll_left_on = 0.0
-    custom float outputs:pilot_roll_left_off = 0.0
     custom float outputs:pilot_roll_right = 0.0
-    custom float outputs:pilot_roll_right_on = 0.0
-    custom float outputs:pilot_roll_right_off = 0.0
     custom double inputs:course_position_y = 0.66
     custom double inputs:course_turn_direction = 1.0
     custom double outputs:course_step = 0.0
@@ -453,6 +425,8 @@ def Xform "Roadster" (
     custom double outputs:roof_impact_energy_j = 0.0
     custom double outputs:roof_impact_capacity_j = 0.0
     custom float outputs:roof_impact_overload = 0.0
+    custom float outputs:service_brake_apply = 0.0
+    custom float outputs:service_brake_release = 0.0
     variantSet "trim" = {
         "Performance" {
             float inputs:boost_available = 0.0
@@ -1150,205 +1124,6 @@ def Xform "Roadster" (
     )
     {
     }
-    def Scope "CourseEvents"
-    {
-        def LunCoEvent "Pilot_forward_on"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_forward_on>
-        }
-        def LunCoEvent "Pilot_forward_off"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_forward_off>
-        }
-        def LunCoEvent "Pilot_reverse_on"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_reverse_on>
-        }
-        def LunCoEvent "Pilot_reverse_off"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_reverse_off>
-        }
-        def LunCoEvent "Pilot_left_on"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_left_on>
-        }
-        def LunCoEvent "Pilot_left_off"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_left_off>
-        }
-        def LunCoEvent "Pilot_right_on"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_right_on>
-        }
-        def LunCoEvent "Pilot_right_off"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_right_off>
-        }
-        def LunCoEvent "Pilot_boost_on"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_boost_on>
-        }
-        def LunCoEvent "Pilot_boost_off"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_boost_off>
-        }
-        def LunCoEvent "Pilot_brake_on"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_brake_on>
-        }
-        def LunCoEvent "Pilot_brake_off"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_brake_off>
-        }
-        def LunCoEvent "Pilot_lift_on"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_lift_on>
-        }
-        def LunCoEvent "Pilot_lift_off"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_lift_off>
-        }
-        def LunCoEvent "Pilot_fan_on"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_fan_on>
-        }
-        def LunCoEvent "Pilot_fan_off"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_fan_off>
-        }
-        def LunCoEvent "Pilot_pitch_up_on"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_pitch_up_on>
-        }
-        def LunCoEvent "Pilot_pitch_up_off"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_pitch_up_off>
-        }
-        def LunCoEvent "Pilot_pitch_down_on"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_pitch_down_on>
-        }
-        def LunCoEvent "Pilot_pitch_down_off"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_pitch_down_off>
-        }
-        def LunCoEvent "Pilot_yaw_left_on"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_yaw_left_on>
-        }
-        def LunCoEvent "Pilot_yaw_left_off"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_yaw_left_off>
-        }
-        def LunCoEvent "Pilot_yaw_right_on"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_yaw_right_on>
-        }
-        def LunCoEvent "Pilot_yaw_right_off"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_yaw_right_off>
-        }
-        def LunCoEvent "Pilot_roll_left_on"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_roll_left_on>
-        }
-        def LunCoEvent "Pilot_roll_left_off"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_roll_left_off>
-        }
-        def LunCoEvent "Pilot_roll_right_on"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_roll_right_on>
-        }
-        def LunCoEvent "Pilot_roll_right_off"
-        {
-            uniform token lunco:event:name = "roadster.pilot.controls"
-            uniform double lunco:event:qualificationTime = 0.0
-            float inputs:trigger
-            float inputs:trigger.connect = </Roadster.outputs:pilot_roll_right_off>
-        }
-    }
     def Scope "ImpactPolicy" (
         prepend apiSchemas = ["LunCoProgramAPI"]
     )
@@ -1362,5 +1137,19 @@ def Xform "Roadster" (
         uniform bool lunco:event:latched = true
         float inputs:trigger = 0.0
         float inputs:trigger.connect = </Roadster.outputs:roof_impact_overload>
+    }
+    def LunCoEvent "ServiceBrakeApply"
+    {
+        uniform token lunco:event:name = "roadster.service-brake.apply"
+        uniform double lunco:event:qualificationTime = 0.0
+        float inputs:trigger
+        float inputs:trigger.connect = </Roadster.outputs:service_brake_apply>
+    }
+    def LunCoEvent "ServiceBrakeRelease"
+    {
+        uniform token lunco:event:name = "roadster.service-brake.release"
+        uniform double lunco:event:qualificationTime = 0.0
+        float inputs:trigger
+        float inputs:trigger.connect = </Roadster.outputs:service_brake_release>
     }
 }

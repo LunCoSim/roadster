@@ -42,58 +42,22 @@ model RoadsterVehicle
   output Real course_air_yaw_degrees;
   output Real course_air_roll_degrees;
   output Real course_backward_distance_m;
-  output Real pilot_command_throttle;
-  output Real pilot_command_brake;
-  output Real pilot_command_thrust_z;
-  output Real pilot_command_thrust_y;
-  output Real pilot_command_thrust_x;
-  output Real pilot_command_fan;
-  output Real pilot_command_lift_fl;
-  output Real pilot_command_lift_fr;
-  output Real pilot_command_lift_rl;
-  output Real pilot_command_lift_rr;
   output Real pilot_forward;
-  output Real pilot_forward_on;
-  output Real pilot_forward_off;
   output Real pilot_reverse;
-  output Real pilot_reverse_on;
-  output Real pilot_reverse_off;
   output Real pilot_left;
-  output Real pilot_left_on;
-  output Real pilot_left_off;
   output Real pilot_right;
-  output Real pilot_right_on;
-  output Real pilot_right_off;
   output Real pilot_boost;
-  output Real pilot_boost_on;
-  output Real pilot_boost_off;
   output Real pilot_brake;
-  output Real pilot_brake_on;
-  output Real pilot_brake_off;
+  output Real service_brake_apply "Discrete request for the native sticking brake";
+  output Real service_brake_release "Discrete release of the native sticking brake";
   output Real pilot_lift;
-  output Real pilot_lift_on;
-  output Real pilot_lift_off;
   output Real pilot_fan;
-  output Real pilot_fan_on;
-  output Real pilot_fan_off;
   output Real pilot_pitch_up;
-  output Real pilot_pitch_up_on;
-  output Real pilot_pitch_up_off;
   output Real pilot_pitch_down;
-  output Real pilot_pitch_down_on;
-  output Real pilot_pitch_down_off;
   output Real pilot_yaw_left;
-  output Real pilot_yaw_left_on;
-  output Real pilot_yaw_left_off;
   output Real pilot_yaw_right;
-  output Real pilot_yaw_right_on;
-  output Real pilot_yaw_right_off;
   output Real pilot_roll_left;
-  output Real pilot_roll_left_on;
-  output Real pilot_roll_left_off;
   output Real pilot_roll_right;
-  output Real pilot_roll_right_on;
-  output Real pilot_roll_right_off;
   CoursePilot pilot(phase=course_phase,action=course_action,elapsed=course_time_s,
     jump_roll_degrees=course_jump_roll_target_deg,
     position_x=autopilot_position_x,velocity_x=measured_vx,turn_direction=course_turn_direction,jump_timing_offset_s=course_jump_timing_offset_s,
@@ -334,8 +298,9 @@ model RoadsterVehicle
   output Real headlight_peak_candela;
   LunCo.Mobility.RoverAckermannDrivetrain steering(
     wheelbase=wheelbase,track=track,max_heading=max_heading,
-    throttle=throttle,steer=steering_position,program_active=program_active,
-    autopilot_enable=autopilot_enable,autopilot_target_x=autopilot_target_x,
+    throttle=if noEvent(course_autopilot_active>0.5) then pilot.command_throttle else throttle,
+    steer=steering_position,program_active=max(program_active,course_autopilot_active),
+    autopilot_enable=if noEvent(course_autopilot_active>0.5) then 0.0 else autopilot_enable,autopilot_target_x=autopilot_target_x,
     autopilot_target_z=autopilot_target_z,autopilot_speed=autopilot_speed,
     autopilot_radius=autopilot_radius,autopilot_turn_only=autopilot_turn_only,
     autopilot_position_x=autopilot_position_x,autopilot_position_z=autopilot_position_z,
@@ -346,13 +311,19 @@ model RoadsterVehicle
     minimum_discharge_temperature=discharge_cutoff_c+273.15,
     gas_capacity_kg=gas_capacity_kg,initial_fill=initial_fill,initial_gas_temperature=initial_gas_temperature,
     steer=steer,attitude={attitude_w,attitude_x,attitude_y,attitude_z},omega_body=omega_body,headlight_switch=headlights,
-    demand=steering.drive_left, brake=brake, boost=if noEvent(jet_flight_enable>0.5) then 0.0 else boost, lift=if noEvent(jet_flight_enable>0.5) then 0.0 else lift, adhesion_force_body=adhesion.force_body,adhesion_power_w=adhesion.electrical_power,refill=refill,unlimited_air=unlimited_air,instant_mass_offset=instant_mass_offset,instant_temperature_offset=instant_temperature_offset,
+    demand=steering.drive_left,
+    brake=if noEvent(course_autopilot_active>0.5) then pilot.command_brake else brake,
+    boost=if noEvent(jet_flight_enable>0.5 or course_autopilot_active>0.5) then 0.0 else boost,
+    lift=if noEvent(jet_flight_enable>0.5 or course_autopilot_active>0.5) then 0.0 else lift,
+    adhesion_force_body=adhesion.force_body,adhesion_power_w=adhesion.electrical_power,refill=refill,unlimited_air=unlimited_air,instant_mass_offset=instant_mass_offset,instant_temperature_offset=instant_temperature_offset,
     instant_wall_temperature_offset=instant_wall_temperature_offset,instant_refill_count=instant_refill_count,
     instant_mechanical_energy_j=instant_mechanical_energy_j,instant_stored_energy_j=instant_stored_energy_j,refill_target_temperature_k=refill_target_temperature_k,
-    lift_individual=if noEvent(jet_flight_enable>0.5) then jet_flight.corner else {lift_fl,lift_rl,lift_fr,lift_rr},
-    thrust_x=if noEvent(jet_flight_enable>0.5) then jet_flight.side else thrust_x,
-    thrust_y=if noEvent(jet_flight_enable>0.5) then jet_flight.collective else thrust_y,
-    thrust_z=if noEvent(jet_flight_enable>0.5) then 0.0 else thrust_z,
+    lift_individual=if noEvent(jet_flight_enable>0.5) then jet_flight.corner
+      else if noEvent(course_autopilot_active>0.5) then {pilot.command_lift_fl,pilot.command_lift_rl,pilot.command_lift_fr,pilot.command_lift_rr}
+      else {lift_fl,lift_rl,lift_fr,lift_rr},
+    thrust_x=if noEvent(jet_flight_enable>0.5) then jet_flight.side else if noEvent(course_autopilot_active>0.5) then pilot.command_thrust_x else thrust_x,
+    thrust_y=if noEvent(jet_flight_enable>0.5) then jet_flight.collective else if noEvent(course_autopilot_active>0.5) then pilot.command_thrust_y else thrust_y,
+    thrust_z=if noEvent(jet_flight_enable>0.5) then 0.0 else if noEvent(course_autopilot_active>0.5) then pilot.command_thrust_z else thrust_z,
     omega_left=wheel_speed_left, omega_right=wheel_speed_right,
     velocity_x=measured_vx, velocity_z=measured_vz, velocity_y=measured_vy,
     ground_gap=ground_gap,ground_valid=ground_valid,velocity_forward=velocity_forward,
@@ -361,7 +332,7 @@ model RoadsterVehicle
   // Assembly adapter only: native geometry binds to the internal adhesion law.
   // Both components are flattened into ONE Modelica solve; no extra participant,
   // communication lag, duplicate rotor integration or script physics is added.
-  FanAdhesion adhesion(skirt_reach=fan_skirt_reach,command=if noEvent(jet_flight_enable>0.5) then 0.0 else fan,enabled=powertrain.enabled,initial_speed_fraction=fan_initial_fraction,
+  FanAdhesion adhesion(skirt_reach=fan_skirt_reach,command=if noEvent(jet_flight_enable>0.5) then 0.0 else if noEvent(course_autopilot_active>0.5) then pilot.command_fan else fan,enabled=powertrain.enabled,initial_speed_fraction=fan_initial_fraction,
     center_of_mass={0,mass_center_y,mass_center_z},body_up={body_up_x,body_up_y,body_up_z},
     gap={surface_gap_0,surface_gap_1,surface_gap_2,surface_gap_3},
     valid={surface_valid_0,surface_valid_1,surface_valid_2,surface_valid_3},
@@ -520,59 +491,23 @@ equation
   course_airborne_gate = course.airborne_gate;
   course_healthy = course.healthy;
   course_failure_reason = noEvent(if course_failure_code>0.5 then course_failure_code else course.failure_reason);
-  pilot_command_throttle = pilot.command_throttle;
-  pilot_command_brake = pilot.command_brake;
-  pilot_command_thrust_z = pilot.command_thrust_z;
-  pilot_command_thrust_y = pilot.command_thrust_y;
-  pilot_command_thrust_x = pilot.command_thrust_x;
-  pilot_command_fan = pilot.command_fan;
-  pilot_command_lift_fl = pilot.command_lift_fl;
-  pilot_command_lift_fr = pilot.command_lift_fr;
-  pilot_command_lift_rl = pilot.command_lift_rl;
-  pilot_command_lift_rr = pilot.command_lift_rr;
-  course_launch_started = noEvent(if abs(throttle)>0.5 or thrust_z>0.5 then 1.0 else 0.0);
+  course_launch_started = noEvent(if abs(steering.throttle)>0.5 or powertrain.thrust_z>0.5 then 1.0 else 0.0);
   pilot_forward = pilot.forward;
-  pilot_forward_on = course_autopilot_active*pilot_forward;
-  pilot_forward_off = course_autopilot_active*(1.0-pilot_forward);
   pilot_reverse = pilot.reverse;
-  pilot_reverse_on = course_autopilot_active*pilot_reverse;
-  pilot_reverse_off = course_autopilot_active*(1.0-pilot_reverse);
   pilot_left = pilot.left;
-  pilot_left_on = course_autopilot_active*pilot_left;
-  pilot_left_off = course_autopilot_active*(1.0-pilot_left);
   pilot_right = pilot.right;
-  pilot_right_on = course_autopilot_active*pilot_right;
-  pilot_right_off = course_autopilot_active*(1.0-pilot_right);
   pilot_boost = pilot.boost;
-  pilot_boost_on = course_autopilot_active*pilot_boost;
-  pilot_boost_off = course_autopilot_active*(1.0-pilot_boost);
   pilot_brake = pilot.brake;
-  pilot_brake_on = course_autopilot_active*pilot_brake;
-  pilot_brake_off = course_autopilot_active*(1.0-pilot_brake);
+  service_brake_apply = course_autopilot_active*pilot.command_brake;
+  service_brake_release = course_autopilot_active*(1.0-pilot.command_brake);
   pilot_lift = pilot.lift;
-  pilot_lift_on = course_autopilot_active*pilot_lift;
-  pilot_lift_off = course_autopilot_active*(1.0-pilot_lift);
   pilot_fan = pilot.fan;
-  pilot_fan_on = course_autopilot_active*pilot_fan;
-  pilot_fan_off = course_autopilot_active*(1.0-pilot_fan);
   pilot_pitch_up = pilot.pitch_up;
-  pilot_pitch_up_on = course_autopilot_active*pilot_pitch_up;
-  pilot_pitch_up_off = course_autopilot_active*(1.0-pilot_pitch_up);
   pilot_pitch_down = pilot.pitch_down;
-  pilot_pitch_down_on = course_autopilot_active*pilot_pitch_down;
-  pilot_pitch_down_off = course_autopilot_active*(1.0-pilot_pitch_down);
   pilot_yaw_left = pilot.yaw_left;
-  pilot_yaw_left_on = course_autopilot_active*pilot_yaw_left;
-  pilot_yaw_left_off = course_autopilot_active*(1.0-pilot_yaw_left);
   pilot_yaw_right = pilot.yaw_right;
-  pilot_yaw_right_on = course_autopilot_active*pilot_yaw_right;
-  pilot_yaw_right_off = course_autopilot_active*(1.0-pilot_yaw_right);
   pilot_roll_left = pilot.roll_left;
-  pilot_roll_left_on = course_autopilot_active*pilot_roll_left;
-  pilot_roll_left_off = course_autopilot_active*(1.0-pilot_roll_left);
   pilot_roll_right = pilot.roll_right;
-  pilot_roll_right_on = course_autopilot_active*pilot_roll_right;
-  pilot_roll_right_off = course_autopilot_active*(1.0-pilot_roll_right);
   course_stage = course.course_stage;
   course_blocks = course.course_blocks;
   course_time_s = course.course_time_s;
