@@ -10,6 +10,9 @@ Its `CrownedVisual` child has render purpose and `renderVisibility=visible`.
 Ordinary subtree invisibility is inappropriate here because it would suppress
 both representations. The physics reader retains the cylinder independently of
 its render visibility. The cabin retains its convex mesh hull.
+The shared wheel projector binds that centered render child after structural
+admission. Its mechanical axle controls roll independently of the mesh basis;
+the same presentation contract supports physical and raycast realizations.
 
 The tire WESL material uses mesh-local position, an explicit axle direction and
 radius for its rim and tread. Its pattern does not depend on primitive cap UVs.
@@ -19,8 +22,8 @@ separation through the document journal.
 `scenarios/tests/wheel_visual_contract.rhai` runs in the graphical production
 host. Thirteen checks cover native analytic collision, hidden proxy geometry,
 one crowned render surface per wheel, material resolution and the preserved
-cabin hull. The regular production build at core `66d9e3ac1` passes the gate;
+cabin hull. The regular production build at core `3844088aa` passes the gate;
 GPU render logs and two inspected close-up captures are retained in the engine
-worktree's `.cache/codex-evidence/physics-followup-20261021/tesla-wheel-visuals-20261022/`.
+worktree's `.cache/codex-evidence/physics-followup-20261021/wheel-render-root/main-visual/`.
 This qualifies wheel presentation and collision ownership. Whole-vehicle
 steering, landing, adhesion and course behavior require their separate gates.
