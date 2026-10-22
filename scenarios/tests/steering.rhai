@@ -1,7 +1,9 @@
 // Three steady turns: actual native yaw response against geometric curvature.
 fn simulation_dependencies(me,ctx) {
  let car=find_path("/World/Roadster");
- #{modelica_entities:[car],entity_reads:[car],entity_writes:[car],query_reads:["ReadPorts","QueryPhysicsState"],required_inputs:[]}
+ let reads=[car];
+ for name in ["Steering_FL_Hinge","Steering_FR_Hinge","Suspension_FL_Slider","Suspension_FR_Slider","Suspension_RL_Slider","Suspension_RR_Slider"] {reads.push(find_path("/World/Roadster/"+name));}
+ #{modelica_entities:[car],entity_reads:reads,entity_writes:[car],query_reads:["ReadPorts","QueryPhysicsState"],required_inputs:[]}
 }
 fn on_start(me,ctx) {this.car=find_path("/World/Roadster");this.time=0.0;this.rows=[];this.done=false;}
 fn on_tick(me,ctx) {
@@ -17,8 +19,15 @@ fn on_tick(me,ctx) {
  drive(this.car,throttle,steer);cmd("SetPorts",#{target:this.car,writes:[["brake",brake],["fan",1.0]]});
  if (this.time>=13.9 && this.rows.len==0) || (this.time>=25.9 && this.rows.len==1) || (this.time>=37.9 && this.rows.len==2) {
   let tangent=2.0/(1.0/tan(v.heading_fl)+1.0/tan(v.heading_fr));
+  let joint_samples=#{};
+  for name in ["Steering_FL_Hinge","Steering_FR_Hinge","Suspension_FL_Slider","Suspension_FR_Slider","Suspension_RL_Slider","Suspension_RR_Slider"] {
+   let coordinate=if name.starts_with("Steering") {"angle"}else{"displacement"};
+   let values=#{};
+   for port in query("ReadPorts",#{api_id:find_path("/World/Roadster/"+name),port_names:[coordinate]}).ports {values[port.direction]=port.value;}
+   joint_samples[name]=values;
+  }
   this.rows.push(#{speed_mps:v.speed_mps,steer:steer,heading_fl:v.heading_fl,heading_fr:v.heading_fr,
-   yaw_rate:v.angvel_y,kinematic_yaw_rate:v.speed_mps*tangent/2.75,position:world_pos(this.car)});
+   yaw_rate:v.angvel_y,kinematic_yaw_rate:v.speed_mps*tangent/2.75,position:world_pos(this.car),joint_samples:joint_samples});
  }
  if this.time<38.0 {return;}
  let failures=[];
