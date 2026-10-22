@@ -1,10 +1,11 @@
+import bevy_pbr::render::{mesh_functions,forward_io::VertexOutput};
+import lunco::shaders::pbr_lit::{lit};
+
 //! Counter-rotating blower rotor, driven by integrated Modelica shaft angle.
-#import bevy_pbr::{mesh_functions,forward_io::VertexOutput}
-#import lunco::pbr_lit::lit
 //!@default angle 0.0
 //!@default rpm 0.0
 struct Material { angle: f32, rpm: f32, }
-@group(#{MATERIAL_BIND_GROUP}) @binding(0)
+@group(constants::MATERIAL_BIND_GROUP) @binding(0)
 var<uniform> mat: Material;
 @fragment
 fn fragment(input: VertexOutput,@builtin(front_facing) front: bool) -> @location(0) vec4<f32> {

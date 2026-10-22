@@ -1,8 +1,9 @@
+import bevy_pbr::render::{mesh_functions, forward_io::VertexOutput, mesh_view_bindings::{globals,view}};
+import lunco::shaders::lunco_noise::{vnoise};
+
 //! Cold-air mixing envelope. Modelica supplies nozzle radius, pressure expansion,
 //! length and velocity. This shader integrates translucent mist inside a fixed
 //! bounding frustum; it never paints the bounding surface as a solid cone.
-#import bevy_pbr::{mesh_functions, forward_io::VertexOutput, mesh_view_bindings::{globals,view}}
-#import lunco::noise::vnoise
 //!@default force 0.0
 //!@default direction 1.0
 //!@default reference_force 30000.0
@@ -23,7 +24,7 @@ struct Material {
     radius_end: f32,
     exit_velocity: f32,
 }
-@group(#{MATERIAL_BIND_GROUP}) @binding(0)
+@group(constants::MATERIAL_BIND_GROUP) @binding(0)
 var<uniform> mat: Material;
 @fragment
 fn fragment(input: VertexOutput,@builtin(front_facing) front: bool) -> @location(0) vec4<f32> {

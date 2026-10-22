@@ -43,9 +43,9 @@ def Xform "World" (
             def Shader "Shader"
             {
                 uniform token info:implementationSource = "sourceAsset"
-                asset info:wgsl:sourceAsset = @../shaders/earth_sky.wgsl@
                 float inputs:brightness = 0.07999999821186066
                 token outputs:surface
+                asset info:wesl:sourceAsset = @../shaders/earth_sky.wesl@
             }
         }
     }

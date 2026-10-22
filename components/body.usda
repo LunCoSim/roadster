@@ -89,10 +89,10 @@ def Xform "Body" (
             def Shader "Surface"
             {
                 uniform token info:implementationSource = "sourceAsset"
-                asset info:wgsl:sourceAsset = @../shaders/suction_fan.wgsl@
                 float inputs:angle = 0.0
                 float inputs:rpm = 0.0
                 token outputs:surface
+                asset info:wesl:sourceAsset = @../shaders/suction_fan.wesl@
             }
         }
         def Material "SideGlass"

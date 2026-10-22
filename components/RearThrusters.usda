@@ -58,7 +58,6 @@ def Xform "RearThrusters" (
             def Shader "Surface"
             {
                 uniform token info:implementationSource = "sourceAsset"
-                asset info:wgsl:sourceAsset = @../shaders/air_jet.wgsl@
                 float inputs:force = 0.0
                 float inputs:direction = -1.0
                 float inputs:reference_force = 30000.0
@@ -69,6 +68,7 @@ def Xform "RearThrusters" (
                 float inputs:radius_end = 0.1599999964237213
                 float inputs:exit_velocity = 600.0
                 token outputs:surface
+                asset info:wesl:sourceAsset = @../shaders/air_jet.wesl@
             }
         }
     }
