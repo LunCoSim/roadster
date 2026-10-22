@@ -207,9 +207,11 @@ historical results. Standing-start timing never subtracts rollout.
 `CompressedAir.mo` provides reusable EOS, sizing and internal-energy calculations;
 CoolProp is only an optional verification dependency.
 
-Maintain wheel/body mechanics with `scripts/author_contact_upgrade.py` and
-standard rigid-body placement with `scripts/author_usd_physics.py`, using the
-live document API. Mount study data lives in `scripts/study_geometry.py`. Author the
+Maintain the raycast wheel mounts and crowned visuals through the live document
+API with `scripts/author_tire_profile.rhai`. Local wheel mounts inherit scene
+placement; the single chassis carries the complete vehicle mass. See
+[wheel contact and qualification](references/wheel-contact.md). Mount study
+data lives in `scripts/study_geometry.py`. Author the
 ramp/course through the running USD document API with `scripts/author_ramp.py`
 and `scripts/author_ramp.py --course`; apply `scripts/author_dynamic_course.py`
 to the base course for the new compact ramp and timing corridor. These scripts
@@ -223,18 +225,13 @@ Performance/Rocket baselines and finite tank blowdown. The [plots](results/propu
 and [layout](results/thruster-layout.png) are generated from recorded observations
 and the authored study geometry.
 
-## Ramp contact correction
+## Physics qualification
 
-[Ramp entry investigation and evidence](references/ramp-contact.md) records
-four speed/fan checks, including smooth 144 km/h entry with all body colliders
-enabled, plus full-course completion. The collision fixes are integrated into main; the approved Parry revision is
-published. The launcher prefers the validated
-local `.scratch/luncosim`; use `LUNCOSIM_BIN` to select another runtime explicitly.
-
-The local development build uses `.scratch/luncosim-assets`, a companion link
-to the same source checkout's `assets/`. This keeps the shared UI manifest
-compatible with the binary. `LUNCO_ASSET_ROOT` explicitly overrides that source.
-The final native launch was checked with the speed/air/fan HUD visible.
+[Wheel contact and qualification](references/wheel-contact.md) records the current
+raycast realization and its measured limits. Nominal driving, wall release,
+steering, ramp entry and moving jump have production evidence. Roof impact,
+suspension travel under drops and full-course completion remain open.
+Use `LUNCOSIM_BIN` to select the regular production build explicitly.
 
 ## Internal fan adhesion model
 
@@ -246,10 +243,9 @@ markers. See the [component boundary](references/dynamics.md#adhesion-component-
 
 ## USD interoperability
 
-See [USD and Omniverse contracts](references/usd-omniverse.md) and the
-[composed authoring audit](results/usd-standard.json). The explicit rigid-body
-rig follows the standard schema contracts; Omniverse execution has not been
-validated. Modelica, Rhai and custom rendering still require their runtime
+See [USD and Omniverse contracts](references/usd-omniverse.md). The chassis and
+wheel attachments use standard schema contracts; Omniverse execution has not
+been validated. Modelica, Rhai and custom rendering still require their runtime
 integrations.
 
 ### Battery assumption

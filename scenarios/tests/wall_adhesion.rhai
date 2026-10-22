@@ -1,4 +1,5 @@
 // A pre-spun vehicle on a real vertical collider. No kinematic attachment.
+import "twin://tesla-roadster-runner/tools/wheel_state" as wheels;
 fn simulation_dependencies(me,ctx) {
  let car=find_path("/World/Roadster");let reads=[car];
  for n in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+n));}
@@ -11,9 +12,7 @@ fn sample(car,name) {
  throw("Missing output "+name);
 }
 fn contacts(car) {
- let count=0;
- for n in ["FL","FR","RL","RR"] {if contact_debug(find_path("/World/Roadster/Wheel_"+n)).touching_pair_count>0 {count+=1;}}
- count
+ wheels::contact_count("/World/Roadster")
 }
 fn on_start(me,ctx) {
  this.car=find_path("/World/Roadster");this.elapsed=0.0;this.done=false;this.on=();this.samples=[];

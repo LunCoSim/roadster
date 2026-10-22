@@ -1,12 +1,13 @@
-// Native ramp entry, with only ordinary throttle/brake/fan actuator commands.
+import "twin://tesla-roadster-runner/tools/wheel_state" as wheel_state;
+// Raycast-wheel ramp entry, with only ordinary throttle/brake/fan actuator commands.
 fn simulation_dependencies(me,ctx) {
  let car=find_path("/World/Roadster");let reads=[car];
- for n in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+n));}
+ for n in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+n));reads.push(find_path("/World/Roadster/Wheel_"+n+"/CrownedVisual"));}
  #{modelica_entities:[car],entity_reads:reads,entity_writes:[car],query_reads:["ReadPorts","QueryPhysicsState","QueryUsdPrim"],required_inputs:[]}
 }
 fn contact_summary(car) {
  let c=contact_debug(car);
- #{normal_impulse_ns:c.total_normal_impulse,continuous_normal_impulse_ns:c.continuous_normal_impulse,
+ #{normal_impulse_ns:c.total_normal_impulse,
   normal_impulse_vector:c.normal_impulse_vector,max_penetration_m:c.max_penetration,
   max_normal_speed_mps:c.max_normal_speed,contact_normal:c.contact_normal,contact_point:c.contact_point}
 }
@@ -31,10 +32,12 @@ fn on_tick(me,ctx) {
  let native=query("QueryPhysicsState",#{id:this.car});
  let wheels=[];let rot=world_rotation(this.car);let inv=[-rot[0],-rot[1],-rot[2],rot[3]];
  for n in ["FL","FR","RL","RR"] {
-  let path="/World/Roadster/Wheel_"+n;let w=find_path(path);let c=contact_debug(w);
-  let hub=qrot(inv,vsub(world_pos(w),pos));let wn=query("QueryPhysicsState",#{id:w});
-  wheels.push(#{wheel_usd_prim_path:path,contact_valid:c.touching_pair_count>0,
-    suspension_compression_m:hub[1]+0.21,angular_velocity:wn.angular_velocity_radps,rotation:world_rotation(w),normal_impulse_ns:c.total_normal_impulse+c.continuous_normal_impulse});
+  let path="/World/Roadster/Wheel_"+n;let w=find_path(path);
+  let state=wheel_state::outputs(w,["contact","shaft_speed"]);
+  let hub=qrot(inv,vsub(world_pos(find_path(path+"/CrownedVisual")),pos));
+  wheels.push(#{wheel_usd_prim_path:path,contact_valid:state.contact>0.5,
+    suspension_compression_m:hub[1]+0.21,shaft_speed_rad_s:state.shaft_speed,
+    rotation:world_rotation(w),normal_force_n:get(w,"WheelRaycast.last_normal_force")});
  }
  let row=#{time_s:this.time,position:pos,speed_mps:speed,velocity:native.linear_velocity_mps,angular_velocity:native.angular_velocity_radps,
   quat:[v.quat_w,v.quat_x,v.quat_y,v.quat_z],body_contact:contact_summary(this.car),wheels:wheels,suction_n:v.downforce,torque_left_nm:v.torque_left,throttle:throttle,brake:brake,up_y:v.up_alignment};

@@ -1,39 +1,47 @@
 # Wheel contact and presentation
 
-The four physical wheels use native analytic X-axis cylinders: radius 0.34 m,
-front width 0.25 m and rear width 0.30 m. Their dimensions remain USD doubles.
-The crowned profile is a separate visual mesh with collision disabled. These
-are study dimensions, not manufacturer tire or carcass calibration.
+The Roadster uses four analytical raycast wheels attached to one vehicle rigid
+body. Standard PhysX wheel, tire and suspension APIs supply radius, inertia,
+braking, stiffness and damping. The shared mobility engine resolves road contact;
+Modelica owns motor torque, steering, stored air, aerodynamics and mass properties.
+The cabin retains its convex mesh hull and all seven chassis collision parts.
 
-Standard `VisibilityAPI` hides each cylinder through `proxyVisibility=invisible`.
-Its `CrownedVisual` child has render purpose and `renderVisibility=visible`.
-Ordinary subtree invisibility is inappropriate here because it would suppress
-both representations. The physics reader retains the cylinder independently of
-its render visibility. The cabin retains its convex mesh hull.
-The shared wheel projector binds that centered render child after structural
-admission. Its mechanical axle controls roll independently of the mesh basis;
-the same presentation contract supports physical and raycast realizations.
+Each wheel is an ordinary vehicle-local Xform. Its mechanical axle is X and its
+suspension direction is local −Y. Scene placement therefore moves the complete
+vehicle without independent body-placement calculations. The centered
+`CrownedVisual` child has render purpose and is the only tire mesh. It rolls
+around the mechanical axle and moves with the measured suspension compression.
+Neither the mount nor its visual contributes a native wheel collider.
 
-The tire WESL material uses mesh-local position, an explicit axle direction and
-radius for its rim and tread. Its pattern does not depend on primitive cap UVs.
-`tools/crowned_tire.rhai` and `scripts/author_tire_profile.rhai` author the same
-separation through the document journal.
+The contact radius is 0.34 m. Front width is 0.25 m and rear width is 0.30 m;
+the crowned visual tapers to 0.30 m at its shoulders. These are study assumptions,
+not manufacturer calibration. Standard PhysX fields retain their schema precision.
+The tire WESL shader uses mesh-local position and an explicit axle direction.
+`tools/crowned_tire.rhai` and `scripts/author_tire_profile.rhai` author the visual
+through the document journal. The single chassis carries the complete Modelica
+vehicle mass, COM and inertia, including its running gear and stored air.
 
-`scenarios/tests/wheel_visual_contract.rhai` runs in the graphical production
-host. Thirteen checks cover native analytic collision, hidden proxy geometry,
-one crowned render surface per wheel, material resolution and the preserved
-cabin hull. The regular production build at core `3844088aa` passes the gate;
-GPU render logs and two inspected close-up captures are retained in the engine
-worktree's `.cache/codex-evidence/physics-followup-20261021/wheel-render-root/main-visual/`.
-This qualifies wheel presentation and collision ownership. Whole-vehicle
-steering, landing, adhesion and course behavior require their separate gates.
+## Production qualification
 
-The wall fixture starts at tire contact: its axle is 0.34 m from the wall,
-matching the analytic radius, with every reset-stack body placed from the same
-vehicle pose. This clears initial penetration admission. Its seven-second
-production gate still fails holding and release: at five seconds all four
-wheels contact the wall with 39.99 kN suction, but the vehicle has descended
-from 30.0 m to 5.86 m. The later release assertion is consequently not an
-isolated detachment measurement. Evidence is in the engine worktree's
-`wheel-render-root/main-checkpoint/tesla-wall-contact.log` beneath the evidence
-directory above. Contact placement does not qualify adhesion or braking.
+Regular production core `3844088aa` passes wall holding/release, steering at
+5/15/30 m/s, ramp drive, all four 11/25/40 m/s fan-on and 25 m/s fan-off entry cases,
+battery mass/energy balance at 120 kWh, motor-only launch and
+the moving-jump gate. Steering retains its original ±25% response bound.
+The five-second wall hold descends 0.37 m with four contacts and 39.999 kN suction;
+fan release then produces a fall. This finite-slip tire law does not establish
+exact static parking. Motor-only 0–60 mph is 1.581 s in the study model;
+measured gas inventory stays constant during that launch. These observations
+are not manufacturer performance claims.
+
+Roof impact, suspension travel under drop conditions and the complete stunt
+course remain unqualified. Their production gates retain their failure verdicts;
+passing nominal driving does not qualify crash behavior or an unrestricted
+landing envelope. Ray queries do not represent tire carcass deformation, broad
+obstacle sweeping or damage. The linear suspension currently lacks mechanical
+travel stops. Do not treat its probe length as a validated bump limit.
+
+The graphical wheel gate passes all 14 checks, with inspected close-up views.
+It separately checks four collider-free wheel mounts,
+one crowned render surface per wheel, material resolution, the cabin mesh and
+complete vehicle mass. Evidence is retained under the engine checkout's
+`.cache/codex-evidence/physics-followup-20261021/raycast-roadster/`.

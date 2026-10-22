@@ -193,30 +193,19 @@ temperature and mass/inertia/energy bookkeeping. The finite external supply
 remains an explicitly commanded engineering option through the control API.
 
 
-## Collision-backed suspension and laboratory air mode
+## Raycast suspension and laboratory air mode
 
-The four wheels are native dynamic cylinder bodies with normal contact and
-CCD. Each has a 5 kg carrier, a Y prismatic spring/damper and an axle revolute
-joint. The front carriers connect through 6 kg yaw knuckles. The Modelica rack
-commands those real steering hinges. At each corner the slider has 55 mm droop
-and 65 mm bump travel; its native end stops constrain the hub, rather than
-clamping only the rendered tire. Body collision boxes leave the wheel wells
-clear, with side sill contacts between the axles. Tire/body contacts are enabled;
-there is no enclosing sphere or pose recovery script.
+Four query wheels apply suspension and analytical tire reactions to the single
+chassis. Standard attachment fields define radius, inertia, brakes and steering;
+the authored spring and damping define each strut. Modelica carries complete
+vehicle mass, COM and inertia, including the running gear and stored air.
+There are no separately integrated wheel, carrier or knuckle masses.
 
-The complete-car mass remains 1700 kg dry plus stored air. Modelica subtracts
-128 kg of separate wheels/carriers/knuckles from chassis mass, shifts chassis
-COM to preserve the nominal full-car COM, and removes the separate parts'
-nominal parallel-axis inertia. Live native joints carry their actual motion.
-This is a rigid tire and simplified linear strut model, without tire carcass,
-bushing, crash deformation, or manufacturer suspension kinematics.
-
-The current profile is eight substeps at 60 Hz, 0.5 mm linear tolerance and
-0.002 rad angular tolerance. Local core `d0b091908` passes four 20-second
-contact/drop/side checks and all four ramp-entry gates. Keyboard landing remains
-open; see
-[contact-analysis.md](contact-analysis.md) for measured limits and ownership.
-No Tesla-specific suspension equations were added to Rust.
+The cabin mesh and six additional chassis collision parts remain active. These
+wheel rays model road support, not a tire carcass or arbitrary obstacle contact.
+See [wheel contact](wheel-contact.md) for current evidence and known suspension,
+roof-impact and course qualification boundaries. No Tesla-specific Rust dynamics
+are introduced by this realization.
 
 The Air inventory's unlimited-air switch enables an explicitly ideal external
 laboratory reservoir. Enabling it invokes the existing instantaneous conditioned

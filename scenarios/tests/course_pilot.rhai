@@ -1,4 +1,5 @@
 // Observer of the production tree. The shared course pilot owns all guidance.
+import "twin://tesla-roadster-runner/tools/wheel_state" as wheels;
 fn simulation_dependencies(me,ctx) {
     let car=find_path("/World/Roadster");
     let reads=[car];for corner in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+corner));}
@@ -14,7 +15,7 @@ fn on_start(me,ctx) {
     this.minimum_carry_speed=();this.minimum_service_speed=();
     this.last_services=0.0;this.maximum_unlimited=0.0;this.climb_height=();this.climb_seal=();this.climb_suction=();
     this.cubes=[];for i in 0..3 {this.cubes.push(find_path("/World/JumpBlock"+i.to_string()));}
-    this.contact_bodies=[this.car];for corner in ["FL","FR","RL","RR"] {this.contact_bodies.push(find_path("/World/Roadster/Wheel_"+corner));}
+    this.contact_bodies=[this.car];
     this.source=sysml_requirements::source();if this.source.ok!=true {throw(this.source.error);}
     let fields=query("QueryUsdPrim",#{path:"/World/DriverSetup",attrs:["study:jumpTimingOffset","study:timingSweep"]}).attrs;
     this.timing_sweep=fields["study:timingSweep"]==true;
@@ -41,7 +42,7 @@ fn on_tick(me,ctx) {
     if (stage==2 || stage==8) && v.position_z< -94.0 && v.position_z> -132.0 {
         for cube in this.cubes {for body in this.contact_bodies {
             let c=contact_debug(body,cube);
-            this.jump_impulse=max(this.jump_impulse,c.total_normal_impulse+c.continuous_normal_impulse);
+            this.jump_impulse=max(this.jump_impulse,c.total_normal_impulse);
         }}
     }
     if stage>=1 && stage<=3 {this.minimum_carry_speed=if this.minimum_carry_speed==() {v.speed_mps}else{min(this.minimum_carry_speed,v.speed_mps)};}
@@ -81,10 +82,7 @@ fn on_tick(me,ctx) {
             peak_cube_collision_impulse_ns:this.jump_impulse,final:v,failures:failures});
         this.done=true;report_verdict(failures,"ROADSTER TIMING CHALLENGE","ROADSTER_COURSE");return;
     }
-    let contacts=0;
-    for corner in ["FL","FR","RL","RR"] {
-        if contact_debug(find_path("/World/Roadster/Wheel_"+corner)).touching_pair_count>0 {contacts+=1;}
-    }
+    let contacts=wheels::contact_count("/World/Roadster");
     let checks=[
         criterion("continuous","courseFlow","ContinuousCourse",#{stage:v.course_stage,blocks:v.course_blocks,minimumCarrySpeedMps:this.minimum_carry_speed}),
         criterion("cube-contact","clearCubes","CleanCubeJump",#{peakImpulseNs:this.jump_impulse}),

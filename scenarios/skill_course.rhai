@@ -1,3 +1,4 @@
+import "twin://tesla-roadster-runner/tools/wheel_state" as wheels;
 // One mission tree for manual play, keyboard acceptance, and autopilot.
 // Modelica owns measurements and control suggestions; this program owns phases
 // and discrete command edges. It never writes forces, poses, velocities or mass.
@@ -32,7 +33,7 @@ fn healthy(me) {
     if this.phase==2 && z< -94.0 && z> -132.0 {
         for cube in this.cubes { for body in this.contact_bodies {
             let c=contact_debug(body,cube);
-            if c.total_normal_impulse+c.continuous_normal_impulse>1.0 {
+            if c.total_normal_impulse>1.0 {
                 this.failure_code=6.0;return false;
             }
         }}
@@ -58,12 +59,7 @@ fn in_flight(me) { readings(this.car,["course_airborne_gate"]).course_airborne_g
 fn roll_ready(me) {readings(this.car,["course_roll_gate"]).course_roll_gate>0.5}
 fn landing_ready(me) {
     if readings(this.car,["landing_gate"]).landing_gate<0.5 {return false;}
-    for corner in ["FL","FR","RL","RR"] {
-        let contact=contact_debug(find_path("/World/Roadster/Wheel_"+corner));
-        // A fresh continuous reaction is native contact evidence too. The
-        // enclosing landing gate and dwell reject airborne impacts/bounces.
-        if contact.touching_pair_count<1 && contact.continuous_normal_impulse<=0.0 {return false;}
-    }
+    if wheels::contact_count("/World/Roadster")!=4 {return false;}
     true
 }
 fn refill(me) {
@@ -92,7 +88,7 @@ fn on_start(me, ctx) {
     this.car = find_path("/World/Roadster");
     this.failure_code=7.0;this.expected_service_count=0.0;
     this.cubes=[];for i in 0..3 {this.cubes.push(find_path("/World/JumpBlock"+i.to_string()));}
-    this.contact_bodies=[this.car];for corner in ["FL","FR","RL","RR"] {this.contact_bodies.push(find_path("/World/Roadster/Wheel_"+corner));}
+    this.contact_bodies=[this.car];
     this.phase = 0; this.blocks = 0; this.autopilot = false;
     this.last_controls = [];
     for name in ["TASK_FAILED","runtime.ui.action","roadster.pilot.controls","intent.edge"] {subscribe(name);}

@@ -4,7 +4,6 @@ import argparse,json,time,urllib.request
 from pathlib import Path
 
 def main():
-    from author_usd_physics import place_vehicle
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--port',type=int,default=4198);args=ap.parse_args()
     root=Path(__file__).resolve().parents[1]
     def q(command,**params):
@@ -30,7 +29,7 @@ def main():
                 ('/World/DriverSetup','study:bank','string',bank),
                 ('/World/Roadster','xformOp:translate','double3','(0,20,0)')]
         ops=[{'SetAttribute':dict(edit_target='@root@',path=path,name=name,type_name=kind,value=value)} for path,name,kind,value in fields]
-        q('ApplyUsdOps',doc_id=doc,ops=ops);place_vehicle(doc,command=q)
+        q('ApplyUsdOps',doc_id=doc,ops=ops);q("SaveDocument",doc_id=doc)
         if not q('InspectUsdDocument',doc_id=doc,path='/World/DriverSetup')['prim']['exists']:raise RuntimeError('Program did not read back')
     q('CloseDocument',doc_id=doc)
     q('OpenFile',path=str(root/'scenes/roadster_track.usda'))

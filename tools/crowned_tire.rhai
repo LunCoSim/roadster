@@ -1,8 +1,7 @@
-//! Analytic cylinder contact with a separate crowned visual mesh.
-//! Dimensions are explicit caller assumptions; native USD geometry owns lowering.
-//! Returns typed geometry/visibility operations; the caller owns body schemas, mass and joints.
+//! Crowned visual mesh under an analytical raycast wheel mount.
+//! Dimensions are explicit caller assumptions; the caller owns wheel dynamics.
 fn ui_label() { "Crowned tire profile" }
-fn ui_hint() { "plan(layer, parent, name, radius_m, width_m, shoulder_drop_m, rings, segments, axis) returns analytic contact and crowned visual geometry" }
+fn ui_hint() { "plan(layer, parent, name, radius_m, width_m, shoulder_drop_m, rings, segments, axis) returns a wheel mount and crowned visual geometry" }
 fn profile(radius_m,width_m,shoulder_drop_m,rings,segments,axis) {
     if !(radius_m>0.0) || !(width_m>0.0) || !(shoulder_drop_m>0.0)
         || !(shoulder_drop_m<radius_m) || rings<5 || rings>65 || rings%2!=1
@@ -21,7 +20,7 @@ fn profile(radius_m,width_m,shoulder_drop_m,rings,segments,axis) {
       facts:#{radius_m:radius_m,width_m:width_m,shoulder_drop_m:shoulder_drop_m,
         axis:axis,rings:rings,segments:segments,
         radial_chord_error_m:radius_m*(1.0-cos(3.141592653589793/f64_from(segments))),
-        fidelity:"Analytic rigid cylinder contact and crowned visual profile; no rubber carcass or manufacturer calibration"}}
+        fidelity:"Analytical raycast contact and crowned visual profile; no rubber carcass or manufacturer calibration"}}
 }
 fn plan(layer,parent,name,radius_m,width_m,shoulder_drop_m,rings,segments,axis) {
     let shape=profile(radius_m,width_m,shoulder_drop_m,rings,segments,axis);
@@ -30,13 +29,8 @@ fn plan(layer,parent,name,radius_m,width_m,shoulder_drop_m,rings,segments,axis) 
     let visual=path+"/CrownedVisual";
     let ops=[
       #{AddPrim:#{edit_target:layer,parent_path:parent,name:name,
-        type_name:"Cylinder",reference:(),reference_prim_path:()}},
-      #{SetAttribute:#{edit_target:layer,path:path,name:"radius",type_name:"double",value:radius_m.to_string()}},
-      #{SetAttribute:#{edit_target:layer,path:path,name:"height",type_name:"double",value:width_m.to_string()}},
-      #{SetAttribute:#{edit_target:layer,path:path,name:"axis",type_name:"token",value:"\""+axis+"\""}},
-      #{SetAttribute:#{edit_target:layer,path:path,name:"purpose",type_name:"token",value:"\"proxy\""}},
-      #{SetAttribute:#{edit_target:layer,path:path,name:"proxyVisibility",type_name:"token",value:"\"invisible\""}},
-      #{SetAttribute:#{edit_target:layer,path:path,name:"physics:collisionEnabled",type_name:"bool",value:"true"}},
+        type_name:"Xform",reference:(),reference_prim_path:()}},
+      #{SetAttribute:#{edit_target:layer,path:path,name:"purpose",type_name:"token",value:"\"default\""}},
       #{AddPrim:#{edit_target:layer,parent_path:path,name:"CrownedVisual",
         type_name:"Mesh",reference:(),reference_prim_path:()}},
       #{RevolveProfileMesh:#{edit_target:layer,path:visual,profile:shape.profile,

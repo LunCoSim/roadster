@@ -2,8 +2,6 @@
 // physics and no pose/velocity/inventory writes. Assumptions: BatteryStudy.mo.
 fn simulation_dependencies(me,ctx) {
  let car=find_path("/World/Roadster");let reads=[car];
- for prefix in ["Wheel_","Suspension_"] {for c in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/"+prefix+c));}}
- for c in ["FL","FR"] {reads.push(find_path("/World/Roadster/SteeringKnuckle_"+c));}
  #{modelica_entities:[car],entity_reads:reads,entity_writes:[car],query_reads:["ReadPorts","QueryPhysicsState","QueryUsdPrim"],required_inputs:[]}
 }
 fn values(car) {
@@ -33,10 +31,6 @@ fn finish(me) {
  let attrs=query("QueryUsdPrim",#{path:"/World/Roadster",attrs:["inputs:battery_capacity_kwh","inputs:boost_available","inputs:rear_tank_volume","inputs:cabin_tank_volume"]}).attrs;
  let requested=attrs["inputs:battery_capacity_kwh"];
  let native=query("QueryPhysicsState",#{id:this.car});let total=native.mass_kg;
- for prefix in ["Wheel_","Suspension_"] {for c in ["FL","FR","RL","RR"] {
-  total+=query("QueryPhysicsState",#{id:find_path("/World/Roadster/"+prefix+c)}).mass_kg;
- }}
- for c in ["FL","FR"] {total+=query("QueryPhysicsState",#{id:find_path("/World/Roadster/SteeringKnuckle_"+c)}).mass_kg;}
  let energy_debit_j=(this.initial.battery_energy_remaining_kwh-v.battery_energy_remaining_kwh)*3600000.0;
  let balance_error=abs(energy_debit_j-this.power_integral_j);
  if abs(v.battery_nominal_energy_kwh-requested)>0.0001 {failures.push("USD battery parameter was not admitted");}

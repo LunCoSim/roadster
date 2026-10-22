@@ -493,63 +493,15 @@ def Xform "World" (
         custom double3 xformOp:rotateXYZ = (0.0, 0.0, -90.0)
         over "Wheel_FL"
         {
-            double3 xformOp:translate = (-0.21000000000000005, 2.06, -1.375)
-            custom double3 xformOp:rotateXYZ = (0.0, 0.0, -90.0)
-            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        }
-        over "Suspension_FL"
-        {
-            custom double3 xformOp:translate = (-0.21000000000000005, 2.06, -1.375)
-            custom double3 xformOp:rotateXYZ = (0.0, 0.0, -90.0)
-            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        }
-        over "SteeringKnuckle_FL"
-        {
-            custom double3 xformOp:translate = (-0.21000000000000005, 2.06, -1.375)
-            custom double3 xformOp:rotateXYZ = (0.0, 0.0, -90.0)
-            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
         }
         over "Wheel_FR"
         {
-            double3 xformOp:translate = (-0.20999999999999994, 0.33999999999999997, -1.375)
-            custom double3 xformOp:rotateXYZ = (0.0, 0.0, -90.0)
-            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        }
-        over "Suspension_FR"
-        {
-            custom double3 xformOp:translate = (-0.20999999999999994, 0.33999999999999997, -1.375)
-            custom double3 xformOp:rotateXYZ = (0.0, 0.0, -90.0)
-            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        }
-        over "SteeringKnuckle_FR"
-        {
-            custom double3 xformOp:translate = (-0.20999999999999994, 0.33999999999999997, -1.375)
-            custom double3 xformOp:rotateXYZ = (0.0, 0.0, -90.0)
-            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
         }
         over "Wheel_RL"
         {
-            double3 xformOp:translate = (-0.21000000000000005, 2.06, 1.375)
-            custom double3 xformOp:rotateXYZ = (0.0, 0.0, -90.0)
-            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        }
-        over "Suspension_RL"
-        {
-            custom double3 xformOp:translate = (-0.21000000000000005, 2.06, 1.375)
-            custom double3 xformOp:rotateXYZ = (0.0, 0.0, -90.0)
-            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
         }
         over "Wheel_RR"
         {
-            double3 xformOp:translate = (-0.20999999999999994, 0.33999999999999997, 1.375)
-            custom double3 xformOp:rotateXYZ = (0.0, 0.0, -90.0)
-            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        }
-        over "Suspension_RR"
-        {
-            custom double3 xformOp:translate = (-0.20999999999999994, 0.33999999999999997, 1.375)
-            custom double3 xformOp:rotateXYZ = (0.0, 0.0, -90.0)
-            uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
         }
     }
     def Camera "Avatar" (

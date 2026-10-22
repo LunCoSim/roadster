@@ -709,17 +709,13 @@ equation
   battery_charge_12min_average_kw = battery.charge_12min_average_kw;
   battery_energy_remaining_kwh = powertrain.soc*battery_capacity_kwh;
   vehicle_mass_kg = powertrain.vehicle_mass_kg;
-  // Six mechanism bodies (4 x 5 kg carriers, 2 x 6 kg knuckles) and
-  // four 24 kg wheels remain separate native bodies. Never count them twice.
-  chassis_mass_kg = vehicle_mass_kg-128.0;
-  chassis_com_y = (vehicle_mass_kg*mass_center_y+128.0*0.21)/chassis_mass_kg;
-  chassis_com_z = (vehicle_mass_kg*mass_center_z+12.0*1.375)/chassis_mass_kg;
-  chassis_inertia_xx = vehicle_inertia_xx-128.0*(0.07^2+1.375^2)-5.6-0.3
-    -chassis_mass_kg*((chassis_com_y-mass_center_y)^2+(chassis_com_z-mass_center_z)^2);
-  chassis_inertia_yy = vehicle_inertia_yy-128.0*(0.86^2+1.375^2)-3.3844-0.3
-    -chassis_mass_kg*(chassis_com_z-mass_center_z)^2;
-  chassis_inertia_zz = vehicle_inertia_zz-128.0*(0.86^2+0.07^2)-3.3844-0.3
-    -chassis_mass_kg*(chassis_com_y-mass_center_y)^2;
+  // Raycast running gear belongs to the single vehicle rigid body.
+  chassis_mass_kg = vehicle_mass_kg;
+  chassis_com_y = mass_center_y;
+  chassis_com_z = mass_center_z;
+  chassis_inertia_xx = vehicle_inertia_xx;
+  chassis_inertia_yy = vehicle_inertia_yy;
+  chassis_inertia_zz = vehicle_inertia_zz;
   // A-B06: battery capacity edits add the equivalent box inertia at the
   // reference vehicle COM. The 120 kWh reference is already in dry inertia;
   // add only its mass delta. Source/assumptions: references/battery-study.md.

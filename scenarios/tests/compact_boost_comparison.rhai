@@ -12,7 +12,7 @@ fn values(car,names) {
 fn on_start(me,ctx) {
  this.car=find_path("/World/Roadster");this.n=0;this.serviced=false;this.lifted=false;this.lift_closed=false;
  this.hit_barrier=false;this.blocks=0;this.takeoff_speed=0.0;this.done=false;
- this.bodies=[this.car];for c in ["FL","FR","RL","RR"] {this.bodies.push(find_path("/World/Roadster/Wheel_"+c));}
+ this.bodies=[this.car];
  this.cubes=[];for i in 0..3 {this.cubes.push(find_path("/World/JumpBlock"+i.to_string()));}
  cmd("SetPorts",#{target:this.car,writes:[["course_autopilot_enable",0.0],["program_active",1.0],["autopilot_enable",0.0],
   ["course_phase",1.0],["course_blocks_passed",0.0],["steer",0.0],["throttle",0.0],["brake",1.0],["fan",0.0],
@@ -37,7 +37,7 @@ fn on_tick(me,ctx) {
  }
  if this.lifted && v.position_z< -94.0 && v.position_z> -132.0 {
   for cube in this.cubes {for body in this.bodies {
-   let c=contact_debug(body,cube);if c.total_normal_impulse+c.continuous_normal_impulse>1.0 {this.hit_barrier=true;}
+   let c=contact_debug(body,cube);if c.total_normal_impulse>1.0 {this.hit_barrier=true;}
   }}
  }
  if this.blocks<3 && v.course_block_crossed>0.5 && v.jump_clearance>0.5 && !this.hit_barrier {

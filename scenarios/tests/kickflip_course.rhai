@@ -8,7 +8,6 @@ fn simulation_dependencies(me,ctx) {
 fn on_start(me,ctx) {
  this.car=find_path("/World/Roadster");this.done=false;this.hit=false;this.peak_impulse=0.0;this.peak_roll=0.0;
  this.bodies=[this.car];this.blocks=[];
- for corner in ["FL","FR","RL","RR"] {this.bodies.push(find_path("/World/Roadster/Wheel_"+corner));}
  for i in 0..3 {this.blocks.push(find_path("/World/JumpBlock"+i.to_string()));}
 }
 fn on_tick(me,ctx) {
@@ -20,7 +19,7 @@ fn on_tick(me,ctx) {
  if row.course_stage>=2 && row.course_stage<4 && row.position_z< -94 && row.position_z> -132 {
   for block in this.blocks {for body in this.bodies {
    let contact=contact_debug(body,block);
-   let impulse=contact.total_normal_impulse+contact.continuous_normal_impulse;
+   let impulse=contact.total_normal_impulse;
    this.peak_impulse=max(this.peak_impulse,impulse);if impulse>1.0 {this.hit=true;}
   }}
  }
@@ -34,7 +33,7 @@ fn on_tick(me,ctx) {
    t_true(row.course_blocks==3,"all three obstacles crossed"),
    t_true(this.peak_roll>=355 && this.peak_roll<405,"measured complete body revolution before recovery bank"),
    t_true(row.up_alignment>0.97 && abs(row.roll_rate_deg_s)<35,"upright attitude and roll-rate recovery"),
-   t_true(!this.hit,"no native car/wheel collision with the obstacles"),
+   t_true(!this.hit,"no chassis collision with the obstacles"),
    t_true(row.instant_services==2,"ordinary green services, finite air")
   ],"KICKFLIP COURSE","ROADSTER_KICKFLIP");
  }

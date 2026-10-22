@@ -103,8 +103,7 @@ def main():
     attr('/World/RampOverview','clippingRange','float2','(0.05, 10000)')
     if args.course: author_course(add,attr,ops,profile)
     q('ApplyUsdOps',doc_id=doc,ops=ops)
-    from author_usd_physics import place_vehicle
-    place_vehicle(doc, command=q)
+    q("SaveDocument",doc_id=doc)
     checked=q('InspectUsdDocument',doc_id=doc,path='/World/StuntRamp')
     if not checked['prim']['exists']:raise RuntimeError('Ramp did not read back')
     report=dict(width_m=14,transition_arc_length_m=50,vertical_extension_m=10,

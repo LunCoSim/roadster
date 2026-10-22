@@ -52,14 +52,14 @@ def main():
     for name,expected in MOUNTS.items():
         if name not in parameters or abs(parameters[name]-expected)>1e-6:failures.append('USD Modelica mount parameter drift: '+name)
     if abs(native['center_of_mass_m'][1]-values['chassis_com_y'])>1e-6 or abs(native['center_of_mass_m'][2]-values['chassis_com_z'])>1e-6:failures.append('Modelica wrench COM differs from native COM')
-    mechanism=[]
-    for prefix,names_part in [('Wheel_', ['FL','FR','RL','RR']),('Suspension_', ['FL','FR','RL','RR']),('SteeringKnuckle_', ['FL','FR'])]:
-        for name in names_part:
-            path='/World/Roadster/'+prefix+name
-            ident=int(q('RunRhai',code='find_path('+json.dumps(path)+')')['stdout'])
-            state=q('QueryPhysicsState',id=ident);mechanism.append(dict(path=path,mass_kg=state['mass_kg']))
-            if prefix=='Wheel_' and (not state['collider_present'] or state['body_mode']!='dynamic'):failures.append('Wheel has no dynamic collider: '+path)
-    total_native_mass=native['mass_kg']+sum(p['mass_kg'] for p in mechanism)
+    wheels=[]
+    for name in ['FL','FR','RL','RR']:
+        path='/World/Roadster/Wheel_'+name
+        ident=int(q('RunRhai',code='find_path('+json.dumps(path)+')')['stdout'])
+        state=q('QueryPhysicsState',id=ident)
+        wheels.append(dict(path=path,collider_present=state['collider_present']))
+        if state['collider_present']:failures.append('Raycast wheel owns a native collider: '+path)
+    total_native_mass=native['mass_kg']
     if abs(total_native_mass-values['vehicle_mass_kg'])>.01:failures.append('Complete native mass disagrees with inventory model')
     wheel_clearances=[]
     for index,wheel in [(0,'Wheel_FL'),(1,'Wheel_RL'),(2,'Wheel_FR'),(3,'Wheel_RR')]:
@@ -76,7 +76,7 @@ def main():
     if abs(values['rear_tank_air_kg']+values['cabin_tank_air_kg']-values['gas_mass_kg'])>1e-6:failures.append('Tank inventory does not sum to total')
     if abs(values['cabin_tank_air_kg']-2*values['rear_tank_air_kg'])>1e-6:failures.append('Common-state mass split does not match 200/400 L')
     if abs(native['mass_kg']-values['chassis_mass_kg'])>.01:failures.append('Native mass did not consume solved gas inventory')
-    report=dict(ok=not failures,nozzles=nozzles,available_seats=visible_seats,mount_parameters=parameters,wheel_clearances=wheel_clearances,modelica=values,mechanism=mechanism,total_native_mass_kg=total_native_mass,native_mass_kg=native['mass_kg'],failures=failures,
+    report=dict(ok=not failures,nozzles=nozzles,available_seats=visible_seats,mount_parameters=parameters,wheel_clearances=wheel_clearances,modelica=values,wheels=wheels,total_native_mass_kg=total_native_mass,native_mass_kg=native['mass_kg'],failures=failures,
         assumptions='Two rigid volumes share uniform density/temperature; cylinder mass split is calculated, not a manufacturer mass specification.')
     (ROOT/'results/hardware.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
     return 0 if report['ok'] else 1

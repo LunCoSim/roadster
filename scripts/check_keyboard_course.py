@@ -391,7 +391,7 @@ class Pilot:
             self.keys(keys, t)
             self.check_native_input_edges()
             if stage in [2,3] and -132<v['position_z']<-94:
-                code='let peak=0.0; for cube in 0..3 {for name in ["Roadster","Roadster/Wheel_FL","Roadster/Wheel_FR","Roadster/Wheel_RL","Roadster/Wheel_RR"] {let c=contact_debug(find_path("/World/"+name),find_path("/World/JumpBlock"+cube.to_string()));peak=max(peak,c.total_normal_impulse+c.continuous_normal_impulse);}} peak'
+                code='let peak=0.0; for cube in 0..3 {for name in ["Roadster"] {let c=contact_debug(find_path("/World/"+name),find_path("/World/JumpBlock"+cube.to_string()));peak=max(peak,c.total_normal_impulse);}} peak'
                 impulse=float(self.q('RunRhai',code=code)['stdout'])
                 self.report['maximum_cube_contact_impulse_ns']=max(impulse,self.report.get('maximum_cube_contact_impulse_ns',0))
             action=round(v['course_step'])
@@ -427,7 +427,7 @@ class Pilot:
                 native = self.q('QueryPhysicsState', id=self.car)
                 contacts = {}
                 for corner in ['FL', 'FR', 'RL', 'RR']:
-                    code = f'contact_debug(find_path("/World/Roadster/Wheel_{corner}")).touching_pair_count'
+                    code = f'import "twin://tesla-roadster-runner/tools/wheel_state" as wheels; if wheels::contact(find_path("/World/Roadster/Wheel_{corner}")) {{1}} else {{0}}'
                     contacts[corner] = int(self.q('RunRhai', code=code)['stdout'])
                 self.report.update(final=v, native=native, landing_contacts=contacts,
                     hud=self.q('ReadExposures', surface='vessel-hud'))

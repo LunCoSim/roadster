@@ -35,7 +35,8 @@ def main():
             shaft=q('ReadPorts',dict(api_id=wid,port_names=['shaft_speed']))['ports']
             speed=next(p['value'] for p in shaft if p['direction']=='out')
             rotation=json.loads(q('RunRhai',dict(code='world_rotation('+str(wid)+')'))['stdout'])
-            contacts=int(q('RunRhai',dict(code='contact_debug('+str(wid)+').touching_pair_count'))['stdout'])
+            contact_ports=q('ReadPorts',dict(api_id=wid,port_names=['contact']))['ports']
+            contacts=int(next(p['value'] for p in contact_ports if p['direction']=='out')>0.5)
             wheels.append(dict(shaft_rad_s=speed,rotation=rotation,contacts=contacts))
         values['wheels']=wheels
         return values

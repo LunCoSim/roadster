@@ -1,4 +1,5 @@
 // Drive against the authored collision mesh. Native physics owns the trajectory.
+import "twin://tesla-roadster-runner/tools/wheel_state" as wheels;
 fn simulation_dependencies(me,ctx) {
  let car=find_path("/World/Roadster");let reads=[car];
  for n in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+n));}
@@ -26,8 +27,7 @@ fn on_tick(me,ctx) {
   this.entry_speed_drop=max(this.entry_speed_drop,this.previous_speed-speed);
  }
  this.previous_speed=speed;this.max_height=max(this.max_height,pos[1]);
- let contacts=0;
- for n in ["FL","FR","RL","RR"] {if contact_debug(find_path("/World/Roadster/Wheel_"+n)).touching_pair_count>0 {contacts+=1;}}
+ let contacts=wheels::contact_count("/World/Roadster");
  // Alignment is measured by the four body-relative surface probes, not
  // assumed from the authored curve or time since launch.
  if contacts>=2 && pos[1]>3.0 && pos[2] < -70.0 {this.slope_contacts+=1;}

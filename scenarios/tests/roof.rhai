@@ -4,11 +4,17 @@ fn simulation_dependencies(me,ctx) {
  #{modelica_entities:[car],entity_reads:[car],entity_writes:[car],query_reads:["ReadPorts","QueryPhysicsState"],required_inputs:[]}
 }
 fn on_start(me,ctx) {
- this.car=find_path("/World/Roadster");this.time=0.0;this.done=false;
+ this.car=find_path("/World/Roadster");this.time=0.0;this.done=false;this.next_sample=0.0;
  cmd("SetPorts",#{target:this.car,writes:[["fan",0.0],["brake",1.0]]});
 }
 fn on_tick(me,ctx) {
- if this.done {return;}this.time+=dt();if this.time<4.0 {return;}
+ if this.done {return;}this.time+=dt();
+ if this.time>=this.next_sample {
+  let row=#{time_s:this.time,position:world_pos(this.car),rotation:world_rotation(this.car),physics:query("QueryPhysicsState",#{id:this.car})};
+  row.ports=query("ReadPorts",#{api_id:this.car,port_names:["up_alignment","jet_force_x","jet_force_y","lift_force","downforce","pitch_rate_deg_s","roll_rate_deg_s","chassis_com_y","chassis_com_z"]}).ports;
+  emit("ROADSTER_ROOF_SAMPLE_EVIDENCE",row);this.next_sample=this.time+0.1;
+ }
+ if this.time<4.0 {return;}
  let v=#{};
  for p in query("ReadPorts",#{api_id:this.car,port_names:["position_y","up_alignment","speed_mps"]}).ports {
   if p.direction=="out" {v[p.name]=p.value;}

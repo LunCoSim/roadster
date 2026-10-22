@@ -22,7 +22,7 @@ def Xform "Roadster" (
     uniform asset info:sourceAsset = @../models/RoadsterVehicle.mo@
     uniform bool lunco:program:realtimeSafe = true
     uniform token lunco:steeringGeometry = "ackermann"
-    float physics:mass = 1572.0
+    float physics:mass = 1700.0
     float3 physics:centerOfMass = (0.0, -0.14000000059604645, 0.0)
     float3 physics:diagonalInertia = (3022.0, 3494.0, 708.0)
     float physxRigidBody:linearDamping = 0.0
@@ -866,17 +866,15 @@ def Xform "Roadster" (
         float inputs:light_intensity
         float inputs:light_intensity.connect = </Roadster.outputs:headlight_intensity_lm>
     }
-    def Cylinder "Wheel_FL" (
-        prepend apiSchemas = ["PhysxVehicleWheelAttachmentAPI", "PhysxVehicleWheelAPI", "PhysicsRigidBodyAPI", "PhysicsCollisionAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI", "PhysxVehicleTireAPI", "PhysicsMaterialAPI", "LunCoTireAPI", "MaterialBindingAPI", "LunCoCatalogAPI", "LunCoWheelAPI", "PhysxVehicleSuspensionAPI", "LunCoSuspensionAPI", "PhysxRigidBodyAPI", "VisibilityAPI"]
+    def Xform "Wheel_FL" (
+        prepend apiSchemas = ["PhysxVehicleWheelAttachmentAPI", "PhysxVehicleWheelAPI", "PhysxVehicleTireAPI", "PhysicsMaterialAPI", "LunCoTireAPI", "MaterialBindingAPI", "LunCoCatalogAPI", "LunCoWheelAPI", "PhysxVehicleSuspensionAPI", "LunCoSuspensionAPI"]
         references = [@lunco://components/mobility/wheel.usda@</Wheel>, @lunco://components/mobility/suspensions/standard.usda@</Suspension>]
         prepend variantSets = "tire"
         variants = { string "tire" = "road" }
     )
     {
         double3 xformOp:translate = (-0.86, -0.21, -1.375)
-        uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        double radius = 0.34
-        double height = 0.25
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
         float physxVehicleWheel:radius = 0.3400000035762787
         float physxVehicleWheel:width = 0.25
         float physxVehicleWheel:mass = 24.0
@@ -895,21 +893,9 @@ def Xform "Roadster" (
         float inputs:drive.connect = </Roadster.outputs:freewheel_torque>
         float inputs:heading
         float inputs:heading.connect = </Roadster.outputs:heading_fl>
-        bool physics:rigidBodyEnabled = true
-        bool physics:collisionEnabled = true
-        custom bool physxRigidBody:enableCCD = true
-        custom rel material:binding:physics = </Roadster/TireMaterial>
-        float physics:mass = 24.0
-        float3 physics:diagonalInertia = (1.399999976158142, 0.8185999989509583, 0.8185999989509583)
-        point3f physics:centerOfMass = (0.0, 0.0, 0.0)
         custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
-        rel physics:filteredPairs = </Roadster>
-        uniform token orientation = "rightHanded"
-        uniform bool doubleSided = false
-        uniform token purpose = "proxy"
+        uniform token purpose = "default"
         color3f[] primvars:displayColor = [(0.02500000037252903, 0.02500000037252903, 0.02800000086426735)]
-        uniform token axis = "X"
-        uniform token proxyVisibility = "invisible"
         variantSet "tire" = {
             "road" (
                 prepend references = @../components/road_tire.usda@</RoadTire>
@@ -945,17 +931,15 @@ def Xform "Roadster" (
             uniform token renderVisibility = "visible"
         }
     }
-    def Cylinder "Wheel_FR" (
-        prepend apiSchemas = ["PhysxVehicleWheelAttachmentAPI", "PhysxVehicleWheelAPI", "PhysicsRigidBodyAPI", "PhysicsCollisionAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI", "PhysxVehicleTireAPI", "PhysicsMaterialAPI", "LunCoTireAPI", "MaterialBindingAPI", "LunCoCatalogAPI", "LunCoWheelAPI", "PhysxVehicleSuspensionAPI", "LunCoSuspensionAPI", "PhysxRigidBodyAPI", "VisibilityAPI"]
+    def Xform "Wheel_FR" (
+        prepend apiSchemas = ["PhysxVehicleWheelAttachmentAPI", "PhysxVehicleWheelAPI", "PhysxVehicleTireAPI", "PhysicsMaterialAPI", "LunCoTireAPI", "MaterialBindingAPI", "LunCoCatalogAPI", "LunCoWheelAPI", "PhysxVehicleSuspensionAPI", "LunCoSuspensionAPI"]
         references = [@lunco://components/mobility/wheel.usda@</Wheel>, @lunco://components/mobility/suspensions/standard.usda@</Suspension>]
         prepend variantSets = "tire"
         variants = { string "tire" = "road" }
     )
     {
         double3 xformOp:translate = (0.86, -0.21, -1.375)
-        uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        double radius = 0.34
-        double height = 0.25
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
         float physxVehicleWheel:radius = 0.3400000035762787
         float physxVehicleWheel:width = 0.25
         float physxVehicleWheel:mass = 24.0
@@ -974,21 +958,9 @@ def Xform "Roadster" (
         float inputs:drive.connect = </Roadster.outputs:freewheel_torque>
         float inputs:heading
         float inputs:heading.connect = </Roadster.outputs:heading_fr>
-        bool physics:rigidBodyEnabled = true
-        bool physics:collisionEnabled = true
-        custom bool physxRigidBody:enableCCD = true
-        custom rel material:binding:physics = </Roadster/TireMaterial>
-        float physics:mass = 24.0
-        float3 physics:diagonalInertia = (1.399999976158142, 0.8185999989509583, 0.8185999989509583)
-        point3f physics:centerOfMass = (0.0, 0.0, 0.0)
         custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
-        rel physics:filteredPairs = </Roadster>
-        uniform token orientation = "rightHanded"
-        uniform bool doubleSided = false
-        uniform token purpose = "proxy"
+        uniform token purpose = "default"
         color3f[] primvars:displayColor = [(0.02500000037252903, 0.02500000037252903, 0.02800000086426735)]
-        uniform token axis = "X"
-        uniform token proxyVisibility = "invisible"
         variantSet "tire" = {
             "road" (
                 prepend references = @../components/road_tire.usda@</RoadTire>
@@ -1024,17 +996,15 @@ def Xform "Roadster" (
             uniform token renderVisibility = "visible"
         }
     }
-    def Cylinder "Wheel_RL" (
-        prepend apiSchemas = ["PhysxVehicleWheelAttachmentAPI", "PhysxVehicleWheelAPI", "PhysicsRigidBodyAPI", "PhysicsCollisionAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI", "PhysxVehicleTireAPI", "PhysicsMaterialAPI", "LunCoTireAPI", "MaterialBindingAPI", "LunCoCatalogAPI", "LunCoWheelAPI", "PhysxVehicleSuspensionAPI", "LunCoSuspensionAPI", "PhysxRigidBodyAPI", "VisibilityAPI"]
+    def Xform "Wheel_RL" (
+        prepend apiSchemas = ["PhysxVehicleWheelAttachmentAPI", "PhysxVehicleWheelAPI", "PhysxVehicleTireAPI", "PhysicsMaterialAPI", "LunCoTireAPI", "MaterialBindingAPI", "LunCoCatalogAPI", "LunCoWheelAPI", "PhysxVehicleSuspensionAPI", "LunCoSuspensionAPI"]
         references = [@lunco://components/mobility/wheel.usda@</Wheel>, @lunco://components/mobility/suspensions/standard.usda@</Suspension>]
         prepend variantSets = "tire"
         variants = { string "tire" = "road" }
     )
     {
         double3 xformOp:translate = (-0.86, -0.21, 1.375)
-        uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        double radius = 0.34
-        double height = 0.3
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
         float physxVehicleWheel:radius = 0.3400000035762787
         float physxVehicleWheel:width = 0.30000001192092896
         float physxVehicleWheel:mass = 24.0
@@ -1052,21 +1022,9 @@ def Xform "Roadster" (
         float inputs:heading = 0.0
         float inputs:drive
         float inputs:drive.connect = </Roadster.outputs:torque_left>
-        bool physics:rigidBodyEnabled = true
-        bool physics:collisionEnabled = true
-        custom bool physxRigidBody:enableCCD = true
-        custom rel material:binding:physics = </Roadster/TireMaterial>
-        float physics:mass = 24.0
-        float3 physics:diagonalInertia = (1.399999976158142, 0.8736000061035156, 0.8736000061035156)
-        point3f physics:centerOfMass = (0.0, 0.0, 0.0)
         custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
-        rel physics:filteredPairs = </Roadster>
-        uniform token orientation = "rightHanded"
-        uniform bool doubleSided = false
-        uniform token purpose = "proxy"
+        uniform token purpose = "default"
         color3f[] primvars:displayColor = [(0.02500000037252903, 0.02500000037252903, 0.02800000086426735)]
-        uniform token axis = "X"
-        uniform token proxyVisibility = "invisible"
         variantSet "tire" = {
             "road" (
                 prepend references = @../components/road_tire.usda@</RoadTire>
@@ -1102,17 +1060,15 @@ def Xform "Roadster" (
             uniform token renderVisibility = "visible"
         }
     }
-    def Cylinder "Wheel_RR" (
-        prepend apiSchemas = ["PhysxVehicleWheelAttachmentAPI", "PhysxVehicleWheelAPI", "PhysicsRigidBodyAPI", "PhysicsCollisionAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI", "PhysxVehicleTireAPI", "PhysicsMaterialAPI", "LunCoTireAPI", "MaterialBindingAPI", "LunCoCatalogAPI", "LunCoWheelAPI", "PhysxVehicleSuspensionAPI", "LunCoSuspensionAPI", "PhysxRigidBodyAPI", "VisibilityAPI"]
+    def Xform "Wheel_RR" (
+        prepend apiSchemas = ["PhysxVehicleWheelAttachmentAPI", "PhysxVehicleWheelAPI", "PhysxVehicleTireAPI", "PhysicsMaterialAPI", "LunCoTireAPI", "MaterialBindingAPI", "LunCoCatalogAPI", "LunCoWheelAPI", "PhysxVehicleSuspensionAPI", "LunCoSuspensionAPI"]
         references = [@lunco://components/mobility/wheel.usda@</Wheel>, @lunco://components/mobility/suspensions/standard.usda@</Suspension>]
         prepend variantSets = "tire"
         variants = { string "tire" = "road" }
     )
     {
         double3 xformOp:translate = (0.86, -0.21, 1.375)
-        uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        double radius = 0.34
-        double height = 0.3
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
         float physxVehicleWheel:radius = 0.3400000035762787
         float physxVehicleWheel:width = 0.30000001192092896
         float physxVehicleWheel:mass = 24.0
@@ -1130,21 +1086,9 @@ def Xform "Roadster" (
         float inputs:heading = 0.0
         float inputs:drive
         float inputs:drive.connect = </Roadster.outputs:torque_right>
-        bool physics:rigidBodyEnabled = true
-        bool physics:collisionEnabled = true
-        custom bool physxRigidBody:enableCCD = true
-        custom rel material:binding:physics = </Roadster/TireMaterial>
-        float physics:mass = 24.0
-        float3 physics:diagonalInertia = (1.399999976158142, 0.8736000061035156, 0.8736000061035156)
-        point3f physics:centerOfMass = (0.0, 0.0, 0.0)
         custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
-        rel physics:filteredPairs = </Roadster>
-        uniform token orientation = "rightHanded"
-        uniform bool doubleSided = false
-        uniform token purpose = "proxy"
+        uniform token purpose = "default"
         color3f[] primvars:displayColor = [(0.02500000037252903, 0.02500000037252903, 0.02800000086426735)]
-        uniform token axis = "X"
-        uniform token proxyVisibility = "invisible"
         variantSet "tire" = {
             "road" (
                 prepend references = @../components/road_tire.usda@</RoadTire>
@@ -1189,235 +1133,6 @@ def Xform "Roadster" (
     }
     def Xform "Adhesion" (
         prepend references = @../components/FanAdhesion.usda@</FanAdhesion>
-    )
-    {
-    }
-    def Xform "Suspension_FL" (
-        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
-    )
-    {
-        float physics:mass = 5.0
-        float3 physics:diagonalInertia = (0.05000000074505806, 0.05000000074505806, 0.05000000074505806)
-        custom double3 xformOp:translate = (-0.86, -0.21, -1.375)
-        uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
-    }
-    def Xform "SteeringKnuckle_FL" (
-        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
-    )
-    {
-        float physics:mass = 6.0
-        float3 physics:diagonalInertia = (0.05000000074505806, 0.05000000074505806, 0.05000000074505806)
-        custom double3 xformOp:translate = (-0.86, -0.21, -1.375)
-        uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
-    }
-    def PhysicsRevoluteJoint "Steering_FL_Hinge" (
-        prepend apiSchemas = ["PhysicsDriveAPI:angular"]
-    )
-    {
-        rel physics:body0 = </Roadster>
-        rel physics:body1 = </Roadster/SteeringKnuckle_FL>
-        uniform token physics:axis = "Y"
-        float physics:lowerLimit = -30.0
-        float physics:upperLimit = 30.0
-        custom float inputs:angle
-        float inputs:angle.connect = </Roadster.outputs:heading_fl>
-        point3f physics:localPos0 = (-0.8600000143051147, -0.20999999344348907, -1.375)
-        point3f physics:localPos1 = (0.0, 0.0, 0.0)
-        quatf physics:localRot0 = (1.0, 0.0, 0.0, 0.0)
-        quatf physics:localRot1 = (1.0, 0.0, 0.0, 0.0)
-        float drive:angular:physics:stiffness = 700.0
-        float drive:angular:physics:damping = 70.0
-        float drive:angular:physics:maxForce = 20000.0
-        float drive:angular:physics:targetPosition = 0.0
-        float drive:angular:physics:targetVelocity = 0.0
-        uniform token drive:angular:physics:type = "force"
-    }
-    def PhysicsPrismaticJoint "Suspension_FL_Slider" (
-        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
-    )
-    {
-        rel physics:body0 = </Roadster/SteeringKnuckle_FL>
-        rel physics:body1 = </Roadster/Suspension_FL>
-        uniform token physics:axis = "Y"
-        float physics:lowerLimit = -0.054999999701976776
-        float physics:upperLimit = 0.06499999761581421
-        float drive:linear:physics:targetPosition = 0.0
-        float drive:linear:physics:targetVelocity = 0.0
-        float drive:linear:physics:stiffness = 300000.0
-        float drive:linear:physics:damping = 14000.0
-        float drive:linear:physics:maxForce = 150000.0
-        uniform token drive:linear:physics:type = "force"
-        point3f physics:localPos0 = (0.0, 0.0, 0.0)
-        point3f physics:localPos1 = (0.0, 0.0, 0.0)
-        quatf physics:localRot0 = (1.0, 0.0, 0.0, 0.0)
-        quatf physics:localRot1 = (1.0, 0.0, 0.0, 0.0)
-    }
-    def PhysicsRevoluteJoint "Wheel_FL_Hinge"
-    {
-        rel physics:body0 = </Roadster/Suspension_FL>
-        rel physics:body1 = </Roadster/Wheel_FL>
-        uniform token physics:axis = "X"
-        point3f physics:localPos0 = (0.0, 0.0, 0.0)
-        point3f physics:localPos1 = (0.0, 0.0, 0.0)
-        quatf physics:localRot0 = (1.0, 0.0, 0.0, 0.0)
-        quatf physics:localRot1 = (1.0, 0.0, 0.0, 0.0)
-    }
-    def Xform "Suspension_FR" (
-        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
-    )
-    {
-        float physics:mass = 5.0
-        float3 physics:diagonalInertia = (0.05000000074505806, 0.05000000074505806, 0.05000000074505806)
-        custom double3 xformOp:translate = (0.86, -0.21, -1.375)
-        uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
-    }
-    def Xform "SteeringKnuckle_FR" (
-        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
-    )
-    {
-        float physics:mass = 6.0
-        float3 physics:diagonalInertia = (0.05000000074505806, 0.05000000074505806, 0.05000000074505806)
-        custom double3 xformOp:translate = (0.86, -0.21, -1.375)
-        uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
-    }
-    def PhysicsRevoluteJoint "Steering_FR_Hinge" (
-        prepend apiSchemas = ["PhysicsDriveAPI:angular"]
-    )
-    {
-        rel physics:body0 = </Roadster>
-        rel physics:body1 = </Roadster/SteeringKnuckle_FR>
-        uniform token physics:axis = "Y"
-        float physics:lowerLimit = -30.0
-        float physics:upperLimit = 30.0
-        custom float inputs:angle
-        float inputs:angle.connect = </Roadster.outputs:heading_fr>
-        point3f physics:localPos0 = (0.8600000143051147, -0.20999999344348907, -1.375)
-        point3f physics:localPos1 = (0.0, 0.0, 0.0)
-        quatf physics:localRot0 = (1.0, 0.0, 0.0, 0.0)
-        quatf physics:localRot1 = (1.0, 0.0, 0.0, 0.0)
-        float drive:angular:physics:stiffness = 700.0
-        float drive:angular:physics:damping = 70.0
-        float drive:angular:physics:maxForce = 20000.0
-        float drive:angular:physics:targetPosition = 0.0
-        float drive:angular:physics:targetVelocity = 0.0
-        uniform token drive:angular:physics:type = "force"
-    }
-    def PhysicsPrismaticJoint "Suspension_FR_Slider" (
-        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
-    )
-    {
-        rel physics:body0 = </Roadster/SteeringKnuckle_FR>
-        rel physics:body1 = </Roadster/Suspension_FR>
-        uniform token physics:axis = "Y"
-        float physics:lowerLimit = -0.054999999701976776
-        float physics:upperLimit = 0.06499999761581421
-        float drive:linear:physics:targetPosition = 0.0
-        float drive:linear:physics:targetVelocity = 0.0
-        float drive:linear:physics:stiffness = 300000.0
-        float drive:linear:physics:damping = 14000.0
-        float drive:linear:physics:maxForce = 150000.0
-        uniform token drive:linear:physics:type = "force"
-        point3f physics:localPos0 = (0.0, 0.0, 0.0)
-        point3f physics:localPos1 = (0.0, 0.0, 0.0)
-        quatf physics:localRot0 = (1.0, 0.0, 0.0, 0.0)
-        quatf physics:localRot1 = (1.0, 0.0, 0.0, 0.0)
-    }
-    def PhysicsRevoluteJoint "Wheel_FR_Hinge"
-    {
-        rel physics:body0 = </Roadster/Suspension_FR>
-        rel physics:body1 = </Roadster/Wheel_FR>
-        uniform token physics:axis = "X"
-        point3f physics:localPos0 = (0.0, 0.0, 0.0)
-        point3f physics:localPos1 = (0.0, 0.0, 0.0)
-        quatf physics:localRot0 = (1.0, 0.0, 0.0, 0.0)
-        quatf physics:localRot1 = (1.0, 0.0, 0.0, 0.0)
-    }
-    def Xform "Suspension_RL" (
-        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
-    )
-    {
-        float physics:mass = 5.0
-        float3 physics:diagonalInertia = (0.05000000074505806, 0.05000000074505806, 0.05000000074505806)
-        custom double3 xformOp:translate = (-0.86, -0.21, 1.375)
-        uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
-    }
-    def PhysicsPrismaticJoint "Suspension_RL_Slider" (
-        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
-    )
-    {
-        rel physics:body0 = </Roadster>
-        rel physics:body1 = </Roadster/Suspension_RL>
-        uniform token physics:axis = "Y"
-        float physics:lowerLimit = -0.054999999701976776
-        float physics:upperLimit = 0.06499999761581421
-        float drive:linear:physics:targetPosition = 0.0
-        float drive:linear:physics:targetVelocity = 0.0
-        float drive:linear:physics:stiffness = 300000.0
-        float drive:linear:physics:damping = 14000.0
-        float drive:linear:physics:maxForce = 150000.0
-        uniform token drive:linear:physics:type = "force"
-        point3f physics:localPos0 = (-0.8600000143051147, -0.20999999344348907, 1.375)
-        point3f physics:localPos1 = (0.0, 0.0, 0.0)
-        quatf physics:localRot0 = (1.0, 0.0, 0.0, 0.0)
-        quatf physics:localRot1 = (1.0, 0.0, 0.0, 0.0)
-    }
-    def PhysicsRevoluteJoint "Wheel_RL_Hinge"
-    {
-        rel physics:body0 = </Roadster/Suspension_RL>
-        rel physics:body1 = </Roadster/Wheel_RL>
-        uniform token physics:axis = "X"
-        point3f physics:localPos0 = (0.0, 0.0, 0.0)
-        point3f physics:localPos1 = (0.0, 0.0, 0.0)
-        quatf physics:localRot0 = (1.0, 0.0, 0.0, 0.0)
-        quatf physics:localRot1 = (1.0, 0.0, 0.0, 0.0)
-    }
-    def Xform "Suspension_RR" (
-        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
-    )
-    {
-        float physics:mass = 5.0
-        float3 physics:diagonalInertia = (0.05000000074505806, 0.05000000074505806, 0.05000000074505806)
-        custom double3 xformOp:translate = (0.86, -0.21, 1.375)
-        uniform token[] xformOpOrder = ["!resetXformStack!", "xformOp:translate", "xformOp:rotateXYZ"]
-        custom double3 xformOp:rotateXYZ = (0.0, 0.0, 0.0)
-    }
-    def PhysicsPrismaticJoint "Suspension_RR_Slider" (
-        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
-    )
-    {
-        rel physics:body0 = </Roadster>
-        rel physics:body1 = </Roadster/Suspension_RR>
-        uniform token physics:axis = "Y"
-        float physics:lowerLimit = -0.054999999701976776
-        float physics:upperLimit = 0.06499999761581421
-        float drive:linear:physics:targetPosition = 0.0
-        float drive:linear:physics:targetVelocity = 0.0
-        float drive:linear:physics:stiffness = 300000.0
-        float drive:linear:physics:damping = 14000.0
-        float drive:linear:physics:maxForce = 150000.0
-        uniform token drive:linear:physics:type = "force"
-        point3f physics:localPos0 = (0.8600000143051147, -0.20999999344348907, 1.375)
-        point3f physics:localPos1 = (0.0, 0.0, 0.0)
-        quatf physics:localRot0 = (1.0, 0.0, 0.0, 0.0)
-        quatf physics:localRot1 = (1.0, 0.0, 0.0, 0.0)
-    }
-    def PhysicsRevoluteJoint "Wheel_RR_Hinge"
-    {
-        rel physics:body0 = </Roadster/Suspension_RR>
-        rel physics:body1 = </Roadster/Wheel_RR>
-        uniform token physics:axis = "X"
-        point3f physics:localPos0 = (0.0, 0.0, 0.0)
-        point3f physics:localPos1 = (0.0, 0.0, 0.0)
-        quatf physics:localRot0 = (1.0, 0.0, 0.0, 0.0)
-        quatf physics:localRot1 = (1.0, 0.0, 0.0, 0.0)
-    }
-    def Material "TireMaterial" (
-        references = @../components/rigid_road_tire.usda@</RigidRoadTire>
     )
     {
     }
