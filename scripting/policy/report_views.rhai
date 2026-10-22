@@ -4,6 +4,10 @@ fn has_panel(facts,id) {
     for panel in facts.panels {if panel.id==id {return true;}}
     false
 }
+fn has_kind(facts,id) {
+    for kind in facts.instance_kinds {if kind==id {return true;}}
+    false
+}
 fn assemble(facts) {
     let plots=[];
     for panel in facts.instance_panels {
@@ -43,6 +47,17 @@ fn assemble(facts) {
             description:"Actual authored signal connections beside their physical result.",scene_visible:true,
             floating:[host]};
         views.push(view);
+    }
+    if has_kind(facts,"signal_grid") {
+            let kind="signal_grid";
+            let host=#{kind:kind,instance:1,corner:"top_right",width:1120,height:720,inset:24};
+            let stunt=#{id:"report-stunt",title:"Stunt data",interaction:"editor",restore:false,
+                description:"Four native physical measurements beside the complete stunt.",scene_visible:true,floating:[host]};
+            views.push(stunt);
+            let tile=#{kind:kind,instance:2,slot:"center"};
+            let overview=#{id:"report-under-hood",title:"Under the hood",interaction:"editor",restore:false,
+                description:"Real channel histories from the same experiment.",instances:[tile]};
+            views.push(overview);
     }
     views
 }

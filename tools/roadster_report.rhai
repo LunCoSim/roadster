@@ -65,3 +65,36 @@ fn show_gas_temperature(experiment_id) {
     #{ok:true,status:"queued",plot:plot,experiment_id:experiment_id,source_cid:report.source_cid,
       scope:"Historical gas bench; not the background car's live telemetry"}
 }
+
+// Native scalar selection only. No derivative, resampling or second history.
+// Call show_live_grid after command admission to style and reveal the view.
+fn prepare_live_grid(grid,columns,entries) {
+    let facts=query("InspectWorkbench",#{});
+    if facts.preparing || !facts.scene_mounted {return #{ok:false,error:"Wait for scene admission"};}
+    let car=find_path("/World/Roadster");
+    if car<=0 {return #{ok:false,error:"The Roadster is not mounted"};}
+    let selected=[];
+    for entry in entries {
+        let name=entry.signal;let found=false;
+        let catalog=query("ListTelemetryChannels",#{name:name});
+        for channel in catalog.channels {
+            if channel.source==car && channel.name==name && channel.active && channel.samples>0 {found=true;break;}
+        }
+        if !found {return #{ok:false,error:"No current measured channel: "+name};}
+        selected.push(#{target_gid:car,signal:name,caption:entry.caption});
+    }
+    cmd("ConfigureSignalGrid",#{grid:grid,title:"Roadster measurements",columns:columns,signals:selected});
+    #{ok:true,status:"queued",grid:grid,channels:entries.len(),source_gid:car}
+}
+fn show_live_grid(grid,perspective,text_size) {
+    let inspection=query("InspectSignalGrid",#{});let plots=[];
+    for view in inspection.grids {if view.grid==grid {plots=view.plots;}}
+    if plots.len()==0 {return #{ok:false,error:"Prepare the native signal grid first"};}
+    for plot in plots {
+        cmd("ConfigureLinePlot",#{plot:plot,x_label:"Time (s)",text_size:text_size,line_width:3.5,
+            show_controls:false,show_legend:false,simplified_grid:true,compact_layout:true,
+            show_latest_value:false,follow_latest:true,time_window_s:5.0});
+    }
+    cmd("ActivatePerspective",#{id:perspective});
+    #{ok:true,status:"queued",grid:grid,plots:plots,window_seconds:5.0}
+}
