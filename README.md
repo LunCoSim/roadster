@@ -229,8 +229,10 @@ and the authored study geometry.
 
 [Wheel contact and qualification](references/wheel-contact.md) records the current
 raycast realization and its measured limits. Nominal driving, wall release,
-steering, ramp entry and moving jump have production evidence. Roof impact,
-suspension travel under drops and full-course completion remain open.
+steering, ramp entry, moving jump and all seven full-course SysML criteria have
+production evidence. The course uses an explicit flexible-skirt study assumption
+and continuous Modelica steering. Roof impact and suspension travel under drops
+remain open.
 Use `LUNCOSIM_BIN` to select the regular production build explicitly.
 
 ## Internal fan adhesion model

@@ -62,13 +62,14 @@ def main():
             attr('/World/'+name,'faceVertexIndices','int[]',str([j for f in faces for j in f]))
         for side,x in [('L',-7.5),('R',7.5)]:
             attr('/World/CrestMarker'+side,'xformOp:translate','double3',str((x,y-1,profile[-1][1]-4)))
+        if scene=='roadster_course_check':attr('/World/DriverSetup','study:expectCollision','bool','false')
         q('ApplyUsdOps',doc_id=doc,ops=ops);q('SaveDocument',doc_id=doc)
         for i in range(3):
             assert q('InspectUsdDocument',doc_id=doc,path=f'/World/JumpBlock{i}')['prim']['exists']
         if scene=='roadster_course_check':
-            for label,offset in [('early',0.3),('late',-0.2)]:
+            for label,offset in [('early',0.3),('late',-0.6)]:
                 q('SaveAsDocument',doc_id=doc,path=str(ROOT/'scenes'/f'roadster_course_{label}.usda'))
-                q('ApplyUsdOps',doc_id=doc,ops=[{'SetAttribute':dict(edit_target='@root@',path='/World/DriverSetup',name='study:jumpTimingOffset',type_name='double',value=str(offset))}])
+                q('ApplyUsdOps',doc_id=doc,ops=[{'SetAttribute':dict(edit_target='@root@',path='/World/DriverSetup',name=n,type_name=t,value=v)} for n,t,v in [('study:jumpTimingOffset','double',str(offset)),('study:expectCollision','bool','true' if label=='late' else 'false')]])
                 q('SaveDocument',doc_id=doc)
         q('CloseDocument',doc_id=doc)
     (ROOT/'results/dynamic-geometry.json').write_text(json.dumps(report,indent=2)+'\n')

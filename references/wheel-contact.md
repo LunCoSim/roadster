@@ -26,18 +26,24 @@ vehicle mass, COM and inertia, including its running gear and stored air.
 Regular production core `3844088aa` passes wall holding/release, steering at
 5/15/30 m/s, ramp drive, all four 11/25/40 m/s fan-on and 25 m/s fan-off entry cases,
 battery mass/energy balance at 120 kWh, motor-only launch and
-the moving-jump gate. Steering retains its original ±25% response bound.
+the moving-jump gate. The complete course passes all seven SysML checks in
+29.18 simulated seconds with the explicit flexible-skirt assumption and
+continuous Modelica steering described in [dynamics](dynamics.md#ramp-and-course).
+Steering retains its original ±25% response bound.
 The five-second wall hold descends 0.37 m with four contacts and 39.999 kN suction;
 fan release then produces a fall. This finite-slip tire law does not establish
 exact static parking. Motor-only 0–60 mph is 1.581 s in the study model;
 measured gas inventory stays constant during that launch. These observations
 are not manufacturer performance claims.
 
-Roof impact, suspension travel under drop conditions and the complete stunt
-course remain unqualified. Their production gates retain their failure verdicts;
+Roof impact and suspension travel under drop conditions remain unqualified.
+Their production gates retain their failure verdicts;
 passing nominal driving does not qualify crash behavior or an unrestricted
 landing envelope. Ray queries do not represent tire carcass deformation, broad
-obstacle sweeping or damage. The linear suspension currently lacks mechanical
+obstacle sweeping or damage. The short-skirt negative case detects loss of
+fan-supported climb and pauses
+the complete coupled vehicle, with a visible shared-HUD status and measured
+Recent Events explanation. The linear suspension currently lacks mechanical
 travel stops. Do not treat its probe length as a validated bump limit.
 
 The graphical wheel gate passes all 14 checks, with inspected close-up views.

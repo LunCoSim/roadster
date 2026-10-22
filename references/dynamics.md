@@ -135,28 +135,48 @@ rate. The manual finite-service budgets remain separate.
 
 ## Ramp and course
 
-The reference image motivates an original 14 m wide ramp: 50 m smooth transition
-to vertical, 10 m wall, 40 m gradual return curve, and 8 m inverted exit. Height
-is about 64.46 m; mesh thickness is 0.6 m. Pitch uses cubic smoothstep, with zero
-endpoint curvature, and 0.2 m sampling. The exact static triangle mesh supplies
-collision; colored markings and checkpoint posts are not invisible obstacles.
-The longer return curve permits the four measured skirt probes to retain a seal.
+The practice ramp uses a 50 m transition, 10 m wall and 40 m return arc. The
+main skill course uses a compact 18 m lower arc, 0.9 m wall, 11.7 m upper arc
+and 5.4 m lip, reaching about 18.9 m. These arc lengths are not radii. The
+smoothstep pitch law gives a minimum upper radius near 4.97 m. Exact static
+mesh collision supplies the road; markings and checkpoint posts are visual.
 
-Prepared suspension is 300 kN/m and 14 kN·s/m per wheel. A short approach in the
-standalone practice scene avoids an unintended high-speed bottoming test.
-Course entry speed is guided at 35–45 km/h. No hidden speed or attachment clamp
-is used; excess speed can lose contact or hit body collision geometry.
+At this curvature, a flat plenum between the axles needs additional skirt
+extension. With a 2.75 m wheelbase and probes 1.1 m either side of the axle
+midpoint, the chord estimate adds about 0.07 m to their 0.25 m uncompressed
+flat-road gap at 4.97 m radius. The explicit 0.40 m flexible-skirt study
+assumption (`fan_skirt_reach`) provides additional dynamic margin and is qualified
+with the actual four probes rather than treating this estimate as exact seal
+geometry. Fan area, pressure and electrical power are unchanged. The shorter
+0.25 m configuration loses adhesion and is the negative acceptance fixture.
+Neither skirt extension nor ramp geometry is manufacturer calibration.
 
-`SkillCourse.mo` owns continuous course measurements and simulation-time/air
-rotation integrals. Rhai sequences real speed/clearance/service/adhesion/landing
-checks. Three 1.2 m static blocks require a timely K pulse. The green waypoints
-refill immediately while moving. Finishing requires at least 170° of aerial pitch
-rotation, a green-zone upright landing, four actual wheel contacts and speed
-below 2 m/s for 0.5 s. The native pause freezes both physics and course time.
+Modelica owns the course pilot and finite steering rack. The analog steering
+demand connects directly to the rack inside the same continuous solve; Rhai
+selects autopilot ownership and handles discrete control edges and phases.
+Pure pursuit transforms the centerline preview into the measured body frame.
+The pilot requests a steady 12 m/s ramp approach after the second refill,
+avoiding a full-throttle transition followed by abrupt braking on the wall.
+Manual controls retain their independent demands and physical limits.
 
-The acceptance pilot uses ordinary drive, brake, fan and jet commands only.
-Completing this course demonstrates these maneuvers in this assumed model;
-it does not establish a safe real-car stunt envelope or Tesla calibration.
+`SkillCourse.mo` owns continuous course observations. Loss of road support above
+12 m during the fan-supported climb is an authored mission-envelope failure.
+Rhai records measured height, suction, weight and seal through
+`PauseSimulationObject`, holding the complete connected vehicle, its Modelica
+state and its mission controller. The world and external supervisor remain live.
+The shared vessel HUD displays the pause status and Recent Events retains the
+measured explanation. Retry resets the scene. This is mission policy,
+not a claim that a detached rigid body cannot be integrated numerically.
+
+The production course gate retains all seven SysML criteria: three blocks, both
+rolling services, fan-supported upper climb, finite air/mass, aerial recovery
+and a cushioned four-wheel return landing. Its current successful run completes
+in 29.18 simulated seconds. The explicit early-timing case also passes all seven
+criteria; the late case verifies a measured chassis impact and mission miss.
+The short-skirt fixture passes seven assertions covering the coupled hold,
+frozen inventories/clocks, one sourced explanation and retained world readiness.
+Drop-travel and roof-impact behavior remain separate
+unqualified conditions.
 
 See [propulsion and mounting analysis](propulsion-analysis.md) for native launch
 measurements, Modelica mean-force sizing/impulse, per-bank blowdown and the fixed
@@ -204,7 +224,7 @@ There are no separately integrated wheel, carrier or knuckle masses.
 The cabin mesh and six additional chassis collision parts remain active. These
 wheel rays model road support, not a tire carcass or arbitrary obstacle contact.
 See [wheel contact](wheel-contact.md) for current evidence and known suspension,
-roof-impact and course qualification boundaries. No Tesla-specific Rust dynamics
+roof-impact qualification boundaries. No Tesla-specific Rust dynamics
 are introduced by this realization.
 
 The Air inventory's unlimited-air switch enables an explicitly ideal external

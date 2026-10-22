@@ -1,6 +1,6 @@
 model SteeringDriver
   "Progressive keyboard driver plus finite steering rack, without a speed angle cap"
-  parameter Real assistance = 1.0;
+  input Real assistance = 1.0 "Keyboard buildup blend; zero accepts an analog rack demand";
   parameter Real low_speed_command_rate(unit="1/s") = 1.8;
   parameter Real sensitivity_speed(unit="m/s") = 20.0;
   parameter Real return_command_rate(unit="1/s") = 2.8;

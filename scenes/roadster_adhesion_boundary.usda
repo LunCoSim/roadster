@@ -1,0 +1,20 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    upAxis = "Y"
+    metersPerUnit = 1.0
+)
+
+def Xform "World" (
+    prepend references = @roadster_course_check.usda@</World>
+)
+{
+    over "Roadster"
+    {
+        custom double inputs:fan_skirt_reach = 0.25
+    }
+    over "DriverSetup"
+    {
+        uniform asset info:sourceAsset = @../scenarios/tests/adhesion_boundary.rhai@
+    }
+}

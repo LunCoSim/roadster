@@ -52,7 +52,7 @@ model SkillCourse
   output Real crest_gate;
   output Real airborne_gate;
   output Real healthy;
-  output Real failure_reason "0 healthy, 1 timeout, 2 launch, 3 carry speed, 4 refill miss, 5 incomplete roll";
+  output Real failure_reason "0 healthy, 1 timeout, 2 launch, 3 carry speed, 4 refill miss, 5 incomplete roll, 8 lost fan adhesion";
   Real target_y;
   Real target_z;
 equation
@@ -91,6 +91,7 @@ equation
   crest_gate = noEvent(if position_y>17.8 and position_z> -301.0 then 1.0 else 0.0);
   airborne_gate = noEvent(if airborne>0.8 and position_y>10.0 then 1.0 else 0.0);
   failure_reason = noEvent(if elapsed>180.0 then 1.0
+    else if abs(stage-4)<0.5 and position_y>12.0 and airborne>0.8 and (fan_seal<0.2 or suction<20000.0) then 8.0
     else if stage<0.5 and position_z<launch_gate_z-15.0 and launch_gate<0.5 then 2.0
     else if stage>0.5 and stage<3.5 and position_z<launch_gate_z-5.0 and speed<25.0 then 3.0
     else if (abs(stage-1)<0.5 and position_z<first_refill_z-8.0) or (abs(stage-3)<0.5 and position_z< -208.0) then 4.0

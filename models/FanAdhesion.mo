@@ -1,6 +1,7 @@
 model FanAdhesion
   "Reduced underbody plenum: geometry stays internal; mechanics consumes its wrench"
   parameter Real initial_speed_fraction = 0.0;
+  parameter Real skirt_reach(unit="m") = 0.25;
   parameter Real ambient_pressure(unit="Pa") = 101325;
   parameter Real air_density(unit="kg/m3") = 1.225;
   parameter Real center_of_pressure[3](each unit="m") = {0,-0.30,0};
@@ -17,7 +18,7 @@ model FanAdhesion
   // physical powertrain receives force and electrical power, never these rays.
   SuctionFan plenum(command=command,enabled=enabled,ambient_pressure=ambient_pressure,
     air_density=air_density,initial_speed_fraction=initial_speed_fraction,
-    gap=gap,valid=valid,alignment=alignment);
+    gap=gap,valid=valid,alignment=alignment,skirt_reach=skirt_reach);
   Real alignment[4];
   Real lever[3];
   output Real force_body[3](each unit="N");

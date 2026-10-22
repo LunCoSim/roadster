@@ -24,6 +24,10 @@ fn roadster_ui(facts) {
         let out=vehicle_ui(v);
         let game=course_ui(course);
         out.rr_course_title=game.rr_course_title;out.rr_course_hint=game.rr_course_hint;out.rr_course_metrics=game.rr_course_metrics;
+        if course!=() && course.course_failure_reason==8.0 {
+            out.runtime_status="ADHESION LOST / VEHICLE PAUSED";
+            out.program_label="PAUSED";
+        }
         return out;
     }
     #{runtime_status:"PHYSICS LOADING",rr_speed:"--",rr_mode:"PREPARING"}
@@ -96,14 +100,17 @@ fn course_ui(c) {
   "Launch, three blocks, fan climb and manual flip landed on FOUR wheels. Retry for a faster run.",
   "Checkpoint missed. Retry resets course, car, air and the simulation clock."];
  let index=max(0,min(8,c.course_stage.round().to_int()));
+ if c.course_failure_reason!=() && c.course_failure_reason>0.5 {index=8;}
  out.rr_course_title=titles[index];out.rr_course_hint=hints[index];
  if index==8 && c.course_failure_reason!=() {
   let reasons=["Checkpoint missed.","Course time exceeded 180 s.","Launch gate missed: reach 60 mph before passing blue.",
     "Lost carry speed: keep at least 90 km/h before the ramp.","Green refill waypoint missed.",
     "Landed before completing the aerial roll.","Cube impact: adjust K takeoff timing at the yellow line.",
-    "Checkpoint clearance or landing qualification missed."];
-  let reason=max(0,min(7,c.course_failure_reason.round().to_int()));
-  out.rr_course_hint=reasons[reason]+" Retry resets the course, car and air.";
+    "Checkpoint clearance or landing qualification missed.",
+    "Fan adhesion lost during climb. Vehicle and Modelica paused; review skirt reach and retry."];
+  let reason=c.course_failure_reason.round().to_int();
+  out.rr_course_hint=if reason>=0 && reason<reasons.len {reasons[reason]+" Retry resets the course, car and air."}
+    else {"Unknown mission failure code "+reason.to_string()+". Review model diagnostics."};
  }
  if index==6 {
   out.rr_course_hint=if c.course_step<10 {"Q/E: roll wheels-down, nose AWAY from ramp. Counterpulse, J/L yaw trim; K cushions descent."}

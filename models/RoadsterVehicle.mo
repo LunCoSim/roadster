@@ -37,7 +37,6 @@ model RoadsterVehicle
   output Real course_air_roll_degrees;
   output Real course_backward_distance_m;
   output Real pilot_command_throttle;
-  output Real pilot_command_steer;
   output Real pilot_command_brake;
   output Real pilot_command_thrust_z;
   output Real pilot_command_thrust_y;
@@ -99,7 +98,7 @@ model RoadsterVehicle
     yaw=autopilot_yaw,up_y=up_alignment,airborne=flight_control_weight,
     wheel_heading=heading_fl,wheel_heading_rate=-max_heading*steering_driver.rack_velocity,
     steering_preview_s=steering_driver.command_tau+steering_driver.rack_tau,full_lift_force=full_lift_force_n,mass=vehicle_mass_kg,
-    wheelbase=wheelbase,angular_acceleration={
+    wheelbase=wheelbase,max_heading=max_heading,angular_acceleration={
       full_lift_force_n*abs(lift_front_z-mass_center_z)/(1.0+rear_lift_trim)/vehicle_inertia_xx,
       side_yaw_acceleration,full_lift_force_n*0.4/vehicle_inertia_zz});
   SkillCourse course(enabled=course_enabled,stage=course_phase,blocks=course_blocks_passed,
@@ -212,6 +211,7 @@ model RoadsterVehicle
   parameter Real rear_tank_volume(unit="m3") = 0.2;
   parameter Real cabin_tank_volume(unit="m3") = 0.4;
   parameter Real fan_initial_fraction = 0.0;
+  parameter Real fan_skirt_reach(unit="m") = 0.40 "Flexible skirt extension for the compact stunt ramp; study assumption";
   parameter Real initial_fill = 1.0;
   parameter Real initial_gas_temperature(unit="K") = 293.15;
   input Real discharge_cutoff_c(unit="degC",min=-130,max=20) = -130
@@ -311,8 +311,9 @@ model RoadsterVehicle
   input Real surface_ny_3;
   input Real surface_nz_3;
   parameter Real keyboard_steering_assistance = 1.0 "0 selects direct analog rack commands";
-  SteeringDriver steering_driver(command=steer,
-    speed=speed_mps,assistance=keyboard_steering_assistance);
+  SteeringDriver steering_driver(
+    command=if noEvent(course_autopilot_active>0.5) then pilot.command_steer else steer,
+    speed=speed_mps,assistance=if noEvent(program_active>0.5 or course_autopilot_active>0.5) then 0.0 else keyboard_steering_assistance);
   Real steering_position;
   Real steering_limit;
   output Real aerodynamic_drag_kn;
@@ -354,7 +355,7 @@ model RoadsterVehicle
   // Assembly adapter only: native geometry binds to the internal adhesion law.
   // Both components are flattened into ONE Modelica solve; no extra participant,
   // communication lag, duplicate rotor integration or script physics is added.
-  FanAdhesion adhesion(command=if noEvent(jet_flight_enable>0.5) then 0.0 else fan,enabled=powertrain.enabled,initial_speed_fraction=fan_initial_fraction,
+  FanAdhesion adhesion(skirt_reach=fan_skirt_reach,command=if noEvent(jet_flight_enable>0.5) then 0.0 else fan,enabled=powertrain.enabled,initial_speed_fraction=fan_initial_fraction,
     center_of_mass={0,mass_center_y,mass_center_z},body_up={body_up_x,body_up_y,body_up_z},
     gap={surface_gap_0,surface_gap_1,surface_gap_2,surface_gap_3},
     valid={surface_valid_0,surface_valid_1,surface_valid_2,surface_valid_3},
@@ -510,7 +511,6 @@ equation
   course_healthy = course.healthy;
   course_failure_reason = noEvent(if course_failure_code>0.5 then course_failure_code else course.failure_reason);
   pilot_command_throttle = pilot.command_throttle;
-  pilot_command_steer = pilot.command_steer;
   pilot_command_brake = pilot.command_brake;
   pilot_command_thrust_z = pilot.command_thrust_z;
   pilot_command_thrust_y = pilot.command_thrust_y;

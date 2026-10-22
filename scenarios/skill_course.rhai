@@ -124,7 +124,7 @@ fn task(me, ctx) {
     ])
 }
 fn pilot_setpoint(car) {
-    let names = ["throttle","steer","brake","thrust_z","thrust_y","thrust_x",
+    let names = ["throttle","brake","thrust_z","thrust_y","thrust_x",
         "fan","lift_fl","lift_fr","lift_rl","lift_rr"];
     let ports = []; for name in names { ports.push("pilot_command_"+name); }
     let p = readings(car,ports);
@@ -150,6 +150,15 @@ fn on_event(me, evt, ctx) {
         this.phase = 8; this.autopilot = false;
         let writes = stop_setpoint(); writes.push(["course_phase",8.0]);writes.push(["course_failure_code",this.failure_code]);
         cmd("SetPorts",#{target:this.car,writes:writes});
+        if this.failure_code==8.0 {
+            let measured=readings(this.car,["position_y","downforce","fan_seal","vehicle_mass_kg"]);
+            let result=cmd("PauseSimulationObject",#{target:this.car,condition:"roadster:adhesion-lost",
+                detail:"Fan-supported climb lost road contact at "+measured.position_y.to_string()
+                    +" m; suction="+measured.downforce.to_string()+" N, weight="
+                    +(measured.vehicle_mass_kg*9.80665).to_string()+" N, seal="+measured.fan_seal.to_string()
+                    +". Coupled vehicle paused; retry after reviewing the skirt/contact envelope."});
+            if result.ok!=true {throw("Adhesion failure could not pause its coupled vehicle: "+result.to_string());}
+        }
         notify("Course missed: see the HUD reason. Retry resets car, air and mission tree.");
     }
     if evt.name == "runtime.ui.action" && evt.value.action == "roadster.autopilot" {

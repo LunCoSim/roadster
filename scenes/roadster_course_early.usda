@@ -551,6 +551,7 @@ def Xform "World" (
         uniform token info:implementationSource = "sourceAsset"
         uniform asset info:sourceAsset = @../scenarios/tests/course_pilot.rhai@
         custom double study:jumpTimingOffset = 0.3
+        custom bool study:expectCollision = false
     }
     def Mesh "StuntRamp" (
         prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "LunCoTerrainAPI", "MaterialBindingAPI"]

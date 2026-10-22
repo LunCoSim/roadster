@@ -113,7 +113,8 @@ def main():
     if args.course:
         q('SaveAsDocument',doc_id=doc,path=str(ROOT/'scenes/roadster_course_check.usda'))
         q('ApplyUsdOps',doc_id=doc,ops=[{'SetAttribute':dict(edit_target='@root@',path='/World/DriverSetup',
-            name='info:sourceAsset',type_name='asset',value='@../scenarios/tests/course_pilot.rhai@')}])
+            name='info:sourceAsset',type_name='asset',value='@../scenarios/tests/course_pilot.rhai@')},
+            {'SetAttribute':dict(edit_target='@root@',path='/World/DriverSetup',name='study:expectCollision',type_name='bool',value='false')}])
         q('SaveDocument',doc_id=doc)
         print(json.dumps(report,indent=2));return
     q('SaveAsDocument',doc_id=doc,path=str(ROOT/'scenes/roadster_ramp_check.usda'))

@@ -17,8 +17,10 @@ fn on_start(me,ctx) {
     this.cubes=[];for i in 0..3 {this.cubes.push(find_path("/World/JumpBlock"+i.to_string()));}
     this.contact_bodies=[this.car];
     this.source=sysml_requirements::source();if this.source.ok!=true {throw(this.source.error);}
-    let fields=query("QueryUsdPrim",#{path:"/World/DriverSetup",attrs:["study:jumpTimingOffset","study:timingSweep"]}).attrs;
+    let fields=query("QueryUsdPrim",#{path:"/World/DriverSetup",attrs:["study:jumpTimingOffset","study:timingSweep","study:expectCollision"]}).attrs;
     this.timing_sweep=fields["study:timingSweep"]==true;
+    this.expect_collision=fields["study:expectCollision"];
+    if !this.timing_sweep && this.expect_collision!=true && this.expect_collision!=false {throw("Course fixture requires an explicit study:expectCollision verdict contract");}
     this.timing_offset=if fields["study:jumpTimingOffset"]==() {0.0}else{fields["study:jumpTimingOffset"]};
     cmd("SetPorts",#{target:this.car,writes:[["course_jump_timing_offset_s",this.timing_offset]]});
 }
@@ -34,7 +36,7 @@ fn on_tick(me,ctx) {
         "quat_w","quat_x","quat_y","quat_z","pitch_rate_deg_s","yaw_rate_deg_s","roll_rate_deg_s",
         "heading_fl","pilot_left","pilot_right","velocity_x","velocity_z","pilot_lift","pilot_boost","pilot_pitch_up","pilot_pitch_down","pilot_yaw_left","pilot_yaw_right","pilot_roll_left","pilot_roll_right",
         "course_forward_speed","course_forward_z","jet_force_x","jet_force_y","thruster_yaw_moment_nm","thruster_roll_moment_nm",
-        "course_step","velocity_y","course_landing_impact_speed","course_air_pitch_degrees","course_air_yaw_degrees","course_air_roll_degrees","course_backward_distance_m",
+        "pilot_forward","pilot_brake","course_step","velocity_y","course_landing_impact_speed","course_air_pitch_degrees","course_air_yaw_degrees","course_air_roll_degrees","course_backward_distance_m",
         "instant_services","instant_air_added_kg","chassis_mass_kg","course_autopilot_active","unlimited_air_active"]}).ports {
         if p.direction=="out" {v[p.name]=p.value;}
     }
@@ -58,9 +60,10 @@ fn on_tick(me,ctx) {
     if stage!=this.last_stage {this.stage_times.push(#{stage:stage,time_s:this.time,
         position:world_pos(this.car)});this.last_stage=stage;}
     if this.time>=this.next_sample {
-        emit("ROADSTER_COURSE_SAMPLE_EVIDENCE",#{time_s:this.time,stage:stage,position:world_pos(this.car),
+        let contact=if stage==4 {query("QueryPhysicsState",#{id:this.car})}else{()};
+        emit("ROADSTER_COURSE_SAMPLE_EVIDENCE",#{time_s:this.time,stage:stage,physics:contact,position:world_pos(this.car),
             speed:v.speed_mps,up_y:v.up_alignment,gas_kg:v.gas_mass_kg,temperature:v.tank_temperature_k,telemetry:v});
-        this.next_sample=this.time+(if stage==2 || stage==6 {0.05}else{0.2});
+        this.next_sample=this.time+(if stage==2 || stage==4 || stage==6 {0.05}else{0.2});
     }
     if this.timing_sweep && (stage>=3 || this.time>=20.0) {
         let failures=[];
@@ -76,7 +79,7 @@ fn on_tick(me,ctx) {
     }
     if stage!=7 && stage!=8 && this.time<100.0 {return;}
     let native=query("QueryPhysicsState",#{id:this.car});let failures=[];
-    if this.timing_offset!=0.0 {
+    if this.expect_collision {
         if stage!=8 || v.course_failure_reason!=6.0 || this.jump_impulse<100.0 {failures.push("Timing perturbation did not produce a measured cube collision and mission miss");}
         emit("ROADSTER_COURSE_EVIDENCE",#{stage:stage,stage_times:this.stage_times,timing_offset_s:this.timing_offset,
             peak_cube_collision_impulse_ns:this.jump_impulse,final:v,failures:failures});

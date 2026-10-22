@@ -25,6 +25,10 @@ model CoursePilot
   input Real mass;
   input Real angular_acceleration[3] "Full-bank pitch/yaw/roll authority, rad/s2";
   parameter Real wheelbase = 2.75;
+  parameter Real max_heading = 0.45 "Full-scale rack angle in radians";
+  parameter Real lookahead_time_s(unit="s") = 1.0 "Path preview longer than the finite rack response";
+  parameter Real minimum_lookahead_m(unit="m") = 10.0;
+  parameter Real ramp_approach_speed(unit="m/s") = 12.0 "Pilot target for the compact transition";
   parameter Real pulse_period = 0.1;
   parameter Real pulse_on = 0.05;
   parameter Real attitude_gain[3] = {4.0,3.5,3.0};
@@ -60,12 +64,10 @@ model CoursePilot
   output Real command_lift_rl;
   output Real command_lift_rr;
 protected
-  Real forward_axis[3];
-  Real right_axis[3];
-  Real desired[3];
-  Real lookahead;
-  Real heading_error;
   Real rack_error;
+  Real desired_wheel_heading;
+  Real lookahead;
+  Real target_lateral;
   Real error_quaternion[4];
   Real target_bank;
   Real landing_time;
@@ -92,7 +94,10 @@ protected
   Real lateral_lift;
 equation
   command_throttle = forward-reverse;
-  command_steer = right-left;
+  // Autonomous guidance supplies an analog rack setpoint. Human key
+  // suggestions remain discrete and retain the separate keyboard adapter.
+  command_steer = noEvent(if phase<6 and on_ground>0.5 and speed>0.5 then
+    max(-1.0,min(1.0,-desired_wheel_heading/max_heading)) else 0.0);
   command_brake = brake;
   command_thrust_z = boost;
   command_thrust_y = lift;
@@ -102,20 +107,13 @@ equation
   command_lift_fr = min(1.0,pitch_up+roll_right);
   command_lift_rl = min(1.0,pitch_down+roll_left);
   command_lift_rr = min(1.0,pitch_down+roll_right);
-  forward_axis = {-2*(attitude[2]*attitude[4]+attitude[1]*attitude[3]),
-    -2*(attitude[3]*attitude[4]-attitude[1]*attitude[2]),
-    -1+2*(attitude[2]^2+attitude[3]^2)};
-  right_axis = {1-2*(attitude[3]^2+attitude[4]^2),
-    2*(attitude[2]*attitude[3]+attitude[1]*attitude[4]),
-    2*(attitude[2]*attitude[4]-attitude[1]*attitude[3])};
-  lookahead = max(10.0,0.5*speed);
-  desired = {-(position_x+0.5*velocity_x)/lookahead,forward_axis[2],forward_axis[3]};
-  heading_error = atan2(-sum(right_axis.*desired),sum(forward_axis.*desired));
-  // A-C01 study controller: anticipate the actual modeled steering lag.
-  // Source: SteeringDriver.mo command_tau + rack_tau (not Tesla calibration).
-  // This PD/preview term prevents digital pulses chasing an already-moving
-  // rack at speed. It changes guidance keys only; manual plant control is direct.
-  rack_error = wheel_heading+steering_preview_s*wheel_heading_rate-atan(2*wheelbase*sin(heading_error)/lookahead);
+  // Pure pursuit of the course centerline. Transform the preview point into
+  // the measured body frame before converting curvature to a rack angle.
+  lookahead = max(minimum_lookahead_m,lookahead_time_s*speed);
+  target_lateral = -(1-2*(attitude[3]^2+attitude[4]^2))*position_x
+    -2*(attitude[2]*attitude[4]-attitude[1]*attitude[3])*lookahead;
+  desired_wheel_heading = -atan(2*wheelbase*target_lateral/(position_x^2+lookahead^2));
+  rack_error = wheel_heading+steering_preview_s*wheel_heading_rate-desired_wheel_heading;
   on_ground = noEvent(if airborne<0.2 then 1.0 else 0.0);
   ramp_flight = noEvent(if abs(phase-6)<0.5 and airborne>0.2 then 1.0 else 0.0);
   // Start above the takeoff surface, then retain control through recovery.
@@ -126,10 +124,15 @@ equation
   der(jump_roll_progress_deg) = noEvent(if jump_flight>0.5 then rates[3] else 0.0);
   jump_roll_remaining = jump_roll_degrees-jump_roll_progress_deg;
   world_up_x = 2*(attitude[2]*attitude[3]-attitude[1]*attitude[4]);
-  // Corner jets produce a net force as well as a roll moment. Once clear of
-  // the obstacles, use collective thrust while it points toward the road to
-  // remove that lateral impulse. These remain ordinary finite-air valves.
-  lateral_lift = noEvent(if jump_flight>0.5 and phase>2.5 and up_y> -0.1
+  // Corner jets produce a net force as well as a roll moment. Correct its
+  // lateral impulse during the rotation when the lift vector points back
+  // toward the course; waiting until the roll finishes loses that authority.
+  // These remain ordinary finite-air valves, with the same cooling limits.
+  lateral_lift = noEvent(if ramp_flight>0.5 and up_y>0.8
+    and abs(world_up_x)>0.02 and (-1.2*position_x-2.0*velocity_x)*world_up_x>0 then
+      min(0.6,max(0.0,(-1.2*position_x-2.0*velocity_x)
+        /((full_lift_force/max(1.0,mass))*world_up_x)))
+    else if jump_flight>0.5 and up_y> -0.1
     and abs(world_up_x)>0.25 and (-1.2*position_x-2.0*velocity_x)*world_up_x>0 then
       min(0.3,max(0.0,(-1.2*position_x-2.0*velocity_x)
         /((full_lift_force/max(1.0,mass))*world_up_x+1e-9))) else 0.0);
@@ -141,7 +144,7 @@ equation
   // Carry the launch speed through both service pads and the cube corridor.
   cruise_speed = noEvent(if phase>0.5 and phase<3.5 then 35.0
     else if phase>3.5 and phase<5.5 and action<7.5 then
-      (if position_y>10 then 6.5 else if position_z> -298 and position_y<0.8 then 28.0 else 0.0)
+      ramp_approach_speed
     else 0.0);
   // A narrow ballistic clearance corridor. Valve closing contributes a short
   // residual impulse; the target is measured velocity, not an assumed K hold.
@@ -150,7 +153,6 @@ equation
   takeoff_gate = noEvent(if position_z< -72.0+35.0*jump_timing_offset_s then 1.0 else 0.0);
   forward = noEvent(if phase<0.5 and action>0.5 then 1.0
     else if cruise_speed>0 and speed<cruise_speed-0.5 and on_ground>0.5 then 1.0
-    else if phase>3.5 and phase<5.5 and action<7.5 and cruise_speed<0.5 then 1.0
     else 0.0);
   reverse = 0.0;
   brake = noEvent(if phase<0.5 and action<0.5 then 1.0
@@ -165,9 +167,8 @@ equation
   recommended_yaw_direction = noEvent(if predicted_lateral_position>0 then 1.0 else -1.0);
   // The inverted ramp already points along +Z. Recover with a roll, then
   // bank the physical lift vector to cancel lateral drift over the road.
-  target_bank = noEvent(if ramp_flight>0.5 and up_y>0.8 then
-    max(-0.24,min(0.24,atan2(-1.2*position_x-2.0*velocity_x,
-      max(9.80665,0.6*full_lift_force/max(1.0,mass)))))
+  target_bank = noEvent(if ramp_flight>0.5 then
+    max(-0.45,min(0.45,atan2(-1.2*position_x-2.0*velocity_x,9.80665)))
     else if jump_flight>0.5 and abs(jump_roll_remaining)<20 and up_y>0.8 then
       max(-0.24,min(0.24,atan2(1.2*position_x+2.0*velocity_x,
         max(9.80665,0.6*full_lift_force/max(1.0,mass))))) else 0.0);
