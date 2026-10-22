@@ -1,24 +1,4 @@
-//! Roadster wheel look derived from LunCo wheel.wgsl; unique sidewall index mark.
-//!
-//! Draws a wheel on a cylinder so its rotation is obvious: tire tread on the
-//! rolling surface + bright rim + radial spokes + hubcap on the faces.
-//!
-//! ## Cap vs. barrel — handled in object space
-//! A cylinder has two distinct surfaces that need different treatment:
-//!   * the two circular **faces** (caps) → the wheel "disc": spokes, rim, hub;
-//!   * the **barrel** (the rolling tread surface) → tire rubber + lugs.
-//! Bevy's cylinder UVs only map the *caps* to a centred disc; the barrel UV is
-//! (around, height), so a UV-polar pattern is correct on the faces but garbage
-//! on the tread. We therefore recover the **mesh-local normal** from the model
-//! matrix (Bevy cylinders run along local Y) and branch on it: |n.y|≈1 ⇒ a
-//! face (use the cap UV disc), else ⇒ the barrel (tread from the local angle).
-//! Object space is mesh-fixed, so everything spins with the wheel.
-//!
-//! Dynamic, self-describing parameters: the engine reflects the `Material`
-//! struct (field names → offsets) and the `//!@` annotations straight out of
-//! this file. Edit live (hot-reload) or via the Inspector / `SetObjectProperty`.
-
-#import bevy_pbr::{
+import bevy_pbr::render::{
     forward_io::VertexOutput,
     pbr_types,
     pbr_functions,
@@ -26,7 +6,13 @@
     mesh_types,
     mesh_view_bindings::view,
     mesh_functions,
-}
+};
+
+//! Crowned Roadster tire: mesh-local axle coordinates drive rim and tread.
+//! The visual meridian is independent of the analytic collision cylinder.
+//! Mesh-local positions keep the pattern attached while the wheel rolls and
+//! avoid depending on a particular primitive generator's cap UV convention.
+
 const TAU: f32 = 6.28318530718;
 
 //!@ui      rim_color   color "Rim / spoke colour"
@@ -43,6 +29,9 @@ const TAU: f32 = 6.28318530718;
 //!@default lug_depth   0.6
 //!@ui      wear        0 1 "Tread wear"
 //!@default wear        0.15
+//!@ui      wheel_radius 0.01 2.0 "Visual tire radius (m)"
+//!@default wheel_radius 0.34
+//!@default axle_axis 1.0,0.0,0.0
 struct Material {
     rim_color:   vec3<f32>,
     spoke_count: f32,
@@ -51,9 +40,11 @@ struct Material {
     spoke_width: f32,
     lug_depth:   f32,
     wear:        f32,
+    wheel_radius: f32,
+    axle_axis: vec3<f32>,
 }
 
-@group(#{MATERIAL_BIND_GROUP}) @binding(0)
+@group(constants::MATERIAL_BIND_GROUP) @binding(0)
 var<uniform> mat: Material;
 
 @fragment
@@ -66,21 +57,23 @@ fn fragment(input: VertexOutput, @builtin(front_facing) is_front: bool) -> @loca
     let metal  = mat.rim_color;                           // bright spoke/rim
     let tread  = mix(mat.tire_color, mat.rim_color, 0.22); // subtle lug highlight (reads as rubber)
 
-    // Mesh-local normal: normalize the model matrix' basis columns to recover
-    // the pure rotation R, then n_local = Rᵀ · n_world. A Bevy cylinder's axis
-    // is local Y, so |n_local.y|≈1 on the circular faces and ≈0 on the barrel.
     let m = mesh_functions::get_world_from_local(input.instance_index);
-    let R = mat3x3<f32>(normalize(m[0].xyz), normalize(m[1].xyz), normalize(m[2].xyz));
-    let n_local = normalize(transpose(R) * normalize(input.world_normal));
+    let local_position = (mesh_functions::get_local_from_world(input.instance_index)
+        * input.world_position).xyz;
+    let n_local = normalize(transpose(mat3x3<f32>(m[0].xyz,m[1].xyz,m[2].xyz))
+        * normalize(input.world_normal));
+    let axle = normalize(mat.axle_axis);
+    let reference = select(vec3<f32>(0.0,1.0,0.0),vec3<f32>(0.0,0.0,1.0),abs(axle.y)>0.9);
+    let radial_u = normalize(cross(axle,reference));
+    let radial_v = cross(axle,radial_u);
+    let radial = vec2<f32>(dot(local_position,radial_u),dot(local_position,radial_v));
+    let angle = atan2(radial.y,radial.x)/TAU+0.5;
 
     var color: vec3<f32>;
     var is_metal: f32 = 0.0;
-    if (abs(n_local.y) > 0.5) {
-        // ---- Circular face: the wheel disc (UV-polar) ----
-        // Bevy maps each cap to a UV disc centred at (0.5,0.5), radius 0.5.
-        let c = input.uv - vec2<f32>(0.5, 0.5);
-        let r = length(c) * 2.0;                          // 0 at hub, 1 at rim
-        let ang = atan2(c.y, c.x) / TAU + 0.5;            // 0..1, mesh-fixed
+    if (abs(dot(n_local,axle)) > 0.5) {
+        let r = length(radial)/mat.wheel_radius;
+        let ang = angle;
         if (r > 0.74) {
             // Black tire ring — smooth sidewall (a tire's side has no tread).
             // The rolling tread lives on the barrel branch below.
@@ -105,9 +98,7 @@ fn fragment(input: VertexOutput, @builtin(front_facing) is_front: bool) -> @loca
         }
     } else {
         // ---- Barrel: the rolling tread surface ----
-        // Angle around the axle from the local normal (radial on the barrel),
-        // so lugs are mesh-fixed and stream past as the wheel rolls.
-        let ang = atan2(n_local.z, n_local.x) / TAU + 0.5;
+        let ang = angle;
         // Lug PROFILE instead of a hard on/off stripe: `wear` rounds and
         // flattens it toward bald (a worn tire's lug↔groove contrast fades),
         // `lug_depth` fakes relief — groove valleys pick up contact AO.

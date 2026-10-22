@@ -2,26 +2,31 @@
 (
     defaultPrim = "RoadTire"
     upAxis = "Y"
-    metersPerUnit = 1
+    metersPerUnit = 1.0
 )
 
 over "RoadTire" (
     prepend references = @lunco://components/mobility/tires/hard.usda@</Tire>
-) {
-    float physics:dynamicFriction = 1.4
-    float physics:staticFriction = 1.4
-    float physxVehicleTire:longitudinalStiffness = 30000
-    float2 physxVehicleTire:lateralStiffnessGraph = (1, 90000)
-    float physxVehicleTire:restLoad = 9000
-    # Steady-state slip-angle denominator floor: avoids the discontinuous
-    # zero-speed lateral saturation of an uncalibrated tire curve.
+)
+{
+    float physics:dynamicFriction = 1.399999976158142
+    float physics:staticFriction = 1.399999976158142
+    float physxVehicleTire:longitudinalStiffness = 30000.0
+    float2 physxVehicleTire:lateralStiffnessGraph = (1.0, 90000.0)
+    float physxVehicleTire:restLoad = 9000.0
     float lunco:tire:minValidatedSpeed = 8.0
-    over "TireLook" { over "Shader" {
-        uniform asset info:wgsl:sourceAsset = @../shaders/road_tire.wgsl@
-        color3f inputs:rim_color = (0.75,0.78,0.82)
-        float inputs:spoke_count = 5
-        float inputs:spoke_width = 0.22
-        float inputs:tread_lugs = 32
-        float inputs:lug_depth = 0.04
-    } }
+    over "TireLook"
+    {
+        over "Shader"
+        {
+            color3f inputs:rim_color = (0.75, 0.7799999713897705, 0.8199999928474426)
+            float inputs:spoke_count = 5.0
+            float inputs:spoke_width = 0.2199999988079071
+            float inputs:tread_lugs = 32.0
+            float inputs:lug_depth = 0.03999999910593033
+            uniform asset info:wesl:sourceAsset = @../shaders/road_tire.wesl@
+            custom float inputs:wheel_radius = 0.3400000035762787
+            custom float3 inputs:axle_axis = (1.0, 0.0, 0.0)
+        }
+    }
 }
