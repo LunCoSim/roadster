@@ -27,3 +27,13 @@ GPU render logs and two inspected close-up captures are retained in the engine
 worktree's `.cache/codex-evidence/physics-followup-20261021/wheel-render-root/main-visual/`.
 This qualifies wheel presentation and collision ownership. Whole-vehicle
 steering, landing, adhesion and course behavior require their separate gates.
+
+The wall fixture starts at tire contact: its axle is 0.34 m from the wall,
+matching the analytic radius, with every reset-stack body placed from the same
+vehicle pose. This clears initial penetration admission. Its seven-second
+production gate still fails holding and release: at five seconds all four
+wheels contact the wall with 39.99 kN suction, but the vehicle has descended
+from 30.0 m to 5.86 m. The later release assertion is consequently not an
+isolated detachment measurement. Evidence is in the engine worktree's
+`wheel-render-root/main-checkpoint/tesla-wall-contact.log` beneath the evidence
+directory above. Contact placement does not qualify adhesion or braking.
