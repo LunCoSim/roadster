@@ -30,6 +30,14 @@ fn on_event(me,evt,ctx) {
                 }
             }
         }
+        if evt.value.action=="roadster.cutoff.up" || evt.value.action=="roadster.cutoff.down" {
+            let change=if evt.value.action=="roadster.cutoff.up" {5.0}else{-5.0};
+            for p in query("ReadPorts",#{api_id:car,port_names:["thermal_guard_temperature_c"]}).ports {
+                if p.direction=="out" {
+                    cmd("SetPorts",#{target:car,writes:[["discharge_cutoff_c",max(-130.0,min(20.0,p.value+change))]]});
+                }
+            }
+        }
         if evt.value.action=="roadster.fans" {name="roadster_fan_toggle";}
         if evt.value.action=="roadster.refill" {name="roadster_instant_refill";}
         if evt.value.action=="roadster.unlimited" {

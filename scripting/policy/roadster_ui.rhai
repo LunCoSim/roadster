@@ -36,17 +36,21 @@ fn vehicle_ui(v) {
         let status=if servicing {"REFILLING / moving allowed"}else if ready {"AIR READY"}else if v.thermal_guard_active>0.5 {"MODEL TEMP GUARD / REFILL"}else{"AIR UNAVAILABLE"};
         let out=#{program_label:"MANUAL",runtime_status:status};
 
-        out.rr_speed = text_number(v.speed_kmh,1.0);
+        // A speedometer measures forward travel, not the 3-D velocity norm.
+        // Use the same whole-unit instrument precision in both unit systems.
+        // Raw 3-D and longitudinal velocities remain available to telemetry.
+        out.rr_speed = text_number(3.6*v.longitudinal_speed_mps,1.0);
         out.rr_steering = "FL "+text_number(v.steer_left_degrees,10.0)+" / FR "+text_number(v.steer_right_degrees,10.0)+" deg";
-        out.rr_mph = text_number(v.speed_mph,10.0)+" mph";
+        out.rr_mph = text_number(v.longitudinal_speed_mps/0.44704,1.0)+" mph";
         out.rr_air_mass = text_number(v.gas_mass_kg,10.0)+" kg";
         out.rr_air_pressure = text_number(v.pressure_bar,10.0)+" bar";
         out.rr_air_fill = text_number(v.air_fill_percent,10.0)+"%";
         out.rr_air_width = v.air_fill_percent.to_string()+"%";
         out.rr_air_status = status;
         out.rr_air_color = if ready {"#68e0b2"}else{"#ffc66d"};
-        out.rr_fill_temperature = text_number(v.refill_target_k,10.0)+" K";
-        out.rr_temperature = text_number(v.tank_temperature_k,10.0)+" K";
+        out.rr_fill_temperature = text_number(v.refill_target_k-273.15,10.0)+" °C";
+        out.rr_cutoff_temperature = text_number(v.thermal_guard_temperature_c,10.0)+" °C";
+        out.rr_temperature = text_number(v.tank_temperature_c,10.0)+" °C";
         out.rr_unlimited_label = if v.unlimited_air_active>0.5 {"UNLIMITED AIR · ON"}else{"UNLIMITED AIR · OFF"};
         out.rr_refill_label = "Tab · REFILL AIR";
         out.rr_autopilot_label = if v.course_autopilot_active>0.5 {"STOP AUTOPILOT"}else{"RUN AUTOPILOT"};

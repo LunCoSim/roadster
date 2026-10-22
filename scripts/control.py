@@ -21,6 +21,7 @@ def main():
     for name in ['lift-fl','lift-fr','lift-rl','lift-rr','refill']:
         parser.add_argument('--'+name,type=float)
     parser.add_argument('--refill-temperature',type=float,help='Live external refill target in K (253.15–333.15)')
+    parser.add_argument('--discharge-cutoff',type=float,help='Live study temperature cutoff in °C (-130..20); no reload')
     parser.add_argument('--status',action='store_true')
     parser.add_argument('--keyboard',action='store_true',help='Return control to the native keyboard')
     parser.add_argument('--camera',choices=['chase','driver','free'])
@@ -51,6 +52,10 @@ def main():
             if not low <= value <= 1:
                 parser.error(f'{name} must be between {low} and 1')
             writes.append([name,value])
+    control_requested=bool(writes)
+    if args.discharge_cutoff is not None:
+        if not -130 <= args.discharge_cutoff <= 20: parser.error('discharge-cutoff must be -130..20 °C')
+        writes.append(['discharge_cutoff_c',args.discharge_cutoff])
     if args.refill_temperature is not None:
         if not 253.15 <= args.refill_temperature <= 333.15: parser.error('refill-temperature must be 253.15–333.15 K')
         writes.append(['refill_target_temperature_k',args.refill_temperature])
@@ -60,15 +65,16 @@ def main():
         call('AcquireControl',dict(target=target,bind_camera=True))
         call('ObserveAvatar',{})
     if writes:
-        avatar=int(call('RunRhai',{'code':'find_path("/World/Avatar")'})['stdout'])
-        if avatar>=0: call('ReleaseControlSource',dict(source=avatar))
-        call('AcquireControl',dict(target=target,bind_camera=False))
+        if control_requested:
+            avatar=int(call('RunRhai',{'code':'find_path("/World/Avatar")'})['stdout'])
+            if avatar>=0: call('ReleaseControlSource',dict(source=avatar))
+            call('AcquireControl',dict(target=target,bind_camera=False))
         print(json.dumps(call('SetPorts',dict(target=target,producer_id=4198001,writes=writes)),indent=2))
     if args.status or not writes:
         print(json.dumps(call('ReadPorts',dict(api_id=target,port_names=[
             'speed','position_x','position_y','position_z','yaw','soc',
             'temperature_k','impulse_remaining','thruster_force','battery_power',
-            'gas_mass_kg','tank_pressure_pa','force_local_x','force_local_y','force_local_z'])),indent=2))
+            'gas_mass_kg','tank_temperature_c','thermal_guard_temperature_c','tank_pressure_pa','force_local_x','force_local_y','force_local_z'])),indent=2))
 
 
 if __name__ == '__main__':

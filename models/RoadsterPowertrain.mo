@@ -10,7 +10,7 @@ model RoadsterPowertrain
   // >300-mile reporting; exact energy is withheld in the firsthand interview:
   // https://www.motortrend.com/news/first-look-2028-tesla-roadster-performance-thrust-rocket
   parameter Real capacity_kwh = 120 "Source-informed study assumption; see references/battery-study.md";
-  parameter Real initial_soc = 0.90;
+  parameter Real initial_soc = 1.0 "Initial battery state of charge; energy use starts from this physical state";
   parameter Real dry_mass_kg = 1700 "Study mass excluding gas; published target has unspecified trim/fill state";
   parameter Real rho = 1.225;
   parameter Real cd_area(unit="m2") = 0.62;
@@ -29,7 +29,7 @@ model RoadsterPowertrain
     "Common-pressure, common-temperature manifold approximation";
   parameter Real initial_pressure = CompressedAir.pressureFromDensity(initial_gas_mass/tank_volume,initial_gas_temperature);
   parameter Real gamma = 1.4;
-  parameter Real minimum_discharge_temperature(unit="K") = 200 "Model guard, not a Tesla hardware threshold";
+  input Real minimum_discharge_temperature(unit="K") = 143.15 "Live study guard; 10.6 K above dry-air critical temperature, not a Tesla hardware rating";
   parameter Real ambient_pressure(unit="Pa") = 101325;
   parameter Real throat_area(unit="m2") = 0.002 "Aggregate open throat area, study assumption";
   parameter Real nozzle_efficiency = 0.85;
@@ -187,6 +187,7 @@ model RoadsterPowertrain
   output Real downforce(unit="N");
   output Real vehicle_mass_kg(unit="kg");
   output Real tank_temperature_k(unit="K");
+  output Real tank_temperature_c(unit="degC");
   output Real rear_tank_air_kg(unit="kg");
   output Real cabin_tank_air_kg(unit="kg");
   output Real tank_volume_m3(unit="m3");
@@ -296,6 +297,7 @@ equation
   gas_mass_kg = max(0.000001,gas_mass);
   vehicle_mass_kg = dry_mass_kg+boost_available*gas_mass_kg;
   tank_temperature_k = gas_temperature;
+  tank_temperature_c = gas_temperature-273.15;
   tank_volume_m3 = tank_volume;
   // At the assumed shared rho/T, masses partition by internal volume.
   rear_tank_air_kg = gas_mass_kg*rear_tank_volume/tank_volume;
@@ -346,5 +348,36 @@ equation
   der(motor_temperature) = (drive_power*(1.0/efficiency-1.0)+max(0.0,-mechanical_power)*(1.0-regen_efficiency)
     -cooling_w_k*(motor_temperature-ambient_k))/heat_capacity;
   temperature_k = motor_temperature;
-  annotation(experiment(StartTime=0,StopTime=10,Interval=0.01,Tolerance=1e-6));
+  annotation(
+    Icon(coordinateSystem(extent={{-180,-130},{180,130}}),graphics={
+      Rectangle(extent={{-180,130},{180,-130}},radius=8,
+        lineColor={84,103,117},fillColor={9,15,21},fillPattern=FillPattern.Solid),
+      Text(extent={{-165,119},{165,91}},textString="PNEUMATIC POWERTRAIN",textColor={230,238,244}),
+      Text(extent={{-165,82},{165,52}},
+        textString=DynamicSelect("Tank pressure [bar]",String(tank_pressure_pa/100000)+" bar"),
+        textColor={121,224,233}),
+      Text(extent={{-165,47},{165,17}},
+        textString=DynamicSelect("Gas temperature [°C]",String(tank_temperature_c)+" °C"),
+        textColor={230,238,244}),
+      Text(extent={{-165,12},{165,-18}},
+        textString=DynamicSelect("Gas inventory [kg]",String(gas_mass_kg)+" kg"),
+        textColor={230,238,244}),
+      Text(extent={{-165,-23},{165,-53}},
+        textString=DynamicSelect("Discharge [kg/s]",String(mass_flow)+" kg/s"),
+        textColor={158,179,191}),
+      Text(extent={{-165,-63},{165,-82}},textString="CORNER VALVE OPENINGS",textColor={158,179,191}),
+      Rectangle(extent={{-150,-95},{-90,-113}},lineColor={84,103,117}),
+      Rectangle(extent=DynamicSelect({{-150,-95},{-150,-113}},{{-150,-95},{-150+60*valve_lift[1],-113}}),
+        lineColor={121,224,233},fillColor={121,224,233},fillPattern=FillPattern.Solid),
+      Rectangle(extent={{-70,-95},{-10,-113}},lineColor={84,103,117}),
+      Rectangle(extent=DynamicSelect({{-70,-95},{-70,-113}},{{-70,-95},{-70+60*valve_lift[2],-113}}),
+        lineColor={121,224,233},fillColor={121,224,233},fillPattern=FillPattern.Solid),
+      Rectangle(extent={{10,-95},{70,-113}},lineColor={84,103,117}),
+      Rectangle(extent=DynamicSelect({{10,-95},{10,-113}},{{10,-95},{10+60*valve_lift[3],-113}}),
+        lineColor={121,224,233},fillColor={121,224,233},fillPattern=FillPattern.Solid),
+      Rectangle(extent={{90,-95},{150,-113}},lineColor={84,103,117}),
+      Rectangle(extent=DynamicSelect({{90,-95},{90,-113}},{{90,-95},{90+60*valve_lift[4],-113}}),
+        lineColor={121,224,233},fillColor={121,224,233},fillPattern=FillPattern.Solid)
+    }),
+    experiment(StartTime=0,StopTime=10,Interval=0.01,Tolerance=1e-6));
 end RoadsterPowertrain;

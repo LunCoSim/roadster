@@ -437,6 +437,16 @@ def Xform "Roadster" (
     custom double outputs:gas_capacity_mass_kg = 0.0
     custom float inputs:reference_gas_mass_kg = 250.0
     custom float inputs:reference_storage_volume_m3 = 0.6000000238418579
+    custom float outputs:longitudinal_speed_mps = 0.0 (
+        documentation = "Magnitude of body-forward velocity in m/s; excludes transverse suspension movement. Raw 3D speed remains a separate output."
+    )
+    custom float inputs:initial_battery_soc = 1.0 (
+        documentation = "Initial battery state of charge, fraction 0 to 1. Set at scene initialization; motors, auxiliaries and fans subsequently consume simulated stored energy."
+    )
+    custom double inputs:discharge_cutoff_c = -130.0
+    custom double outputs:tank_temperature_c = 0.0
+    custom double outputs:tank_wall_temperature_c = 0.0
+    custom double outputs:thermal_guard_temperature_c = 0.0
     variantSet "trim" = {
         "Performance" {
             float inputs:boost_available = 0.0

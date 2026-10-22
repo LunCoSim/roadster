@@ -8,11 +8,12 @@
   <property name="rr_air_fill">100%</property><property name="rr_air_width">100%</property>
   <property name="rr_air_status">AIR READY</property><property name="rr_air_color">#68e0b2</property>
   <property name="rr_unlimited_label">UNLIMITED AIR · OFF</property>
-  <property name="rr_fill_temperature">293.2 K</property>
-  <property name="rr_temperature">293 K</property><property name="rr_refill_label">Tab · REFILL AIR</property>
-  <property name="rr_fan_state">FANS ON</property><property name="rr_fan_label">F · FANS OFF</property>
+  <property name="rr_fill_temperature">20.0 °C</property>
+  <property name="rr_cutoff_temperature">−130 °C</property>
+  <property name="rr_temperature">20.0 °C</property><property name="rr_refill_label">Tab · REFILL AIR</property>
+  <property name="rr_fan_state">FANS OFF</property><property name="rr_fan_label">F · FANS OFF</property>
   <property name="rr_suction">0.0 kN suction</property><property name="rr_fan_detail">0 kPa / 0 kW</property>
-  <property name="rr_aero">Drag 0.0 kN</property><property name="rr_battery">90% battery</property>
+  <property name="rr_aero">Drag 0.0 kN</property><property name="rr_battery">100% battery</property>
   <property name="rr_mode">DRIVE</property><property name="rr_rates">P 0 / R 0 / Y 0 deg/s</property>
   <property name="rr_force">Lift 0 kN / Boost 0 kN</property><property name="rr_service">External test air supply</property>
   <node id="rr-root">
@@ -31,6 +32,11 @@
         <text id="rr-air-mass">{rr_air_mass}   /   {rr_air_fill}</text>
         <node id="rr-air-track"><node id="rr-air-level" /></node>
         <text id="rr-air-pressure">{rr_air_pressure} absolute   /   {rr_temperature}</text>
+        <node id="rr-cutoff-controls">
+          <button id="rr-cutoff-down" on_press="runtime_ui_authored_action" tag:action="roadster.cutoff.down"><text id="rr-cutoff-minus">−</text></button>
+          <text id="rr-air-cutoff">Study cutoff: {rr_cutoff_temperature}</text>
+          <button id="rr-cutoff-up" on_press="runtime_ui_authored_action" tag:action="roadster.cutoff.up"><text id="rr-cutoff-plus">+</text></button>
+        </node>
         <text id="rr-air-status">{rr_air_status}</text>
         <node id="rr-temperature-controls">
           <button id="rr-temperature-down" on_press="runtime_ui_authored_action" tag:action="roadster.temperature.down"><text id="rr-minus">-</text></button>

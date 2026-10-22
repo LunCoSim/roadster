@@ -186,6 +186,7 @@ model RoadsterVehicle
   // https://www.motortrend.com/news/first-look-2028-tesla-roadster-performance-thrust-rocket
   // BatteryStudy.mo and references/battery-study.md record every inference.
   parameter Real battery_capacity_kwh = 120 "Study energy, not a published Tesla specification";
+  parameter Real initial_battery_soc = 1.0 "Battery state of charge at scene initialization";
   parameter Real reference_vehicle_dry_mass_kg = 1700;
   BatteryStudy battery(capacity_kwh=battery_capacity_kwh,
     reference_vehicle_dry_mass_kg=reference_vehicle_dry_mass_kg);
@@ -213,6 +214,8 @@ model RoadsterVehicle
   parameter Real fan_initial_fraction = 0.0;
   parameter Real initial_fill = 1.0;
   parameter Real initial_gas_temperature(unit="K") = 293.15;
+  input Real discharge_cutoff_c(unit="degC",min=-130,max=20) = -130
+    "Live tank-temperature trip; study range -130..20 °C, not a Tesla hardware limit";
   input Real jet_flight_enable = 0.0 "Optional valve-request flight controller; off for normal course/manual play";
   input Real jet_flight_target_x = 0.0;
   input Real jet_flight_target_y = 30.0;
@@ -330,9 +333,10 @@ model RoadsterVehicle
     autopilot_radius=autopilot_radius,autopilot_turn_only=autopilot_turn_only,
     autopilot_position_x=autopilot_position_x,autopilot_position_z=autopilot_position_z,
     autopilot_yaw=autopilot_yaw,autopilot_yaw_rate=autopilot_yaw_rate,piloted=piloted);
-  RoadsterPowertrain powertrain(capacity_kwh=battery_capacity_kwh,dry_mass_kg=battery.vehicle_dry_mass_kg,
+  RoadsterPowertrain powertrain(capacity_kwh=battery_capacity_kwh,initial_soc=initial_battery_soc,dry_mass_kg=battery.vehicle_dry_mass_kg,
     boost_available=boost_available, lift_available=lift_available,lift_trim={1,rear_lift_trim,1,rear_lift_trim},
     rear_tank_volume=rear_tank_volume,cabin_tank_volume=cabin_tank_volume,
+    minimum_discharge_temperature=discharge_cutoff_c+273.15,
     gas_capacity_kg=gas_capacity_kg,initial_fill=initial_fill,initial_gas_temperature=initial_gas_temperature,
     steer=steer,attitude={attitude_w,attitude_x,attitude_y,attitude_z},omega_body=omega_body,headlight_switch=headlights,
     demand=steering.drive_left, brake=brake, boost=if noEvent(jet_flight_enable>0.5) then 0.0 else boost, lift=if noEvent(jet_flight_enable>0.5) then 0.0 else lift, adhesion_force_body=adhesion.force_body,adhesion_power_w=adhesion.electrical_power,refill=refill,unlimited_air=unlimited_air,instant_mass_offset=instant_mass_offset,instant_temperature_offset=instant_temperature_offset,
@@ -345,7 +349,8 @@ model RoadsterVehicle
     omega_left=wheel_speed_left, omega_right=wheel_speed_right,
     velocity_x=measured_vx, velocity_z=measured_vz, velocity_y=measured_vy,
     ground_gap=ground_gap,ground_valid=ground_valid,velocity_forward=velocity_forward,
-    body_up_y=body_up_y);
+    body_up_y=body_up_y)
+    annotation(Placement(transformation(extent={{-180,-100},{180,160}})));
   // Assembly adapter only: native geometry binds to the internal adhesion law.
   // Both components are flattened into ONE Modelica solve; no extra participant,
   // communication lag, duplicate rotor integration or script physics is added.
@@ -355,7 +360,8 @@ model RoadsterVehicle
     valid={surface_valid_0,surface_valid_1,surface_valid_2,surface_valid_3},
     normal_x={surface_nx_0,surface_nx_1,surface_nx_2,surface_nx_3},
     normal_y={surface_ny_0,surface_ny_1,surface_ny_2,surface_ny_3},
-    normal_z={surface_nz_0,surface_nz_1,surface_nz_2,surface_nz_3});
+    normal_z={surface_nz_0,surface_nz_1,surface_nz_2,surface_nz_3})
+    annotation(Placement(transformation(extent={{240,-70},{540,130}})));
   // Reusable engineering readouts; presentation code only formats these.
   output Real air_fill_percent;
   output Real refill_allowed;
@@ -368,6 +374,7 @@ model RoadsterVehicle
   output Real service_air_used_kg;
   output Real service_energy_j;
   output Real speed_mps(unit="m/s");
+  output Real longitudinal_speed_mps(unit="m/s") "Speedometer: magnitude of velocity along the body forward axis; excludes transverse suspension motion";
   output Real speed_kmh(unit="km/h");
   output Real speed_mph(unit="mi/h");
   output Real pressure_bar(unit="bar");
@@ -378,6 +385,9 @@ model RoadsterVehicle
   output Real suction_force_kn(unit="kN");
   output Real air_discharge_enabled;
   output Real thermal_guard_active;
+  output Real thermal_guard_temperature_c(unit="degC");
+  output Real tank_temperature_c(unit="degC");
+  output Real tank_wall_temperature_c(unit="degC");
   output Real thermal_guard_temperature_k(unit="K")
     "The study's assumed discharge guard, exposed for native telemetry plots";
   output Real up_alignment;
@@ -632,6 +642,7 @@ equation
   plume_side_radius_end = powertrain.side_nozzle.radius_end;
   plume_side_exit_velocity = powertrain.side_nozzle.exit_velocity;
   speed_mps = sqrt(measured_vx*measured_vx+measured_vy*measured_vy+measured_vz*measured_vz);
+  longitudinal_speed_mps = abs(velocity_forward);
   speed_kmh = 3.6*speed_mps;
   speed_mph = speed_mps/0.44704;
   pressure_bar = tank_pressure_pa/100000.0;
@@ -648,6 +659,9 @@ equation
   refill_target_pressure_pa = powertrain.target_air.pressure;
   thermal_guard_active = noEvent(if tank_temperature_k<=powertrain.minimum_discharge_temperature then 1.0 else 0.0);
   thermal_guard_temperature_k = powertrain.minimum_discharge_temperature;
+  thermal_guard_temperature_c = thermal_guard_temperature_k-273.15;
+  tank_temperature_c = powertrain.tank_temperature_c;
+  tank_wall_temperature_c = tank_wall_temperature_k-273.15;
   tank_wall_temperature_k = powertrain.tank_heat.wall_temperature;
   tank_heat_flow_w = powertrain.tank_heat.heat_to_gas;
   // Engineering readouts; all vehicle motion is integrated by native physics.
