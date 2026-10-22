@@ -40,3 +40,28 @@ fn gas_bench_report(experiment_id,split_s) {
       remaining_mass_fraction:mass[split]/mass[0],remaining_pressure_fraction:pressure[split]/pressure[0],
       scope:"Same gas plant, chosen fill, fixed mechanical observations; not a driving trial or hardware measurement"}
 }
+
+// Prepare the native chart before revealing the report perspective.
+// Requires a completed bench and that exact document selected; no simulation starts.
+fn show_gas_temperature(experiment_id) {
+    let status=query("RunStatus",#{experiment_id:experiment_id});
+    if status.state!="done" {return #{ok:false,error:"Complete the native gas bench first"};}
+    let facts=query("InspectWorkbench",#{});
+    if facts.preparing || !facts.scene_mounted {return #{ok:false,error:"Wait for the current Twin and scene admission before preparing the report"};}
+    if facts.document_id!=status.doc_id {return #{ok:false,error:"Focus the bench document before showing its data"};}
+    let plot=();
+    for panel in facts.instance_panels {
+        if panel.id=="modelica_plot" {plot=panel.canonical_instance;}
+    }
+    if plot==() {return #{ok:false,error:"The native Modelica plot is unavailable"};}
+    let report=gas_bench_report(experiment_id,2.5);
+    if !report.ok {return report;}
+    cmd("SetPlotSignals",#{plot:plot,signals:["tank_temperature_c"]});
+    cmd("ConfigureLinePlot",#{plot:plot,caption:"Tank air temperature",x_label:"Time (s)",y_label:"°C",
+        text_size:28.0,line_width:5.0,show_controls:false,show_legend:false,
+        simplified_grid:true,compact_layout:true,follow_latest:false,y_reference_range:[-130.0,40.0]});
+    cmd("SetTimeTransport",#{playing:false});
+    cmd("ActivatePerspective",#{id:"twin/report-analysis"});
+    #{ok:true,status:"queued",plot:plot,experiment_id:experiment_id,source_cid:report.source_cid,
+      scope:"Historical gas bench; not the background car's live telemetry"}
+}

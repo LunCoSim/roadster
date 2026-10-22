@@ -24,21 +24,21 @@ fn assemble(facts) {
     if plots.len()>0 {
         let plot=plots[0];
         let kind=plot.kind;let instance=plot.instance;
-        let host=#{kind:kind,instance:instance,corner:"bottom_left",width:880,height:400,inset:24};
+        let host=#{kind:kind,instance:instance,corner:"top_right",width:880,height:400,inset:24};
         let view=#{id:"report-analysis",title:"Car + data",interaction:"editor",restore:false,
             description:"The native graph over the scene, without a tab header or title bar.",scene_visible:true,
             floating:[host]};
         views.push(view);
     }
     if has_panel(facts,"modelica_canvas_diagram") {
-        let host=#{panel:"modelica_canvas_diagram",corner:"bottom_left",width:1100,height:640,inset:24};
+        let host=#{panel:"modelica_canvas_diagram",corner:"top_left",width:1100,height:640,inset:24};
         let view=#{id:"report-model",title:"Car + model",interaction:"editor",restore:false,
             description:"The selected native Modelica diagram over the physical vehicle.",scene_visible:true,
             floating:[host]};
         views.push(view);
     }
     if has_panel(facts,"usd_connection_canvas") {
-        let host=#{panel:"usd_connection_canvas",corner:"bottom_left",width:1100,height:640,inset:24};
+        let host=#{panel:"usd_connection_canvas",corner:"top_left",width:1100,height:640,inset:24};
         let view=#{id:"report-connections",title:"Connections",interaction:"editor",restore:false,
             description:"Actual authored signal connections beside their physical result.",scene_visible:true,
             floating:[host]};
