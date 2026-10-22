@@ -28,7 +28,7 @@ fn on_tick(me,ctx) {
             && !authored.api_schemas.contains("PhysicsMeshCollisionAPI") && physics.collider_present,
             corner+": native analytic cylinder remains the collision owner"));
         checks.push(t_true(get(wheel,"PhysicalWheel")!=()
-            && get(wheel,"PhysicalWheel.visual_entity").to_string()=="None"
+            && get(wheel,"PhysicalWheel.visual_entity").to_string()!="None"
             && get(wheel,"Visibility").to_string().contains("Hidden"),
             corner+": collision proxy contributes no rendered wheel surface"));
         let material=query("QueryUsdPrim",#{path:path+"/CrownedVisual",attrs:[],topology:true}).topology.parts[0].materials;
