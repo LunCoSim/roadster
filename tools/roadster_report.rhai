@@ -83,7 +83,8 @@ fn prepare_live_grid(grid,columns,entries) {
         if !found {return #{ok:false,error:"No current measured channel: "+name};}
         selected.push(#{target_gid:car,signal:name,caption:entry.caption});
     }
-    cmd("ConfigureSignalGrid",#{grid:grid,title:"Roadster measurements",columns:columns,signals:selected});
+    cmd("ConfigureSignalGrid",#{grid:grid,title:"Roadster measurements",columns:columns,
+        signals:selected,sync_time_axes:true});
     #{ok:true,status:"queued",grid:grid,channels:entries.len(),source_gid:car}
 }
 fn show_live_grid(grid,perspective,text_size) {
