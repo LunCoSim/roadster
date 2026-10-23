@@ -87,7 +87,7 @@ def Xform "RearThrusters" (
         float[] primvars:displayOpacity = [0.30000001192092896]
         double3 xformOp:translate = (-0.55, -0.14, 2.37)
         double3 xformOp:rotateXYZ = (90.0, 0.0, 0.0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
         float inputs:force = 0.0
         float inputs:radius_start = 0.0
         float inputs:radius_expanded = 0.0
@@ -96,6 +96,7 @@ def Xform "RearThrusters" (
         float inputs:radius_end = 0.0
         float inputs:exit_velocity = 0.0
         rel material:binding = </RearThrusters/Looks/Rear>
+        custom double3 xformOp:scale = (1.6, 2.2, 1.6)
     }
     def Mesh "Jet1" (
         prepend apiSchemas = ["MaterialBindingAPI"]
@@ -112,7 +113,7 @@ def Xform "RearThrusters" (
         float[] primvars:displayOpacity = [0.30000001192092896]
         double3 xformOp:translate = (-0.2, -0.14, 2.37)
         double3 xformOp:rotateXYZ = (90.0, 0.0, 0.0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
         float inputs:force = 0.0
         float inputs:radius_start = 0.0
         float inputs:radius_expanded = 0.0
@@ -121,6 +122,7 @@ def Xform "RearThrusters" (
         float inputs:radius_end = 0.0
         float inputs:exit_velocity = 0.0
         rel material:binding = </RearThrusters/Looks/Rear>
+        custom double3 xformOp:scale = (1.6, 2.2, 1.6)
     }
     def Mesh "Jet2" (
         prepend apiSchemas = ["MaterialBindingAPI"]
@@ -137,7 +139,7 @@ def Xform "RearThrusters" (
         float[] primvars:displayOpacity = [0.30000001192092896]
         double3 xformOp:translate = (0.2, -0.14, 2.37)
         double3 xformOp:rotateXYZ = (90.0, 0.0, 0.0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
         float inputs:force = 0.0
         float inputs:radius_start = 0.0
         float inputs:radius_expanded = 0.0
@@ -146,6 +148,7 @@ def Xform "RearThrusters" (
         float inputs:radius_end = 0.0
         float inputs:exit_velocity = 0.0
         rel material:binding = </RearThrusters/Looks/Rear>
+        custom double3 xformOp:scale = (1.6, 2.2, 1.6)
     }
     def Mesh "Jet3" (
         prepend apiSchemas = ["MaterialBindingAPI"]
@@ -162,7 +165,7 @@ def Xform "RearThrusters" (
         float[] primvars:displayOpacity = [0.30000001192092896]
         double3 xformOp:translate = (0.55, -0.14, 2.37)
         double3 xformOp:rotateXYZ = (90.0, 0.0, 0.0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
         float inputs:force = 0.0
         float inputs:radius_start = 0.0
         float inputs:radius_expanded = 0.0
@@ -171,5 +174,6 @@ def Xform "RearThrusters" (
         float inputs:radius_end = 0.0
         float inputs:exit_velocity = 0.0
         rel material:binding = </RearThrusters/Looks/Rear>
+        custom double3 xformOp:scale = (1.6, 2.2, 1.6)
     }
 }

@@ -24,6 +24,8 @@ def Xform "Body" (
                 float inputs:roughness = 0.18000000715255737
                 color3f inputs:emissiveColor = (0.0, 0.0, 0.0)
                 token outputs:surface = ""
+                custom float inputs:clearcoat = 0.800000011920929
+                custom float inputs:clearcoatRoughness = 0.07999999821186066
             }
         }
         def Material "Glass"
@@ -38,6 +40,8 @@ def Xform "Body" (
                 float inputs:roughness = 0.08500000089406967
                 color3f inputs:emissiveColor = (0.0, 0.0, 0.0)
                 token outputs:surface = ""
+                custom float inputs:clearcoat = 0.800000011920929
+                custom float inputs:clearcoatRoughness = 0.07999999821186066
             }
         }
         def Material "Carbon"

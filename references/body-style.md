@@ -37,3 +37,21 @@ continue to light the road; cosmetic lamp doors do not add photometric claims.
 Before/after native renders are `results/body-before-{front,side}.png` and
 `results/body-after-{front,side,rear}.png`. These show the appearance on a fresh
 production scene load; no new dynamics acceptance is claimed for a visual edit.
+
+
+## Shared materials and exhaust visibility
+
+The canonical body material has a clearcoat weight of 0.8 and clearcoat
+roughness of 0.08. The rear and perimeter jet meshes use a 1.6 × 2.2 × 1.6
+visual scale, with denser cool-white mixing mist. The shader preserves the
+near-nozzle radius while extending the visible envelope. Exhaust remains gated
+by the live force; there is no plume when the jet is off.
+
+These are shared appearance choices, used by normal scenes and film scenes.
+They do not change nozzle area, mass flow, force stations or vehicle dynamics.
+The plume is enhanced for visibility and is not a calibrated CFD result.
+`tools/roadster_appearance.rhai` provides the native USD dry plan. The document
+owner applied and saved the component changes; twelve material/transform values
+were read back. A native 1,980-image, 60 fps course take from the canonical Twin
+was reviewed for the enhanced jets and car finish. This is visual evidence,
+not hardware validation or a new claim about Tesla's exhaust.
