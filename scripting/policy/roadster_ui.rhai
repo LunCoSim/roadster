@@ -41,7 +41,13 @@ fn roadster_ui(facts) {
 fn vehicle_ui(v) {
         let servicing=v.refill_active>0.5;
         let ready=v.air_discharge_enabled>0.5;
-        let fan_state=if v.fan_requested<0.5 {"FANS OFF"}else if v.fan_seal>0.8 {"FANS ON / SEALED"}else{"FANS ON / NO SEAL"};
+        // The pilot can run the fans while the manual switch stays off.
+        // Read the effective model command; retain the manual switch for its
+        // button label. Below 60 rpm the display treats spin-down as stopped.
+        let fan_state=if v.fan_commanded==() {"FAN STATUS UNAVAILABLE"}
+        else if v.fan_commanded>0.5 {
+            if v.fan_seal>0.8 {"FANS ON / SEALED"}else{"FANS ON / NO SEAL"}
+        }else if v.fan_rpm>60.0 {"FANS STOPPING"}else{"FANS OFF"};
         let status=if servicing {"REFILLING / moving allowed"}else if ready {"AIR READY"}else if v.thermal_guard_active>0.5 {"MODEL TEMP GUARD / REFILL"}else{"AIR UNAVAILABLE"};
         let out=#{program_label:"MANUAL",runtime_status:status};
 

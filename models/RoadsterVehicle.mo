@@ -19,6 +19,8 @@ model RoadsterVehicle
   input Real course_turn_direction = 1.0 "Positive yaw until the course latches its measured drift decision";
   input Real course_jump_timing_offset_s = 0.0 "Guidance-only timing perturbation for acceptance; positive fires earlier";
   input Real course_jump_roll_target_deg = 360.0 "Signed obstacle-jump kickflip request; zero selects an upright jump";
+  input Real course_transit_speed_mps(unit="m/s",min=0) = 35.0
+    "Guidance cruise request, not a velocity constraint; zero for standing-start jump tests";
   input Real course_autopilot_enable;
   output Real course_autopilot_active;
   output Real course_block_crossed;
@@ -60,6 +62,7 @@ model RoadsterVehicle
   output Real pilot_roll_right;
   CoursePilot pilot(phase=course_phase,action=course_action,elapsed=course_time_s,
     jump_roll_degrees=course_jump_roll_target_deg,
+    transit_speed_mps=course_transit_speed_mps,
     position_x=autopilot_position_x,velocity_x=measured_vx,turn_direction=course_turn_direction,jump_timing_offset_s=course_jump_timing_offset_s,
     position_y=course_position_y,position_z=autopilot_position_z,
     speed=speed_mps,velocity_y=measured_vy,velocity_z=measured_vz,
@@ -389,6 +392,7 @@ model RoadsterVehicle
   output Real fan_angle_right;
   output Real fan_rpm;
   output Real fan_requested;
+  output Real fan_commanded "Powered fan command after manual/course/flight arbitration";
   output Real fan_vacuum_kpa;
   output Real fan_power_kw;
   output Real fan_pressure_pa;
@@ -568,6 +572,7 @@ equation
   fan_angle_right = -adhesion.rotor_angle;
   fan_rpm = adhesion.rotor_rpm;
   fan_requested = max(0.0,min(1.0,fan));
+  fan_commanded = max(0.0,min(1.0,adhesion.command))*powertrain.enabled;
   fan_vacuum_kpa = fan_pressure_pa/1000.0;
   fan_power_kw = fan_power_w/1000.0;
   fan_pressure_pa = adhesion.pressure_drop;

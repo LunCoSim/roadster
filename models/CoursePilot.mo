@@ -8,6 +8,8 @@ model CoursePilot
   input Real turn_direction;
   input Real jump_timing_offset_s;
   input Real jump_roll_degrees = 0.0 "Requested signed kickflip rotation; zero retains an upright jump";
+  input Real transit_speed_mps(unit="m/s",min=0) = 35.0
+    "Requested course cruise speed; zero selects a standing jump without motor acceleration";
   input Real position_y;
   input Real position_z;
   input Real speed;
@@ -142,7 +144,7 @@ equation
   right = noEvent(if phase<6 and on_ground>0.5 and rack_error>0.0015 then 1.0 else 0.0);
   // Target speeds are pilot requests, never physical velocity constraints.
   // Carry the launch speed through both service pads and the cube corridor.
-  cruise_speed = noEvent(if phase>0.5 and phase<3.5 then 35.0
+  cruise_speed = noEvent(if phase>0.5 and phase<3.5 then max(0.0,transit_speed_mps)
     else if phase>3.5 and phase<5.5 and action<7.5 then
       ramp_approach_speed
     else 0.0);

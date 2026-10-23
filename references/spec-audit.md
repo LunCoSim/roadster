@@ -50,7 +50,7 @@ plume is not an additional thruster. No combustion or rocket fuel is modeled.
 | Thrust trim storage | S05: one 200 L vessel | Thrust now composes a 200 L rear vessel without cabin storage. Modelica derives 83.33 kg at the Rocket study density; this mass is an inference. Rocket keeps 600 L / 250 kg. |
 | Acceleration | Reveal demo 0.81 s; published targets and rollout conventions differ | Strict ≤0.59 s is the user's standing-start acceptance target. Latest measured study result is in results/launch-telemetry.json; this does not validate a Tesla production claim. |
 | Dimensions / tires / inertia | No checked manufacturer drawing or tire curves | All geometry, wheelbase, radius, masses, inertias, friction and slip curves remain assumptions in assumptions.md. |
-| Thermal equipment | No directly checked tank thermal-management design | Passive wall exchange and conservative 200 K guard; external refill equipment is explicitly test service. |
+| Thermal equipment | No directly checked tank thermal-management design | Passive wall exchange and adjustable −130 °C study guard; this is not a verified valve rating. External refill equipment is explicitly test service. See discharge-limits.md. |
 | Light photometry | No checked manufacturer beam measurements | Modelica-focused 3000 lm per beam; renderer input compensates its angular attenuation. Study optics only. |
 | Rotation losses | No measured rotational aerodynamic coefficients | Native constant angular damping 0.5 remains a study approximation; jet release does not automatically counterfire or level the car. |
 | Range / top speed / charging | Manufacturer targets, no full duty-cycle validation | Not verified by the current acceptance suite. |

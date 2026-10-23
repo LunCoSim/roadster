@@ -427,6 +427,8 @@ def Xform "Roadster" (
     custom float outputs:roof_impact_overload = 0.0
     custom float outputs:service_brake_apply = 0.0
     custom float outputs:service_brake_release = 0.0
+    custom float outputs:fan_commanded = 0.0
+    custom float inputs:course_transit_speed_mps = 35.0
     variantSet "trim" = {
         "Performance" {
             float inputs:boost_available = 0.0
