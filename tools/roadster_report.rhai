@@ -1,7 +1,42 @@
 //! Read-only reports over native Roadster experiment trajectories.
 //! This tool does not integrate a simulator or change a model/controller.
 fn ui_label() { "Roadster experiment report" }
-fn ui_hint() { "gas_bench_report(experiment_id, split_s) summarizes two native valve pulses" }
+fn ui_hint() { "Summarize native gas pulses or compare sealed/open fan-bench observations" }
+// Select recorded samples, without interpolation or a second model. This
+// reports controlled skirt-gap observations, not motion of the physical car.
+fn fan_seal_report(experiment_id,sealed_time_s,open_time_s) {
+    let status=query("RunStatus",#{experiment_id:experiment_id});
+    if status.state!="done" {return #{ok:false,error:"A completed native fan experiment is required"};}
+    let names=["skirt_gap_m","suction_kn","vacuum_kpa","electrical_power_kw",
+        "volume_flow_m3_s","seal_fraction"];
+    let r=query("GetExperimentResult",#{experiment_id:experiment_id,variables:names});
+    if r.downsampled || r.missing_variables.len()>0 || r.times.len()<2 {
+        return #{ok:false,error:"Full native fan-bench histories are required"};
+    }
+    let first=r.times[0];let last=r.times[r.times.len()-1];
+    if sealed_time_s<first || open_time_s>last || sealed_time_s>=open_time_s {
+        return #{ok:false,error:"Choose ordered sealed/open times inside the native run"};
+    }
+    let snapshots=[];
+    for t in [sealed_time_s,open_time_s] {
+        let index=0;
+        for i in 1..r.times.len() {
+            if abs(r.times[i]-t)<abs(r.times[index]-t) {index=i;}
+        }
+        let values=#{};
+        for name in names {values[name]=r.series[name][index];}
+        snapshots.push(#{time_s:r.times[index],values:values});
+    }
+    let sealed=snapshots[0];let open=snapshots[1];
+    if sealed.values.electrical_power_kw<=0.0 || sealed.values.suction_kn<=0.0 {
+        return #{ok:false,error:"The sealed snapshot must include working fans"};
+    }
+    #{ok:true,experiment_id:experiment_id,source_cid:r.source_cid,samples:r.times.len(),
+      sealed:sealed,open:open,
+      power_ratio:open.values.electrical_power_kw/sealed.values.electrical_power_kw,
+      suction_fraction:open.values.suction_kn/sealed.values.suction_kn,
+      scope:"Canonical fan plant with controlled gap observations; geometry and efficiency are study inputs, not Tesla measurements"}
+}
 fn gas_bench_report(experiment_id,split_s) {
     let status=query("RunStatus",#{experiment_id:experiment_id});
     if status.state!="done" {return #{ok:false,error:"A completed native experiment is required"};}
