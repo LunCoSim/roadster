@@ -16,7 +16,7 @@ overshoot; it is not a manufacturer controller calibration.
 | Motor topology / combined ratings | Two rear motors, 1 MW / 1400 N·m | S05 describes rear drive, over 1 MW and 1400 N·m. The model uses a conservative 1 MW baseline, not 1 MW per motor. |
 | Reduction / efficiency | 8.4 / 0.97 | Ratio reported in interview summaries, primary transcript unverified. Combined wheel limit 11407.2 N·m / 970 kW before slip control. |
 | Battery / efficiency | 120 kWh / 0.93 | A-B01 source-informed assumption; 110–140 kWh sensitivity. See [battery derivation](battery-study.md), inline sources in BatteryStudy.mo and energy/native-mass checks. The current vehicle starts at 100% SOC, with a 2% drive reserve. |
-| Body L/W/H | 4.50 / 1.99 / about 1.20 m | Original procedural geometry; length/width checked from the authored Skin vertices on 24 October. Exterior bounding rectangle ≈8.955 m²; this is not a measured sealed plenum or Tesla dimension drawing. |
+| Body visual envelope | 4.50 m long / 1.9875 m wide; shell local Y −0.361…0.632 m | Procedural cross-section study adapted under MIT from the referenced browser simulator, fitted to our existing wheel datums. Checked by native mesh readback on 24 October; see body-style.md. A roughly 9 m² exterior bounding rectangle is not the sealed plenum or a Tesla dimension drawing. |
 | Wheelbase / track / tire radius | 2.75 / 1.72 / 0.34 m | Study geometry; front/rear tire width 0.25/0.30 m. |
 | Wheel mass / rotational inertia | 24 kg / 1.4 kg·m² each | Complete rotating assembly assumption. |
 | Tire friction / longitudinal stiffness | 1.4 / 30000 N·s/m | Ideal dry surface; no measured supplier curves. |

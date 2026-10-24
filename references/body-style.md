@@ -1,7 +1,9 @@
-# Reveal-inspired Roadster body — 2026-10-20
+# Reveal-inspired Roadster body — 2026-10-24
 
-This original procedural mesh follows the redesigned white Roadster, rather
-than the older red 2017 concept. Photo proportions are visual references, not
+The procedural mesh follows the redesigned white Roadster. The current shell
+adapts the MIT-licensed body profile from the user-supplied
+[Roadster simulator](https://github.com/eduardmur/tesla-roadster-simulator),
+fitted to this Twin's existing dimensions and wheel locations. It is not
 manufacturer CAD, measured dimensions or a new physical calibration.
 
 ## Visual references
@@ -16,32 +18,43 @@ manufacturer CAD, measured dimensions or a new physical calibration.
 
 ## Geometry choices
 
-`scripts/author_body_style.py` creates the visual shell using OpenFile,
-ApplyUsdOps and SaveDocument. Longitudinal deck stations define the hood and
-shoulder line independently of the wheel openings. Circular apertures cut only
-the side panels; their recessed dark returns give visible wheel-well depth.
-The old contact-authoring step raised all six vertices in each body section to
-clear a tire envelope, creating conspicuous full-width humps. It now owns only
-the existing collision envelopes, leaving visual authoring separate.
+`tools/reveal_body.rhai` supplies pure typed USD plans. Open the exact body
+document and run `scenarios/author_body.rhai` on a stable application host with
+`params.body_document` set to its document ID. The program applies
+`setup_plan(existing_paths)`, all 220 `chunk_plan` sections, both `cap_plan` ends
+and four wheelhouse liners through the document journal, then saves the complete
+result. Keep a different scene rendered during authoring. The general assembly
+builder serializes numeric mesh arrays at the USD boundary.
 
-The revision adds dark side windows, narrow white A-pillars and roof rails,
-rear buttresses, a roof spine, a continuous front light strip, closed triangular
-headlamp-door seams, a black front/rear fascia and a low rear deck lip. Surface
-winding points outward. All dimensions and materials remain study choices.
+The closed loft has 220 longitudinal intervals, 100 points per section, small
+fillets and shared differential normals at section boundaries. Side glass,
+fastback canopy, white paint and carbon sill are separate native USD meshes
+bound to the existing `UsdPreviewSurface` materials. The wheel openings are
+geometric cuts with analytic circle/edge intersections, not shader discards.
+Dark inner liners close the sight line through each wheelhouse. The rear light
+and deck lip follow the new tail height; the red emission is increased to 8.0.
+Both end caps match the exact shell rings.
+Wheel openings follow our ±1.375 m axle datums, not the reference's axles.
+
+The code adaptation and full MIT notice are documented in
+[reveal comparison](reveal-comparison.md) and
+`licenses/tesla-roadster-simulator-MIT.txt`. Photographs and audio are not copied.
 
 The existing collider shapes, rigid-body parameters, wheel mounts, suspension,
 thruster force stations and Modelica plant are retained. The new meshes have
 collision disabled and introduce no rigid bodies. Existing headlight sources
 continue to light the road; cosmetic lamp doors do not add photometric claims.
 
-Before/after native renders are `results/body-before-{front,side}.png` and
-`results/body-after-{front,side,rear}.png`. These show the appearance on a fresh
-production scene load; no new dynamics acceptance is claimed for a visual edit.
+Native front, side and rear captures from the canonical cinematic scene are
+kept in ignored `.scratch/rear-and-lighting-review/`. No new dynamics acceptance
+is claimed for this visual edit. The shell uses standard materials; compatibility
+of the complete vehicle and stage with the reference path tracer remains open
+because other custom surfaces and point/spot lights are still present.
 
 
 ## Shared materials and exhaust visibility
 
-The canonical body material has a clearcoat weight of 0.8 and clearcoat
+The canonical paint has a clearcoat weight of 0.8 and clearcoat
 roughness of 0.08. The rear and perimeter jet meshes use a 1.6 × 2.2 × 1.6
 visual scale, with denser cool-white mixing mist. The shader preserves the
 near-nozzle radius while extending the visible envelope. Exhaust remains gated
