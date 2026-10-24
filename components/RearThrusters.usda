@@ -69,6 +69,8 @@ def Xform "RearThrusters" (
                 float inputs:exit_velocity = 600.0
                 token outputs:surface
                 asset info:wesl:sourceAsset = @../shaders/air_jet.wesl@
+                custom float inputs:surface_distance = 12.0
+                custom float inputs:surface_hit_valid = 0.0
             }
         }
     }
@@ -97,6 +99,20 @@ def Xform "RearThrusters" (
         float inputs:exit_velocity = 0.0
         rel material:binding = </RearThrusters/Looks/Rear>
         custom double3 xformOp:scale = (1.6, 2.2, 1.6)
+        token lunco:raycast:axis = "Y"
+        float lunco:raycast:maxDistance = 12.0
+        double3 lunco:raycast:offset = (0.0, 0.0, 0.0)
+        custom float inputs:surface_distance = 0.0
+        float inputs:surface_distance.connect = </RearThrusters/Jet0/OcclusionProbe.outputs:ray_distance>
+        custom float inputs:surface_hit_valid = 0.0
+        float inputs:surface_hit_valid.connect = </RearThrusters/Jet0/OcclusionProbe.outputs:ray_hit_valid>
+        def Xform "OcclusionProbe" (
+            references = @./SurfaceProbe.usda@
+        )
+        {
+            token lunco:raycast:axis = "Y"
+            float lunco:raycast:maxDistance = 12.0
+        }
     }
     def Mesh "Jet1" (
         prepend apiSchemas = ["MaterialBindingAPI"]
@@ -123,6 +139,20 @@ def Xform "RearThrusters" (
         float inputs:exit_velocity = 0.0
         rel material:binding = </RearThrusters/Looks/Rear>
         custom double3 xformOp:scale = (1.6, 2.2, 1.6)
+        token lunco:raycast:axis = "Y"
+        float lunco:raycast:maxDistance = 12.0
+        double3 lunco:raycast:offset = (0.0, 0.0, 0.0)
+        custom float inputs:surface_distance = 0.0
+        float inputs:surface_distance.connect = </RearThrusters/Jet1/OcclusionProbe.outputs:ray_distance>
+        custom float inputs:surface_hit_valid = 0.0
+        float inputs:surface_hit_valid.connect = </RearThrusters/Jet1/OcclusionProbe.outputs:ray_hit_valid>
+        def Xform "OcclusionProbe" (
+            references = @./SurfaceProbe.usda@
+        )
+        {
+            token lunco:raycast:axis = "Y"
+            float lunco:raycast:maxDistance = 12.0
+        }
     }
     def Mesh "Jet2" (
         prepend apiSchemas = ["MaterialBindingAPI"]
@@ -149,6 +179,20 @@ def Xform "RearThrusters" (
         float inputs:exit_velocity = 0.0
         rel material:binding = </RearThrusters/Looks/Rear>
         custom double3 xformOp:scale = (1.6, 2.2, 1.6)
+        token lunco:raycast:axis = "Y"
+        float lunco:raycast:maxDistance = 12.0
+        double3 lunco:raycast:offset = (0.0, 0.0, 0.0)
+        custom float inputs:surface_distance = 0.0
+        float inputs:surface_distance.connect = </RearThrusters/Jet2/OcclusionProbe.outputs:ray_distance>
+        custom float inputs:surface_hit_valid = 0.0
+        float inputs:surface_hit_valid.connect = </RearThrusters/Jet2/OcclusionProbe.outputs:ray_hit_valid>
+        def Xform "OcclusionProbe" (
+            references = @./SurfaceProbe.usda@
+        )
+        {
+            token lunco:raycast:axis = "Y"
+            float lunco:raycast:maxDistance = 12.0
+        }
     }
     def Mesh "Jet3" (
         prepend apiSchemas = ["MaterialBindingAPI"]
@@ -175,5 +219,19 @@ def Xform "RearThrusters" (
         float inputs:exit_velocity = 0.0
         rel material:binding = </RearThrusters/Looks/Rear>
         custom double3 xformOp:scale = (1.6, 2.2, 1.6)
+        token lunco:raycast:axis = "Y"
+        float lunco:raycast:maxDistance = 12.0
+        double3 lunco:raycast:offset = (0.0, 0.0, 0.0)
+        custom float inputs:surface_distance = 0.0
+        float inputs:surface_distance.connect = </RearThrusters/Jet3/OcclusionProbe.outputs:ray_distance>
+        custom float inputs:surface_hit_valid = 0.0
+        float inputs:surface_hit_valid.connect = </RearThrusters/Jet3/OcclusionProbe.outputs:ray_hit_valid>
+        def Xform "OcclusionProbe" (
+            references = @./SurfaceProbe.usda@
+        )
+        {
+            token lunco:raycast:axis = "Y"
+            float lunco:raycast:maxDistance = 12.0
+        }
     }
 }

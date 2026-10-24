@@ -15,6 +15,8 @@ import lunco::shaders::lunco_noise::{vnoise};
 //!@default mixing_length 1.5
 //!@default radius_end 0.16
 //!@default exit_velocity 600.0
+//!@default surface_distance 12.0
+//!@default surface_hit_valid 0.0
 struct Material {
     force: f32,
     direction: f32,
@@ -25,6 +27,8 @@ struct Material {
     mixing_length: f32,
     radius_end: f32,
     exit_velocity: f32,
+    surface_distance: f32,
+    surface_hit_valid: f32,
 }
 @group(constants::MATERIAL_BIND_GROUP) @binding(0)
 var<uniform> mat: Material;
@@ -37,10 +41,15 @@ fn fragment(input: VertexOutput,@builtin(front_facing) front: bool) -> @location
     let eye=(inverse*vec4<f32>(view.world_position,1.0)).xyz;
     let ray=normalize(start-eye);
     let activity=clamp(delivered/mat.reference_force,0.0,1.0);
+    let transform=mesh_functions::get_world_from_local(input.instance_index);
+    let metres_per_local_y=length((transform*vec4<f32>(0.0,1.0,0.0,0.0)).xyz);
     var optical_depth=0.0;
     for(var i=0;i<32;i=i+1) {
         let p=start+ray*(0.08*(f32(i)+0.5));
         if p.y<0.0 || p.y>mat.mixing_length { continue; }
+        // Native physics measures nozzle-to-solid clearance along this jet.
+        // Clipping is a rendering consequence; it never changes thrust.
+        if mat.surface_hit_valid>0.5 && p.y*metres_per_local_y>=max(0.0,mat.surface_distance-0.02) {continue;}
         let near=clamp(p.y/max(0.001,mat.expansion_length),0.0,1.0);
         let far=clamp((p.y-mat.expansion_length)/max(0.001,mat.mixing_length-mat.expansion_length),0.0,1.0);
         let radius=mix(mat.radius_start/1.6,mat.radius_expanded,near)+(mat.radius_end-mat.radius_expanded)*far;
