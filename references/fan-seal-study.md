@@ -1,5 +1,9 @@
 # Controlled fan-skirt study
 
+This is an illustrative parameter configuration, not calibrated Tesla fan
+performance. The [assumption audit](fan-assumption-audit.md) reviews the area,
+fan map, leakage and seal closure, and records native sensitivity tests.
+
 `RoadsterFanSealBench` composes the existing `FanAdhesion` / `SuctionFan`
 plant with controlled geometric observations. It does not prescribe motion
 of the car, change a wheel or alter the fan equations.
@@ -27,6 +31,8 @@ efficiency and seal law are reduced-model study inputs. The comparison shows
 their consequence: almost four times the electrical power can accompany
 almost no suction when the seal is lost. It does not imply that the tires
 lose their ordinary gravity-loaded grip.
+The numerical ratio depends on the chosen configuration. The near-zero force
+also depends on the Gaussian seal multiplier, which is not a measured seal law.
 
 Native run `08d00b17-b17f-41c4-bba8-e3e0b891386c` used source CID
 `bafkreif2lasp7avjuvstyovzecdi2dsoyt7qan5ueoiv2orlvqlktbj6wi`.

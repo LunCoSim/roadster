@@ -15,8 +15,8 @@ overshoot; it is not a manufacturer controller calibration.
 | Chassis USD mass | 1572 kg dry | Four physical 24 kg wheels plus 32 kg carriers/knuckles are separate bodies. Modelica supplies operating chassis mass/inertia. |
 | Motor topology / combined ratings | Two rear motors, 1 MW / 1400 N·m | S05 describes rear drive, over 1 MW and 1400 N·m. The model uses a conservative 1 MW baseline, not 1 MW per motor. |
 | Reduction / efficiency | 8.4 / 0.97 | Ratio reported in interview summaries, primary transcript unverified. Combined wheel limit 11407.2 N·m / 970 kW before slip control. |
-| Battery / efficiency | 120 kWh / 0.93 | A-B01 source-informed assumption; 110–140 kWh sensitivity. See [battery derivation](battery-study.md), inline sources in BatteryStudy.mo and energy/native-mass checks. 90% initial SOC, 2% drive reserve. |
-| Body L/W/H | 4.50 / 1.94 / about 1.20 m | Original procedural geometry; no dimension drawing. |
+| Battery / efficiency | 120 kWh / 0.93 | A-B01 source-informed assumption; 110–140 kWh sensitivity. See [battery derivation](battery-study.md), inline sources in BatteryStudy.mo and energy/native-mass checks. The current vehicle starts at 100% SOC, with a 2% drive reserve. |
+| Body L/W/H | 4.50 / 1.99 / about 1.20 m | Original procedural geometry; length/width checked from the authored Skin vertices on 24 October. Exterior bounding rectangle ≈8.955 m²; this is not a measured sealed plenum or Tesla dimension drawing. |
 | Wheelbase / track / tire radius | 2.75 / 1.72 / 0.34 m | Study geometry; front/rear tire width 0.25/0.30 m. |
 | Wheel mass / rotational inertia | 24 kg / 1.4 kg·m² each | Complete rotating assembly assumption. |
 | Tire friction / longitudinal stiffness | 1.4 / 30000 N·s/m | Ideal dry surface; no measured supplier curves. |
@@ -25,13 +25,13 @@ overshoot; it is not a manufacturer controller calibration.
 | Steering actuator | 0.12 s, 2 command units/s | Max wheel angle 0.45 rad, no speed angle cap. Modelica keyboard driver buildup 1.8/(1+(v/20)^2) units/s, return 2.8 units/s. Full rack travel remains available. |
 | Slip control | 0.12 target, gain 30 | Uses measured wheel and body speed; no separate wheel animation. |
 | Drag area / density / rolling coefficient | 0.62 m² / 1.225 kg/m³ / 0.012 | Body-axis drag: forward 0.62, side 4.5, vertical 8.0 m²; airbrake 1.1 m²; lift area 7.9 m². Dissipative 3D drag and smoothed ground rolling resistance. |
-| Fan vacuum / plenum / power | 20 kPa / 2 m² / 80 kW | Four rear electric extractors (placement/count S10); rotor dynamics, four-corner seal/leakage; at most 40 kN suction. Study assumptions. |
+| Fan vacuum / plenum / power | 20 kPa / 2 m² / 80 kW, unverified baseline | Four rear extractors and a seal around the battery region are supported by S10. Actual sealed area, pressure, fan curve, leakage and power rating are not established. The 40 kN result is conditional on these inputs, not a measured Tesla rating. See [fan assumption audit](fan-assumption-audit.md). |
 | Gas volume / starting temperature | 0.6 m³ / 293.15 K | S05 describes 200 L rear + 400 L cabin for Rocket. Modelica sums both editable volumes, assumes a shared gas state, and publishes their mass split. Thrust uses only 200 L; Modelica derives 83.33 kg at the same assumed initial density. Rocket retains 250 kg. |
 | Starting pressure | **43.7023451 MPa absolute** | Modelica real-gas calculation for 250 kg dry air, 600 L and 20°C. Not an asserted Tesla operating pressure. |
 | Gas thermodynamics | Lemmon dry-air Helmholtz EOS | Reusable CompressedAir package. S05 describes nitrogen; dry air follows the user's study input. Nitrogen comparison in gas-storage.md. |
 | Nozzle throat / efficiency / valve response | 0.002 m² / 0.85 / 0.025 s | Uncalibrated aggregate area; ideal nozzle expansion with real-gas tank state. Side/yaw jet area is 4% of aggregate. |
 | Mounts / fixed lift trim | Front lift Z −0.90 m, rear +1.85 m; X ±0.80 m; rear-boost Y −0.02 m; COM Y −0.14 m | Study placement follows observed topology and clears modeled tires. Rear lift valve gain 0.486486 balances collective moment. Full cross-product moments are in Modelica. |
-| Thermal validity cutoff | 200 K | Discharge stops at the study-domain boundary. Conservative model guard, not Tesla hardware data. No calibrated regulator or phase-change closure. Finite wall heat capacity 60 kJ/K, gas-wall 200 W/K, ambient-wall 20 W/K. |
+| Discharge study guard | −130 °C / 143.15 K, adjustable | Current RoadsterVehicle default, not a certified valve limit or an extension of the gas implementation's verified range. The guard is above dry-air critical temperature, which alone does not establish material or low-temperature accuracy. See [discharge limits](discharge-limits.md). Finite wall heat capacity 60 kJ/K, gas-wall 200 W/K, ambient-wall 20 W/K remain uncalibrated heat-transfer inputs. |
 | Gas inertia / COM | Centered 1.2 × 0.5 × 1.0 m equivalent distribution | Mass and diagonal inertia change. Actual tank placement and COM migration remain unverified. |
 | Motor heat capacity / cooling | 100000 J/K / 300 W/K | Lumped estimate at 298.15 K ambient. |
 
