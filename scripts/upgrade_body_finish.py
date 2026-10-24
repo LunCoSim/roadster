@@ -53,7 +53,12 @@ def main():
    v=[deck(sign,za),(sign*wa,la,za),(sign*wb,lb,zb),deck(sign,zb)]
    quads.append(v if sign<0 else v[::-1])
  for z in [-2.25,2.25]:
-  w,h=profile(z);v=[(-w,-.265,z),(-w,h-.045,z),(w,h-.045,z),(w,-.265,z)];quads.append(v if z<0 else v[::-1])
+  # The cap must meet every transverse deck station. A flat shoulder-height
+  # cap leaves an open crescent below the crowned deck.
+  for fa,fb in zip(fractions,fractions[1:]):
+   left,right=deck(fa,z),deck(fb,z)
+   v=[(left[0],-.265,z),(right[0],-.265,z),right,left]
+   quads.append(v if z>0 else v[::-1])
  mesh('/Body/Skin',*quad_mesh(quads))
  # Curved smoked glazing, with original perimeter and pillar mounts retained.
  rings=[(-.75,.745,.353),(-.15,.645,.70),(.62,.635,.68),(1.30,.74,.38)]

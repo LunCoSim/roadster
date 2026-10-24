@@ -64,9 +64,10 @@ def shell():
             quad(v if sign<0 else v[::-1])
     # End caps, with outward normals. No full-width sheet through wheel wells.
     for z in [-2.25, 2.25]:
-        w, y = profile(z)
-        v = [(-w,-.265,z),(-w,y,z),(w,y,z),(w,-.265,z)]
-        quad(v if z<0 else v[::-1])
+        for fa, fb in zip(fractions, fractions[1:]):
+            left, right = deck(fa, z), deck(fb, z)
+            v = [(left[0], -.265, z), (right[0], -.265, z), right, left]
+            quad(v if z>0 else v[::-1])
     return points, faces
 
 
