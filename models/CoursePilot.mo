@@ -31,6 +31,8 @@ model CoursePilot
   parameter Real lookahead_time_s(unit="s") = 1.0 "Path preview longer than the finite rack response";
   parameter Real minimum_lookahead_m(unit="m") = 10.0;
   parameter Real ramp_approach_speed(unit="m/s") = 12.0 "Pilot target for the compact transition";
+  parameter Real ramp_entry_z_m(unit="m") = -300.0 "Course ramp entry in the shared scene frame";
+  parameter Real fan_preload_distance_m(unit="m",min=0) = 12.0 "Start fans one approach-second before the ramp to establish suction";
   parameter Real pulse_period = 0.1;
   parameter Real pulse_on = 0.05;
   parameter Real attitude_gain[3] = {4.0,3.5,3.0};
@@ -161,7 +163,9 @@ equation
     else if cruise_speed>0 and speed>cruise_speed+2 then 1.0
     else if abs(phase-6)<0.5 and on_ground>0.5 and forward<0.5 and reverse<0.5 then 1.0
     else if phase>6.5 then 1.0 else 0.0);
-  fan = noEvent(if phase<3.5 or phase>5.5 or (abs(phase-5)<0.5 and action>7.5) then 0.0 else 1.0);
+  fan = noEvent(if phase<3.5 or phase>5.5
+    or (phase<4.5 and position_z>ramp_entry_z_m+fan_preload_distance_m)
+    or (abs(phase-5)<0.5 and action>7.5) then 0.0 else 1.0);
   // q_error = conjugate(q_body) * q_target, expressed in body axes.
   // Recover wheels-down while retaining the ramp exit heading (+Z).
   landing_time = (velocity_y+sqrt(velocity_y^2+2*9.80665*max(0.0,position_y)))/9.80665;
