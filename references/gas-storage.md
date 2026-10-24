@@ -75,7 +75,8 @@ reported hardware volume; it never substitutes an 83 kg inventory.
 The vehicle calls the same package during discharge. It integrates mass and
 the rigid-tank adiabatic energy balance, using real-gas pressure and cv.
 The nozzle still uses an ideal-expansion approximation. Gas flow stops at the
-200 K conservative model guard, not a Tesla hardware limit. Finite tank-wall heat transfer and external thermal service are included; remaining gas need not all be immediately usable impulse.
+live −130 °C study guard, not a Tesla hardware limit; see
+[discharge limits](discharge-limits.md). Finite tank-wall heat transfer and external thermal service are included; remaining gas need not all be immediately usable impulse.
 
 ## Numerical evidence
 

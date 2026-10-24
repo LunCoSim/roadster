@@ -1,5 +1,11 @@
 # Roadster propulsion and mounting analysis
 
+Current configuration: the temperature trip is now the live Celsius input
+`discharge_cutoff_c`, default −130 °C. The 200 K results below are retained
+measurements of the prior configuration. They must not be used to claim a
+half-inventory limit for the current model. See [discharge limits](discharge-limits.md)
+and the native Celsius bench result described there.
+
 2026-10-18. Results are for this engineering study, not a calibrated Tesla car.
 All forces, gas states, moment arms, sizing and recorded rear impulse are computed
 by Modelica. Native LunCoSim integrates body/contact/wheel motion. Python plots

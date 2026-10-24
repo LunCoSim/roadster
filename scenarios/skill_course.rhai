@@ -1,4 +1,4 @@
-import "twin://tesla-roadster-runner/tools/wheel_state" as wheels;
+import "../tools/wheel_state" as wheels;
 // One mission tree for manual play, keyboard acceptance, and autopilot.
 // Modelica owns continuous pilot-to-actuator coupling; this program owns phases
 // and discrete service requests. It never writes forces, poses, velocities or mass.
@@ -16,12 +16,15 @@ fn readings(car, names) {
     }
     values
 }
+fn course_notice(announcements, message) {
+    if announcements {notify(message);} else {print(message);}
+}
 fn phase_node(phase, action, message) {
     once(|me| {
         this.phase = phase;
         cmd("SetPorts", #{target:this.car, writes:[
             ["course_phase", phase*1.0], ["course_action", action*1.0]]});
-        notify(message);
+        course_notice(this.announcements,message);
     })
 }
 fn action_node(action) {
@@ -76,15 +79,17 @@ fn count_block(me) {
     this.blocks += 1;
     cmd("SetPorts",#{target:this.car,writes:[["course_blocks_passed",this.blocks*1.0]]});
 }
-fn refill_node(phase, message) {
-    seq([phase_node(phase,2,message), wait_until(Fn("in_refill_zone")),
-         once(Fn("refill")), wait_until(Fn("tank_ready"))])
+fn refill_node(phase, message, enabled) {
+    let nodes=[phase_node(phase,2,message),wait_until(Fn("in_refill_zone"))];
+    if enabled {nodes.push(once(Fn("refill")));nodes.push(wait_until(Fn("tank_ready")));}
+    seq(nodes)
 }
 fn barrier_node() {
     seq([wait_until(Fn("barrier_reached")), check(Fn("barrier_cleared")),
          once(Fn("count_block")),wait_until(Fn("block_count_published"))])
 }
 fn on_start(me, ctx) {
+    this.announcements=!ctx.contains("announcements") || ctx.announcements;
     this.car = find_path("/World/Roadster");
     this.failure_code=7.0;this.expected_service_count=0.0;
     this.cubes=[];for i in 0..3 {this.cubes.push(find_path("/World/JumpBlock"+i.to_string()));}
@@ -94,19 +99,21 @@ fn on_start(me, ctx) {
         "roadster.service-brake.apply","roadster.service-brake.release"] {subscribe(name);}
     cmd("SetPorts",#{target:this.car,writes:[["course_phase",0.0],["course_failure_code",0.0],
         ["course_action",0.0],["course_blocks_passed",0.0],["course_autopilot_enable",0.0]]});
+    emit("roadster.course.ready",#{});
 }
 fn task(me, ctx) {
+    let services=!ctx.contains("refills") || ctx.refills;
     reactive_seq([
         check(Fn("healthy")),
         seq([
             phase_node(0,0,"LAUNCH: settle, then W + Space to reach 60 mph at the blue gate. Ctrl+P pauses."),
             wait(2.0), action_node(1), wait_until(Fn("launch_started")), wait(0.65), action_node(2),
             wait_until(Fn("launched")),
-            refill_node(1,"REFILL 1: drive through the green waypoint; refill is immediate while rolling."),
+            refill_node(1,"REFILL 1: drive through the green waypoint; refill is immediate while rolling.",services),
             phase_node(2,3,"JUMP: fans OFF, carry 126 km/h, pulse K precisely at the yellow takeoff line."),
             wait_until(Fn("at_takeoff")), action_node(4), wait_until(Fn("jump_impulse_ready")), action_node(5),
             repeat(3,barrier_node()),
-            refill_node(3,"LAND + REFILL 2: pulse K to cushion the cube landing. Keep rolling through green, F fans ON for ramp."),
+            refill_node(3,"LAND + REFILL 2: pulse K to cushion the cube landing. Keep rolling through green, F fans ON for ramp.",services),
             phase_node(4,6,"CLIMB: fans ON, approach near 100 km/h, then hold W up the ramp."),
             wait_until(Fn("climbed")),
             phase_node(5,7,"CREST: follow the return lip; prepare the flip and switch fans OFF at the crest."),
@@ -147,17 +154,17 @@ fn on_event(me, evt, ctx) {
                     +". Coupled vehicle paused; retry after reviewing the skirt/contact envelope."});
             if result.ok!=true {throw("Adhesion failure could not pause its coupled vehicle: "+result.to_string());}
         }
-        notify("Course missed: see the HUD reason. Retry resets car, air and mission tree.");
+        course_notice(this.announcements,"Course missed: see the HUD reason. Retry resets car, air and mission tree.");
     }
     if evt.name == "runtime.ui.action" && evt.value.action == "roadster.autopilot" {
-        if this.phase >= 7 && !this.autopilot { notify("Retry the course before starting the autopilot."); return; }
+        if this.phase >= 7 && !this.autopilot { course_notice(this.announcements,"Retry the course before starting the autopilot."); return; }
         this.autopilot = !this.autopilot;
         if this.autopilot {
             cmd("SetPorts",#{target:this.car,writes:[["course_autopilot_enable",1.0]]});
-            notify("Course autopilot ON. Press any driving or jet key to take over. Ctrl+P still pauses.");
+            course_notice(this.announcements,"Course autopilot ON. Press any driving or jet key to take over. Ctrl+P still pauses.");
         } else {
             cmd("SetPorts",#{target:this.car,writes:stop_setpoint()});
-            notify("Autopilot OFF. Manual controls active.");
+            course_notice(this.announcements,"Autopilot OFF. Manual controls active.");
         }
     }
     if this.autopilot && evt.name == "intent.edge" && evt.source == this.car && evt.value.edge == "pressed" {
@@ -167,7 +174,7 @@ fn on_event(me, evt, ctx) {
             this.autopilot = false;
             // Native input has already written the player's complete frame.
             cmd("SetPorts",#{target:this.car,writes:[["course_autopilot_enable",0.0],["program_active",0.0]]});
-            notify("Manual takeover: autopilot OFF.");
+            course_notice(this.announcements,"Manual takeover: autopilot OFF.");
         }
     }
 }

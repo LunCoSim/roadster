@@ -59,4 +59,24 @@ equation
   airflow = leak_area*sqrt(2.0*pressure_drop/max(0.01,air_density));
   electrical_power = idle_power*speed_fraction^3+rotor_acceleration_power+pressure_drop*airflow/efficiency;
   suction_force = pressure_drop*plenum_area*seal;
+  annotation(Icon(coordinateSystem(extent={{-150,-100},{150,100}}),graphics={
+    Rectangle(extent={{-150,100},{150,-100}},radius=8,
+      lineColor={84,103,117},fillColor={9,15,21},fillPattern=FillPattern.Solid),
+    Text(extent={{-138,91},{138,65}},textString="UNDERBODY PLENUM",textColor={230,238,244}),
+    Text(extent={{-138,57},{138,30}},
+      textString=DynamicSelect("Pressure drop [kPa]",String(pressure_drop/1000)+" kPa"),
+      textColor={121,224,233}),
+    Text(extent={{-138,24},{138,-3}},
+      textString=DynamicSelect("Suction [kN]",String(suction_force/1000)+" kN suction"),
+      textColor={230,238,244}),
+    Text(extent={{-138,-9},{138,-36}},
+      textString=DynamicSelect("Electrical power [kW]",String(electrical_power/1000)+" kW"),
+      textColor={230,238,244}),
+    Text(extent={{-138,-42},{138,-65}},
+      textString=DynamicSelect("Airflow [m3/s]",String(airflow)+" m3/s"),
+      textColor={158,179,191}),
+    Rectangle(extent={{-130,-77},{130,-87}},lineColor={84,103,117}),
+    Rectangle(extent=DynamicSelect({{-130,-77},{-130,-87}},{{-130,-77},{-130+260*seal,-87}}),
+      lineColor={121,224,233},fillColor={121,224,233},fillPattern=FillPattern.Solid)
+  }));
 end SuctionFan;

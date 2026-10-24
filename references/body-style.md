@@ -52,6 +52,6 @@ They do not change nozzle area, mass flow, force stations or vehicle dynamics.
 The plume is enhanced for visibility and is not a calibrated CFD result.
 `tools/roadster_appearance.rhai` provides the native USD dry plan. The document
 owner applied and saved the component changes; twelve material/transform values
-were read back. A native 1,980-image, 60 fps course take from the canonical Twin
-was reviewed for the enhanced jets and car finish. This is visual evidence,
+were read back. Sampled frames from a native 1,980-image, 60 fps course take from the
+canonical Twin were reviewed for the enhanced jets and car finish. This is visual evidence,
 not hardware validation or a new claim about Tesla's exhaust.

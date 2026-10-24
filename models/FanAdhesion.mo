@@ -18,7 +18,8 @@ model FanAdhesion
   // physical powertrain receives force and electrical power, never these rays.
   SuctionFan plenum(command=command,enabled=enabled,ambient_pressure=ambient_pressure,
     air_density=air_density,initial_speed_fraction=initial_speed_fraction,
-    gap=gap,valid=valid,alignment=alignment,skirt_reach=skirt_reach);
+    gap=gap,valid=valid,alignment=alignment,skirt_reach=skirt_reach)
+    annotation(Placement(transformation(extent={{-130,-80},{130,80}})));
   Real alignment[4];
   Real lever[3];
   output Real force_body[3](each unit="N");
@@ -44,4 +45,18 @@ equation
   rotor_angle = plenum.rotor_angle;
   rotor_rpm = plenum.rotor_rpm;
   surface_proximity = max({valid[i]*max(0.0,min(1.0,(0.50-gap[i])/0.15)) for i in 1:4});
+  annotation(Icon(coordinateSystem(extent={{-150,-100},{150,100}}),graphics={
+    Rectangle(extent={{-150,100},{150,-100}},radius=8,
+      lineColor={84,103,117},fillColor={9,15,21},fillPattern=FillPattern.Solid),
+    Text(extent={{-138,91},{138,65}},textString="FAN ADHESION",textColor={230,238,244}),
+    Text(extent={{-138,51},{138,19}},
+      textString=DynamicSelect("Suction [kN]",String(-force_body[2]/1000)+" kN suction"),
+      textColor={121,224,233}),
+    Text(extent={{-138,7},{138,-25}},
+      textString=DynamicSelect("Electrical power [kW]",String(electrical_power/1000)+" kW"),
+      textColor={230,238,244}),
+    Text(extent={{-138,-37},{138,-69}},
+      textString=DynamicSelect("Seal [%]",String(100*seal)+" % seal"),
+      textColor={158,179,191})
+  }),Diagram(coordinateSystem(extent={{-150,-100},{150,100}})));
 end FanAdhesion;

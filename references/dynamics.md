@@ -56,7 +56,7 @@ p = EOS(rho,T)
 20 W/K ambient-wall conductance. Ambient is 293.15 K; initial wall follows the
 editable initial gas temperature. These coefficients are assumptions.
 
-Discharge is inhibited below a **200 K conservative model guard**. This is not
+Discharge is inhibited below the live **−130 °C (143.15 K) study guard**. This is not
 a Tesla thermal threshold, a fundamental air freezing point, or a claim that
 all stored air is usable. No calibrated regulator, multiphase nozzle flow or
 moisture/icing model is present. Reviewed sources do not establish Tesla's
