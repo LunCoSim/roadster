@@ -8,7 +8,14 @@ fn has_kind(facts,id) {
     for kind in facts.instance_kinds {if kind==id {return true;}}
     false
 }
-fn assemble(facts) {
+fn workspace_view(plot) {
+    let docked=#{kind:plot.kind,instance:plot.instance,slot:"bottom"};
+    #{id:"report-workspace",title:"Workspace",interaction:"editor",restore:false,
+      description:"Drive the car with live Graphs and selected Telemetry channels in the same workbench.",
+      scene_visible:true,center:["workbench::viewport"],left:["telemetry_browser"],
+      instances:[docked]}
+}
+fn report_views(facts) {
     let plots=[];
     for panel in facts.instance_panels {
         if panel.id=="modelica_plot" && panel.canonical_instance!=() {
@@ -25,6 +32,10 @@ fn assemble(facts) {
         views.push(view);
     }
     if !facts.scene_mounted || !has_panel(facts,"workbench::viewport") {return views;}
+    if plots.len()>0 && has_panel(facts,"telemetry_browser") {
+        let workspace=workspace_view(plots[0]);
+        views.push(workspace);
+    }
     if plots.len()>0 {
         let plot=plots[0];
         let kind=plot.kind;let instance=plot.instance;
