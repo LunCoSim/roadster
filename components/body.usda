@@ -673,6 +673,17 @@ def Xform "Body" (
         uniform token subdivisionScheme = "none"
         uniform bool doubleSided = true
         custom bool physics:collisionEnabled = false
-        custom rel material:binding = </Body/Looks/Carbon>
+        custom rel material:binding = </Body/Looks/White>
+    }
+    def Mesh "RearFasciaSurround" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        point3f[] points = [(-0.8999999761581421, 0.23499999940395355, 2.2639999389648438), (-0.7300000190734863, 0.11999999731779099, 2.2750000953674316), (-0.7099999785423279, -0.26499998569488525, 2.2750000953674316), (-0.8100000023841858, -0.26499998569488525, 2.2639999389648438), (0.8999999761581421, 0.23499999940395355, 2.2639999389648438), (0.8100000023841858, -0.26499998569488525, 2.2639999389648438), (0.7099999785423279, -0.26499998569488525, 2.2750000953674316), (0.7300000190734863, 0.11999999731779099, 2.2750000953674316), (-0.8999999761581421, 0.23499999940395355, 2.2639999389648438), (0.8999999761581421, 0.23499999940395355, 2.2639999389648438), (0.7300000190734863, 0.11999999731779099, 2.2750000953674316), (-0.7300000190734863, 0.11999999731779099, 2.2750000953674316)]
+        int[] faceVertexCounts = [4, 4, 4]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        uniform token subdivisionScheme = "none"
+        uniform bool doubleSided = true
+        custom rel material:binding = </Body/Looks/White>
     }
 }

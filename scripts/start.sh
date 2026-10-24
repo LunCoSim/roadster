@@ -24,7 +24,7 @@ if [[ -z "${LUNCO_ASSET_ROOT:-}" && -d "$roadster_checkout/assets" ]]; then
     export LUNCO_ASSET_ROOT="$roadster_checkout/assets"
 fi
 export LUNCO_ASSET_ROOT="$(python3 "$roadster_root/scripts/prepare_runtime_assets.py")"
-roadster_scene="${1:-roadster_skill_course}"
+roadster_scene="${1:-roadster_cinematic}"
 if (($#)); then shift; fi
 if [[ ! "$roadster_scene" =~ ^roadster_[a-z0-9_]+$ || ! -f "$roadster_root/scenes/$roadster_scene.usda" ]]; then
     echo 'Choose an existing roadster_*.usda scene under scenes/ (without the extension).' >&2

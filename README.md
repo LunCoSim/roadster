@@ -14,17 +14,25 @@ across 200 L + 400 L vessels; it does not carry 250 kg in each vessel.
 ## Run
 
 ```sh
-./scripts/start.sh roadster_skill_course --api 4198
+./scripts/start.sh roadster_cinematic --api 4198
 ```
 
 Use the second form when supplying simulator options. With no arguments the
-launcher opens the skill course. Set `LUNCOSIM_BIN` to a LunCoSim executable with
+launcher opens **Roadster Cinematic**, the interactive night course. The standard
+daylight course remains available as `roadster_skill_course`. Set `LUNCOSIM_BIN` to a LunCoSim executable with
 the current shared camera, wheel and coupled-object APIs. For source development,
 select the regular checkout build explicitly, for example
 `LUNCOSIM_BIN=../../luncosim-workspace/optimization/target/debug/luncosim`.
 The launcher composes shared assets and the authored HUD locally and loads the
 isolated keymap. Shared `lunco://` assets resolve from the neighboring checkout.
 No shared application assets are edited.
+
+For the illuminated presentation track, choose **Roadster Cinematic**
+(`scenes/roadster_cinematic.usda`). It is now the Twin and launcher's default.
+Use **Run autopilot** to watch the course, or drive with WASD and Space for boost.
+This scene uses the same vehicle, forces and course program as the daylight
+scene; it changes stage lighting and materials. It has no recorder or frozen
+film-startup program.
 
 The native **avatar following** camera is selected automatically. Its stabilized
 view keeps the horizon level and shifts to the open side/below the ramp as the
@@ -150,7 +158,8 @@ study assumptions. See [storage](references/gas-storage.md) and
 
 | Scene | Purpose |
 |---|---|
-| roadster_skill_course | Default driving challenge |
+| roadster_cinematic | Default interactive night showcase: illuminated track, shared car and physics |
+| roadster_skill_course | Standard daylight driving challenge |
 | roadster_ramp | Close practice start at the stunt ramp |
 | roadster_rocket / thrust / track | Flat-track Rocket / rear-boost / motor-only trims |
 | roadster_wall | Pre-spun wall adhesion fixture |

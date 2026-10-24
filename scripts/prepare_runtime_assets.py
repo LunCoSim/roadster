@@ -4,11 +4,17 @@
 The current host admits one application UI manifest. This launcher-local asset
 root composes its shared surfaces with the Twin's authored HUD. No Rust/UI build.
 """
-import json,os
+import argparse,json,os
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--output',type=Path,default=ROOT/'.scratch/runtime-assets',
+                    help='Owned runtime asset directory; separate recordings from interactive sessions')
+args=parser.parse_args()
 source=Path(os.environ.get('LUNCO_ASSET_ROOT',str(ROOT.parent.parent/'luncosim-workspace/main/assets'))).resolve()
-dest=ROOT/'.scratch/runtime-assets';dest.mkdir(parents=True,exist_ok=True)
+dest=args.output.resolve();dest.mkdir(parents=True,exist_ok=True)
+if dest==source or dest in source.parents or source in dest.parents:
+    raise ValueError('Runtime asset output must be separate from the shared asset source')
 # The production asset owner rejects directory symlinks escaping its root.
 # Hard links provide a local composition without copying large shared assets.
 import shutil
