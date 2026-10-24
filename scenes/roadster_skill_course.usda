@@ -488,7 +488,7 @@ def Xform "World" (
         variants = { string "trim" = "Rocket" }
     )
     {
-        double3 xformOp:translate = (0.0, 0.66, 200.0)
+        double3 xformOp:translate = (0.0, 0.66, 0.0)
         uniform token[] xformOpOrder = ["xformOp:translate"]
         float inputs:course_enabled = 1.0
         float inputs:course_phase = 0.0
@@ -506,6 +506,8 @@ def Xform "World" (
         float outputs:landing_gate = 0.0
         custom double inputs:course_position_y
         double inputs:course_position_y.connect = </World/Roadster.outputs:position_y>
+        custom double inputs:course_launch_gate_z = -20.0
+        custom double inputs:course_first_refill_z = -40.0
         over "DriverCamera"
         {
             float exposure:iso = 400.0
@@ -614,7 +616,7 @@ def Xform "World" (
     def Cube "CourseStart"
     {
         double size = 1.0
-        custom double3 xformOp:translate = (0.0, 0.04, 197.0)
+        custom double3 xformOp:translate = (0.0, 0.04, -3.0)
         custom double3 xformOp:scale = (14.0, 0.04, 0.3)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         color3f[] primvars:displayColor = [(0.029999999329447746, 0.47999998927116394, 1.0)]
@@ -622,7 +624,7 @@ def Xform "World" (
     def Cube "LaunchGateL"
     {
         double size = 1.0
-        custom double3 xformOp:translate = (-6.4, 2.5, 140.0)
+        custom double3 xformOp:translate = (-6.4, 2.5, -20.0)
         custom double3 xformOp:scale = (0.35, 5.0, 0.35)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         color3f[] primvars:displayColor = [(0.029999999329447746, 0.47999998927116394, 1.0)]
@@ -630,7 +632,7 @@ def Xform "World" (
     def Cube "LaunchGateR"
     {
         double size = 1.0
-        custom double3 xformOp:translate = (6.4, 2.5, 140.0)
+        custom double3 xformOp:translate = (6.4, 2.5, -20.0)
         custom double3 xformOp:scale = (0.35, 5.0, 0.35)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         color3f[] primvars:displayColor = [(0.029999999329447746, 0.47999998927116394, 1.0)]
@@ -638,7 +640,7 @@ def Xform "World" (
     def Cube "LaunchGateTop"
     {
         double size = 1.0
-        custom double3 xformOp:translate = (0.0, 5.0, 140.0)
+        custom double3 xformOp:translate = (0.0, 5.0, -20.0)
         custom double3 xformOp:scale = (13.2, 0.3, 0.3)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         color3f[] primvars:displayColor = [(0.029999999329447746, 0.47999998927116394, 1.0)]
@@ -646,7 +648,7 @@ def Xform "World" (
     def Cube "RefillPad0"
     {
         double size = 1.0
-        custom double3 xformOp:translate = (0.0, 0.035, 40.0)
+        custom double3 xformOp:translate = (0.0, 0.035, -40.0)
         custom double3 xformOp:scale = (12.0, 0.035, 16.0)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         color3f[] primvars:displayColor = [(0.03500000014901161, 0.20999999344348907, 0.10000000149011612)]
@@ -654,7 +656,7 @@ def Xform "World" (
     def Cube "RefillRail00"
     {
         double size = 1.0
-        custom double3 xformOp:translate = (-6.0, 0.07, 40.0)
+        custom double3 xformOp:translate = (-6.0, 0.07, -40.0)
         custom double3 xformOp:scale = (0.15, 0.1, 16.0)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         color3f[] primvars:displayColor = [(0.03999999910593033, 0.8500000238418579, 0.3199999928474426)]
@@ -662,7 +664,7 @@ def Xform "World" (
     def Cube "RefillMarker000"
     {
         double size = 1.0
-        custom double3 xformOp:translate = (-6.0, 1.0, 32.0)
+        custom double3 xformOp:translate = (-6.0, 1.0, -48.0)
         custom double3 xformOp:scale = (0.25, 2.0, 0.25)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         color3f[] primvars:displayColor = [(0.03999999910593033, 0.8500000238418579, 0.3199999928474426)]
@@ -670,7 +672,7 @@ def Xform "World" (
     def Cube "RefillMarker001"
     {
         double size = 1.0
-        custom double3 xformOp:translate = (-6.0, 1.0, 48.0)
+        custom double3 xformOp:translate = (-6.0, 1.0, -32.0)
         custom double3 xformOp:scale = (0.25, 2.0, 0.25)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         color3f[] primvars:displayColor = [(0.03999999910593033, 0.8500000238418579, 0.3199999928474426)]
@@ -678,7 +680,7 @@ def Xform "World" (
     def Cube "RefillRail01"
     {
         double size = 1.0
-        custom double3 xformOp:translate = (6.0, 0.07, 40.0)
+        custom double3 xformOp:translate = (6.0, 0.07, -40.0)
         custom double3 xformOp:scale = (0.15, 0.1, 16.0)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         color3f[] primvars:displayColor = [(0.03999999910593033, 0.8500000238418579, 0.3199999928474426)]
@@ -686,7 +688,7 @@ def Xform "World" (
     def Cube "RefillMarker010"
     {
         double size = 1.0
-        custom double3 xformOp:translate = (6.0, 1.0, 32.0)
+        custom double3 xformOp:translate = (6.0, 1.0, -48.0)
         custom double3 xformOp:scale = (0.25, 2.0, 0.25)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         color3f[] primvars:displayColor = [(0.03999999910593033, 0.8500000238418579, 0.3199999928474426)]
@@ -694,7 +696,7 @@ def Xform "World" (
     def Cube "RefillMarker011"
     {
         double size = 1.0
-        custom double3 xformOp:translate = (6.0, 1.0, 48.0)
+        custom double3 xformOp:translate = (6.0, 1.0, -32.0)
         custom double3 xformOp:scale = (0.25, 2.0, 0.25)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         color3f[] primvars:displayColor = [(0.03999999910593033, 0.8500000238418579, 0.3199999928474426)]

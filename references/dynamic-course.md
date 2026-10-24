@@ -29,6 +29,11 @@ course time for inspection.
 
 ## Timing and geometry
 
+- The default skill course starts at Z = 0 m, checks the blue launch gate at
+  −20 m and services the tanks at −40 m. Its obstacle takeoff remains −72 m:
+  52 m from launch gate to takeoff. `tools/compact_course.rhai` authors the
+  matching scene placements and course measurement parameters through the
+  native USD document owner. It does not change the car's physical model.
 - Nominal corridor speed: 35 m/s (126 km/h). Falling below 25 m/s after the launch
   gate and before the ramp approach fails the challenge; this never clamps the
   physical speed or steering. Both green services work without stopping.
