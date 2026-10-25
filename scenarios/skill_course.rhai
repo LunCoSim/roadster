@@ -58,6 +58,14 @@ fn barrier_cleared(me) { readings(this.car,["jump_clearance"]).jump_clearance > 
 fn block_count_published(me) { readings(this.car,["course_blocks"]).course_blocks >= this.blocks*1.0 }
 fn climbed(me) { readings(this.car,["climb_gate"]).climb_gate > 0.5 }
 fn at_crest(me) { readings(this.car,["course_crest_gate"]).course_crest_gate > 0.5 }
+fn hanging_still(me) {
+    let v=readings(this.car,["position_y","position_z","speed_mps","up_alignment",
+        "downforce","vehicle_mass_kg","jet_force_x","jet_force_y","jet_force_z"]);
+    v.position_y>17.5 && v.position_z> -307.0 && v.position_z< -302.0
+        && v.speed_mps<0.08 && v.up_alignment< -0.97
+        && v.downforce>v.vehicle_mass_kg*9.80665*1.2
+        && abs(v.jet_force_x)+abs(v.jet_force_y)+abs(v.jet_force_z)<1.0
+}
 fn in_flight(me) { readings(this.car,["course_airborne_gate"]).course_airborne_gate > 0.5 }
 fn roll_ready(me) {readings(this.car,["course_roll_gate"]).course_roll_gate>0.5}
 fn landing_ready(me) {
@@ -116,7 +124,10 @@ fn task(me, ctx) {
             refill_node(3,"LAND + REFILL 2: pulse K to cushion the landing. Keep rolling; switch fans on just before the ramp.",services),
             phase_node(4,6,"CLIMB: approach the ramp, press F before the curve, then hold W to climb."),
             wait_until(Fn("climbed")),
-            phase_node(5,7,"CREST: follow the return lip; prepare the flip and switch fans OFF at the crest."),
+            phase_node(5,7,"HANG: brake under the return deck. Fan suction holds the car upside down, with jets OFF."),
+            retry(120,seq([wait_until(Fn("hanging_still")),
+                reactive_seq([check(Fn("hanging_still")),wait(2.0)])])),
+            action_node(7.25),
             wait_until(Fn("at_crest")), action_node(8), wait_until(Fn("in_flight")),
             phase_node(6,9,"FLIP: E rolls counterclockwise viewed from behind; Q counterpulses. Keep nose AWAY. R/C and J/L trim."),
             wait_until(Fn("roll_ready")),

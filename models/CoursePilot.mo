@@ -31,6 +31,7 @@ model CoursePilot
   parameter Real lookahead_time_s(unit="s") = 1.0 "Path preview longer than the finite rack response";
   parameter Real minimum_lookahead_m(unit="m") = 10.0;
   parameter Real ramp_approach_speed(unit="m/s") = 12.0 "Pilot target for the compact transition";
+  parameter Real inverted_stop_z_m(unit="m") = -304.5 "Stop beneath the flat return deck, before its open edge";
   parameter Real ramp_entry_z_m(unit="m") = -300.0 "Course ramp entry in the shared scene frame";
   parameter Real fan_preload_distance_m(unit="m",min=0) = 12.0 "Start fans one approach-second before the ramp to establish suction";
   parameter Real pulse_period = 0.1;
@@ -147,6 +148,9 @@ equation
   // Target speeds are pilot requests, never physical velocity constraints.
   // Carry the launch speed through both service pads and the cube corridor.
   cruise_speed = noEvent(if phase>0.5 and phase<3.5 then max(0.0,transit_speed_mps)
+    else if abs(phase-5)<0.5 and abs(action-7)<0.1 then
+      min(6.0,sqrt(10.0*max(0.0,inverted_stop_z_m-position_z)))
+    else if abs(phase-4)<0.5 and position_y>13.0 then 6.0
     else if phase>3.5 and phase<5.5 and action<7.5 then
       ramp_approach_speed
     else 0.0);
@@ -160,6 +164,8 @@ equation
     else 0.0);
   reverse = 0.0;
   brake = noEvent(if phase<0.5 and action<0.5 then 1.0
+    else if abs(phase-5)<0.5 and abs(action-7)<0.1
+      and (cruise_speed<0.25 or speed>cruise_speed+0.15) then 1.0
     else if cruise_speed>0 and speed>cruise_speed+2 then 1.0
     else if abs(phase-6)<0.5 and on_ground>0.5 and forward<0.5 and reverse<0.5 then 1.0
     else if phase>6.5 then 1.0 else 0.0);
