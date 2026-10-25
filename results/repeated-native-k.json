@@ -1,0 +1,425 @@
+{
+  "ok": true,
+  "presses": [
+    {
+      "press": 1,
+      "peak_m": 6.022326949743729,
+      "held_force_n": 64010.06680170825,
+      "final_height_m": 0.5343730303810874,
+      "final_speed_mps": -6.77999807408014e-08,
+      "samples": [
+        {
+          "out:jet_force_y": 0.006977128574953403,
+          "out:position_y": 4.660592205582361,
+          "out:velocity_y": 5.385910511016846
+        },
+        {
+          "out:jet_force_y": 7.399891132358011e-16,
+          "out:position_y": 6.022326949743729,
+          "out:velocity_y": 1.4481933116912842
+        },
+        {
+          "out:jet_force_y": 9.379663148380737e-30,
+          "out:position_y": 5.812891089874029,
+          "out:velocity_y": -2.4739277362823486
+        },
+        {
+          "out:jet_force_y": 1.1889102366885041e-43,
+          "out:position_y": 4.037458059894561,
+          "out:velocity_y": -6.377336025238037
+        },
+        {
+          "out:jet_force_y": 1.5069915052990913e-57,
+          "out:position_y": 0.7094540573234553,
+          "out:velocity_y": -10.2319917678833
+        },
+        {
+          "out:jet_force_y": 1.910171915882042e-71,
+          "out:position_y": 0.5344405533724057,
+          "out:velocity_y": 0.0034815259277820587
+        },
+        {
+          "out:jet_force_y": 2.4212187063111783e-85,
+          "out:position_y": 0.5343728807067905,
+          "out:velocity_y": -5.12227325089043e-06
+        },
+        {
+          "out:jet_force_y": 3.068990184671671e-99,
+          "out:position_y": 0.5343730291720639,
+          "out:velocity_y": 4.346187409964841e-08
+        },
+        {
+          "out:jet_force_y": 3.890065306618044e-113,
+          "out:position_y": 0.5343730299999653,
+          "out:velocity_y": -8.369465831492562e-08
+        },
+        {
+          "out:jet_force_y": 4.930809220610767e-127,
+          "out:position_y": 0.5343730306126604,
+          "out:velocity_y": -3.601089204607888e-08
+        },
+        {
+          "out:jet_force_y": 6.249991416907635e-141,
+          "out:position_y": 0.5343730297021443,
+          "out:velocity_y": -1.7906201321693516e-07
+        },
+        {
+          "out:jet_force_y": 7.922104320022333e-155,
+          "out:position_y": 0.5343730303810874,
+          "out:velocity_y": -6.77999807408014e-08
+        }
+      ],
+      "ok": true
+    },
+    {
+      "press": 2,
+      "peak_m": 6.021766188057745,
+      "held_force_n": 64010.066801708235,
+      "final_height_m": 0.5343729673204378,
+      "final_speed_mps": -1.3641580665080255e-07,
+      "samples": [
+        {
+          "out:jet_force_y": 0.006977128574953406,
+          "out:position_y": 4.660201400953019,
+          "out:velocity_y": 5.385485649108887
+        },
+        {
+          "out:jet_force_y": 7.399891132358002e-16,
+          "out:position_y": 6.021766188057745,
+          "out:velocity_y": 1.4477684497833252
+        },
+        {
+          "out:jet_force_y": 9.379663148380731e-30,
+          "out:position_y": 5.812160983650619,
+          "out:velocity_y": -2.474350929260254
+        },
+        {
+          "out:jet_force_y": 1.1889102366885051e-43,
+          "out:position_y": 4.036558773337537,
+          "out:velocity_y": -6.377758979797363
+        },
+        {
+          "out:jet_force_y": 1.506991505299092e-57,
+          "out:position_y": 0.7083867527233902,
+          "out:velocity_y": -10.23241138458252
+        },
+        {
+          "out:jet_force_y": 1.9101719158820447e-71,
+          "out:position_y": 0.5344409966254258,
+          "out:velocity_y": 0.003450987860560417
+        },
+        {
+          "out:jet_force_y": 2.42121870631118e-85,
+          "out:position_y": 0.5343728128196741,
+          "out:velocity_y": -4.745839305542177e-06
+        },
+        {
+          "out:jet_force_y": 3.068990184671676e-99,
+          "out:position_y": 0.5343729662571624,
+          "out:velocity_y": 6.635500149343443e-09
+        },
+        {
+          "out:jet_force_y": 3.8900653066180546e-113,
+          "out:position_y": 0.5343729648714847,
+          "out:velocity_y": -5.694280957868614e-08
+        },
+        {
+          "out:jet_force_y": 4.93080922061078e-127,
+          "out:position_y": 0.5343729666646773,
+          "out:velocity_y": -1.2052124986894341e-07
+        },
+        {
+          "out:jet_force_y": 6.249991416907646e-141,
+          "out:position_y": 0.5343729670670647,
+          "out:velocity_y": 6.635275440203259e-09
+        },
+        {
+          "out:jet_force_y": 7.922104320022353e-155,
+          "out:position_y": 0.5343729673204378,
+          "out:velocity_y": -1.3641580665080255e-07
+        }
+      ],
+      "ok": true
+    },
+    {
+      "press": 3,
+      "peak_m": 6.021766129510133,
+      "held_force_n": 64010.06680170825,
+      "final_height_m": 0.534373030520251,
+      "final_speed_mps": -1.6307120631608996e-07,
+      "samples": [
+        {
+          "out:jet_force_y": 0.006977128574953409,
+          "out:position_y": 4.660201342405407,
+          "out:velocity_y": 5.385485649108887
+        },
+        {
+          "out:jet_force_y": 7.399891132358008e-16,
+          "out:position_y": 6.021766129510133,
+          "out:velocity_y": 1.4477684497833252
+        },
+        {
+          "out:jet_force_y": 9.379663148380733e-30,
+          "out:position_y": 5.812160925103007,
+          "out:velocity_y": -2.474350929260254
+        },
+        {
+          "out:jet_force_y": 1.1889102366885057e-43,
+          "out:position_y": 4.036558714789925,
+          "out:velocity_y": -6.377758979797363
+        },
+        {
+          "out:jet_force_y": 1.5069915052990922e-57,
+          "out:position_y": 0.7083866941757782,
+          "out:velocity_y": -10.23241138458252
+        },
+        {
+          "out:jet_force_y": 1.910171915882045e-71,
+          "out:position_y": 0.534441062471223,
+          "out:velocity_y": 0.003451167605817318
+        },
+        {
+          "out:jet_force_y": 2.4212187063111803e-85,
+          "out:position_y": 0.5343728785995188,
+          "out:velocity_y": -4.645338776754215e-06
+        },
+        {
+          "out:jet_force_y": 3.0689901846716777e-99,
+          "out:position_y": 0.534373028991012,
+          "out:velocity_y": 4.355890226293013e-08
+        },
+        {
+          "out:jet_force_y": 3.890065306618057e-113,
+          "out:position_y": 0.5343730351062367,
+          "out:velocity_y": -4.124871111343964e-09
+        },
+        {
+          "out:jet_force_y": 4.9308092206107835e-127,
+          "out:position_y": 0.5343730277772397,
+          "out:velocity_y": -2.425436775865819e-07
+        },
+        {
+          "out:jet_force_y": 6.249991416907649e-141,
+          "out:position_y": 0.5343730322366147,
+          "out:velocity_y": -9.949267365527703e-08
+        },
+        {
+          "out:jet_force_y": 7.922104320022358e-155,
+          "out:position_y": 0.534373030520251,
+          "out:velocity_y": -1.6307120631608996e-07
+        }
+      ],
+      "ok": true
+    },
+    {
+      "press": 4,
+      "peak_m": 6.021766183848314,
+      "held_force_n": 64010.06680170828,
+      "final_height_m": 0.5343729675204116,
+      "final_speed_mps": 4.4796525600077075e-08,
+      "samples": [
+        {
+          "out:jet_force_y": 0.006977128574953409,
+          "out:position_y": 4.660201396743588,
+          "out:velocity_y": 5.385485649108887
+        },
+        {
+          "out:jet_force_y": 7.399891132358008e-16,
+          "out:position_y": 6.021766183848314,
+          "out:velocity_y": 1.4477684497833252
+        },
+        {
+          "out:jet_force_y": 9.37966314838074e-30,
+          "out:position_y": 5.812160979441188,
+          "out:velocity_y": -2.474350929260254
+        },
+        {
+          "out:jet_force_y": 1.1889102366885067e-43,
+          "out:position_y": 4.036558769128106,
+          "out:velocity_y": -6.377758979797363
+        },
+        {
+          "out:jet_force_y": 1.5069915052990927e-57,
+          "out:position_y": 0.7083867485139592,
+          "out:velocity_y": -10.23241138458252
+        },
+        {
+          "out:jet_force_y": 1.9101719158820463e-71,
+          "out:position_y": 0.5344409986296625,
+          "out:velocity_y": 0.0034510567784309387
+        },
+        {
+          "out:jet_force_y": 2.421218706311182e-85,
+          "out:position_y": 0.5343728114681099,
+          "out:velocity_y": -4.755363534059143e-06
+        },
+        {
+          "out:jet_force_y": 3.0689901846716797e-99,
+          "out:position_y": 0.5343729630169879,
+          "out:velocity_y": 6.069112146178668e-08
+        },
+        {
+          "out:jet_force_y": 3.890065306618058e-113,
+          "out:position_y": 0.5343729682696423,
+          "out:velocity_y": -1.8781666000222685e-08
+        },
+        {
+          "out:jet_force_y": 4.9308092206107835e-127,
+          "out:position_y": 0.5343729656578124,
+          "out:velocity_y": -1.4593824460007454e-07
+        },
+        {
+          "out:jet_force_y": 6.249991416907651e-141,
+          "out:position_y": 0.5343729669368084,
+          "out:velocity_y": 2.890202388527996e-08
+        },
+        {
+          "out:jet_force_y": 7.922104320022362e-155,
+          "out:position_y": 0.5343729675204116,
+          "out:velocity_y": 4.4796525600077075e-08
+        }
+      ],
+      "ok": true
+    },
+    {
+      "press": 5,
+      "peak_m": 6.02176612220728,
+      "held_force_n": 64010.06680170828,
+      "final_height_m": 0.5343730289290461,
+      "final_speed_mps": -4.75142272193807e-08,
+      "samples": [
+        {
+          "out:jet_force_y": 0.006977128574953412,
+          "out:position_y": 4.660201335102554,
+          "out:velocity_y": 5.385485649108887
+        },
+        {
+          "out:jet_force_y": 7.399891132358011e-16,
+          "out:position_y": 6.02176612220728,
+          "out:velocity_y": 1.4477684497833252
+        },
+        {
+          "out:jet_force_y": 9.37966314838074e-30,
+          "out:position_y": 5.8121609178001545,
+          "out:velocity_y": -2.474350929260254
+        },
+        {
+          "out:jet_force_y": 1.1889102366885067e-43,
+          "out:position_y": 4.036558707487073,
+          "out:velocity_y": -6.377758979797363
+        },
+        {
+          "out:jet_force_y": 1.5069915052990927e-57,
+          "out:position_y": 0.7083866868729256,
+          "out:velocity_y": -10.23241138458252
+        },
+        {
+          "out:jet_force_y": 1.9101719158820463e-71,
+          "out:position_y": 0.5344410650236551,
+          "out:velocity_y": 0.0034512351267039776
+        },
+        {
+          "out:jet_force_y": 2.421218706311182e-85,
+          "out:position_y": 0.5343728763168034,
+          "out:velocity_y": -4.704621915152529e-06
+        },
+        {
+          "out:jet_force_y": 3.0689901846716797e-99,
+          "out:position_y": 0.5343730301149764,
+          "out:velocity_y": 7.964226256262918e-08
+        },
+        {
+          "out:jet_force_y": 3.890065306618058e-113,
+          "out:position_y": 0.5343730307953491,
+          "out:velocity_y": 3.1958553137201307e-08
+        },
+        {
+          "out:jet_force_y": 4.9308092206107835e-127,
+          "out:position_y": 0.5343730303001784,
+          "out:velocity_y": 1.6938184188575178e-10
+        },
+        {
+          "out:jet_force_y": 6.249991416907651e-141,
+          "out:position_y": 0.5343730319573945,
+          "out:velocity_y": 1.694537843377475e-10
+        },
+        {
+          "out:jet_force_y": 7.922104320022362e-155,
+          "out:position_y": 0.5343730289290461,
+          "out:velocity_y": -4.75142272193807e-08
+        }
+      ],
+      "ok": true
+    },
+    {
+      "press": 6,
+      "peak_m": 6.021766163415158,
+      "held_force_n": 64010.06680170827,
+      "final_height_m": 0.5343729673100828,
+      "final_speed_mps": 1.20153185179106e-08,
+      "samples": [
+        {
+          "out:jet_force_y": 0.006977128574953409,
+          "out:position_y": 4.660201376310432,
+          "out:velocity_y": 5.385485649108887
+        },
+        {
+          "out:jet_force_y": 7.399891132357999e-16,
+          "out:position_y": 6.021766163415158,
+          "out:velocity_y": 1.4477684497833252
+        },
+        {
+          "out:jet_force_y": 9.379663148380728e-30,
+          "out:position_y": 5.8121609590080325,
+          "out:velocity_y": -2.474350929260254
+        },
+        {
+          "out:jet_force_y": 1.188910236688505e-43,
+          "out:position_y": 4.036558748694951,
+          "out:velocity_y": -6.377758979797363
+        },
+        {
+          "out:jet_force_y": 1.5069915052990896e-57,
+          "out:position_y": 0.7083867280808036,
+          "out:velocity_y": -10.23241138458252
+        },
+        {
+          "out:jet_force_y": 1.910171915882041e-71,
+          "out:position_y": 0.5344409982199423,
+          "out:velocity_y": 0.003450976684689522
+        },
+        {
+          "out:jet_force_y": 2.4212187063111763e-85,
+          "out:position_y": 0.5343728124474438,
+          "out:velocity_y": -4.788143087353092e-06
+        },
+        {
+          "out:jet_force_y": 3.0689901846716695e-99,
+          "out:position_y": 0.5343729668778052,
+          "out:velocity_y": -1.310359749595591e-07
+        },
+        {
+          "out:jet_force_y": 3.8900653066180465e-113,
+          "out:position_y": 0.534372966865829,
+          "out:velocity_y": -5.1563123548703516e-08
+        },
+        {
+          "out:jet_force_y": 4.930809220610774e-127,
+          "out:position_y": 0.5343729646849021,
+          "out:velocity_y": -1.4693057437398238e-07
+        },
+        {
+          "out:jet_force_y": 6.249991416907635e-141,
+          "out:position_y": 0.5343729679842926,
+          "out:velocity_y": 5.969892669099863e-08
+        },
+        {
+          "out:jet_force_y": 7.922104320022343e-155,
+          "out:position_y": 0.5343729673100828,
+          "out:velocity_y": 1.20153185179106e-08
+        }
+      ],
+      "ok": true
+    }
+  ]
+}

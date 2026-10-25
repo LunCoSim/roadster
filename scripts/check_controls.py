@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Verify the actual native keymap, valve release and physical force directions.
 
-Run against a fresh Rocket scene started with scripts/start.sh. This commands
+Run against the interactive Twin started with scripts/start.sh. This commands
 the existing window input API and reads production ports; it simulates no physics.
 """
 import argparse
 import json
 from pathlib import Path
+import struct
 import time
 import urllib.request
 
@@ -35,7 +36,9 @@ def main():
     def ports(car):
         names=['thrust_x','thrust_y','thrust_z','jet_force_x','jet_force_y','jet_force_z','force_local_x','force_local_y',
                'force_local_z','thruster_pitch_moment_nm','gas_mass_kg','tank_pressure_pa','torque_left',
-               'position_y','velocity_y','downforce','heading_fl','brake','lift_fl','lift_fr','lift_rl','lift_rr','jet_lift_0','jet_lift_1','jet_lift_2','jet_lift_3','torque_x','torque_y','torque_z','angvel_x','angvel_y','angvel_z']
+               'position_y','velocity_y','downforce','heading_fl','brake','lift_fl','lift_fr','lift_rl','lift_rr','jet_lift_0','jet_lift_1','jet_lift_2','jet_lift_3','torque_x','torque_y','torque_z','angvel_x','angvel_y','angvel_z',
+               'throttle','steer','fan_rpm','instant_services','speed','fan_requested',
+               'refill_target_k','thermal_guard_temperature_c','unlimited_air_active','course_autopilot_active']
         return q('ReadPorts',dict(api_id=car,port_names=names))['ports']
     def value(records,name,direction='out'):
         return next(p['value'] for p in records if p['name']==name and p['direction']==direction)
@@ -59,7 +62,8 @@ def main():
                 if any(e.get('name')=='/World/Roadster' and e.get('status')=='Running'
                        and e.get('has_simcomponent') and e.get('modelica_current_time',100)<3 for e in models):
                     car=int(q('RunRhai',dict(code='find_path("/World/Roadster")'))['stdout'])
-                    return car
+                    if q('RunRhai',dict(code=f'is_controlled({car})'))['stdout']=='true':
+                        return car
             time.sleep(.1)
         raise RuntimeError('Fresh Twin did not publish a running Roadster participant')
     await_ready()
@@ -125,28 +129,117 @@ def main():
         def fan_state():
             ps=q('ReadPorts',dict(api_id=car,port_names=['fan_requested']))['ports']
             return value(ps,'fan_requested')
-        initial=fan_state();key('F','Pressed');wait_sim(.15);off=fan_state()
+        initial=fan_state();key('F','Pressed');wait_sim(.15);toggled=fan_state()
         wait_sim(.4);held=fan_state();key('F','Released');wait_sim(.1);released=fan_state()
-        key('F','Pressed');wait_sim(.15);on=fan_state();key('F','Released')
-        results.append(dict(key='F',initial=initial,pressed=off,held=held,released=released,second_press=on,
-                            ok=initial==1 and off==0 and held==0 and released==0 and on==1))
-        key('W','Pressed'); wait_sim(.25)
-        drive=ports(car)
-        key('W','Released'); wait_sim(.25)
-        results.append(dict(key='W',torque_nm=value(drive,'torque_left'),ok=value(drive,'torque_left')>0))
-        key('A','Pressed'); wait_sim(.3)
-        steer=ports(car)
-        key('A','Released')
-        results.append(dict(key='A',heading_rad=value(steer,'heading_fl'),ok=abs(value(steer,'heading_fl'))>0))
-        q('InjectWindowInput',{'event':{'Key':dict(key='ShiftLeft',state='Pressed',text=None,repeat=False)}})
-        wait_sim(.15)
-        brake=ports(car)
-        q('InjectWindowInput',{'event':{'Key':dict(key='ShiftLeft',state='Released',text=None,repeat=False)}})
-        results.append(dict(key='ShiftLeft',brake=value(brake,'brake','in'),ok=value(brake,'brake','in')==1))
+        spinning=value(ports(car),'fan_rpm')
+        key('F','Pressed');wait_sim(.15);restored=fan_state();key('F','Released')
+        results.append(dict(key='F',initial=initial,pressed=toggled,held=held,released=released,
+            second_press=restored,fan_rpm=spinning,
+            ok=toggled==1-initial and held==toggled and released==toggled and restored==initial
+            and (toggled==0 or spinning>100)))
+        for name,sign in [('W',1),('S',-1)]:
+            car=fresh_twin()
+            key(name,'Pressed');wait_sim(.6);drive=ports(car)
+            key(name,'Released');wait_sim(.15);released=ports(car)
+            results.append(dict(key=name,torque_nm=value(drive,'torque_left'),speed_mps=value(drive,'speed'),
+                ok=sign*value(drive,'torque_left')>0 and value(drive,'throttle','in')==sign
+                and value(drive,'speed')>.2 and value(released,'throttle','in')==0))
+        for name,sign in [('A',1),('D',-1)]:
+            car=fresh_twin()
+            key(name,'Pressed');wait_sim(.3);steer=ports(car)
+            key(name,'Released');wait_sim(.15);released=ports(car)
+            results.append(dict(key=name,heading_rad=value(steer,'heading_fl'),
+                ok=sign*value(steer,'heading_fl')>0 and value(released,'steer','in')==0))
+        for name in ['ShiftLeft','ShiftRight']:
+            car=fresh_twin()
+            key('W','Pressed');wait_sim(.5);key('W','Released');moving=value(ports(car),'speed')
+            key(name,'Pressed');wait_sim(1.5);brake=ports(car)
+            key(name,'Released');wait_sim(.15);released=ports(car)
+            results.append(dict(key=name,brake=value(brake,'brake','in'),before_speed=moving,
+                stopped_speed=value(brake,'speed'),ok=value(brake,'brake','in')==1
+                and moving>.2 and value(brake,'speed')<.2 and value(released,'brake','in')==0))
+        car=fresh_twin()
+        key('K','Pressed');wait_sim(.2);key('K','Released');wait_sim(.3)
+        depleted=ports(car)
+        key('Tab','Pressed');wait_sim(.15);refilled=ports(car)
+        wait_sim(.3);held=ports(car);key('Tab','Released')
+        results.append(dict(key='Tab',before_kg=value(depleted,'gas_mass_kg'),after_kg=value(refilled,'gas_mass_kg'),
+            ok=value(refilled,'gas_mass_kg')>value(depleted,'gas_mass_kg')+1
+            and value(refilled,'instant_services')==value(depleted,'instant_services')+1
+            and value(held,'instant_services')==value(refilled,'instant_services')))
+        def tick():return int(q('RunRhai',dict(code='clock_snapshot().sim_tick'))['stdout'])
+        for modifier in ['ControlLeft','ControlRight']:
+            key(modifier,'Pressed');time.sleep(.05);key('P','Pressed');time.sleep(.1)
+            key('P','Released');key(modifier,'Released');time.sleep(.1)
+            paused=tick();time.sleep(.25);still=tick()
+            key(modifier,'Pressed');time.sleep(.05);key('P','Pressed');time.sleep(.1)
+            key('P','Released');key(modifier,'Released');time.sleep(.1)
+            resumed=tick()
+            results.append(dict(key=modifier+'+P',paused_tick=paused,held_tick=still,resumed_tick=resumed,
+                ok=paused==still and resumed>still))
+        def camera():
+            return next(c['entity'] for c in q('SceneCameraAudit',{})['candidates']
+                        if c['camera_active'] and c['render_target']=='window')
+        before=camera();key('V','Pressed');time.sleep(.15);key('V','Released');after=camera()
+        results.append(dict(key='V',before=before,after=after,ok=before!=after))
+        q('ObserveAvatar',{})
+
+        # Click the rendered HTML controls through native pointer events. This
+        # catches a missing HUI picking feature, which leaves decorative buttons
+        # visible while installing neither Button nor the press observer.
+        car=fresh_twin()
+        (root/'results').mkdir(exist_ok=True)
+        screenshot=root/'results/controls-layout.png'
+        previous_mtime=screenshot.stat().st_mtime_ns if screenshot.exists() else None
+        q('CaptureScreenshot',dict(save_to_file=True,path=str(screenshot)))
+        deadline=time.monotonic()+15
+        while not screenshot.exists() or screenshot.stat().st_mtime_ns==previous_mtime:
+            if time.monotonic()>deadline:raise RuntimeError('Control layout capture was not written')
+            time.sleep(.05)
+        width,height=struct.unpack('>II',screenshot.read_bytes()[16:24])
+        def click(x,y):
+            q('InjectWindowInput',{'event':{'PointerMove':dict(x=x,y=y)}})
+            time.sleep(.08)
+            for state in ['Pressed','Released']:
+                q('InjectWindowInput',{'event':{'PointerButton':dict(button='Primary',state=state,x=x,y=y)}})
+                time.sleep(.08)
+            wait_sim(.15)
+        def out(name):return value(ports(car),name)
+        click(302,height-79);enabled=out('fan_requested')
+        click(302,height-79);disabled=out('fan_requested')
+        results.append(dict(key='HUD fans',ok=enabled==1 and disabled==0))
+        for label,y,port in [('fill temperature',height-160,'refill_target_k'),
+                             ('discharge cutoff',height-227,'thermal_guard_temperature_c')]:
+            initial=out(port);click(width-47,y);raised=out(port)
+            click(width-240,y);restored=out(port)
+            results.append(dict(key='HUD '+label,initial=initial,raised=raised,restored=restored,
+                ok=abs(raised-initial-5)<.001 and abs(restored-initial)<.001))
+        click(width-143,height-122);enabled=out('unlimited_air_active')
+        click(width-143,height-122);disabled=out('unlimited_air_active')
+        results.append(dict(key='HUD unlimited air',ok=enabled==1 and disabled==0))
+        key('K','Pressed');wait_sim(.2);key('K','Released');wait_sim(.3)
+        depleted=ports(car);click(width-143,height-79);refilled=ports(car)
+        results.append(dict(key='HUD refill',ok=value(refilled,'gas_mass_kg')>value(depleted,'gas_mass_kg')+1
+            and value(refilled,'instant_services')==value(depleted,'instant_services')+1))
+        car=fresh_twin();click(343,78);autopilot=out('course_autopilot_active')
+        key('W','Pressed');wait_sim(.2);key('W','Released');manual=out('course_autopilot_active')
+        results.append(dict(key='HUD autopilot and manual takeover',ok=autopilot==1 and manual==0))
+        previous=q('RunRhai',dict(code='twin_name()'))['stdout'];click(215,78)
+        deadline=time.monotonic()+60
+        while time.monotonic()<deadline:
+            state=q('GetReadiness',{})
+            if q('RunRhai',dict(code='twin_name()'))['stdout']!=previous and state['ready'] and not state['world_hold'] and not state['pending_count']:
+                if q('RunRhai',dict(code='is_controlled(find_path("/World/Roadster"))'))['stdout']=='true':break
+            time.sleep(.05)
+        else:raise RuntimeError('HUD retry did not restore a ready, controlled Twin')
+        results.append(dict(key='HUD retry',ok=True))
+        status=q('ScriptInspect',dict(target=int(q('RunRhai',dict(code='find_path("/World")'))['stdout'])))
+        results.append(dict(key='driver event health',status=status['status'],ok=status['status']['ok']))
     finally:
-        for name in ['I','J','K','L','P','O','Q','E','R','C','F','W','A','S','D','Space','Comma','Period','ShiftLeft']: key(name,'Released')
+        for name in ['I','J','K','L','P','O','Q','E','R','C','F','W','A','S','D','Space','Comma','Period','ShiftLeft','ShiftRight','Tab','V','ControlLeft','ControlRight']: key(name,'Released')
         q('InjectWindowInput',{'event':{'Key':dict(key='ShiftLeft',state='Released',text=None,repeat=False)}})
     report=dict(ok=all(r['ok'] for r in results),checks=results)
+    (root/'results').mkdir(exist_ok=True)
     (root/'results/controls.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))
     return 0 if report['ok'] else 1

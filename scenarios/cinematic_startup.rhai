@@ -1,5 +1,9 @@
 // Interactive showcase: the regular driver owns controls, the native camera
 // follower supplies the presentation view. No recorder or frozen transport.
+fn simulation_dependencies(me,ctx) {
+    import "./driver_setup" as driver;
+    driver::simulation_dependencies(me,ctx)
+}
 fn on_start(me,ctx) {
     import "./driver_setup" as driver;
     driver::on_start(me,ctx);

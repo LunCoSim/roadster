@@ -62,6 +62,9 @@ Editor/inspector and Modelica documents to inspect parameters while paused.
 wheel torque and steering still operate, but tires cannot generate road forces
 without contact. K commands all four bottom jets with fixed geometry trim at any altitude;
 there is no automatic pitch/roll/yaw correction or airborne control remapping.
+K is a held valve command: releasing it closes the lift valves. It does not
+request a jump of a fixed height. A long hold can produce a high powered climb;
+an unpowered touchdown must not create a higher rebound.
 
 Fans toggle with **F** or the HUD **ON/OFF** button and measured seal, suction and electrical power.
 Four rear extractors sit behind a dark grille. The forward headlights are actual
@@ -172,6 +175,8 @@ python3 scripts/run_motor_launch.py --binary .scratch/luncosim
 python3 scripts/run_ramp_entries.py --binary .scratch/luncosim
 python3 scripts/run_scene_check.py roadster_course_check ROADSTER_COURSE --verification Roadster::VerifySkillCourse --ticks 2400
 python3 scripts/check_controls.py --port 4198
+python3 scripts/check_jump_rebound.py --port 4198
+python3 scripts/check_jump_rebound.py --port 4198 --held
 python3 scripts/check_driving.py
 python3 scripts/check_effects.py
 python3 scripts/check_keyboard_course.py --launch --manual --binary /path/to/luncosim

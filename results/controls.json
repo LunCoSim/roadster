@@ -1,0 +1,374 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "key": "K",
+      "axis": "y",
+      "expected_sign": 1,
+      "held_force_n": 71710.24122944339,
+      "released_force_n": 1.5778776787352102,
+      "gas_before_kg": 249.99999379118307,
+      "gas_after_kg": 219.4393439231614,
+      "tank_pressure_pa": 32409364.34608646,
+      "position_y_m": 1.2617232117336243,
+      "input_value": 1.0,
+      "physical_mass_kg": 1919.4393310546875,
+      "mass_snapshot_gas_kg": 219.4393120067919,
+      "ok": true
+    },
+    {
+      "key": "Space",
+      "axis": "z",
+      "expected_sign": -1,
+      "held_force_n": -85519.33518121591,
+      "released_force_n": -1.8568824402596085,
+      "gas_before_kg": 249.99999379118307,
+      "gas_after_kg": 208.49037361172594,
+      "tank_pressure_pa": 28792206.478923645,
+      "position_y_m": 0.5341732138076623,
+      "input_value": 1.0,
+      "physical_mass_kg": 1908.4903564453125,
+      "mass_snapshot_gas_kg": 208.49037361172594,
+      "ok": true
+    },
+    {
+      "key": "J",
+      "axis": "x",
+      "expected_sign": -1,
+      "held_force_n": -5127.5096233209115,
+      "released_force_n": -0.23194604489741497,
+      "gas_before_kg": 249.99999379118307,
+      "gas_after_kg": 247.9577160043766,
+      "tank_pressure_pa": 42859253.136453055,
+      "position_y_m": 0.5338264628662728,
+      "input_value": -1.0,
+      "physical_mass_kg": 1947.957763671875,
+      "mass_snapshot_gas_kg": 247.9577160043766,
+      "ok": true
+    },
+    {
+      "key": "L",
+      "axis": "x",
+      "expected_sign": 1,
+      "held_force_n": 5142.367215715856,
+      "released_force_n": 0.1194454053843026,
+      "gas_before_kg": 249.99999379118307,
+      "gas_after_kg": 248.22763150037622,
+      "tank_pressure_pa": 42992186.261163235,
+      "position_y_m": 0.5339365606341744,
+      "input_value": 1.0,
+      "physical_mass_kg": 1948.2276611328125,
+      "mass_snapshot_gas_kg": 248.22762920108582,
+      "ok": true
+    },
+    {
+      "key": "I",
+      "axis": "y",
+      "expected_sign": 1,
+      "held_force_n": 29282.99204699651,
+      "released_force_n": 0.6674445868527583,
+      "gas_before_kg": 249.99999379118307,
+      "gas_after_kg": 238.6344542484936,
+      "tank_pressure_pa": 39217590.694726996,
+      "position_y_m": 0.8455252933781594,
+      "input_value": 1.0,
+      "corner_forces_n": [
+        29282.99204699651,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "torque_x_nm": 25174.774218383194,
+      "torque_z_nm": -24105.629774799898,
+      "corner_ok": true,
+      "physical_mass_kg": 1938.63427734375,
+      "mass_snapshot_gas_kg": 238.6344542484936,
+      "ok": true
+    },
+    {
+      "key": "P",
+      "axis": "y",
+      "expected_sign": 1,
+      "held_force_n": 29282.99204699651,
+      "released_force_n": 1.2999823737552534,
+      "gas_before_kg": 249.99999379118307,
+      "gas_after_kg": 238.63447967728774,
+      "tank_pressure_pa": 39217590.694726996,
+      "position_y_m": 0.834864980308339,
+      "input_value": 1.0,
+      "corner_forces_n": [
+        0.0,
+        0.0,
+        29282.99204699651,
+        0.0
+      ],
+      "torque_x_nm": 25299.952494262827,
+      "torque_z_nm": 24048.071869256786,
+      "corner_ok": true,
+      "physical_mass_kg": 1938.634521484375,
+      "mass_snapshot_gas_kg": 238.63447967728774,
+      "ok": true
+    },
+    {
+      "key": "Comma",
+      "axis": "y",
+      "expected_sign": 1,
+      "held_force_n": 14987.47882020729,
+      "released_force_n": 0.3454457492272745,
+      "gas_before_kg": 249.99999379118307,
+      "gas_after_kg": 243.9149946189438,
+      "tank_pressure_pa": 41224897.836367235,
+      "position_y_m": 0.6804563377518207,
+      "input_value": 1.0,
+      "corner_forces_n": [
+        0.0,
+        14987.47882020729,
+        0.0,
+        0.0
+      ],
+      "torque_x_nm": -27633.342900699347,
+      "torque_z_nm": -12173.992197856136,
+      "corner_ok": true,
+      "physical_mass_kg": 1943.9149169921875,
+      "mass_snapshot_gas_kg": 243.9149946189438,
+      "ok": true
+    },
+    {
+      "key": "Period",
+      "axis": "y",
+      "expected_sign": 1,
+      "held_force_n": 15123.741357021525,
+      "released_force_n": 0.34860119689213015,
+      "gas_before_kg": 249.99999379118307,
+      "gas_after_kg": 244.70529991439645,
+      "tank_pressure_pa": 41604401.15967902,
+      "position_y_m": 0.6231514192040777,
+      "input_value": 1.0,
+      "corner_forces_n": [
+        0.0,
+        0.0,
+        0.0,
+        15123.741357021525
+      ],
+      "torque_x_nm": -27936.64537843167,
+      "torque_z_nm": 12186.521824008532,
+      "corner_ok": true,
+      "physical_mass_kg": 1944.705322265625,
+      "mass_snapshot_gas_kg": 244.7052931646328,
+      "ok": true
+    },
+    {
+      "key": "Q",
+      "axis": "y",
+      "expected_sign": 1,
+      "held_force_n": 41932.19745774871,
+      "released_force_n": 0.9342353979648375,
+      "gas_before_kg": 249.99999379118307,
+      "gas_after_kg": 233.54178425601438,
+      "tank_pressure_pa": 37807152.10656062,
+      "position_y_m": 0.9281215879600495,
+      "input_value": 1.0,
+      "corner_forces_n": [
+        28208.933198755127,
+        13723.26425899358,
+        0.0,
+        0.0
+      ],
+      "torque_x_nm": -3.3983890060031093e-12,
+      "torque_z_nm": -33545.75846606972,
+      "corner_ok": true,
+      "body_pitch_moment_nm": -3.637978807091713e-12,
+      "physical_mass_kg": 1933.5418701171875,
+      "mass_snapshot_gas_kg": 233.54178425601438,
+      "ok": true
+    },
+    {
+      "key": "E",
+      "axis": "y",
+      "expected_sign": 1,
+      "held_force_n": 41932.197457748734,
+      "released_force_n": 0.9462886857220603,
+      "gas_before_kg": 249.99999379118307,
+      "gas_after_kg": 234.6311321131007,
+      "tank_pressure_pa": 37807152.10656065,
+      "position_y_m": 0.8769110420544166,
+      "input_value": 1.0,
+      "corner_forces_n": [
+        0.0,
+        0.0,
+        28208.93319875514,
+        13723.264258993588
+      ],
+      "torque_x_nm": -3.4699091342442874e-12,
+      "torque_z_nm": 33545.75846606973,
+      "corner_ok": true,
+      "body_pitch_moment_nm": -3.637978807091713e-12,
+      "physical_mass_kg": 1934.6312255859375,
+      "mass_snapshot_gas_kg": 234.63111347613395,
+      "ok": true
+    },
+    {
+      "key": "R",
+      "axis": "y",
+      "expected_sign": 1,
+      "held_force_n": 52902.64678555959,
+      "released_force_n": 2.303885962879897,
+      "gas_before_kg": 249.99999379118307,
+      "gas_after_kg": 228.43701269411133,
+      "tank_pressure_pa": 35483065.894803785,
+      "position_y_m": 1.006617909995839,
+      "input_value": 1.0,
+      "corner_forces_n": [
+        26451.323392779796,
+        0.0,
+        26451.323392779796,
+        0.0
+      ],
+      "torque_x_nm": 47612.38084570625,
+      "torque_z_nm": 0.0,
+      "corner_ok": true,
+      "physical_mass_kg": 1928.43701171875,
+      "mass_snapshot_gas_kg": 228.43701269411133,
+      "ok": true
+    },
+    {
+      "key": "C",
+      "axis": "y",
+      "expected_sign": 1,
+      "held_force_n": 28573.048655576713,
+      "released_force_n": 0.6516301847483638,
+      "gas_before_kg": 249.99999379118307,
+      "gas_after_kg": 238.9252035336217,
+      "tank_pressure_pa": 39328048.44553596,
+      "position_y_m": 0.829443467548117,
+      "input_value": 1.0,
+      "corner_forces_n": [
+        0.0,
+        14286.524327788356,
+        0.0,
+        14286.524327788356
+      ],
+      "torque_x_nm": -52860.140694051486,
+      "torque_z_nm": 0.0,
+      "corner_ok": true,
+      "physical_mass_kg": 1938.925048828125,
+      "mass_snapshot_gas_kg": 238.92519079344223,
+      "ok": true
+    },
+    {
+      "key": "F",
+      "initial": 0.0,
+      "pressed": 1.0,
+      "held": 1.0,
+      "released": 1.0,
+      "second_press": 0.0,
+      "fan_rpm": 9677.384563458483,
+      "ok": true
+    },
+    {
+      "key": "W",
+      "torque_nm": 39.78122678591198,
+      "speed_mps": 2.783916473388672,
+      "ok": true
+    },
+    {
+      "key": "S",
+      "torque_nm": -5610.120534787024,
+      "speed_mps": 2.257499933242798,
+      "ok": true
+    },
+    {
+      "key": "A",
+      "heading_rad": 0.16113168144398043,
+      "ok": true
+    },
+    {
+      "key": "D",
+      "heading_rad": -0.15804924769269604,
+      "ok": true
+    },
+    {
+      "key": "ShiftLeft",
+      "brake": 1.0,
+      "before_speed": 2.348910331726074,
+      "stopped_speed": 2.3813257143956434e-08,
+      "ok": true
+    },
+    {
+      "key": "ShiftRight",
+      "brake": 1.0,
+      "before_speed": 2.3765511512756348,
+      "stopped_speed": 1.0125200233801479e-08,
+      "ok": true
+    },
+    {
+      "key": "Tab",
+      "before_kg": 223.26506416818546,
+      "after_kg": 249.9999921624178,
+      "ok": true
+    },
+    {
+      "key": "ControlLeft+P",
+      "paused_tick": 1983,
+      "held_tick": 1983,
+      "resumed_tick": 1996,
+      "ok": true
+    },
+    {
+      "key": "ControlRight+P",
+      "paused_tick": 2000,
+      "held_tick": 2000,
+      "resumed_tick": 2013,
+      "ok": true
+    },
+    {
+      "key": "V",
+      "before": 103079209690,
+      "after": 107374177867,
+      "ok": true
+    },
+    {
+      "key": "HUD fans",
+      "ok": true
+    },
+    {
+      "key": "HUD fill temperature",
+      "initial": 293.1499938964844,
+      "raised": 298.1499938964844,
+      "restored": 293.1499938964844,
+      "ok": true
+    },
+    {
+      "key": "HUD discharge cutoff",
+      "initial": -130.0,
+      "raised": -125.0,
+      "restored": -130.0,
+      "ok": true
+    },
+    {
+      "key": "HUD unlimited air",
+      "ok": true
+    },
+    {
+      "key": "HUD refill",
+      "ok": true
+    },
+    {
+      "key": "HUD autopilot and manual takeover",
+      "ok": true
+    },
+    {
+      "key": "HUD retry",
+      "ok": true
+    },
+    {
+      "key": "driver event health",
+      "status": {
+        "state": "ready",
+        "ok": true,
+        "diagnostics": []
+      },
+      "ok": true
+    }
+  ]
+}

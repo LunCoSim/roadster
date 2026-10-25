@@ -1,0 +1,2586 @@
+{
+  "scripted": true,
+  "language": "Rhai",
+  "paused": false,
+  "status": {
+    "state": "ready",
+    "ok": true,
+    "diagnostics": []
+  },
+  "running": true,
+  "compiled": true,
+  "started": true,
+  "generation": 0,
+  "hooks": [
+    "on_start",
+    "on_tick",
+    "simulation_dependencies"
+  ],
+  "state": {
+    "__mission_doc": null,
+    "airborne": true,
+    "car": 3456074109699141,
+    "done": true,
+    "failures": [
+      "",
+      "",
+      ""
+    ],
+    "first_apex": 6.12703021427554,
+    "held": false,
+    "landed": true,
+    "later_apex": 2.82072057645932,
+    "maximum_compression": 0.06500065326690674,
+    "maximum_force": 84692.44156277011,
+    "samples": [
+      {
+        "contacts": 0,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.6250981525518,
+        "lift_n": 0.0,
+        "time_s": 0.016666666666666666,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -0.8172051310539246
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5714707016013563,
+        "lift_n": 0.0,
+        "time_s": 0.06666666666666667,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.3074510097503662
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.4878666386939585,
+        "lift_n": 0.0,
+        "time_s": 0.13333333333333333,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -0.32452327013015747
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5189379646908492,
+        "lift_n": 0.0,
+        "time_s": 0.19999999999999998,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 0.6418319940567017
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5402783070458099,
+        "lift_n": 0.0,
+        "time_s": 0.26666666666666666,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 0.03688226640224457
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5360004342801403,
+        "lift_n": 0.0,
+        "time_s": 0.3333333333333333,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -0.08476552367210388
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5332658074912615,
+        "lift_n": 0.0,
+        "time_s": 0.39999999999999997,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -0.004065001383423805
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5338252684523468,
+        "lift_n": 0.0,
+        "time_s": 0.4666666666666666,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 0.01073471363633871
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5341667448901717,
+        "lift_n": 0.0,
+        "time_s": 0.5333333333333333,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 0.00043821532744914293
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5341177586374215,
+        "lift_n": 0.0,
+        "time_s": 0.5833333333333335,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -0.0015534056583419442
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.534061035938521,
+        "lift_n": 0.0,
+        "time_s": 0.6333333333333336,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -0.0006301222601905465
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5340517903528621,
+        "lift_n": 0.0,
+        "time_s": 0.6833333333333338,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 0.00011099381663370878
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5340606099201182,
+        "lift_n": 0.0,
+        "time_s": 0.733333333333334,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 0.000171870065969415
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5340656228412399,
+        "lift_n": 0.0,
+        "time_s": 0.7833333333333341,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 3.600331547204405e-05
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5340654815680068,
+        "lift_n": 0.0,
+        "time_s": 0.8333333333333343,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -2.40622648561839e-05
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5340643711730877,
+        "lift_n": 0.0,
+        "time_s": 0.8833333333333344,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.5924251783872023e-05
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5340640119618243,
+        "lift_n": 0.0,
+        "time_s": 0.9333333333333346,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -5.065210189059144e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5340641244383484,
+        "lift_n": 0.0,
+        "time_s": 0.9833333333333347,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 3.4830154618248343e-06
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.534064260642725,
+        "lift_n": 0.0,
+        "time_s": 1.0500000000000012,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 3.3588980841159355e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5340642425207897,
+        "lift_n": 0.0,
+        "time_s": 1.1166666666666676,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -5.383113830248476e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5340642307401318,
+        "lift_n": 0.0,
+        "time_s": 1.183333333333334,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -2.968512546885904e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5340642313274342,
+        "lift_n": 0.0,
+        "time_s": 1.2500000000000004,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.7998585732925676e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5340642325273397,
+        "lift_n": 0.0,
+        "time_s": 1.3166666666666669,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.7998585732925676e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5340642337272452,
+        "lift_n": 0.0,
+        "time_s": 1.3833333333333333,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.7998585732925676e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5340642349271507,
+        "lift_n": 0.0,
+        "time_s": 1.4499999999999997,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.7998585732925676e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 249.99999379118307,
+        "height_m": 0.5340642361270562,
+        "lift_n": 0.0,
+        "time_s": 1.5166666666666662,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.7998585732925676e-08
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 243.5555878524172,
+        "height_m": 0.5673652015201088,
+        "lift_n": 83902.57528515912,
+        "time_s": 1.5833333333333326,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.3558399677276611
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 234.61524171698133,
+        "height_m": 0.7344944983295437,
+        "lift_n": 80778.29548290238,
+        "time_s": 1.649999999999999,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 3.579972505569458
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 226.23542741889977,
+        "height_m": 1.0444223418406482,
+        "lift_n": 73433.23062554954,
+        "time_s": 1.7166666666666655,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 5.615637302398682
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 218.50589551330293,
+        "height_m": 1.4817812874487872,
+        "lift_n": 66915.00818567332,
+        "time_s": 1.7833333333333319,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 7.413942813873291
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.90435708557055,
+        "height_m": 2.0292183741501804,
+        "lift_n": 16474.439961493164,
+        "time_s": 1.8499999999999983,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 8.739424705505371
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.2615989743054,
+        "height_m": 2.6017491504124637,
+        "lift_n": 1135.805174254884,
+        "time_s": 1.9166666666666647,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 8.346648216247559
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21709405353835,
+        "height_m": 3.1361936464480396,
+        "lift_n": 78.88308970279964,
+        "time_s": 1.9833333333333312,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 7.7001261711120605
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21400222586337,
+        "height_m": 3.6267734229139323,
+        "lift_n": 5.481314574619994,
+        "time_s": 2.0499999999999976,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 7.037746429443359
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21378738208256,
+        "height_m": 4.0731947183183665,
+        "lift_n": 0.38089114392126155,
+        "time_s": 2.116666666666664,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 6.37579345703125
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.2137724528578,
+        "height_m": 4.475533997970008,
+        "lift_n": 0.026467814740840725,
+        "time_s": 2.1833333333333305,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 5.715248107910156
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377141544355,
+        "height_m": 4.833883678870582,
+        "lift_n": 0.0018392271489506705,
+        "time_s": 2.249999999999997,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 5.056041717529297
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377134335484,
+        "height_m": 5.148328198449993,
+        "lift_n": 1.9588619923337818e-05,
+        "time_s": 2.3166666666666633,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.398033142089844
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133834545,
+        "height_m": 5.418942204075241,
+        "lift_n": 9.458686728387157e-08,
+        "time_s": 2.3833333333333298,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 3.7410690784454346
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133799734,
+        "height_m": 5.645790173070812,
+        "lift_n": 4.567282150665745e-10,
+        "time_s": 2.449999999999996,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 3.0850002765655518
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797313,
+        "height_m": 5.828926595257902,
+        "lift_n": 2.205387145870622e-12,
+        "time_s": 2.5166666666666626,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.4296772480010986
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797145,
+        "height_m": 5.968396215098285,
+        "lift_n": 1.0649073728373959e-14,
+        "time_s": 2.583333333333329,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.7749531269073486
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 6.064233815627479,
+        "lift_n": 5.142079967820578e-17,
+        "time_s": 2.6499999999999955,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.1206810474395752
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 6.11646457235732,
+        "lift_n": 2.482937664126496e-19,
+        "time_s": 2.716666666666662,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 0.4667145013809204
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 6.125103780864113,
+        "lift_n": 1.198927175035115e-21,
+        "time_s": 2.7833333333333283,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -0.18709319829940796
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 6.090157647947156,
+        "lift_n": 5.7892164745324e-24,
+        "time_s": 2.8499999999999948,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -0.8408517837524414
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 6.011631436044657,
+        "lift_n": 2.795418095482181e-26,
+        "time_s": 2.916666666666661,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.4944772720336914
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 5.889538997182929,
+        "lift_n": 1.349813453940983e-28,
+        "time_s": 2.9833333333333276,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -2.147825241088867
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 5.7239038174546595,
+        "lift_n": 6.517795507075694e-31,
+        "time_s": 3.049999999999994,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -2.800748825073242
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 5.514759348104083,
+        "lift_n": 3.147224374745204e-33,
+        "time_s": 3.1166666666666605,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -3.4531002044677734
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 5.262148642311179,
+        "lift_n": 1.5196888578696405e-35,
+        "time_s": 3.183333333333327,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.104736328125
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 4.966124327251994,
+        "lift_n": 7.338066616548176e-38,
+        "time_s": 3.2499999999999933,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.755512237548828
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 4.626748548219287,
+        "lift_n": 3.5433056636024773e-40,
+        "time_s": 3.3166666666666598,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -5.4052886962890625
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 4.244093076655948,
+        "lift_n": 1.710943169655196e-42,
+        "time_s": 3.383333333333326,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -6.053916931152344
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 3.8182392430997725,
+        "lift_n": 8.261569256143387e-45,
+        "time_s": 3.4499999999999926,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -6.701259613037109
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 3.3492776317096586,
+        "lift_n": 3.9892339737609123e-47,
+        "time_s": 3.516666666666659,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -7.347171783447266
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 2.8373081994748945,
+        "lift_n": 1.9262669253025575e-49,
+        "time_s": 3.5833333333333255,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -7.991519927978516
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 2.2824402911163206,
+        "lift_n": 9.301295114205401e-52,
+        "time_s": 3.649999999999992,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -8.634159088134766
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 1.6847922814584608,
+        "lift_n": 4.491282552068356e-54,
+        "time_s": 3.7166666666666583,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -9.274959564208984
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 1.0444916201330061,
+        "lift_n": 2.168689263500967e-56,
+        "time_s": 3.7833333333333248,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -9.91378402709961
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 0.48514281339415266,
+        "lift_n": 1.0471870876678052e-58,
+        "time_s": 3.849999999999991,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 0.03220680356025696
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 0.5241296695119972,
+        "lift_n": 5.056514130294252e-61,
+        "time_s": 3.9166666666666576,
+        "up_alignment": 0.9999999944344238,
+        "vertical_speed_mps": 0.5901601314544678
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 0.5414368291192959,
+        "lift_n": 2.441620538446149e-63,
+        "time_s": 3.983333333333324,
+        "up_alignment": 0.9999999996602974,
+        "vertical_speed_mps": -0.016846735030412674
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 0.5371999477891523,
+        "lift_n": 4.472479680391383e-65,
+        "time_s": 4.033333333333324,
+        "up_alignment": 0.9999999994624234,
+        "vertical_speed_mps": -0.10239000618457794
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 0.5335529092797815,
+        "lift_n": 2.159609932534437e-67,
+        "time_s": 4.099999999999991,
+        "up_alignment": 0.9999999999997586,
+        "vertical_speed_mps": -0.010389134287834167
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 0.5340470744511849,
+        "lift_n": 1.0428029567980687e-69,
+        "time_s": 4.166666666666657,
+        "up_alignment": 0.9999999999975082,
+        "vertical_speed_mps": 0.012411201372742653
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 0.534476053106876,
+        "lift_n": 5.035344505126499e-72,
+        "time_s": 4.233333333333324,
+        "up_alignment": 0.9999999999999363,
+        "vertical_speed_mps": 0.0010551851009950042
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 0.534410409801997,
+        "lift_n": 2.4313983749301346e-74,
+        "time_s": 4.29999999999999,
+        "up_alignment": 0.999999999999982,
+        "vertical_speed_mps": -0.0015013773227110505
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 0.5343600663341777,
+        "lift_n": 1.1740404294014527e-76,
+        "time_s": 4.3666666666666565,
+        "up_alignment": 0.9999999999999987,
+        "vertical_speed_mps": -0.00010351298260502517
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 0.5343686818600348,
+        "lift_n": 5.669045996230222e-79,
+        "time_s": 4.433333333333323,
+        "up_alignment": 0.9999999999999999,
+        "vertical_speed_mps": 0.00018130177340935916
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 212.21377133797137,
+        "height_m": 0.5343745776765774,
+        "lift_n": 2.73739144967057e-81,
+        "time_s": 4.499999999999989,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.60864417720586e-06
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 209.2936207019582,
+        "height_m": 0.5434124150888637,
+        "lift_n": 51728.14729596155,
+        "time_s": 4.566666666666656,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 0.49909067153930664
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 203.06550277731716,
+        "height_m": 0.6186001876012996,
+        "lift_n": 54857.26465392925,
+        "time_s": 4.633333333333322,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.744821548461914
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 196.96073789654076,
+        "height_m": 0.7776244485394672,
+        "lift_n": 51262.005102018345,
+        "time_s": 4.699999999999989,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.9690279960632324
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 191.2118164309291,
+        "height_m": 1.0140123681740478,
+        "lift_n": 47684.269618780636,
+        "time_s": 4.766666666666655,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.068955898284912
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 186.15235393257757,
+        "height_m": 1.319629551620932,
+        "lift_n": 22944.215439518382,
+        "time_s": 4.8333333333333215,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 5.0514655113220215
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.2111778122202,
+        "height_m": 1.6518638448433594,
+        "lift_n": 1575.1328425888166,
+        "time_s": 4.899999999999988,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.779660701751709
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14613161389357,
+        "height_m": 1.949142807872744,
+        "lift_n": 109.36491843131402,
+        "time_s": 4.966666666666654,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.148679256439209
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14161327118302,
+        "height_m": 2.203230628521891,
+        "lift_n": 7.5993940121535415,
+        "time_s": 5.033333333333321,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 3.4938769340515137
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14129930049842,
+        "height_m": 2.4136144870536045,
+        "lift_n": 0.5280846093005072,
+        "time_s": 5.099999999999987,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.838204860687256
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14127748276488,
+        "height_m": 2.5803062447921947,
+        "lift_n": 0.036696926694969004,
+        "time_s": 5.166666666666654,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.183114528656006
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14127596665426,
+        "height_m": 2.7033446317182497,
+        "lift_n": 0.002550092808592051,
+        "time_s": 5.23333333333332,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.528566837310791
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14127586129996,
+        "height_m": 2.7827611041830496,
+        "lift_n": 5.290004438015023e-05,
+        "time_s": 5.2999999999999865,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 0.8744215965270996
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14127585397893,
+        "height_m": 2.818577420675905,
+        "lift_n": 2.554418460146105e-07,
+        "time_s": 5.366666666666653,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 0.22053027153015137
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14127585347018,
+        "height_m": 2.810805404686147,
+        "lift_n": 1.2334684515016194e-09,
+        "time_s": 5.433333333333319,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -0.43325433135032654
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14127585343482,
+        "height_m": 2.759449387096578,
+        "lift_n": 5.956128270285074e-12,
+        "time_s": 5.499999999999986,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.0869791507720947
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.1412758534323,
+        "height_m": 2.664517490320617,
+        "lift_n": 2.876073843112504e-14,
+        "time_s": 5.566666666666652,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7405140399932861
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 2.5260274933062137,
+        "lift_n": 1.3887881967711666e-16,
+        "time_s": 5.633333333333319,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -2.393709421157837
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 2.344007067509705,
+        "lift_n": 6.70613042249521e-19,
+        "time_s": 5.699999999999985,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -3.046419382095337
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 2.11849370984059,
+        "lift_n": 3.2382320605912887e-21,
+        "time_s": 5.7666666666666515,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -3.6984941959381104
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 1.8495347091339172,
+        "lift_n": 1.563665791939108e-23,
+        "time_s": 5.833333333333318,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.349791049957275
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 1.5371869766495765,
+        "lift_n": 7.550572752135506e-26,
+        "time_s": 5.899999999999984,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -5.000162601470947
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 1.1815173589966834,
+        "lift_n": 3.6459931794249933e-28,
+        "time_s": 5.966666666666651,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -5.649458408355713
+      },
+      {
+        "contacts": 0,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.7826024779460967,
+        "lift_n": 1.760563936425334e-30,
+        "time_s": 6.033333333333317,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -6.297537326812744
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.4910261012956143,
+        "lift_n": 8.501347041260309e-33,
+        "time_s": 6.099999999999984,
+        "up_alignment": 0.9999999795668906,
+        "vertical_speed_mps": 0.5597805380821228
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5330951229080201,
+        "lift_n": 4.105099454532e-35,
+        "time_s": 6.16666666666665,
+        "up_alignment": 0.9999999176314427,
+        "vertical_speed_mps": 0.4160058796405792
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5406370771634501,
+        "lift_n": 1.9822554266844726e-37,
+        "time_s": 6.2333333333333165,
+        "up_alignment": 0.9999999792310519,
+        "vertical_speed_mps": -0.0867702066898346
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5347046811184955,
+        "lift_n": 9.571842455255722e-40,
+        "time_s": 6.299999999999983,
+        "up_alignment": 0.9999999981990897,
+        "vertical_speed_mps": -0.052590757608413696
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5338973788384864,
+        "lift_n": 4.6220161908976126e-42,
+        "time_s": 6.366666666666649,
+        "up_alignment": 0.9999999998635684,
+        "vertical_speed_mps": 0.011064442805945873
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534595981836941,
+        "lift_n": 2.2318622024944104e-44,
+        "time_s": 6.433333333333316,
+        "up_alignment": 0.9999999999934026,
+        "vertical_speed_mps": 0.005814929958432913
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534674266203905,
+        "lift_n": 1.077713408782991e-46,
+        "time_s": 6.499999999999982,
+        "up_alignment": 0.9999999999990876,
+        "vertical_speed_mps": -0.0013924939557909966
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534592342158061,
+        "lift_n": 5.204022787342352e-49,
+        "time_s": 6.566666666666649,
+        "up_alignment": 0.999999999999963,
+        "vertical_speed_mps": -0.0006394563242793083
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345850440062749,
+        "lift_n": 2.512899309766528e-51,
+        "time_s": 6.633333333333315,
+        "up_alignment": 0.9999999999999934,
+        "vertical_speed_mps": 0.00017329656111542135
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345946162467898,
+        "lift_n": 1.213419524667488e-53,
+        "time_s": 6.6999999999999815,
+        "up_alignment": 0.9999999999999997,
+        "vertical_speed_mps": 6.991824193391949e-05
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345952581075339,
+        "lift_n": 5.859315244076334e-56,
+        "time_s": 6.766666666666648,
+        "up_alignment": 0.9999999999999999,
+        "vertical_speed_mps": -2.13960483961273e-05
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345941445127425,
+        "lift_n": 2.829324398936161e-58,
+        "time_s": 6.833333333333314,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -7.583672413602471e-06
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345940935192113,
+        "lift_n": 1.3662136469082518e-60,
+        "time_s": 6.899999999999981,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.588850975371315e-06
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942215713881,
+        "lift_n": 6.597121577490533e-63,
+        "time_s": 6.966666666666647,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 7.768704222144152e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942171522706,
+        "lift_n": 3.1855934559398647e-65,
+        "time_s": 7.033333333333314,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.1522221749801247e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942093389957,
+        "lift_n": 1.53824746331872e-67,
+        "time_s": 7.09999999999998,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.340388373857422e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942166421128,
+        "lift_n": 7.427831767384466e-70,
+        "time_s": 7.1666666666666465,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7858132750347977e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942169913578,
+        "lift_n": 3.5867235505481255e-72,
+        "time_s": 7.233333333333313,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.926983657085657e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942171915944,
+        "lift_n": 1.7319435954287856e-74,
+        "time_s": 7.299999999999979,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.2519303993485664e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594216679886,
+        "lift_n": 8.363144066463416e-77,
+        "time_s": 7.366666666666646,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.1322550363956907e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942153072227,
+        "lift_n": 4.0383634856344266e-79,
+        "time_s": 7.433333333333312,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.340389084400158e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942169479013,
+        "lift_n": 1.9500297132842925e-81,
+        "time_s": 7.499999999999979,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.1322556048298793e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942183733401,
+        "lift_n": 9.416229732337001e-84,
+        "time_s": 7.566666666666645,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.0929844052043336e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942161066045,
+        "lift_n": 4.546873342215624e-86,
+        "time_s": 7.6333333333333115,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -3.3752691308563953e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942177141677,
+        "lift_n": 2.195576945794854e-88,
+        "time_s": 7.699999999999978,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.785815761934373e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942170368865,
+        "lift_n": 1.060191850165996e-90,
+        "time_s": 7.766666666666644,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.340384110601008e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942165914009,
+        "lift_n": 5.119414040360404e-93,
+        "time_s": 7.833333333333311,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -8.143643270841494e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594217586361,
+        "lift_n": 2.4720431274969587e-95,
+        "time_s": 7.899999999999977,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7858143408489013e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942174388993,
+        "lift_n": 1.1936907418127175e-97,
+        "time_s": 7.966666666666644,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.340385531686479e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942170923684,
+        "lift_n": 2.1865965496733635e-99,
+        "time_s": 8.016666666666644,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7858136303061656e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942167127242,
+        "lift_n": 4.005396262253691e-101,
+        "time_s": 8.066666666666647,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.340386242229215e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942170119102,
+        "lift_n": 7.337064124147238e-103,
+        "time_s": 8.11666666666665,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -3.3752712624846026e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942165163674,
+        "lift_n": 1.34399959548817e-104,
+        "time_s": 8.166666666666652,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.340384821143743e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942186533623,
+        "lift_n": 2.4619314601977157e-106,
+        "time_s": 8.216666666666654,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 7.750927721872358e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942158895322,
+        "lift_n": 4.5097531949484954e-108,
+        "time_s": 8.266666666666657,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -6.554184039941902e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942162218313,
+        "lift_n": 8.260942295662081e-110,
+        "time_s": 8.31666666666666,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.340384821143743e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942180442456,
+        "lift_n": 1.5132350742145875e-111,
+        "time_s": 8.366666666666662,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -9.733099659570144e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942165221784,
+        "lift_n": 2.771936046653293e-113,
+        "time_s": 8.416666666666664,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 6.161469201515501e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942189406394,
+        "lift_n": 5.077617827362897e-115,
+        "time_s": 8.466666666666667,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -6.554184750484637e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594211872031,
+        "lift_n": 9.30115348114502e-117,
+        "time_s": 8.51666666666667,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7858162948414247e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942159130616,
+        "lift_n": 1.7037803627756776e-118,
+        "time_s": 8.566666666666672,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.410875256624422e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942192090327,
+        "lift_n": 3.120975811206953e-120,
+        "time_s": 8.616666666666674,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -3.3752776573692245e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942151868786,
+        "lift_n": 5.716986857512982e-122,
+        "time_s": 8.666666666666677,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.1322567416982565e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942169099469,
+        "lift_n": 1.0472345979063626e-123,
+        "time_s": 8.71666666666668,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.0929828420103149e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942186164565,
+        "lift_n": 1.9183187267645858e-125,
+        "time_s": 8.766666666666682,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -6.554199671882088e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942156870501,
+        "lift_n": 3.5139659419316283e-127,
+        "time_s": 8.816666666666684,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.1322572390781716e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942166650584,
+        "lift_n": 6.436863894165822e-129,
+        "time_s": 8.866666666666687,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.982541147389384e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942185702497,
+        "lift_n": 1.179101253985707e-130,
+        "time_s": 8.91666666666669,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.571998601932137e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942163362313,
+        "lift_n": 2.1598712971759444e-132,
+        "time_s": 8.966666666666692,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -9.733113870424859e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942181089685,
+        "lift_n": 3.956440526337408e-134,
+        "time_s": 9.016666666666694,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.571998957203505e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942158749502,
+        "lift_n": 7.247386241663438e-136,
+        "time_s": 9.066666666666697,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -9.733113870424859e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942176476873,
+        "lift_n": 1.3275722609418433e-137,
+        "time_s": 9.1166666666667,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.571998957203505e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942154136689,
+        "lift_n": 2.4318396125911172e-139,
+        "time_s": 9.166666666666702,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -9.733113870424859e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942171864061,
+        "lift_n": 4.4546304798238336e-141,
+        "time_s": 9.216666666666704,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.571998957203505e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942174524708,
+        "lift_n": 8.159967648669695e-143,
+        "time_s": 9.266666666666707,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.1322569548610772e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942176854226,
+        "lift_n": 1.4947383815162887e-144,
+        "time_s": 9.316666666666709,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.9647411515252315e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942163951448,
+        "lift_n": 2.7380535179968454e-146,
+        "time_s": 9.366666666666712,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 7.750914932103115e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942177208467,
+        "lift_n": 5.015551286370141e-148,
+        "time_s": 9.416666666666714,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -8.143658192238945e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942169603867,
+        "lift_n": 9.187459030895601e-150,
+        "time_s": 9.466666666666717,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.571997891389401e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942175741443,
+        "lift_n": 1.6829536376684525e-151,
+        "time_s": 9.516666666666719,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.340368478660821e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942168633542,
+        "lift_n": 3.0828250947034325e-153,
+        "time_s": 9.566666666666721,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.1322573811867187e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942160532215,
+        "lift_n": 5.647101786944827e-155,
+        "time_s": 9.616666666666724,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.340364215404406e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942176107157,
+        "lift_n": 1.0344329430947283e-156,
+        "time_s": 9.666666666666726,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -9.733120975852216e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942183569252,
+        "lift_n": 1.8948684586610262e-158,
+        "time_s": 9.716666666666729,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 7.750906405590285e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942172156545,
+        "lift_n": 3.4710093807514565e-160,
+        "time_s": 9.766666666666731,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -3.375293999852147e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942189718305,
+        "lift_n": 6.35817540667681e-162,
+        "time_s": 9.816666666666734,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -3.375293999852147e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942141714988,
+        "lift_n": 1.164686976339595e-163,
+        "time_s": 9.866666666666736,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.982537949947073e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942186098849,
+        "lift_n": 2.1334670029236985e-165,
+        "time_s": 9.916666666666739,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 6.161450016861636e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942171540354,
+        "lift_n": 3.908072736811493e-167,
+        "time_s": 9.966666666666741,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.982537239404337e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942162280048,
+        "lift_n": 7.158785386977944e-169,
+        "time_s": 10.016666666666744,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.9637760306778773e-09
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942188948087,
+        "lift_n": 1.3113422214002794e-170,
+        "time_s": 10.066666666666746,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.785833525502767e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942181012334,
+        "lift_n": 2.4021091792239002e-172,
+        "time_s": 10.116666666666749,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 7.750909247761228e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942169599641,
+        "lift_n": 4.400169820235727e-174,
+        "time_s": 10.166666666666751,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -3.375291157681204e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942194611993,
+        "lift_n": 8.060205786007256e-176,
+        "time_s": 10.216666666666754,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.5719932728616186e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942146774257,
+        "lift_n": 1.4764638523262016e-177,
+        "time_s": 10.266666666666756,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.9637518278159405e-09
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942182051853,
+        "lift_n": 2.7045779588430256e-179,
+        "time_s": 10.316666666666759,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.571992207047515e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942169480171,
+        "lift_n": 4.954230251129558e-181,
+        "time_s": 10.366666666666761,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.9647500333094285e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942169160542,
+        "lift_n": 9.075130232896885e-183,
+        "time_s": 10.416666666666764,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.3930758768765372e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942175794787,
+        "lift_n": 1.6623770791136948e-184,
+        "time_s": 10.466666666666766,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7858374334878135e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942150143187,
+        "lift_n": 3.0451326449577533e-186,
+        "time_s": 10.516666666666769,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.982530489248347e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594218426177,
+        "lift_n": 5.5780561907818796e-188,
+        "time_s": 10.566666666666771,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.34035853106252e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942164570622,
+        "lift_n": 1.0217850671145645e-189,
+        "time_s": 10.616666666666774,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.964753941294475e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942167562346,
+        "lift_n": 1.871699889778625e-191,
+        "time_s": 10.666666666666776,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 7.750900010705664e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942180819294,
+        "lift_n": 3.428568849307754e-193,
+        "time_s": 10.716666666666779,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -8.143673113636396e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942146392526,
+        "lift_n": 6.280432206446246e-195,
+        "time_s": 10.766666666666781,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.3930661069139205e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594218431914,
+        "lift_n": 1.1504458608046786e-196,
+        "time_s": 10.816666666666784,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 6.161432963835978e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942169926127,
+        "lift_n": 2.1073799150654453e-198,
+        "time_s": 10.866666666666786,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -8.143679508521018e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942166129485,
+        "lift_n": 3.860286020674077e-200,
+        "time_s": 10.916666666666789,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.982518765293207e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942175247185,
+        "lift_n": 7.071248969465204e-202,
+        "time_s": 10.966666666666791,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.0929804261650133e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942165490088,
+        "lift_n": 1.2953071703917087e-203,
+        "time_s": 11.016666666666794,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -9.733135897249667e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942161196736,
+        "lift_n": 2.372735934879566e-205,
+        "time_s": 11.066666666666796,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.340344320207805e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942178427272,
+        "lift_n": 4.346363476027021e-207,
+        "time_s": 11.116666666666799,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 6.161430121665035e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942167014479,
+        "lift_n": 7.961642528512303e-209,
+        "time_s": 11.166666666666801,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.9647677968778225e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942154111571,
+        "lift_n": 1.4584088891693845e-210,
+        "time_s": 11.216666666666804,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 7.750888642021891e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942183594161,
+        "lift_n": 2.671504610888288e-212,
+        "time_s": 11.266666666666806,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.9647709943201335e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942156121221,
+        "lift_n": 4.893646004924925e-214,
+        "time_s": 11.316666666666809,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.964768862691926e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942154808091,
+        "lift_n": 8.964151119033538e-216,
+        "time_s": 11.366666666666811,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -8.143682350691961e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942178992503,
+        "lift_n": 1.6420477619192332e-217,
+        "time_s": 11.416666666666814,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.571973732936385e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942161619244,
+        "lift_n": 3.0078931033231253e-219,
+        "time_s": 11.466666666666816,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.2912052227420645e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942155007932,
+        "lift_n": 5.509840252542684e-221,
+        "time_s": 11.516666666666818,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.340344320207805e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942165450162,
+        "lift_n": 1.0092891716890043e-222,
+        "time_s": 11.566666666666821,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.571972311850914e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594217953489,
+        "lift_n": 1.848809725862101e-224,
+        "time_s": 11.616666666666823,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.340341478036862e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942157360132,
+        "lift_n": 3.386638312869264e-226,
+        "time_s": 11.666666666666826,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.6090967847048887e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942168464627,
+        "lift_n": 6.203623238477728e-228,
+        "time_s": 11.716666666666828,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.092979644568004e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594216996614,
+        "lift_n": 1.1363758822213131e-229,
+        "time_s": 11.766666666666831,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -3.3753163819483234e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942165010487,
+        "lift_n": 2.0816063237207536e-231,
+        "time_s": 11.816666666666833,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.34034005695139e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594218306884,
+        "lift_n": 3.8130735818128322e-233,
+        "time_s": 11.866666666666836,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.3930542053230965e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942151622237,
+        "lift_n": 6.984764539359639e-235,
+        "time_s": 11.916666666666838,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.1322602233576617e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942162892287,
+        "lift_n": 1.2794648272496128e-236,
+        "time_s": 11.96666666666684,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.5719694696799706e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942189394637,
+        "lift_n": 2.3437157016162944e-238,
+        "time_s": 12.016666666666843,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.1322599391405674e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942156457941,
+        "lift_n": 4.2932037936467733e-240,
+        "time_s": 12.066666666666846,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.9639827542050625e-09
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942198523724,
+        "lift_n": 7.864263855683107e-242,
+        "time_s": 12.116666666666848,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 6.16142585840862e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942157143032,
+        "lift_n": 1.440570923637203e-243,
+        "time_s": 12.16666666666685,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.9639969650597777e-09
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942189771423,
+        "lift_n": 2.638828769077946e-245,
+        "time_s": 12.216666666666853,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 4.571972311850914e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942153688931,
+        "lift_n": 4.8337899285907525e-247,
+        "time_s": 12.266666666666856,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.785856618141679e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942189959814,
+        "lift_n": 8.85450589990107e-249,
+        "time_s": 12.316666666666858,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.2519251413323218e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942150069221,
+        "lift_n": 1.6219627936323412e-250,
+        "time_s": 12.36666666666686,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7680429209576687e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942147265949,
+        "lift_n": 2.9711011711307025e-252,
+        "time_s": 12.416666666666863,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.9825095282376424e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942191649667,
+        "lift_n": 5.4424442656240904e-254,
+        "time_s": 12.466666666666866,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 6.161421595152206e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942141824956,
+        "lift_n": 9.969434786706521e-256,
+        "time_s": 12.516666666666868,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7680433472833101e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942146472245,
+        "lift_n": 1.826194709532903e-257,
+        "time_s": 12.56666666666687,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.0929792182423625e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942186220034,
+        "lift_n": 3.3452118042621053e-259,
+        "time_s": 12.616666666666873,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.964778810290227e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942155601251,
+        "lift_n": 6.127737571538438e-261,
+        "time_s": 12.666666666666876,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.9825063307953315e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942182269136,
+        "lift_n": 1.1224750381030625e-262,
+        "time_s": 12.716666666666878,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.3930485209812105e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942164730252,
+        "lift_n": 2.0561425605460025e-264,
+        "time_s": 12.76666666666688,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.964780586647066e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942155635346,
+        "lift_n": 3.76642870020992e-266,
+        "time_s": 12.816666666666883,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 6.16141591081032e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942182468781,
+        "lift_n": 6.899319786299107e-268,
+        "time_s": 12.866666666666886,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -6.554240172818027e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942147379619,
+        "lift_n": 1.2638129368458664e-269,
+        "time_s": 12.916666666666888,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -3.375328816446199e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942186630668,
+        "lift_n": 2.3150443482780178e-271,
+        "time_s": 12.96666666666689,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.410869714391083e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942173065401,
+        "lift_n": 4.240683205254459e-273,
+        "time_s": 13.016666666666893,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.964783784089377e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594216016241,
+        "lift_n": 7.768055904037473e-275,
+        "time_s": 13.066666666666896,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 7.750872299538969e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942183187765,
+        "lift_n": 1.4229474160866355e-276,
+        "time_s": 13.116666666666898,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -3.375326684817992e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942170781479,
+        "lift_n": 2.6065457810552437e-278,
+        "time_s": 13.1666666666669,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.393043902453428e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942187680808,
+        "lift_n": 4.77465349950296e-280,
+        "time_s": 13.216666666666903,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.96478165246117e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942167327248,
+        "lift_n": 8.74617896295659e-282,
+        "time_s": 13.266666666666906,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.964108209406845e-09
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942193995122,
+        "lift_n": 1.6021193142009176e-283,
+        "time_s": 13.316666666666908,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7858662104686118e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942152448823,
+        "lift_n": 2.934751609068826e-285,
+        "time_s": 13.36666666666691,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.9825063307953315e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942204283101,
+        "lift_n": 5.375858632163902e-287,
+        "time_s": 13.416666666666913,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.4108701407167246e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942120020133,
+        "lift_n": 9.847462298331894e-289,
+        "time_s": 13.466666666666915,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -9.733154371360797e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594214519788,
+        "lift_n": 1.803851619907429e-290,
+        "time_s": 13.516666666666918,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.2519241465724917e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594218891927,
+        "lift_n": 3.304283423170252e-292,
+        "time_s": 13.56666666666692,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.6090984900074545e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942157307038,
+        "lift_n": 6.052764396877588e-294,
+        "time_s": 13.616666666666923,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 7.750868036282554e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594217106054,
+        "lift_n": 1.1087413484019076e-295,
+        "time_s": 13.666666666666925,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.34032513555394e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594217322425,
+        "lift_n": 2.030984998304215e-297,
+        "time_s": 13.716666666666928,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -2.4038274659687886e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942121081495,
+        "lift_n": 3.720344731153878e-299,
+        "time_s": 13.76666666666693,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 6.16140241049834e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594218053184,
+        "lift_n": 6.814902537880891e-301,
+        "time_s": 13.816666666666933,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.410868719631253e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942155376737,
+        "lift_n": 1.248349269326162e-302,
+        "time_s": 13.866666666666935,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.4501533485145046e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942136347677,
+        "lift_n": 2.2867177900103085e-304,
+        "time_s": 13.916666666666938,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.982493541026088e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942188181887,
+        "lift_n": 4.188794228059996e-306,
+        "time_s": 13.96666666666694,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.4108688617398002e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942165675881,
+        "lift_n": 7.673004942499351e-308,
+        "time_s": 14.016666666666943,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.4501533485145046e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942141348636,
+        "lift_n": 1.40553573565243e-309,
+        "time_s": 14.066666666666945,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.9824946068401914e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942193182855,
+        "lift_n": 2.574674893608e-311,
+        "time_s": 14.116666666666948,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.4108690038483473e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942155444563,
+        "lift_n": 4.7183269178e-313,
+        "time_s": 14.16666666666695,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -8.143705798602241e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942179132142,
+        "lift_n": 8.39911598e-315,
+        "time_s": 14.216666666666953,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.2519230097041145e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942150831224,
+        "lift_n": 0.0,
+        "time_s": 14.266666666666955,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -3.3575025781829027e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942123854851,
+        "lift_n": 0.0,
+        "time_s": 14.316666666666958,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.340315898498375e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942188272227,
+        "lift_n": 0.0,
+        "time_s": 14.36666666666696,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.4108682933056116e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942149540489,
+        "lift_n": 0.0,
+        "time_s": 14.416666666666963,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7680454789115174e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594214673709,
+        "lift_n": 0.0,
+        "time_s": 14.466666666666965,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 2.982483948699155e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942188471592,
+        "lift_n": 0.0,
+        "time_s": 14.516666666666968,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 6.161398857784661e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942153216795,
+        "lift_n": 0.0,
+        "time_s": 14.56666666666697,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.964799060758196e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942188659702,
+        "lift_n": 0.0,
+        "time_s": 14.616666666666973,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.4108682933056116e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942133702253,
+        "lift_n": 0.0,
+        "time_s": 14.666666666666975,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -2.085937467199983e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942133382346,
+        "lift_n": 0.0,
+        "time_s": 14.716666666666978,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.0929763760714195e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942186706603,
+        "lift_n": 0.0,
+        "time_s": 14.76666666666698,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7858928558212028e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942177777139,
+        "lift_n": 0.0,
+        "time_s": 14.816666666666983,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7858928558212028e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594217149677,
+        "lift_n": 0.0,
+        "time_s": 14.866666666666985,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7858928558212028e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942169024476,
+        "lift_n": 0.0,
+        "time_s": 14.916666666666988,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -3.375350843271008e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.534594215893603,
+        "lift_n": 0.0,
+        "time_s": 14.96666666666699,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7858939216353065e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942174179549,
+        "lift_n": 0.0,
+        "time_s": 15.016666666666993,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.3930197440004122e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942189588642,
+        "lift_n": 0.0,
+        "time_s": 15.066666666666995,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -6.554262910185571e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942156982892,
+        "lift_n": 0.0,
+        "time_s": 15.116666666666998,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 7.750846009457746e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942202690973,
+        "lift_n": 0.0,
+        "time_s": 15.166666666667,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.7858999612485604e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942116606585,
+        "lift_n": 0.0,
+        "time_s": 15.216666666667003,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -4.964820377040269e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942147910178,
+        "lift_n": 0.0,
+        "time_s": 15.266666666667005,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.2519204517502658e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942188651153,
+        "lift_n": 0.0,
+        "time_s": 15.316666666667007,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 6.161375409874381e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942153892935,
+        "lift_n": 0.0,
+        "time_s": 15.36666666666701,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.2912107649754034e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942123108368,
+        "lift_n": 0.0,
+        "time_s": 15.416666666667012,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 6.161377541502588e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942184048699,
+        "lift_n": 0.0,
+        "time_s": 15.466666666667015,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.5698117294959957e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942166840746,
+        "lift_n": 0.0,
+        "time_s": 15.516666666667017,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.291210338649762e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942136056205,
+        "lift_n": 0.0,
+        "time_s": 15.56666666666702,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 6.161381804759003e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942190208235,
+        "lift_n": 0.0,
+        "time_s": 15.616666666667022,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.4108660195688572e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942140548865,
+        "lift_n": 0.0,
+        "time_s": 15.666666666667025,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -2.0859394567196432e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942138738738,
+        "lift_n": 0.0,
+        "time_s": 15.716666666667027,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 9.340282502989794e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942189744913,
+        "lift_n": 0.0,
+        "time_s": 15.76666666666703,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -1.9646222426672466e-09
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942137767545,
+        "lift_n": 0.0,
+        "time_s": 15.816666666667032,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -6.554288489724058e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.53459421679121,
+        "lift_n": 0.0,
+        "time_s": 15.866666666667035,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 1.2519193148818886e-07
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942178188439,
+        "lift_n": 0.0,
+        "time_s": 15.916666666667037,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": -6.554290621352266e-08
+      },
+      {
+        "contacts": 4,
+        "gas_mass_kg": 185.14127585343215,
+        "height_m": 0.5345942170583389,
+        "lift_n": 0.0,
+        "time_s": 15.96666666666704,
+        "up_alignment": 1.0,
+        "vertical_speed_mps": 6.161364751733345e-08
+      }
+    ],
+    "t": 16.000000000000373
+  }
+}

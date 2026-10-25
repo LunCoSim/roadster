@@ -5,10 +5,16 @@ fn simulation_dependencies(me, ctx) {
       query_reads:[],required_inputs:[]}
 }
 fn on_start(me, ctx) {
+    for name in ["intent.edge", "runtime.ui.action", "roadster_fan_toggle",
+        "roadster_instant_refill", "roadster_air_refilled", "roadster_test_refill_cancel"] {
+        subscribe(name);
+    }
     let car = find_path("/World/Roadster");
-    cmd("AcquireControl", #{target:car,bind_camera:true});
+    let control = cmd("AcquireControl", #{target:car,bind_camera:true});
+    if control.ok != true {
+        throw("Roadster manual control could not be acquired: " + control.to_string());
+    }
     cmd("ObserveAvatar",#{});
-
 }
 fn on_event(me,evt,ctx) {
     let car=find_path("/World/Roadster");

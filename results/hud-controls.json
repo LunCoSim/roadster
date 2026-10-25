@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "checks": {
+    "fan": true,
+    "temperature": true,
+    "cutoff": true,
+    "unlimited": true,
+    "refill": true,
+    "autopilot": true,
+    "manual_takeover": true,
+    "retry": true,
+    "driver_health": true
+  }
+}
