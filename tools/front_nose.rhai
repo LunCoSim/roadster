@@ -4,6 +4,15 @@ fn width(z) {
     let station=reveal_body::station(-z*4.34/4.5);
     station[4][0]*(1.99/2.02)
 }
+// The faceted painted edge is the actual nose silhouette. Keep dark trim
+// inside this edge as well as inside the original station envelope.
+fn nose_outer_width(z) {
+    let back=-2.25+32.0*4.5/220.0;
+    let a=width(-2.235)-0.024;let b=width(-1.88)-0.004;let d=width(back);
+    if z<= -2.235 {return a;}
+    let edge=if z< -1.88 {a+(b-a)*(z+2.235)/0.355}else{b+(d-b)*(z+1.88)/(back+1.88)};
+    min(width(z),edge)
+}
 fn plane_y(z) {
     let back=-2.25+32.0*4.5/220.0;
     let p=reveal_body::station(-back*4.34/4.5);
@@ -69,7 +78,7 @@ fn geometry(existing_paths) {
     let half=[];
     for z in [-2.22,-2.17,-2.08,-1.98,-1.88,-1.84] {
         let p=reveal_body::station(-z*4.34/4.5);
-        half.push([width(z)-0.024,max(0.035,p[4][1]-0.02),z]);
+        half.push([nose_outer_width(z)-0.024,max(0.035,p[4][1]-0.02),z]);
     }
     let outline=[];
     for i in 0..half.len() {outline.push(mirror(half[half.len()-1-i],-1.0));}
@@ -88,7 +97,7 @@ fn geometry(existing_paths) {
         let p=outline[i];let side_fraction=abs(i-(outline.len()-1)/2.0)/((outline.len()-1)/2.0);
         let chord=0.14*(1.0-side_fraction)+0.015*side_fraction;
         let oz=p[2]-0.006;
-        let ox=if abs(p[0])<0.001 {0.0}else{(if p[0]<0.0 {-1.0}else{1.0})*(width(oz)-0.024)};
+        let ox=if abs(p[0])<0.001 {0.0}else{(if p[0]<0.0 {-1.0}else{1.0})*(nose_outer_width(oz)-0.024)};
         outer.push([ox,-0.238,oz]);
         inner.push([p[0]*0.985,-0.238,p[2]+chord]);
     }
@@ -162,8 +171,7 @@ fn side_part(chunk) {
             strip.push([low,shoulder,edge]);
         }
         for i in 0..strip.len()-1 {
-            returns.push([strip[i][0],strip[i+1][0],strip[i+1][1],strip[i][1]]);
-            returns.push([strip[i][1],strip[i+1][1],strip[i+1][2],strip[i][2]]);
+            returns.push([strip[i][0],strip[i+1][0],strip[i+1][2],strip[i][2]]);
         }
         }else{
         // The old shell ends in a rounded cross-section. Bridge that exact

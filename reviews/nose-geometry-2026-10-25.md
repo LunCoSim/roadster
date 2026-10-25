@@ -34,3 +34,15 @@ The runtime closed during the initial review. Its unsaved native document
 journal was recovered on reopening; the saved body and the reproducible Rhai
 recipe now hold the accepted result. No physical calibration was changed and
 no new narrated video master is claimed by this geometry review.
+
+## Production-light follow-up
+
+The rendered night scene exposed an unnecessary narrow shoulder strip. The
+side return now runs directly from the retained lower shell to the faceted edge.
+Fascia and splitter widths also follow that actual faceted edge, retaining the
+24 mm inset. Native authoring saved the revised meshes. All seven
+collision-enabled source blocks still match commit `99b3f90` exactly.
+
+The fresh front and wheel-side takes were inspected in the production lighting.
+The faceted finish still has sharp highlights; it is not a smooth CAD replica.
+Current body SHA-256: `9d4d7d4cdccd32a51319ecc26fb59044c7692e4e97ecbb9e8361c80299a020f3`.
