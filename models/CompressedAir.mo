@@ -2,7 +2,7 @@ package CompressedAir
   "Reusable dry-air storage calculations using Lemmon et al. (2000) Helmholtz EOS"
   // Coefficients: CoolProp 8.0.0 Air.json, Lemmon-JPCRD-2000.
   // DOI 10.1063/1.1285884. See references/gas-storage.md and LICENSES/CoolProp.txt.
-  // Single-phase study domain: 200..350 K, 0.1..70 MPa. SI absolute pressure.
+  // Single-phase study domain: 143.15..350 K, 0.1..70 MPa. SI absolute pressure.
   constant Real R = 8.31451/0.02896546;
   constant Real reducingDensity = 10447.7*0.02896546;
   constant Real reducingTemperature = 132.6312;

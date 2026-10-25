@@ -28,6 +28,18 @@ fn panel(me) {
 fn front(me) {apply_plan(this.doc,reveal_body::cap_plan(false,0),"Close body nose");}
 fn rear_left(me) {apply_plan(this.doc,reveal_body::cap_plan(true,0),"Close left body tail");}
 fn rear_right(me) {apply_plan(this.doc,reveal_body::cap_plan(true,1),"Close right body tail");}
+fn nose_begin(me) {
+    let paths=query("InspectUsdDocument",#{doc_id:this.doc,path:"/Body"}).prim.children;
+    for path in query("InspectUsdDocument",#{doc_id:this.doc,path:"/Body/RevealShell"}).prim.children {paths.push(path);}
+    let plan=front_nose::geometry(paths);
+    apply_plan(this.doc,#{ok:true,ops:plan.ops},"Retire superseded nose sheets");this.nose_index=0;
+}
+fn nose_prepare(me) {this.nose_part=front_nose::part(this.nose_index);}
+fn nose_apply(me) {
+    let p=this.nose_part;
+    apply_plan(this.doc,#{ok:true,ops:front_nose::add_mesh(p.name,p.polys,p.material)},"Author "+p.name);
+    this.nose_index+=1;
+}
 fn finish(me) {
     apply_plan(this.doc,reveal_body::wheelhouse_plan(),"Close cosmetic wheelhouse back walls");
     let result=cmd("SaveDocument",#{doc_id:this.doc});
@@ -37,5 +49,7 @@ fn finish(me) {
 fn task(me,ctx) {
     seq([check(Fn("ready")),repeat(220,seq([once(Fn("panel")),wait(0.02)])),
         once(Fn("front")),wait(0.02),once(Fn("rear_left")),wait(0.02),
-        once(Fn("rear_right")),wait(0.02),once(Fn("finish"))])
+        once(Fn("rear_right")),wait(0.02),once(Fn("nose_begin")),
+        repeat(13,seq([once(Fn("nose_prepare")),wait(0.02),once(Fn("nose_apply")),wait(0.02)])),
+        once(Fn("finish"))])
 }

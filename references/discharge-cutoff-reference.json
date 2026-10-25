@@ -1,0 +1,46 @@
+{
+  "method": "Isentropic remaining gas in a well-mixed, rigid, adiabatic venting tank; no wall heat, valve dynamics or vehicle integration. Engineering reference calculation, not simulator footage.",
+  "coolprop_version": "8.0.0",
+  "fluid": "Air",
+  "initial_mass_kg": 250,
+  "tank_volume_m3": 0.6,
+  "initial_temperature_c": 20,
+  "critical_temperature_c": -140.61939999999998,
+  "rows": [
+    {
+      "cutoff_c": -73.15,
+      "remaining_mass_kg": 136.52682739972585,
+      "discharged_percent": 45.38926904010966,
+      "tank_pressure_bar_abs": 105.67319708625288,
+      "phase": "supercritical"
+    },
+    {
+      "cutoff_c": -100,
+      "remaining_mass_kg": 103.55274440391955,
+      "discharged_percent": 58.578902238432185,
+      "tank_pressure_bar_abs": 63.98082055402233,
+      "phase": "supercritical"
+    },
+    {
+      "cutoff_c": -120,
+      "remaining_mass_kg": 80.30855159096303,
+      "discharged_percent": 67.87657936361478,
+      "tank_pressure_bar_abs": 42.23349424796852,
+      "phase": "supercritical"
+    },
+    {
+      "cutoff_c": -130,
+      "remaining_mass_kg": 69.36145617356327,
+      "discharged_percent": 72.25541753057469,
+      "tank_pressure_bar_abs": 33.710837210137264,
+      "phase": "supercritical_gas"
+    },
+    {
+      "cutoff_c": -135,
+      "remaining_mass_kg": 64.09389099388974,
+      "discharged_percent": 74.3624436024441,
+      "tank_pressure_bar_abs": 29.95384974286738,
+      "phase": "supercritical_gas"
+    }
+  ]
+}

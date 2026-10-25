@@ -326,6 +326,7 @@ fn attr(path,name,kind,value) {
 fn prim(parent,name,kind) {
     #{AddPrim:#{edit_target:"@root@",parent_path:parent,name:name,type_name:kind,reference:(),reference_prim_path:()}}
 }
+// front_nose owns the visible light seam; front_lightbar owns illumination.
 fn setup_plan(existing_paths) {
     let ops=[];
     for path in ["/Body/RevealShell","/Body/Looks/RevealFinish"] {
@@ -342,6 +343,7 @@ fn setup_plan(existing_paths) {
     ops.push(attr("/Body/RearWing","xformOp:translate","double3","(0.0,0.438,2.205)"));
     ops.push(attr("/Body/RearLightBar","xformOp:translate","double3","(0.0,0.375,2.263)"));
     ops.push(attr("/Body/Looks/RearLamp/Shader","inputs:emissiveColor","color3f","(8.0,0.03,0.06)"));
+    for name in ["HeadlightL","HeadlightR"] {ops.push(attr("/Body/"+name,"visibility","token","\"invisible\""));}
     ops.push(#{SetPrimDocumentation:#{edit_target:"@root@",path:"/Body",
         documentation:"Procedural visual study; not Tesla CAD. Cross-section profile adapted from eduardmur/tesla-roadster-simulator body.ts, MIT, Copyright (c) 2026 Tesla Roadster Simulator contributors. Native USD material regions and geometric wheel openings; see references/body-style.md and references/licenses/tesla-roadster-simulator-MIT.txt. Physical colliders, wheel mounts and propulsion remain separate."}});
     #{ok:true,ops:ops}

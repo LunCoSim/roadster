@@ -7,7 +7,7 @@
 
 def Xform "Roadster" (
     kind = "assembly"
-    documentation = "October 2026 Roadster study. Geometry and performance parameters are assumptions, not Tesla CAD or calibration."
+    doc = "October 2026 Roadster study. Geometry and performance parameters are assumptions, not Tesla CAD or calibration."
     prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxVehicleContextAPI", "LunCoCatalogAPI", "LunCoProgramAPI", "LunCoUiSchemaAPI"]
     prepend references = @lunco://components/avionics/obc.usda@</OBC>
     prepend variantSets = "trim"
@@ -391,7 +391,7 @@ def Xform "Roadster" (
     custom double inputs:course_failure_code = 0.0
     custom double outputs:course_failure_reason = 0.0
     custom float inputs:battery_capacity_kwh = 120.0 (
-        documentation = "120 kWh study assumption from >100 kWh reporting and 300-mile sizing. Editable preparation parameter. BatteryStudy computes mass/inertia deltas from a 120 kWh / 1700 kg reference. See references/battery-study.md. Not a Tesla capacity specification."
+        doc = "120 kWh study assumption from >100 kWh reporting and 300-mile sizing. Editable preparation parameter. BatteryStudy computes mass/inertia deltas from a 120 kWh / 1700 kg reference. See references/battery-study.md. Not a Tesla capacity specification."
     )
     custom double outputs:battery_nominal_energy_kwh = 0.0
     custom double outputs:battery_range_energy_kwh = 0.0
@@ -410,10 +410,10 @@ def Xform "Roadster" (
     custom float inputs:reference_gas_mass_kg = 250.0
     custom float inputs:reference_storage_volume_m3 = 0.6000000238418579
     custom float outputs:longitudinal_speed_mps = 0.0 (
-        documentation = "Magnitude of body-forward velocity in m/s; excludes transverse suspension movement. Raw 3D speed remains a separate output."
+        doc = "Magnitude of body-forward velocity in m/s; excludes transverse suspension movement. Raw 3D speed remains a separate output."
     )
     custom float inputs:initial_battery_soc = 1.0 (
-        documentation = "Initial battery state of charge, fraction 0 to 1. Set at scene initialization; motors, auxiliaries and fans subsequently consume simulated stored energy."
+        doc = "Initial battery state of charge, fraction 0 to 1. Set at scene initialization; motors, auxiliaries and fans subsequently consume simulated stored energy."
     )
     custom double inputs:discharge_cutoff_c = -130.0
     custom double outputs:tank_temperature_c = 0.0
@@ -816,42 +816,6 @@ def Xform "Roadster" (
             custom double outputs:contact_approach_speed = 0.0
         }
     }
-    def SphereLight "HeadlampL" (
-        prepend apiSchemas = ["ShapingAPI", "ShadowAPI", "LunCoLightAPI"]
-    )
-    {
-        double3 xformOp:translate = (-0.7, 0.065, -2.27)
-        double3 xformOp:rotateXYZ = (-2.0, 0.0, 0.0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
-        float inputs:intensity = 133000.0
-        bool inputs:normalize = true
-        float inputs:radius = 0.04500000178813934
-        color3f inputs:color = (0.8999999761581421, 0.949999988079071, 1.0)
-        float inputs:shaping:cone:angle = 22.0
-        float inputs:shaping:cone:softness = 0.3499999940395355
-        bool inputs:shadow:enable = true
-        float lunco:light:range = 120.0
-        float inputs:light_intensity
-        float inputs:light_intensity.connect = </Roadster.outputs:headlight_intensity_lm>
-    }
-    def SphereLight "HeadlampR" (
-        prepend apiSchemas = ["ShapingAPI", "ShadowAPI", "LunCoLightAPI"]
-    )
-    {
-        double3 xformOp:translate = (0.7, 0.065, -2.27)
-        double3 xformOp:rotateXYZ = (-2.0, 0.0, 0.0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
-        float inputs:intensity = 133000.0
-        bool inputs:normalize = true
-        float inputs:radius = 0.04500000178813934
-        color3f inputs:color = (0.8999999761581421, 0.949999988079071, 1.0)
-        float inputs:shaping:cone:angle = 22.0
-        float inputs:shaping:cone:softness = 0.3499999940395355
-        bool inputs:shadow:enable = true
-        float lunco:light:range = 120.0
-        float inputs:light_intensity
-        float inputs:light_intensity.connect = </Roadster.outputs:headlight_intensity_lm>
-    }
     def Xform "Wheel_FL" (
         prepend apiSchemas = ["PhysxVehicleWheelAttachmentAPI", "PhysxVehicleWheelAPI", "PhysxVehicleTireAPI", "PhysicsMaterialAPI", "LunCoTireAPI", "MaterialBindingAPI", "LunCoCatalogAPI", "LunCoWheelAPI", "PhysxVehicleSuspensionAPI", "LunCoSuspensionAPI"]
         references = [@lunco://components/mobility/wheel.usda@</Wheel>, @lunco://components/mobility/suspensions/standard.usda@</Suspension>]
@@ -1153,5 +1117,170 @@ def Xform "Roadster" (
         uniform double lunco:event:qualificationTime = 0.0
         float inputs:trigger
         float inputs:trigger.connect = </Roadster.outputs:service_brake_release>
+    }
+    def Xform "FrontLightbar"
+    {
+        def SphereLight "Segment0" (
+            prepend apiSchemas = ["ShapingAPI", "ShadowAPI", "LunCoLightAPI"]
+        )
+        {
+            custom double3 xformOp:translate = (-0.7, 0.048, -2.275)
+            custom double3 xformOp:rotateXYZ = (-2.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            bool inputs:normalize = true
+            float inputs:intensity = 29555.560546875
+            float inputs:radius = 0.07500000298023224
+            color3f inputs:color = (0.8999999761581421, 0.949999988079071, 1.0)
+            float inputs:shaping:cone:angle = 22.0
+            float inputs:shaping:cone:softness = 0.3499999940395355
+            bool inputs:shadow:enable = true
+            float lunco:light:range = 120.0
+            custom float inputs:light_intensity
+            float inputs:light_intensity.connect = </Roadster.outputs:headlight_intensity_lm>
+        }
+        def SphereLight "Segment1" (
+            prepend apiSchemas = ["ShapingAPI", "ShadowAPI", "LunCoLightAPI"]
+        )
+        {
+            custom double3 xformOp:translate = (-0.5249999999999999, 0.048, -2.275)
+            custom double3 xformOp:rotateXYZ = (-2.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            bool inputs:normalize = true
+            float inputs:intensity = 29555.560546875
+            float inputs:radius = 0.07500000298023224
+            color3f inputs:color = (0.8999999761581421, 0.949999988079071, 1.0)
+            float inputs:shaping:cone:angle = 22.0
+            float inputs:shaping:cone:softness = 0.3499999940395355
+            bool inputs:shadow:enable = true
+            float lunco:light:range = 120.0
+            custom float inputs:light_intensity
+            float inputs:light_intensity.connect = </Roadster.outputs:headlight_intensity_lm>
+        }
+        def SphereLight "Segment2" (
+            prepend apiSchemas = ["ShapingAPI", "ShadowAPI", "LunCoLightAPI"]
+        )
+        {
+            custom double3 xformOp:translate = (-0.35, 0.048, -2.275)
+            custom double3 xformOp:rotateXYZ = (-2.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            bool inputs:normalize = true
+            float inputs:intensity = 29555.560546875
+            float inputs:radius = 0.07500000298023224
+            color3f inputs:color = (0.8999999761581421, 0.949999988079071, 1.0)
+            float inputs:shaping:cone:angle = 22.0
+            float inputs:shaping:cone:softness = 0.3499999940395355
+            bool inputs:shadow:enable = true
+            float lunco:light:range = 120.0
+            custom float inputs:light_intensity
+            float inputs:light_intensity.connect = </Roadster.outputs:headlight_intensity_lm>
+        }
+        def SphereLight "Segment3" (
+            prepend apiSchemas = ["ShapingAPI", "ShadowAPI", "LunCoLightAPI"]
+        )
+        {
+            custom double3 xformOp:translate = (-0.17500000000000004, 0.048, -2.275)
+            custom double3 xformOp:rotateXYZ = (-2.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            bool inputs:normalize = true
+            float inputs:intensity = 29555.560546875
+            float inputs:radius = 0.07500000298023224
+            color3f inputs:color = (0.8999999761581421, 0.949999988079071, 1.0)
+            float inputs:shaping:cone:angle = 22.0
+            float inputs:shaping:cone:softness = 0.3499999940395355
+            bool inputs:shadow:enable = true
+            float lunco:light:range = 120.0
+            custom float inputs:light_intensity
+            float inputs:light_intensity.connect = </Roadster.outputs:headlight_intensity_lm>
+        }
+        def SphereLight "Segment4" (
+            prepend apiSchemas = ["ShapingAPI", "ShadowAPI", "LunCoLightAPI"]
+        )
+        {
+            custom double3 xformOp:translate = (0.0, 0.048, -2.275)
+            custom double3 xformOp:rotateXYZ = (-2.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            bool inputs:normalize = true
+            float inputs:intensity = 29555.560546875
+            float inputs:radius = 0.07500000298023224
+            color3f inputs:color = (0.8999999761581421, 0.949999988079071, 1.0)
+            float inputs:shaping:cone:angle = 22.0
+            float inputs:shaping:cone:softness = 0.3499999940395355
+            bool inputs:shadow:enable = true
+            float lunco:light:range = 120.0
+            custom float inputs:light_intensity
+            float inputs:light_intensity.connect = </Roadster.outputs:headlight_intensity_lm>
+        }
+        def SphereLight "Segment5" (
+            prepend apiSchemas = ["ShapingAPI", "ShadowAPI", "LunCoLightAPI"]
+        )
+        {
+            custom double3 xformOp:translate = (0.17500000000000004, 0.048, -2.275)
+            custom double3 xformOp:rotateXYZ = (-2.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            bool inputs:normalize = true
+            float inputs:intensity = 29555.560546875
+            float inputs:radius = 0.07500000298023224
+            color3f inputs:color = (0.8999999761581421, 0.949999988079071, 1.0)
+            float inputs:shaping:cone:angle = 22.0
+            float inputs:shaping:cone:softness = 0.3499999940395355
+            bool inputs:shadow:enable = true
+            float lunco:light:range = 120.0
+            custom float inputs:light_intensity
+            float inputs:light_intensity.connect = </Roadster.outputs:headlight_intensity_lm>
+        }
+        def SphereLight "Segment6" (
+            prepend apiSchemas = ["ShapingAPI", "ShadowAPI", "LunCoLightAPI"]
+        )
+        {
+            custom double3 xformOp:translate = (0.34999999999999987, 0.048, -2.275)
+            custom double3 xformOp:rotateXYZ = (-2.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            bool inputs:normalize = true
+            float inputs:intensity = 29555.560546875
+            float inputs:radius = 0.07500000298023224
+            color3f inputs:color = (0.8999999761581421, 0.949999988079071, 1.0)
+            float inputs:shaping:cone:angle = 22.0
+            float inputs:shaping:cone:softness = 0.3499999940395355
+            bool inputs:shadow:enable = true
+            float lunco:light:range = 120.0
+            custom float inputs:light_intensity
+            float inputs:light_intensity.connect = </Roadster.outputs:headlight_intensity_lm>
+        }
+        def SphereLight "Segment7" (
+            prepend apiSchemas = ["ShapingAPI", "ShadowAPI", "LunCoLightAPI"]
+        )
+        {
+            custom double3 xformOp:translate = (0.5249999999999999, 0.048, -2.275)
+            custom double3 xformOp:rotateXYZ = (-2.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            bool inputs:normalize = true
+            float inputs:intensity = 29555.560546875
+            float inputs:radius = 0.07500000298023224
+            color3f inputs:color = (0.8999999761581421, 0.949999988079071, 1.0)
+            float inputs:shaping:cone:angle = 22.0
+            float inputs:shaping:cone:softness = 0.3499999940395355
+            bool inputs:shadow:enable = true
+            float lunco:light:range = 120.0
+            custom float inputs:light_intensity
+            float inputs:light_intensity.connect = </Roadster.outputs:headlight_intensity_lm>
+        }
+        def SphereLight "Segment8" (
+            prepend apiSchemas = ["ShapingAPI", "ShadowAPI", "LunCoLightAPI"]
+        )
+        {
+            custom double3 xformOp:translate = (0.7, 0.048, -2.275)
+            custom double3 xformOp:rotateXYZ = (-2.0, 0.0, 0.0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            bool inputs:normalize = true
+            float inputs:intensity = 29555.560546875
+            float inputs:radius = 0.07500000298023224
+            color3f inputs:color = (0.8999999761581421, 0.949999988079071, 1.0)
+            float inputs:shaping:cone:angle = 22.0
+            float inputs:shaping:cone:softness = 0.3499999940395355
+            bool inputs:shadow:enable = true
+            float lunco:light:range = 120.0
+            custom float inputs:light_intensity
+            float inputs:light_intensity.connect = </Roadster.outputs:headlight_intensity_lm>
+        }
     }
 }

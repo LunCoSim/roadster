@@ -17,6 +17,7 @@ import CoolProp.CoolProp as CP
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port',type=int,default=4198)
+    parser.add_argument('--cold',action='store_true',help='Check the extended single-phase study range down to 143.15 K')
     args=parser.parse_args()
     root=Path(__file__).resolve().parents[1]
     def q(command,params=None):
@@ -43,8 +44,10 @@ def main():
     else:
         raise RuntimeError(status)
     checks=[]
-    for temperature in [253.15,293.15,333.15]:
-        for volume in [.5,.6,.8]:
+    temperatures=[143.15,173.15,200.0,293.15] if args.cold else [253.15,293.15,333.15]
+    volumes=[.6,1.2,2.2] if args.cold else [.5,.6,.8]
+    for temperature in temperatures:
+        for volume in volumes:
             density=250/volume
             pressure=CP.PropsSI('P','Dmass',density,'T',temperature,'Air')
             if pressure>70e6: continue
@@ -80,7 +83,8 @@ def main():
                 density_kg_m3=density,volume_for_250kg_litre=250/density*1000))
     report=dict(ok=all(c['ok'] for c in checks),coolprop_version=CoolProp.__version__,
         checks=checks,pressure_sweep=sweep,internal_energy_reference_offset_j_kg=531917.3305791204)
-    (root/'results/gas-sizing.json').write_text(json.dumps(report,indent=2)+'\n')
+    output=root/'results'/('gas-cold-reference.json' if args.cold else 'gas-sizing.json')
+    output.write_text(json.dumps(report,indent=2)+'\n')
     return 0 if report['ok'] else 1
 
 

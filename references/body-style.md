@@ -68,3 +68,32 @@ owner applied and saved the component changes; twelve material/transform values
 were read back. Sampled frames from a native 1,980-image, 60 fps course take from the
 canonical Twin were reviewed for the enhanced jets and car finish. This is visual evidence,
 not hardware validation or a new claim about Tesla's exhaust.
+
+## Nose revision — 2026-10-25
+
+The user-supplied front, overhead and low-angle photographs guide this cosmetic
+revision. `tools/front_nose.rhai` uses `reveal_body::station` as its dimensional
+boundary. The fascia and separate 18 mm splitter blade remain at least 24 mm
+inside that station outline. The fascia bottom moves 75 mm rearward and 45 mm
+inward; the hood overhangs its top. The splitter wraps the chamfered corners and
+its chord tapers from 140 mm at the centre to 15 mm at each side.
+
+A flat hood, crisp corner facets, recessed triangular lamps and a continuous
+light seam replace the smooth front sheets. The obsolete `FrontMask` is removed
+as well as the rectangular splitter. New side returns retain the existing wheel
+opening, and a rear joining mesh meets the original shell cross-section.
+
+`scenarios/author_body.rhai` finishes with this nose automatically. To update
+only the nose, run `scenarios/author_front_nose.rhai` with the open canonical
+`body_document` ID. It applies bounded native document
+operations and leaves the preview open for inspection. Save through the document
+owner after reviewing; `save: true` is available for an already-reviewed rebuild.
+This is the shared body component used by the ordinary and cinematic scenes.
+
+Native Editor screenshots were reviewed from the front, above and a low front
+quarter. A dense contour-edge check found a minimum station inset of 24 mm.
+All seven collision-enabled body prim blocks remained byte-identical; the four
+main collider prims also matched their native before/after snapshots. Vehicle
+and Modelica source hashes were unchanged during this nose edit. Every new mesh
+has collision disabled. These checks establish a cosmetic revision, not a change
+to physical mass, inertia, centre of mass, colliders or force stations.

@@ -1,6 +1,7 @@
 model HeadlightOptics
-  "Two focused LED study lamps; finite electrical/optical budget"
+  "Continuous LED bar, nine overlapping segments; finite optical budget"
   parameter Real electrical_power_each(unit="W") = 60;
+  parameter Integer optical_segments = 9 "Rendering discretization of the continuous bar";
   parameter Real delivered_efficacy(unit="lm/W") = 50;
   parameter Real outer_angle_degrees = 22;
   parameter Real cone_softness = 0.35;
@@ -19,7 +20,8 @@ equation
   // it over the sphere; focus the finite lamp flux into that actual envelope.
   effective_solid_angle = 2.0*3.141592653589793*(1.0-inner_cosine+(inner_cosine-outer_cosine)/3.0);
   electrical_power = 2.0*electrical_power_each*enabled;
-  flux_each_lm = electrical_power_each*delivered_efficacy*enabled;
+  // Preserve the original 120 W total, shared across the complete bar.
+  flux_each_lm = 2.0*electrical_power_each*delivered_efficacy*enabled/optical_segments;
   peak_candela = flux_each_lm/effective_solid_angle;
   // Native SpotLight is an absorbent housing around an isotropic source:
   // its API lumens divide by 4*pi before cone attenuation, not by beam angle.
