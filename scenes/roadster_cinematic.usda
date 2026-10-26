@@ -2070,4 +2070,9 @@ def Xform "World" (
     def Scope "Policies"
     {
     }
+    over "GroundSurface"
+    {
+        custom rel material:binding = </World/FilmLooks/Ground>
+        color3f[] primvars:displayColor = [(0.026000000536441803, 0.03200000151991844, 0.041999999433755875)]
+    }
 }
