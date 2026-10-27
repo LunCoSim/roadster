@@ -15,8 +15,10 @@ import urllib.request
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port',type=int,default=4198)
+    parser.add_argument('--output-dir',type=Path,help='Directory for the control report and layout capture')
     args=parser.parse_args()
     root=Path(__file__).resolve().parents[1]
+    output=args.output_dir or root/'results'
     def q(command,params):
         req=urllib.request.Request(f'http://127.0.0.1:{args.port}/api/commands',
             data=json.dumps(dict(type='ExecuteCommand',command=command,params=params)).encode(),
@@ -188,8 +190,8 @@ def main():
         # catches a missing HUI picking feature, which leaves decorative buttons
         # visible while installing neither Button nor the press observer.
         car=fresh_twin()
-        (root/'results').mkdir(exist_ok=True)
-        screenshot=root/'results/controls-layout.png'
+        output.mkdir(parents=True,exist_ok=True)
+        screenshot=output/'controls-layout.png'
         previous_mtime=screenshot.stat().st_mtime_ns if screenshot.exists() else None
         q('CaptureScreenshot',dict(save_to_file=True,path=str(screenshot)))
         deadline=time.monotonic()+15
@@ -239,8 +241,8 @@ def main():
         for name in ['I','J','K','L','P','O','Q','E','R','C','F','W','A','S','D','Space','Comma','Period','ShiftLeft','ShiftRight','Tab','V','ControlLeft','ControlRight']: key(name,'Released')
         q('InjectWindowInput',{'event':{'Key':dict(key='ShiftLeft',state='Released',text=None,repeat=False)}})
     report=dict(ok=all(r['ok'] for r in results),checks=results)
-    (root/'results').mkdir(exist_ok=True)
-    (root/'results/controls.json').write_text(json.dumps(report,indent=2)+'\n')
+    output.mkdir(parents=True,exist_ok=True)
+    (output/'controls.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))
     return 0 if report['ok'] else 1
 

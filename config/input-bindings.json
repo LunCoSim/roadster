@@ -1,60 +1,59 @@
 {
-  "input_bindings": {
-    "thrust": [
-      "Space"
-    ],
-    "release": [],
-    "yaw_left": [
-      "KeyJ"
-    ],
-    "yaw_right": [
-      "KeyL"
-    ],
-    "speed_boost": [
-      "KeyK"
-    ],
-    "action": [
-      "KeyF"
-    ],
-    "brake": [
-      "ShiftLeft",
-      "ShiftRight"
-    ],
-    "auxiliary_1": [
-      "KeyI",
-      "KeyQ",
-      "KeyR"
-    ],
-    "auxiliary_2": [
-      "KeyP",
-      "KeyE",
-      "KeyR"
-    ],
-    "auxiliary_3": [
-      "Comma",
-      "KeyQ",
-      "KeyC"
-    ],
-    "auxiliary_4": [
-      "Period",
-      "KeyE",
-      "KeyC"
-    ],
-    "pause": [],
-    "key_chords": {
-      "pause": [
-        [
-          "ControlLeft",
-          "KeyP"
-        ],
-        [
-          "ControlRight",
-          "KeyP"
-        ]
+  "kind": "lunco.input-bindings.v1",
+  "thrust": [
+    "Space"
+  ],
+  "release": [],
+  "yaw_left": [
+    "KeyJ"
+  ],
+  "yaw_right": [
+    "KeyL"
+  ],
+  "speed_boost": [
+    "KeyK"
+  ],
+  "action": [
+    "KeyF"
+  ],
+  "brake": [
+    "ShiftLeft",
+    "ShiftRight"
+  ],
+  "auxiliary_1": [
+    "KeyI",
+    "KeyQ",
+    "KeyR"
+  ],
+  "auxiliary_2": [
+    "KeyP",
+    "KeyE",
+    "KeyR"
+  ],
+  "auxiliary_3": [
+    "Comma",
+    "KeyQ",
+    "KeyC"
+  ],
+  "auxiliary_4": [
+    "Period",
+    "KeyE",
+    "KeyC"
+  ],
+  "pause": [],
+  "key_chords": {
+    "pause": [
+      [
+        "ControlLeft",
+        "KeyP"
+      ],
+      [
+        "ControlRight",
+        "KeyP"
       ]
-    },
-    "secondary_action": [
-      "Tab"
     ]
-  }
+  },
+  "secondary_action": [
+    "Tab"
+  ]
 }

@@ -1,0 +1,108 @@
+{
+  "kind": "lunco.runtime-ui-manifest.v1",
+  "surfaces": [
+    {
+      "id": "vessel-hud",
+      "template": "ui/roadster_hud.html",
+      "stylesheet": "ui/roadster_hud.css",
+      "namespace": "vessel-hud",
+      "bindings": {
+        "rr_autopilot_label": {
+          "source": "rr_autopilot_label"
+        },
+        "rr_course_controls": {
+          "source": "rr_course_controls"
+        },
+        "rr_course_title": {
+          "source": "rr_course_title"
+        },
+        "rr_course_hint": {
+          "source": "rr_course_hint"
+        },
+        "rr_course_metrics": {
+          "source": "rr_course_metrics"
+        },
+        "rr_steering": {
+          "source": "rr_steering"
+        },
+        "rr_speed": {
+          "source": "rr_speed"
+        },
+        "rr_mph": {
+          "source": "rr_mph"
+        },
+        "rr_air_mass": {
+          "source": "rr_air_mass"
+        },
+        "rr_air_pressure": {
+          "source": "rr_air_pressure"
+        },
+        "rr_air_fill": {
+          "source": "rr_air_fill"
+        },
+        "rr_air_width": {
+          "source": "rr_air_width",
+          "css": true
+        },
+        "rr_air_status": {
+          "source": "rr_air_status"
+        },
+        "rr_air_color": {
+          "source": "rr_air_color",
+          "css": true
+        },
+        "rr_unlimited_label": {
+          "source": "rr_unlimited_label"
+        },
+        "rr_fill_temperature": {
+          "source": "rr_fill_temperature"
+        },
+        "rr_cutoff_temperature": {
+          "source": "rr_cutoff_temperature"
+        },
+        "rr_temperature": {
+          "source": "rr_temperature"
+        },
+        "rr_refill_label": {
+          "source": "rr_refill_label"
+        },
+        "rr_fan_state": {
+          "source": "rr_fan_state"
+        },
+        "rr_fan_label": {
+          "source": "rr_fan_label"
+        },
+        "rr_suction": {
+          "source": "rr_suction"
+        },
+        "rr_fan_detail": {
+          "source": "rr_fan_detail"
+        },
+        "rr_aero": {
+          "source": "rr_aero"
+        },
+        "rr_battery": {
+          "source": "rr_battery"
+        },
+        "rr_mode": {
+          "source": "rr_mode"
+        },
+        "rr_rates": {
+          "source": "rr_rates"
+        },
+        "rr_force": {
+          "source": "rr_force"
+        },
+        "rr_service": {
+          "source": "rr_service"
+        }
+      },
+      "actions": [],
+      "visible_in_perspective": "sandbox_view",
+      "interactive": true,
+      "placement": {
+        "mode": "viewport"
+      }
+    }
+  ]
+}

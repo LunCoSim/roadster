@@ -15,19 +15,17 @@ if [[ -z "$roadster_bin" ]]; then
 fi
 mkdir -p "$roadster_root/.scratch"
 export TMPDIR="$roadster_root/.scratch"
-if [[ -z "${LUNCOSIM_CONFIG:-}" ]]; then
-    export LUNCOSIM_CONFIG="$roadster_root/.scratch/session-config"
-    mkdir -p "$LUNCOSIM_CONFIG"
-    cp "$roadster_root/config/input-bindings.json" "$LUNCOSIM_CONFIG/settings.json"
-fi
 if [[ -z "${LUNCO_ASSET_ROOT:-}" && -d "$roadster_checkout/assets" ]]; then
     export LUNCO_ASSET_ROOT="$roadster_checkout/assets"
 fi
-export LUNCO_ASSET_ROOT="$(python3 "$roadster_root/scripts/prepare_runtime_assets.py")"
-roadster_scene="${1:-roadster_cinematic}"
-if (($#)); then shift; fi
+roadster_scene="roadster_cinematic"
+if (($#)) && [[ "$1" != --* ]]; then roadster_scene="$1"; shift; fi
+roadster_api=(--api 4198)
+for roadster_arg in "$@"; do
+    if [[ "$roadster_arg" == --api ]]; then roadster_api=(); break; fi
+done
 if [[ ! "$roadster_scene" =~ ^roadster_[a-z0-9_]+$ || ! -f "$roadster_root/scenes/$roadster_scene.usda" ]]; then
     echo 'Choose an existing roadster_*.usda scene under scenes/ (without the extension).' >&2
     exit 1
 fi
-exec "$roadster_bin" --no-vsync --no-throttle --scene "$roadster_root/scenes/$roadster_scene.usda" "$@"
+exec "$roadster_bin" --no-vsync --no-throttle "${roadster_api[@]}" --scene "$roadster_root/scenes/$roadster_scene.usda" "$@"

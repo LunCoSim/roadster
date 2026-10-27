@@ -17,15 +17,18 @@ across 200 L + 400 L vessels; it does not carry 250 kg in each vessel.
 ./scripts/start.sh roadster_cinematic --api 4198
 ```
 
-Use the second form when supplying simulator options. With no arguments the
-launcher opens **Roadster Cinematic**, the interactive night course. The standard
-daylight course remains available as `roadster_skill_course`. Set `LUNCOSIM_BIN` to a LunCoSim executable with
-the current shared camera, wheel and coupled-object APIs. For source development,
-select the regular checkout build explicitly, for example
-`LUNCOSIM_BIN=../../luncosim-workspace/optimization/target/debug/luncosim`.
-The launcher composes shared assets and the authored HUD locally and loads the
-isolated keymap. Shared `lunco://` assets resolve from the neighboring checkout.
-No shared application assets are edited.
+Open this Twin folder in LunCoSim to load **Roadster Cinematic**, the interactive
+night course, with the Tesla keyboard map and Roadster HUD automatically. The
+Twin owns `config/input-bindings.json` and `ui/runtime_surfaces.json`; closing
+or replacing the Twin restores the application controls and UI. Your saved
+application key preferences are unchanged.
+
+`./scripts/start.sh` opens the same default scene on API port 4198. Options can
+be passed directly, for example `./scripts/start.sh --api 4519`. The daylight
+course remains available as `./scripts/start.sh roadster_skill_course --api 4198`.
+Set `LUNCOSIM_BIN` to the current production executable. The launcher uses the
+shared application assets directly; no generated asset copy or isolated keymap
+is required.
 
 For the illuminated presentation track, choose **Roadster Cinematic**
 (`scenes/roadster_cinematic.usda`). It is now the Twin and launcher's default.
@@ -71,6 +74,13 @@ Four rear extractors sit behind a dark grille. The forward headlights are actual
 USD spot lights, attached to the car; dusk exposure is authored on course cameras.
 The HUD reports speed, physical wheel angles, air mass/percentage, absolute
 pressure, gas temperature, refill target and battery charge.
+
+The direct-load contract is checked by `scenarios/tests/default_loading.rhai`.
+For the complete native-key and HUD response check on an owned running session:
+
+```sh
+python3 scripts/check_controls.py --port 4198 --output-dir .scratch/control-check
+```
 
 ## Skill course
 
