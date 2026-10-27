@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Revise the cube timing corridor using the native USD document journal."""
+from scene_documents import save_scene_as
 from author_surface_probes import q, ROOT, await_doc
 import json
 from math import sin,cos,pi
@@ -25,7 +26,7 @@ def main():
     for j in range(1,41):profile.append((y,z+j*5.4/40,pi))
     report.update(ramp_height_m=y,ramp_end_z_m=profile[-1][1],lower_arc_m=18,vertical_m=.9,upper_arc_m=11.7,lip_m=5.4,transverse_segments=14)
     for scene in ['roadster_skill_course','roadster_course_check']:
-        q('OpenFile',path=str(ROOT/'scenes'/f'{scene}.usda'))
+        q('OpenFile',path=str(ROOT/('scenes/tests' if scene=='roadster_course_check' else 'scenes')/f'{scene}.usda'))
         doc=await_doc(lambda d: f'/{scene}.usda' in str(d))
         ops=[]
         def attr(path,name,kind,value):
@@ -68,7 +69,7 @@ def main():
             assert q('InspectUsdDocument',doc_id=doc,path=f'/World/JumpBlock{i}')['prim']['exists']
         if scene=='roadster_course_check':
             for label,offset in [('early',0.3),('late',-0.6)]:
-                q('SaveAsDocument',doc_id=doc,path=str(ROOT/'scenes'/f'roadster_course_{label}.usda'))
+                save_scene_as(q, doc, str(ROOT/'scenes/tests'/f'roadster_course_{label}.usda'))
                 q('ApplyUsdOps',doc_id=doc,ops=[{'SetAttribute':dict(edit_target='@root@',path='/World/DriverSetup',name=n,type_name=t,value=v)} for n,t,v in [('study:jumpTimingOffset','double',str(offset)),('study:expectCollision','bool','true' if label=='late' else 'false')]])
                 q('SaveDocument',doc_id=doc)
         q('CloseDocument',doc_id=doc)

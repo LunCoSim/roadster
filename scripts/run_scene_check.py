@@ -11,7 +11,7 @@ a=ap.parse_args();key=a.result_name or a.channel.lower().replace('roadster_','')
 if not key or any(c not in 'abcdefghijklmnopqrstuvwxyz0123456789_-' for c in key):ap.error('Result name must use lowercase letters, digits, hyphens or underscores')
 env=os.environ.copy();env.update(TMPDIR=str(ROOT/'.scratch'),LUNCO_ASSET_ROOT=str(CHECKOUT/'assets'),LUNCOSIM_EPHEMERAL_SETTINGS='1',LUNCOSIM_ISOLATED_RUN='1')
 with (ROOT/f'results/{key}.log').open('w') as log:
- p=subprocess.run([a.binary,'test','--scene',str(ROOT/f'scenes/{a.scene}.usda'),'--max-ticks',str(a.ticks),'--verdict-channel',a.channel]+(['--verification',a.verification] if a.verification else []),env=env,stdout=log,stderr=subprocess.STDOUT)
+ p=subprocess.run([a.binary,'test','--scene',str(ROOT/f'scenes/tests/{a.scene}.usda'),'--max-ticks',str(a.ticks),'--verdict-channel',a.channel]+(['--verification',a.verification] if a.verification else []),env=env,stdout=log,stderr=subprocess.STDOUT)
 events=[];samples=[]
 log_text=(ROOT/f'results/{key}.log').read_text()
 if any(marker in log_text for marker in ["on_tick() failed", "on_start() failed"]):

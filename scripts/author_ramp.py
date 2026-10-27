@@ -6,6 +6,7 @@ geometry construction, not a replacement dynamics solver. The mesh uses a
 50 m transition whose pitch smoothly increases from level to vertical, with
 zero end curvature, followed by a 10 m vertical wall. All dimensions SI.
 """
+from scene_documents import save_scene_as
 import argparse
 import json
 from math import sin,cos,pi
@@ -111,15 +112,15 @@ def main():
         authoring='ApplyUsdOps + SaveDocument',reference='User supplied stunt-ramp image; study dimensions, not measured replica')
     (ROOT/('results/course-geometry.json' if args.course else 'results/ramp-geometry.json')).write_text(json.dumps(report,indent=2)+'\n')
     if args.course:
-        q('SaveAsDocument',doc_id=doc,path=str(ROOT/'scenes/roadster_course_check.usda'))
+        save_scene_as(q, doc, str(ROOT/'scenes/tests/roadster_course_check.usda'))
         q('ApplyUsdOps',doc_id=doc,ops=[{'SetAttribute':dict(edit_target='@root@',path='/World/DriverSetup',
-            name='info:sourceAsset',type_name='asset',value='@../scenarios/tests/course_pilot.rhai@')},
+            name='info:sourceAsset',type_name='asset',value='@twin://tesla-roadster-runner/scenarios/tests/course_pilot.rhai@')},
             {'SetAttribute':dict(edit_target='@root@',path='/World/DriverSetup',name='study:expectCollision',type_name='bool',value='false')}])
         q('SaveDocument',doc_id=doc)
         print(json.dumps(report,indent=2));return
-    q('SaveAsDocument',doc_id=doc,path=str(ROOT/'scenes/roadster_ramp_check.usda'))
+    save_scene_as(q, doc, str(ROOT/'scenes/tests/roadster_ramp_check.usda'))
     q('ApplyUsdOps',doc_id=doc,ops=[{'SetAttribute':dict(edit_target='@root@',path='/World/DriverSetup',
-        name='info:sourceAsset',type_name='asset',value='@../scenarios/tests/ramp_drive.rhai@')}])
+        name='info:sourceAsset',type_name='asset',value='@twin://tesla-roadster-runner/scenarios/tests/ramp_drive.rhai@')}])
     q('SaveDocument',doc_id=doc)
     print(json.dumps(report,indent=2))
 def author_course(add,attr,ops,profile):

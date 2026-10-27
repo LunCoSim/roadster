@@ -5,6 +5,7 @@ Coarse samples locate boundaries, then every frame between passing samples and
 its adjacent failing frame is measured. This qualifies the authored speed/plant,
 not every possible speed, subframe instant, weather or human input latency.
 """
+from scene_documents import save_scene_as
 import argparse,hashlib,json,subprocess,sys
 from pathlib import Path
 from author_surface_probes import q,ROOT,await_doc
@@ -19,10 +20,10 @@ def main():
  files=sorted(set(files)|{str(p.relative_to(ROOT)) for p in (ROOT/'models').glob('*.mo')})
  source_snapshot={f:hashlib.sha256((ROOT/f).read_bytes()).hexdigest() for f in files}
  try:
-  q('OpenFile',path=str(ROOT/'scenes/roadster_course_check.usda'))
+  q('OpenFile',path=str(ROOT/'scenes/tests/roadster_course_check.usda'))
   doc=await_doc(lambda d:'/roadster_course_check.usda' in str(d))
-  scene=ROOT/'scenes/roadster_jump_window.usda'
-  q('SaveAsDocument',doc_id=doc,path=str(scene))
+  scene=ROOT/'scenes/tests/roadster_jump_window.usda'
+  save_scene_as(q, doc, str(scene))
   def set_offset(tick):
    q('ApplyUsdOps',doc_id=doc,ops=[{'SetAttribute':dict(edit_target='@root@',path='/World/DriverSetup',name=n,type_name=t,value=v)}
      for n,t,v in [('study:timingSweep','bool','true'),('study:jumpTimingOffset','double',str(tick/60))]])

@@ -20,7 +20,7 @@ def main():
     env.update(TMPDIR=str(ROOT/'.scratch'),LUNCO_ASSET_ROOT=env.get('LUNCO_ASSET_ROOT',str(CHECKOUT/'assets')),
         LUNCOSIM_EPHEMERAL_SETTINGS='1',LUNCOSIM_ISOLATED_RUN='1')
     with (ROOT/f'results/{key}.log').open('w') as log:
-        process=subprocess.run([str(binary),'test','--scene',str(ROOT/f'scenes/{scene}.usda'),
+        process=subprocess.run([str(binary),'test','--scene',str(ROOT/f'scenes/tests/{scene}.usda'),
             '--max-ticks','650','--verdict-channel','ROADSTER_MOTOR'],cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT)
     evidence=[]
     for line in (ROOT/f'results/{key}.log').read_text().splitlines():

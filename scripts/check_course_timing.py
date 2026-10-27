@@ -25,8 +25,8 @@ def main():
     files=['requirements/roadster.sysml','twin.toml','models/CoursePilot.mo','models/SkillCourse.mo','models/RoadsterVehicle.mo',
            'scenarios/skill_course.rhai','scenarios/tests/course_pilot.rhai',
            'vehicles/roadster.usda',
-           'scenes/roadster_skill_course.usda','scenes/roadster_course_check.usda',
-           'scenes/roadster_course_early.usda','scenes/roadster_course_late.usda']
+           'scenes/roadster_skill_course.usda','scenes/tests/roadster_course_check.usda',
+           'scenes/tests/roadster_course_early.usda','scenes/tests/roadster_course_late.usda']
     files=sorted(set(files)|{str(p.relative_to(ROOT)) for p in (ROOT/'models').glob('*.mo')})
     summary=dict(ok=all(row['ok'] for row in rows),cases=rows,
         binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),

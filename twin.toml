@@ -4,7 +4,12 @@ version = "0.1.0"
 
 [usd]
 default_scene = "scenes/roadster_cinematic.usda"
-scenes = ["scenes/*.usda"]
+scenes = [
+    "scenes/roadster_cinematic.usda",
+    "scenes/roadster_skill_course.usda",
+    "scenes/roadster_ramp.usda",
+    "scenes/tests/*.usda",
+]
 
 [sysml]
 root = "requirements/roadster.sysml"
@@ -13,13 +18,13 @@ paths = ["requirements"]
 [verification]
 [[verification.cases]]
 name = "Roadster::VerifyRunner"
-scene = "scenes/roadster_launch.usda"
+scene = "scenes/tests/roadster_launch.usda"
 script = "scenarios/tests/launch.rhai"
 verdict_channel = "ROADSTER_RUNNER"
 
 [[verification.cases]]
 name = "Roadster::VerifySkillCourse"
-scene = "scenes/roadster_course_check.usda"
+scene = "scenes/tests/roadster_course_check.usda"
 script = "scenarios/tests/course_pilot.rhai"
 verdict_channel = "ROADSTER_COURSE"
 

@@ -169,15 +169,29 @@ study assumptions. See [storage](references/gas-storage.md) and
 
 ## Scenes and reproduction
 
+**Scenarios → Scenario** offers Cinematic, Skill Course, and Ramp, with the
+current scene marked. The peer **Test Scenarios** submenu contains the
+measurement and acceptance fixtures, kept under `scenes/tests/` with observers
+under `scenarios/tests/`. It is always available; the global test-visibility
+setting governs Library tests and asset browsers. The flat-track trim presets,
+wall practice, and capture scenes remain available by explicit path and through
+the launcher; they are excluded from the curated menu. `twin.toml` curates
+these three interactive scenes and maps SysML verification cases to fixtures.
+
+Run fixtures through the production runner so their Rhai verdict and exit code
+are checked; opening one from the menu is useful for inspection. The fixture
+authors use `scripts/scene_documents.py` to preserve portable `twin://` asset
+identities when saving a scene into the test directory.
+
 | Scene | Purpose |
 |---|---|
 | roadster_cinematic | Default interactive night showcase: illuminated track, shared car and physics |
 | roadster_skill_course | Standard daylight driving challenge |
 | roadster_ramp | Close practice start at the stunt ramp |
 | roadster_rocket / thrust / track | Flat-track Rocket / rear-boost / motor-only trims |
-| roadster_wall | Pre-spun wall adhesion fixture |
-| roadster_*_check | Authored production acceptance scenes |
-| roadster_launch / roadster_motor_launch | Standing-start measurements |
+| roadster_wall | Interactive wall-adhesion practice |
+| tests/roadster_*_check | Authored production acceptance scenes |
+| tests/roadster_launch / tests/roadster_motor_launch | Standing-start measurements |
 
 ```sh
 python3 scripts/run_launch.py --binary .scratch/luncosim

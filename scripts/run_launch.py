@@ -44,7 +44,7 @@ def main():
     if (CHECKOUT/'assets').is_dir():
         env.setdefault('LUNCO_ASSET_ROOT',str(CHECKOUT/'assets'))
     env.update(LUNCOSIM_EPHEMERAL_SETTINGS='1', LUNCOSIM_ISOLATED_RUN='1')
-    command = [str(binary),'test','--scene',str(ROOT/'scenes/roadster_launch.usda'),
+    command = [str(binary),'test','--scene',str(ROOT/'scenes/tests/roadster_launch.usda'),
                '--verification','Roadster::VerifyRunner','--max-ticks','600']
     with (ROOT/'results/launch.log').open('w') as log:
         process = subprocess.run(command,cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT)
