@@ -56,18 +56,24 @@ def main():
         previous=q('RunRhai',dict(code='twin_name()'))['stdout']
         q('OpenTwin',dict(path=str(root)))
         deadline=time.monotonic()+60
+        last_models=[]
         while time.monotonic()<deadline:
             current=q('RunRhai',dict(code='twin_name()'))['stdout']
             state=q('GetReadiness',{})
+            if state['faulted']: raise RuntimeError(state)
             if current != previous and state['ready'] and not state['pending_count'] and not state['world_hold']:
-                models=q('CosimStatus',dict(include_values=False))['entities']
+                models=q('CosimStatus',dict(include_values=True))['entities']
+                last_models=[{k:e.get(k) for k in ['name','status','model','modelica_current_time']}
+                             for e in models if e.get('has_simcomponent')]
                 if any(e.get('name')=='/World/Roadster' and e.get('status')=='Running'
-                       and e.get('has_simcomponent') and e.get('modelica_current_time',100)<3 for e in models):
+                       and e.get('has_simcomponent') and isinstance(e.get('model'),str)
+                       and e['model'].startswith(f'twin://{current}/') for e in models):
                     car=int(q('RunRhai',dict(code='find_path("/World/Roadster")'))['stdout'])
                     if q('RunRhai',dict(code=f'is_controlled({car})'))['stdout']=='true':
                         return car
             time.sleep(.1)
-        raise RuntimeError('Fresh Twin did not publish a running Roadster participant')
+        raise RuntimeError('Fresh Twin did not publish its running, controlled Roadster: '
+                           +json.dumps(dict(twin=current,readiness=state,models=last_models)))
     await_ready()
     for name in ['ControlLeft','ControlRight','AltLeft','AltRight','ShiftLeft','ShiftRight','SuperLeft','SuperRight']:
         q('InjectWindowInput',{'event':{'Key':dict(key=name,state='Released',text=None,repeat=False)}})

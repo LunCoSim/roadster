@@ -82,6 +82,9 @@ For the complete native-key and HUD response check on an owned running session:
 python3 scripts/check_controls.py --port 4198 --output-dir .scratch/control-check
 ```
 
+Each reopen requires clear readiness, a running model source in the new Twin
+namespace, and established control. Runtime faults are reported immediately.
+
 ## Skill course
 
 1. Reach **60 mph** at the blue launch gate using motor acceleration and boost.
