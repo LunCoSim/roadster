@@ -6,7 +6,7 @@ source = "startup.rhai"
 entry = "install_policies"
 
 [[policies]]
-hook = "runtime.ui.properties"
+hook = "runtime.ui.surface"
 source = "roadster_ui.rhai"
 entry = "roadster_ui"
 deterministic = false

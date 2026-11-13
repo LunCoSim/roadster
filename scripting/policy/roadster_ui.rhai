@@ -5,15 +5,17 @@ fn camera_ui(facts) {
         for camera in facts.cameras {
             items.push(#{key:camera.name,label:camera.label,action:"camera.select.path."+camera.name});
         }
-        if facts.avatar_available {
-            items.push(#{key:"__avatar__",label:"Free / follow camera",action:"camera.observe.avatar"});
+        if facts.director_available {
+            items.push(#{key:"__director__",label:"Follow scene camera",action:"camera.resume.director"});
         }
-        return #{active_label:facts.active_label,camera_items:items,
-            dropdown_width:"280px",dropdown_max_height:"240px"};
+        return #{active_name:facts.active_name,active_label:facts.active_label,camera_items:items,
+            dropdown_width:"380px",dropdown_max_height:"420px"};
 }
 fn roadster_ui(facts) {
-    if facts.surface_id == "camera-status" { return camera_ui(facts); }
-    if facts.surface_id != "vessel-hud" { return #{}; }
+    if facts.surface_id == "camera-status" {
+        return #{visible:true,properties:camera_ui(facts)};
+    }
+    if facts.surface_id != "vessel-hud" { return #{visible:false,properties:#{} }; }
     let course=();
     for participant in facts.participants {
         if participant.public_outputs.skill_course_active!=() && participant.public_outputs.skill_course_active>0.5 {course=participant.public_outputs;}
@@ -33,21 +35,15 @@ fn roadster_ui(facts) {
             out.program_label="FAILED";
             out.rr_course_hint=facts.pause.detail;
         }
-        return out;
+        return #{visible:true,properties:out};
     }
-    #{runtime_status:"PHYSICS LOADING",rr_speed:"--",rr_mode:"PREPARING"}
+    #{visible:true,properties:#{runtime_status:"PHYSICS LOADING",rr_speed:"--",rr_mode:"PREPARING"}}
 }
 
 fn vehicle_ui(v) {
         let servicing=v.refill_active>0.5;
         let ready=v.air_discharge_enabled>0.5;
-        // The pilot can run the fans while the manual switch stays off.
-        // Read the effective model command; retain the manual switch for its
-        // button label. Below 60 rpm the display treats spin-down as stopped.
-        let fan_state=if v.fan_commanded==() {"FAN STATUS UNAVAILABLE"}
-        else if v.fan_commanded>0.5 {
-            if v.fan_seal>0.8 {"FANS ON / SEALED"}else{"FANS ON / NO SEAL"}
-        }else if v.fan_rpm>60.0 {"FANS STOPPING"}else{"FANS OFF"};
+        let fan_state=fan_status(v);
         let status=if servicing {"REFILLING / moving allowed"}else if ready {"AIR READY"}else if v.thermal_guard_active>0.5 {"MODEL TEMP GUARD / REFILL"}else{"AIR UNAVAILABLE"};
         let out=#{program_label:"MANUAL",runtime_status:status};
 
@@ -72,7 +68,7 @@ fn vehicle_ui(v) {
         out.rr_course_controls = if v.course_autopilot_active>0.5 {"AUTOPILOT · driving or jet keys take over · Ctrl+P pauses"}
             else {suggested_controls(v)};
         out.rr_fan_state = fan_state;
-        out.rr_fan_label = if v.fan_requested>0.5 {"F · FANS OFF"}else{"F · FANS ON"};
+        out.rr_fan_label = if v.fan_requested>0.5 {"F · MANUAL OFF"}else{"F · MANUAL ON"};
         out.rr_suction = text_number(v.suction_force_kn,10.0)+" kN suction";
         out.rr_fan_detail = text_number(v.fan_vacuum_kpa,10.0)+" kPa / "+text_number(v.fan_power_kw,10.0)+" kW";
         out.rr_aero = "Drag "+text_number(v.aerodynamic_drag_kn,100.0)+" kN / Aero load "+text_number(v.aerodynamic_downforce_kn,10.0)+" kN";
@@ -82,6 +78,19 @@ fn vehicle_ui(v) {
         out.rr_force = "Lift "+text_number(v.lift_force_kn,10.0)+" kN / Boost "+text_number(v.boost_force_kn,10.0)+" kN";
         out.rr_service = if servicing {"Test supply: "+text_number(v.refill_flow_kg_s,10.0)+" kg/s"}else{"Earth g = 9.80665 m/s2"};
         out
+}
+
+fn fan_status(v) {
+    if v.fan_commanded==() {return "FAN STATUS UNAVAILABLE";}
+    if v.fan_commanded>0.5 {
+        let state="FANS ON";
+        if v.course_autopilot_active>0.5 && v.fan_requested<0.5 {state+=" · AUTOPILOT";}
+        else {state+=" · MANUAL";}
+        if v.fan_seal>0.8 {state+=" · SEALED";}else{state+=" · NO SEAL";}
+        return state;
+    }
+    if v.fan_rpm>60.0 {return "FANS STOPPING";}
+    "FANS OFF"
 }
 
 fn suggested_controls(v) {

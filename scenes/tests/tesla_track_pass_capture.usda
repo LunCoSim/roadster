@@ -1,0 +1,21 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    upAxis = "Y"
+    metersPerUnit = 1.0
+)
+
+def Xform "World" (
+    prepend references = @../roadster_cinematic.usda@</World>
+)
+{
+    over "Roadster"
+    {
+        string lunco:ui:visibilityMode = "always"
+    }
+
+    over "DriverSetup"
+    {
+        uniform asset info:sourceAsset = @../../scenarios/tests/tesla_track_pass.rhai@
+    }
+}
