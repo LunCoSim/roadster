@@ -82,7 +82,7 @@ For the complete native-key and HUD response check on an owned running session:
 python3 scripts/check_controls.py --port 4198 --output-dir .scratch/control-check
 ```
 
-Each reopen requires clear readiness, a running model source in the new Twin
+Each launch requires clear readiness, a running model source in the active Twin
 namespace, and established control. Runtime faults are reported immediately.
 
 ## Skill course
@@ -104,7 +104,8 @@ namespace, and established control. Runtime faults are reported immediately.
    descent, then **Shift** to stop on contact. Completion requires four wheels,
    upright attitude, the return heading and speed below **0.2 m/s**.
 
-**RETRY COURSE** reloads the authored starting state. The timer uses simulation
+**RETRY COURSE** resets the active scene runtime from its current composed
+source while keeping the Twin open. The timer uses simulation
 time, so pausing does not consume run time. Tests command only the same finite
 actuators as a player; no course script writes pose, velocity or a stunt trajectory.
 

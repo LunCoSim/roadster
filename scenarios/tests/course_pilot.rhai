@@ -6,7 +6,7 @@ fn simulation_dependencies(me,ctx) {
     for i in 0..3 {reads.push(find_path("/World/JumpBlock"+i.to_string()));}
     #{modelica_entities:[car],entity_reads:reads,entity_writes:[car],
       query_reads:["ReadPorts","QueryPhysicsState","QueryUsdPrim","AnalyzeSysml","ReadActiveTwinContract"],
-      required_inputs:[#{owner:"sysml.twin-analysis",identity:twin_name()}]}
+      required_inputs:[#{owner:"sysml.twin-analysis",identity:twin_authority()}]}
 }
 fn on_start(me,ctx) {
     this.car=find_path("/World/Roadster");this.time=0.0;this.last_stage= -1;

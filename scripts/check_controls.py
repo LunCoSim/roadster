@@ -53,12 +53,12 @@ def main():
             time.sleep(.1)
         raise RuntimeError('Scene did not become ready')
     def fresh_twin():
-        previous=q('RunRhai',dict(code='twin_name()'))['stdout']
+        previous=q('RunRhai',dict(code='twin_authority()'))['stdout']
         q('OpenTwin',dict(path=str(root)))
         deadline=time.monotonic()+60
         last_models=[]
         while time.monotonic()<deadline:
-            current=q('RunRhai',dict(code='twin_name()'))['stdout']
+            current=q('RunRhai',dict(code='twin_authority()'))['stdout']
             state=q('GetReadiness',{})
             if state['faulted']: raise RuntimeError(state)
             if current != previous and state['ready'] and not state['pending_count'] and not state['world_hold']:
@@ -232,11 +232,11 @@ def main():
         car=fresh_twin();click(343,78);autopilot=out('course_autopilot_active')
         key('W','Pressed');wait_sim(.2);key('W','Released');manual=out('course_autopilot_active')
         results.append(dict(key='HUD autopilot and manual takeover',ok=autopilot==1 and manual==0))
-        previous=q('RunRhai',dict(code='twin_name()'))['stdout'];click(215,78)
+        previous=q('RunRhai',dict(code='twin_authority()'))['stdout'];click(215,78)
         deadline=time.monotonic()+60
         while time.monotonic()<deadline:
             state=q('GetReadiness',{})
-            if q('RunRhai',dict(code='twin_name()'))['stdout']!=previous and state['ready'] and not state['world_hold'] and not state['pending_count']:
+            if q('RunRhai',dict(code='twin_authority()'))['stdout']!=previous and state['ready'] and not state['world_hold'] and not state['pending_count']:
                 if q('RunRhai',dict(code='is_controlled(find_path("/World/Roadster"))'))['stdout']=='true':break
             time.sleep(.05)
         else:raise RuntimeError('HUD retry did not restore a ready, controlled Twin')

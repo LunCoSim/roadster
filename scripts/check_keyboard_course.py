@@ -165,13 +165,13 @@ class Pilot:
             raise RuntimeError('Non-finite course telemetry')
         return values
 
-    def setup(self):
+    def setup(self, reopen_twin=True):
         self.release()
         # --launch already opens the requested course. Reopening while its
         # initial assets are preparing retires their Twin mount mid-load.
         old = None
-        if not self.args.launch:
-            old = self.q('RunRhai', code='twin_name()')['stdout']
+        if reopen_twin and not self.args.launch:
+            old = self.q('RunRhai', code='twin_authority()')['stdout']
             self.q('OpenTwin', path=str(ROOT))
         deadline = time.monotonic() + 120
         while time.monotonic() < deadline:
@@ -179,17 +179,18 @@ class Pilot:
             if state['faulted']:
                 raise RuntimeError(state['fault'])
             if state['ready'] and not state['world_hold'] and not state['pending_count']:
-                current = self.q('RunRhai', code='twin_name()')['stdout']
+                current = self.q('RunRhai', code='twin_authority()')['stdout']
                 if old is not None and current == old:
                     time.sleep(.1)
                     continue
                 models = self.q('CosimStatus', include_values=False)['entities']
-                if any(e.get('name') == '/World/Roadster' and e.get('status') == 'Running'
-                       for e in models):
+                allowed_statuses = ['Running'] if reopen_twin else ['Idle', 'Running']
+                if any(e.get('name') == '/World/Roadster'
+                       and e.get('status') in allowed_statuses for e in models):
                     break
             time.sleep(.1)
         else:
-            raise RuntimeError('Fresh main course did not become ready')
+            raise RuntimeError('Course did not become ready')
         self.car = int(self.q('RunRhai', code='find_path("/World/Roadster")')['stdout'])
         self.q('SetTimeTransport', rate=self.args.rate)
         self.report['transport_rate'] = self.args.rate
@@ -202,7 +203,7 @@ class Pilot:
         # Course time resets on retry; the native event clock remains global.
         self.input_epoch=float(self.q('RunRhai',code='clock_snapshot().sim_tick')['stdout'])/60.0
         self.report.setdefault('input_lifetimes',[]).append(dict(course_epoch_s=self.start,
-            native_epoch_s=self.input_epoch,twin=self.q('RunRhai',code='twin_name()')['stdout']))
+            native_epoch_s=self.input_epoch,mount_authority=self.q('RunRhai',code='twin_authority()')['stdout']))
 
     def fan(self, keys, t, observed, desired):
         if t < self.fan_until:
@@ -260,7 +261,7 @@ class Pilot:
             raise RuntimeError('Ctrl+P did not pause and resume the native clock')
 
     def operator_checks(self):
-        """Exercise real HUD/keyboard ownership, then retry into a fresh course."""
+        """Exercise real HUD/keyboard ownership, then reset the active course."""
         def tick():
             return int(self.q('RunRhai', code='clock_snapshot().sim_tick')['stdout'])
         # Pause while the pilot owns controls. Shift would itself take over.
@@ -304,41 +305,63 @@ class Pilot:
             program_port=program)
         if not manual:
             raise RuntimeError('W did not relinquish autopilot program ownership')
+        # Use the same secondary-action input as a player to create a non-default
+        # Modelica service count before retry. The reset must clear it with the
+        # mission clock and stage while retaining this mounted Twin authority.
+        self.keys({'Tab'}, self.snapshot()['course_time_s']-self.start)
+        self.step(2)
+        self.keys(set(), self.snapshot()['course_time_s']-self.start)
+        self.step(2)
         # Native HUD retry: no pose, inventory, checkpoint or actuator writes.
         old_car = self.car
         old_course = self.snapshot()
-        old_twin = self.q('RunRhai',code='twin_name()')['stdout']
+        if old_course['course_stage'] < 1 or old_course['course_time_s'] <= 0.5 \
+                or old_course['instant_services'] < 1:
+            raise RuntimeError('Retry setup did not create non-default mission and service state')
+        old_authority = self.q('RunRhai',code='twin_authority()')['stdout']
+        old_twin_id = int(self.q('ReadActiveTwinContract')['twin_id'])
         self.keys({'ShiftLeft'}, self.snapshot()['course_time_s']-self.start)
         for state in ['Pressed', 'Released']:
             self.pointer(state,235,78)
+        self.q('StepSimulation', hold=True)
         deadline = time.monotonic()+120
-        new_lifetime_held = False
         while time.monotonic() < deadline:
-            current_twin = self.q('RunRhai',code='twin_name()')['stdout']
-            if current_twin != old_twin:
-                # Hold the fresh lifetime before polling full admission. Waiting
-                # for a transient running barrier can advance many model cycles.
-                self.q('StepSimulation',hold=True)
-                new_lifetime_held = True
+            current_authority = self.q('RunRhai',code='twin_authority()')['stdout']
+            if current_authority != old_authority:
+                raise RuntimeError(
+                    f'HUD retry changed Twin mount authority: {old_authority!r} -> '
+                    f'{current_authority!r}')
+            current_twin_id = int(self.q('ReadActiveTwinContract')['twin_id'])
+            if current_twin_id != old_twin_id:
+                raise RuntimeError(
+                    f'HUD retry changed workspace Twin id: {old_twin_id} -> {current_twin_id}')
             state = self.q('GetReadiness')
             if state['faulted']:
                 raise RuntimeError(state['fault'])
-            if new_lifetime_held and state['ready'] and not state['world_hold'] and not state['pending_count']:
+            if state['ready'] and not state['pending_count']:
                 current = int(self.q('RunRhai', code='find_path("/World/Roadster")')['stdout'])
                 models = self.q('CosimStatus', include_values=False)['entities']
-                if current >= 0 and any(e.get('name')=='/World/Roadster' and e.get('status') in ['Idle','Running'] for e in models):
-                    fresh_ports = {p['name']:p['value'] for p in self.q('ReadPorts',
-                        api_id=current,port_names=['course_stage','course_time_s','instant_services'])['ports'] if p['direction']=='out'}
-                    if (fresh_ports.get('course_stage')==0 and fresh_ports.get('instant_services')==0
-                            and fresh_ports.get('course_time_s',float('inf'))<old_course['course_time_s']):
+                if current >= 0 and any(
+                        e.get('name')=='/World/Roadster'
+                        and e.get('status') in ['Idle','Running'] for e in models):
+                    # Public prim API ids are source identities and may stay stable across reset.
+                    # An admitted held model is Idle until its first requested
+                    # cycles. Step the reset scene, then inspect its state.
+                    self.car = current
+                    self.step(2)
+                    fresh = self.snapshot()
+                    if (fresh['course_stage']==0 and fresh['course_blocks']==0
+                            and fresh['instant_services']==0
+                            and fresh['course_autopilot_active']<.5
+                            and abs(fresh['gas_mass_kg']-250)<.005
+                            and fresh['course_time_s']<.1
+                            and fresh['course_failure_reason']==0):
                         break
             time.sleep(.03)
         else:
-            raise RuntimeError('HUD retry did not create a fresh ready course')
-        # An admitted held model is Idle until its first requested cycles.
-        self.car = current
-        self.step(2)
-        self.setup()
+            raise RuntimeError('HUD retry did not reset the active scene runtime')
+        # Re-arm telemetry and input bindings without reopening the Twin.
+        self.setup(reopen_twin=False)
         self.q('StepSimulation',hold=True)
         self.step(2)
         fresh = self.snapshot()
@@ -346,13 +369,15 @@ class Pilot:
                  and fresh['instant_services']==0 and fresh['course_autopilot_active']<.5
                  and abs(fresh['gas_mass_kg']-250)<.005 and fresh['course_time_s']<old_course['course_time_s']
                  and fresh['course_failure_reason']==0)
-        self.report['retry_reset'] = dict(ok=reset, old_car=old_car, new_car=self.car,
-            old_twin=old_twin, new_twin=current_twin,
+        self.report['retry_reset'] = dict(ok=reset, api_id_before=old_car, api_id_after=self.car,
+            twin_id_before=old_twin_id,twin_id_after=current_twin_id,
+            mount_authority_before=old_authority,
+            mount_authority_after=current_authority,
             before_retry=old_course,telemetry=fresh)
         if not reset:
             raise RuntimeError('Retry did not reset the mission, air and pilot')
         self.screenshot('retry-reset')
-        # Input audit for the completed course starts at the new Twin lifetime.
+        # Input audit for the completed course starts at the reset scene runtime.
         runtime = self.out.with_suffix('.runtime.log')
         if runtime.exists():
             self.native_offset = runtime.stat().st_size

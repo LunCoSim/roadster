@@ -17,10 +17,10 @@ def main():
         r=json.load(urllib.request.urlopen(req,timeout=30))
         if 'error' in r:raise RuntimeError(r['error'])
         return r['data']
-    old=q('RunRhai',code='twin_name()')['stdout'];q('OpenTwin',path=str(ROOT))
+    old=q('RunRhai',code='twin_authority()')['stdout'];q('OpenTwin',path=str(ROOT))
     deadline=time.monotonic()+60
     while time.monotonic()<deadline:
-        state=q('GetReadiness');current=q('RunRhai',code='twin_name()')['stdout']
+        state=q('GetReadiness');current=q('RunRhai',code='twin_authority()')['stdout']
         if current!=old and state['ready'] and not state['pending_count'] and not state['world_hold']:
             models=q('CosimStatus',include_values=False)['entities']
             if any(e.get('name')=='/World/Roadster' and e.get('status')=='Running' for e in models):break

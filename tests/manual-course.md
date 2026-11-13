@@ -69,9 +69,10 @@ measurements and the timing matrix command.
 
 The `--operator-checks` run uses the native HUD and keyboard path to pause an
 active autopilot, verify frozen pose/inventory/time, resume without takeover,
-press W to take over, and click RETRY COURSE after the first waypoint. It checks a fresh Twin lifetime,
-reset air/mission/ownership, then completes the full course and stops the pilot through its HUD button. Retry may preserve
-public prim IDs; a new ID is not required. The operator checks run in their own
+press W to take over, and click RETRY COURSE after the first waypoint. It checks
+that the same Twin mount remains open while air, mission state, and ownership
+reset, then completes the full course and stops the pilot through its HUD
+button. Public prim IDs remain stable across the runtime reset. The operator checks run in their own
 window and port. Avoid using that window's keys during automation.
 
 ## Automated OS input

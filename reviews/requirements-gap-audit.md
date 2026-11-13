@@ -16,9 +16,9 @@
 - Added latched failure reasons: Modelica owns continuous health classification,
   Rhai owns discrete task/native collision failure, and the HUD names the cause.
 - Added active-autopilot pause, W takeover and real HUD retry coverage after the
-  first service. Retry must clear an existing service record, restore air and
-  restart the course clock in a fresh Twin lifetime. Public prim IDs can remain
-  stable. The client admits the first fixed cycles of a ready, held Idle model
+  first service. Retry must keep the same Twin mount, clear an existing service
+  record, restore air and restart the course clock through scene runtime reset.
+  Public prim IDs remain stable. The client admits the first fixed cycles of a ready, held Idle model
   before waiting for Running; it does not alter vehicle state.
 - Fixed the completed autopilot's STOP button guard. Starting a new pilot after
   completion still requires retry; stopping the active completed pilot works.

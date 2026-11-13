@@ -27,7 +27,11 @@ fn on_event(me,evt,ctx) {
         name="roadster_instant_refill";
     }
     if name=="runtime.ui.action" {
-        if evt.value.action=="roadster.restart" {cmd("OpenTwin",#{path:twin_root()});return;}
+        if evt.value.action=="roadster.restart" {
+            cmd("SetTimeTransport", #{playing:false});
+            cmd("ResetSceneRuntime", #{});
+            return;
+        }
         if evt.value.action=="roadster.temperature.up" || evt.value.action=="roadster.temperature.down" {
             let change=if evt.value.action=="roadster.temperature.up" {5.0}else{-5.0};
             for p in query("ReadPorts",#{api_id:car,port_names:["refill_target_k"]}).ports {
