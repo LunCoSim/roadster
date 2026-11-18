@@ -21,7 +21,7 @@ At 600 L and 293.15 K, the reusable Modelica dry-air equation of state calculate
 
 [Measured launch and force results and placement assumptions](../references/propulsion-analysis.md) include the rear mounting moment, balanced collective geometry, wheel-only Performance/Rocket baselines, and finite tank blowdown. The [plots](../results/propulsion-analysis.png) and [thruster layout](../results/thruster-layout.png) are generated from recorded observations and authored study geometry.
 
-[Wheel contact and qualification](../references/wheel-contact.md) records the current raycast realization and its measured limits. Nominal driving, wall release, steering, ramp entry, moving jump, and all seven full-course SysML criteria have production evidence. The course uses an explicit flexible-skirt study assumption and continuous Modelica actuator coupling. It passes at 60 Hz and 10 Hz outer updates and in the graphical production host, with identical terminal physical evidence at tick 1771 (29.52 simulation seconds). Roof-overload and gentle-contact controls pass nine and four checks; suspension travel passes three. Set `LUNCOSIM_BIN` to select a production build explicitly when running the checks.
+The [wheel-contact and qualification notes](../references/wheel-contact.md) contain the measured limits, supporting checks, and run conditions. Set `LUNCOSIM_BIN` to select a production build explicitly when running the checks.
 
 ## Fans, USD, and battery
 

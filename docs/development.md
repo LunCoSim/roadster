@@ -58,7 +58,7 @@ For a live session, the direct-load check is `scenarios/tests/default_loading.rh
 python3 scripts/check_controls.py --port 4198 --output-dir .scratch/control-check
 ```
 
-See [manual course checks](../tests/manual-course.md), the [course review](../reviews/shared-course-tree.md), and the [dynamic course design](../references/dynamic-course.md). [Recorded results](../results/README.md) distinguish current evidence from historical results. Standing-start timing does not subtract rollout.
+See [manual course checks](../tests/manual-course.md), the [course review](../reviews/shared-course-tree.md), the [dynamic course design](../references/dynamic-course.md), and [wheel-contact qualification](../references/wheel-contact.md). Standing-start timing does not subtract rollout.
 
 ## Edit the model
 
