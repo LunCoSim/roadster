@@ -13,9 +13,9 @@ gives dry air a critical temperature of **132.5306 K (−140.6194 °C)**.
 The −130 °C default leaves a 10.62 K margin above that temperature, keeping the
 tank away from liquid–gas coexistence. This is a deliberately chosen modelling
 margin, not a thermodynamic event at exactly −130 °C. The fluid equations do
-not suddenly lose validity at that number. The native property checks cover
-143.15–293.15 K at three densities (`results/gas-cold-reference.json`), including
-pressure, cv, pressure-temperature derivative and internal energy.
+not suddenly lose validity at that number. Native property checks covered
+143.15–293.15 K at three densities, including pressure, cv, pressure-temperature
+derivative and internal energy.
 
 [Nitrogen's critical temperature](https://coolprop.org/fluid_properties/fluids/Nitrogen.html)
 is about −147 °C. The active study fluid is dry air; the interview names nitrogen.
@@ -65,9 +65,8 @@ request (starting at 0.5 s), fixed-RK4 and 240 Hz output intervals reaches the
 −130 °C trip and finishes with **68.09 kg**, about **72.8% discharged**. Its
 minimum sampled temperature is −130.031 °C; wall heating then warms it to
 −129.80 °C. This is the stationary gas plant with fixed mechanical observations,
-not a driving or no-refill crash result. The native result is experiment
-`2c8c6d87-6bc6-4c8a-9b5d-d0589c2eaf28`, with full source identity in
-`results/2c8c6d87-6bc6-4c8a-9b5d-d0589c2eaf28.json`.
+not a driving or no-refill crash result. The native result was recorded as
+experiment `2c8c6d87-6bc6-4c8a-9b5d-d0589c2eaf28`.
 
 On one unchanged vehicle entity, live changes −130 → 20 → −100 → −130 °C
 correctly close and reopen the discharge gate without a scene reload or gas

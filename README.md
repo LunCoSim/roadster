@@ -17,7 +17,7 @@ This Twin includes the car, a driving course, and the models that make it drive.
 
 ## Results
 
-The current validation record reports that all seven full-course criteria pass in graphical LunCoSim and at both 60 Hz and 10 Hz simulation updates. A completed run takes 29.52 seconds of simulation time. See [wheel-contact and qualification results](references/wheel-contact.md) for the detailed evidence and limits.
+The current validation record reports that all seven full-course criteria pass in graphical LunCoSim and at both 60 Hz and 10 Hz simulation updates. See [wheel-contact and qualification results](references/wheel-contact.md) for run details and limits.
 
 ## Guides
 

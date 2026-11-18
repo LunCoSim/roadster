@@ -4,4 +4,5 @@ __pycache__/
 *.sqlite
 *.sqlite-wal
 *.sqlite-shm
-results/*.log
+/results/*
+!/results/README.md

@@ -2,13 +2,13 @@
 """Run authored battery energy/mass sensitivity and Thrust storage gates."""
 import argparse,hashlib,json,subprocess,sys
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 def main():
  ap=argparse.ArgumentParser(description=__doc__)
  ap.add_argument('--binary',type=Path,default=ROOT/'.scratch/control-target/debug/luncosim')
  args=ap.parse_args();binary=args.binary.resolve();rows=[]
  for scene,name in [('roadster_battery_110','battery-110'),('roadster_battery_120','battery-120'),('roadster_battery_140','battery-140'),('roadster_thrust_storage','thrust-storage')]:
-  p=subprocess.run([sys.executable,str(ROOT/'scripts/run_scene_check.py'),scene,'ROADSTER_BATTERY',
+  p=subprocess.run([sys.executable,str(ROOT/'tests/python/run_scene_check.py'),scene,'ROADSTER_BATTERY',
     '--ticks','500','--result-name',name,'--binary',str(binary)],cwd=ROOT,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
   if p.returncode:raise RuntimeError(p.stdout[-3000:])
   r=json.loads((ROOT/f'results/{name}.json').read_text());v=r['final']

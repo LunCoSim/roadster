@@ -19,7 +19,7 @@ manufacturer CAD, measured dimensions or a new physical calibration.
 ## Geometry choices
 
 `tools/reveal_body.rhai` supplies pure typed USD plans. Open the exact body
-document and run `scenarios/author_body.rhai` on a stable application host with
+document and run `tools/author_body.rhai` on a stable application host with
 `params.body_document` set to its document ID. The program applies
 `setup_plan(existing_paths)`, all 220 `chunk_plan` sections, both `cap_plan` ends
 and four wheelhouse liners through the document journal, then saves the complete
@@ -35,6 +35,11 @@ Dark inner liners close the sight line through each wheelhouse. The rear light
 and deck lip follow the new tail height; the red emission is increased to 8.0.
 Both end caps match the exact shell rings.
 Wheel openings follow our ±1.375 m axle datums, not the reference's axles.
+
+An earlier cap sat 77 mm below the rear deck and the front had the same gap.
+Both end caps were rebuilt as 32 transverse strips matched to their deck rings.
+Native readback confirmed the welded edges while retaining all 25,024 non-cap
+points and normals. These checks establish mesh closure, not a physical change.
 
 The code adaptation and full MIT notice are documented in
 [reveal comparison](reveal-comparison.md) and
@@ -83,8 +88,8 @@ light seam replace the smooth front sheets. The obsolete `FrontMask` is removed
 as well as the rectangular splitter. New side returns retain the existing wheel
 opening, and a rear joining mesh meets the original shell cross-section.
 
-`scenarios/author_body.rhai` finishes with this nose automatically. To update
-only the nose, run `scenarios/author_front_nose.rhai` with the open canonical
+`tools/author_body.rhai` finishes with this nose automatically. To update
+only the nose, run `tools/author_front_nose.rhai` with the open canonical
 `body_document` ID. It applies bounded native document
 operations and leaves the preview open for inspection. Save through the document
 owner after reviewing; `save: true` is available for an already-reviewed rebuild.

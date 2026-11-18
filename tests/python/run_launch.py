@@ -13,7 +13,7 @@ import shutil
 import subprocess
 import sys
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 CHECKOUT = ROOT.parent.parent / 'luncosim-workspace/main'
 
 

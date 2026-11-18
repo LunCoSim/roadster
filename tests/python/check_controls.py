@@ -17,7 +17,7 @@ def main():
     parser.add_argument('--port',type=int,default=4198)
     parser.add_argument('--output-dir',type=Path,help='Directory for the control report and layout capture')
     args=parser.parse_args()
-    root=Path(__file__).resolve().parents[1]
+    root=Path(__file__).resolve().parents[2]
     output=args.output_dir or root/'results'
     def q(command,params):
         req=urllib.request.Request(f'http://127.0.0.1:{args.port}/api/commands',

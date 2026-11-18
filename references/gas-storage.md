@@ -80,15 +80,15 @@ live −130 °C study guard, not a Tesla hardware limit; see
 
 ## Numerical evidence
 
-[gas-sizing.json](../results/gas-sizing.json) contains eight production LunCoSim
-Modelica experiments over 253.15–333.15 K and 500–800 L, restricted to 70 MPa.
-Pressure, inverse volume, dp/dT and cv agree with CoolProp within 1e-8 relative
-tolerance (observed maximum about 9e-16). This checks transcription and solver
-evaluation against the same reference EOS; it is not independent experimental
-validation of Tesla hardware or nozzle performance.
+Eight production LunCoSim Modelica experiments over 253.15–333.15 K and
+500–800 L, restricted to 70 MPa, checked pressure, inverse volume, dp/dT and cv
+against CoolProp. Maximum relative error was about 9e-16, within the 1e-8
+tolerance. This checks transcription and solver evaluation against the same
+reference EOS; it is not independent experimental validation of Tesla hardware
+or nozzle performance.
 
 Reproduce with `CoolProp==8.0.0` installed for the optional comparison script:
-`python3 scripts/check_gas_sizing.py --port 4198`. CoolProp is not required to
+`python3 tests/python/check_gas_sizing.py --port 4198`. CoolProp is not required to
 open the Twin or run the authored Modelica equations.
 
 

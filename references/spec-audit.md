@@ -48,14 +48,14 @@ plume is not an additional thruster. No combustion or rocket fuel is modeled.
 | Active aero | S10 describes moving surfaces | Effective body-axis drag/lift model and airbrake, not a measured full aero map. |
 | Seating / trims | S01/S05: Performance and Thrust two seats; Rocket one | Rocket hides passenger seat; 10 jets. Performance has no jets; Thrust four rear jets. |
 | Thrust trim storage | S05: one 200 L vessel | Thrust now composes a 200 L rear vessel without cabin storage. Modelica derives 83.33 kg at the Rocket study density; this mass is an inference. Rocket keeps 600 L / 250 kg. |
-| Acceleration | Reveal demo 0.81 s; published targets and rollout conventions differ | Strict ≤0.59 s is the user's standing-start acceptance target. Latest measured study result is in results/launch-telemetry.json; this does not validate a Tesla production claim. |
+| Acceleration | Reveal demo 0.81 s; published targets and rollout conventions differ | Strict ≤0.59 s is the user's standing-start acceptance target. The study's measured launch is documented in [propulsion analysis](propulsion-analysis.md); it does not validate a Tesla production claim. |
 | Dimensions / tires / inertia | No checked manufacturer drawing or tire curves | All geometry, wheelbase, radius, masses, inertias, friction and slip curves remain assumptions in assumptions.md. |
 | Thermal equipment | No directly checked tank thermal-management design | Passive wall exchange and adjustable −130 °C study guard; this is not a verified valve rating. External refill equipment is explicitly test service. See discharge-limits.md. |
 | Light photometry | No checked manufacturer beam measurements | Modelica-focused 3000 lm per beam; renderer input compensates its angular attenuation. Study optics only. |
 | Rotation losses | No measured rotational aerodynamic coefficients | Native constant angular damping 0.5 remains a study approximation; jet release does not automatically counterfire or level the car. |
 | Range / top speed / charging | Manufacturer targets, no full duty-cycle validation | Not verified by the current acceptance suite. |
 
-## Model ownership and evidence
+## Model ownership and verification
 
 `RoadsterPowertrain.mo` owns the two volume parameters, total real-gas state and
 calculated per-vessel inventory. `RoadsterVehicle.mo` exposes those quantities;
@@ -66,11 +66,11 @@ mesh; its Rocket requirement is one seat. Counting all instantiated mesh names
 had previously allowed a hidden passenger seat to satisfy the two-seat check.
 No Tesla-specific Rust was added.
 
-`results/hardware.json` records instantiated native nozzle paths, solved volumes,
-individual gas inventories and native vehicle mass. `results/moving_jump.json`
-checks fixed driving meanings through takeoff; `results/controls.json` checks
-actual injected keys; `results/course.json` checks finite-actuator completion.
-The source and assumption columns above limit what these checks establish.
+The native hardware check inspects instantiated nozzle paths, solved volumes,
+individual gas inventories and vehicle mass. Separate moving-jump, input and
+course checks exercise physical takeoff, injected controls and finite-actuator
+completion. The source and assumption columns above limit what these checks
+establish; their machine-readable run outputs are transient and ignored.
 
 ## Force and placement follow-up
 

@@ -2,7 +2,7 @@
 """Drive the unmodified main course through native keyboard events.
 
 Example:
-  python3 scripts/check_keyboard_course.py --launch --binary /path/to/luncosim
+  python3 tests/python/check_keyboard_course.py --launch --binary /path/to/luncosim
 
 The test pilot observes telemetry and presses the same digital keys as a player.
 It never writes actuator ports, vehicle pose/velocity, inventory or checkpoints.
@@ -22,7 +22,7 @@ import traceback
 import urllib.error
 import urllib.request
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 KEYS = {'KeyW', 'KeyA', 'KeyS', 'KeyD', 'Space', 'ShiftLeft', 'KeyK',
         'KeyF', 'KeyR', 'KeyC', 'KeyQ', 'KeyE', 'KeyJ', 'KeyL', 'Tab',
         'ControlLeft', 'ControlRight', 'KeyP', 'KeyV'}
@@ -555,11 +555,11 @@ def main():
     pilot = Pilot(args)
     pilot.report.update(control_mode='autopilot' if args.autopilot else 'keyboard',
                         sequence='scenarios/skill_course.rhai', guidance='models/CoursePilot.mo')
-    sources = ['models/BatteryStudy.mo','models/RoadsterPowertrain.mo','scripts/x11_window_input.py','models/CoursePilot.mo','models/SkillCourse.mo','models/RoadsterVehicle.mo',
+    sources = ['models/BatteryStudy.mo','models/RoadsterPowertrain.mo','tests/python/x11_window_input.py','models/CoursePilot.mo','models/SkillCourse.mo','models/RoadsterVehicle.mo',
                'scenarios/skill_course.rhai','scenes/roadster_skill_course.usda',
                'vehicles/roadster.usda','config/input-bindings.json',
                'scripting/policy/roadster_camera.rhai','scripting/policy/roadster_ui.rhai',
-               'scripts/check_keyboard_course.py']
+               'tests/python/check_keyboard_course.py']
     sources=sorted(set(sources)|{str(p.relative_to(ROOT)) for p in (ROOT/'models').glob('*.mo')})
     pilot.report['source_sha256'] = {name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest()
                                      for name in sources}

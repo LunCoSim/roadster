@@ -5,7 +5,7 @@ def find(path): return int(q("RunRhai",{"code":"find_path("+json.dumps(path)+")"
 def ports(entity,names): return q("ReadPorts",dict(api_id=entity,port_names=names))["ports"]
 from pathlib import Path
 import time,json
-root=Path(__file__).resolve().parents[1]
+root=Path(__file__).resolve().parents[2]
 def key(k,s): q('InjectWindowInput',{'event':{'Key':dict(key=('Key'+k if len(k)==1 else k),state=s,text=None,repeat=False)}})
 def fresh():
  old=q('RunRhai',{'code':'twin_authority()'})['stdout'];q('OpenTwin',{'path':str(root)})

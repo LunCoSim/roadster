@@ -15,7 +15,7 @@ def main():
  a=ap.parse_args();binary=a.binary.resolve()
  p=Pilot(SimpleNamespace(port=a.port,output=a.output,launch=True,manual=True,rate=.25))
  p.report.update(scene='scenes/roadster_rocket.usda',input_path='X11 XTEST -> owned window -> native command ports' if a.input_backend=='x11' else 'InjectWindowInput/native key and repeat events',checks={},hold_samples=[])
- files=['scripts/x11_window_input.py','scripts/check_os_hold.py','scripts/check_keyboard_course.py',
+ files=['tests/python/x11_window_input.py','tests/python/check_os_hold.py','tests/python/check_keyboard_course.py',
    'config/input-bindings.json','vehicles/roadster.usda','scenes/roadster_rocket.usda']
  files=sorted(set(files)|{str(f.relative_to(ROOT)) for f in (ROOT/'models').glob('*.mo')})
  p.report['source_sha256']={f:hashlib.sha256((ROOT/f).read_bytes()).hexdigest() for f in files}

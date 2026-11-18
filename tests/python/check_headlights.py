@@ -8,7 +8,7 @@ def ports(entity,names): return q('ReadPorts',dict(api_id=entity,port_names=name
 import time
 from pathlib import Path
 from PIL import Image,ImageChops,ImageStat
-root=Path(__file__).resolve().parents[1]
+root=Path(__file__).resolve().parents[2]
 old=q('RunRhai',dict(code='twin_authority()'))['stdout'];q('OpenTwin',dict(path=str(root)))
 for _ in range(200):
  state=q('GetReadiness');current=q('RunRhai',dict(code='twin_authority()'))['stdout']

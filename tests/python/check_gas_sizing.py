@@ -19,7 +19,7 @@ def main():
     parser.add_argument('--port',type=int,default=4198)
     parser.add_argument('--cold',action='store_true',help='Check the extended single-phase study range down to 143.15 K')
     args=parser.parse_args()
-    root=Path(__file__).resolve().parents[1]
+    root=Path(__file__).resolve().parents[2]
     def q(command,params=None):
         req=urllib.request.Request(f'http://127.0.0.1:{args.port}/api/commands',
             data=json.dumps(dict(type='ExecuteCommand',command=command,params=params or {})).encode(),

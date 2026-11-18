@@ -4,12 +4,13 @@
 Freshen the Twin first so this records the full-tank baseline, not a driven car.
 Structural assertions establish the study configuration, not Tesla calibration.
 """
-import argparse,json,re,time,urllib.request
+import argparse,json,re,sys,time,urllib.request
 from pathlib import Path
 
-from study_geometry import MOUNTS,thruster_stations
+ROOT=Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT))
+from scripts.study_geometry import MOUNTS,thruster_stations
 
-ROOT=Path(__file__).resolve().parents[1]
 def main():
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--port',type=int,default=4198);args=ap.parse_args()
     def q(command,**params):

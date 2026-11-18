@@ -16,7 +16,7 @@ def main():
     parser.add_argument('--port', type=int, default=4198)
     parser.add_argument('--held', action='store_true')
     args = parser.parse_args()
-    root = Path(__file__).resolve().parents[1]
+    root = Path(__file__).resolve().parents[2]
 
     def q(command, params=None):
         request = urllib.request.Request(

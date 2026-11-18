@@ -2,7 +2,7 @@
 """Run native ramp entry gates and retain a compact matrix and measured traces."""
 import argparse,csv,json,os,subprocess,sys
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 CASES=[(11,1),(25,1),(40,1),(25,0)]
 def main():
  ap=argparse.ArgumentParser(description=__doc__)
@@ -13,7 +13,7 @@ def main():
   key=f'ramp-entry-{speed}-{fan}'
   evidence=ROOT/f'results/{key}.json'
   evidence.unlink(missing_ok=True)
-  result=subprocess.run([sys.executable,str(ROOT/'scripts/run_scene_check.py'),scene,'ROADSTER_RAMP_ENTRY','--result-name',key,'--binary',a.binary,'--ticks','1800'],cwd=ROOT,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
+  result=subprocess.run([sys.executable,str(ROOT/'tests/python/run_scene_check.py'),scene,'ROADSTER_RAMP_ENTRY','--result-name',key,'--binary',a.binary,'--ticks','1800'],cwd=ROOT,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
   if evidence.exists():
    report=json.loads(evidence.read_text());samples=report.pop('samples',[])
   else:

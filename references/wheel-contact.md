@@ -17,7 +17,7 @@ The contact radius is 0.34 m. Front width is 0.25 m and rear width is 0.30 m;
 the crowned visual tapers to 0.30 m at its shoulders. These are study assumptions,
 not manufacturer calibration. Standard PhysX fields retain their schema precision.
 The tire WESL shader uses mesh-local position and an explicit axle direction.
-`tools/crowned_tire.rhai` and `scripts/author_tire_profile.rhai` author the visual
+`tools/crowned_tire.rhai` and `tools/author_tire_profile.rhai` author the visual
 through the document journal. The single chassis carries the complete Modelica
 vehicle mass, COM and inertia, including its running gear and stored air.
 
@@ -51,3 +51,22 @@ It separately checks four collider-free wheel mounts,
 one crowned render surface per wheel, material resolution, the cabin mesh and
 complete vehicle mass. Evidence is retained under the engine checkout's
 `.cache/codex-evidence/physics-followup-20261021/raycast-roadster/`.
+
+## Landing rebound regression
+
+A fast landing used to let the wheel query cross the suspension stop between
+steps. The displacement correction then added a large separating velocity. The
+shared raycast-wheel repair uses speculative native contact impulses and extends
+the query by the hub travel for one master step; it does not change vehicle
+mass, thrust, springs or authored travel.
+
+In the recorded regression, two 0.3 s lift pulses produced a 6.127 m first apex,
+then a later maximum of 2.821 m and 65.001 mm compression. A 10 s held lift
+reached a 64.980 m first apex and a 0.588 m maximum after touchdown, with
+65.004 mm compression. Both authored regressions checked takeoff, touchdown,
+no higher post-landing launch and the 65 mm compression limit plus 3 mm solver
+tolerance. Six repeated native K-key jumps with refills also settled without an
+escalating bounce. These are the recorded Roadster cases, not a general landing
+envelope or all-platform qualification. Reproduce with
+`python3 tests/python/check_jump_rebound.py --port 4518` and add `--held` for
+the long-hold case.

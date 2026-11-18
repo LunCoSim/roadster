@@ -27,10 +27,10 @@ runtime. Use a fresh course and finite air. Record the build and any failed step
 Automated reproduction:
 
 ```
-python3 scripts/check_keyboard_course.py --launch --manual --binary /path/to/luncosim
-python3 scripts/check_keyboard_course.py --launch --manual --autopilot --binary /path/to/luncosim
-python3 scripts/check_keyboard_course.py --launch --manual --autopilot --operator-checks --binary /path/to/luncosim
-python3 scripts/check_camera.py --port 4198
+python3 tests/python/check_keyboard_course.py --launch --manual --binary /path/to/luncosim
+python3 tests/python/check_keyboard_course.py --launch --manual --autopilot --binary /path/to/luncosim
+python3 tests/python/check_keyboard_course.py --launch --manual --autopilot --operator-checks --binary /path/to/luncosim
+python3 tests/python/check_camera.py --port 4198
 ```
 
 The camera check holds physics and leaves it held. Run it in a separate session
@@ -77,7 +77,7 @@ window and port. Avoid using that window's keys during automation.
 
 ## Automated OS input
 
-`python3 scripts/check_keyboard_course.py --launch --manual --input-backend x11 --binary /path/to/luncosim --output results/os-keyboard.json`
+`python3 tests/python/check_keyboard_course.py --launch --manual --input-backend x11 --binary /path/to/luncosim --output results/os-keyboard.json`
 
 This uses XTEST through the X11 window manager and winit, targeting only the
 owned process/window. It requires python-xlib and XTEST, takes foreground focus,
@@ -85,7 +85,7 @@ checks focus before input, and releases its own held keys on exit. Physical
 keyboard repeat settings remain unchanged. Avoid interacting with this window
 during automation. It is synthetic OS input; human course completion is separate.
 
-`python3 scripts/check_os_hold.py --binary /path/to/luncosim`
+`python3 tests/python/check_os_hold.py --binary /path/to/luncosim`
 
 This focused OS test holds D and W for three wall-clock seconds each while normal
 key repeat stays enabled, sampling the X server key state and native steering /
@@ -93,12 +93,12 @@ throttle commands. It also checks release. Run it alone so another test window
 cannot take focus; focus loss aborts the run.
 
 For a focused native repeat regression without OS delivery, use
-`python3 scripts/check_os_hold.py --input-backend native --output results/native-hold.json --binary /path/to/luncosim`.
+`python3 tests/python/check_os_hold.py --input-backend native --output results/native-hold.json --binary /path/to/luncosim`.
 It injects `Pressed` events with `repeat=True`, checks the live solver's consumed
 steering/throttle aliases throughout each hold, then verifies release. It does
 not qualify the desktop input path. Run windowed tests sequentially.
 
-`python3 scripts/check_jump_window.py --binary /path/to/luncosim` uses an owned
+`python3 tests/python/check_jump_window.py --binary /path/to/luncosim` uses an owned
 USD-authoring API on port 4198 to measure the jump window on the native 60 Hz
 frame grid. It stops after the three cubes or a measured mission miss, so its
 result qualifies that jump and authored speed rather than the entire course at

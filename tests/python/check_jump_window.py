@@ -5,10 +5,12 @@ Coarse samples locate boundaries, then every frame between passing samples and
 its adjacent failing frame is measured. This qualifies the authored speed/plant,
 not every possible speed, subframe instant, weather or human input latency.
 """
-from scene_documents import save_scene_as
 import argparse,hashlib,json,subprocess,sys
 from pathlib import Path
-from author_surface_probes import q,ROOT,await_doc
+ROOT=Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT))
+from scripts.scene_documents import save_scene_as
+from scripts.author_surface_probes import q,await_doc
 
 
 def main():
@@ -34,7 +36,7 @@ def main():
    if any(hashlib.sha256((ROOT/f).read_bytes()).hexdigest()!=h for f,h in source_snapshot.items()):
     raise RuntimeError('Plant or observer source changed during the timing sweep; restart it')
    sha=hashlib.sha256(scene.read_bytes()).hexdigest()
-   cmd=[sys.executable,str(ROOT/'scripts/run_scene_check.py'),'roadster_jump_window',
+   cmd=[sys.executable,str(ROOT/'tests/python/run_scene_check.py'),'roadster_jump_window',
      'ROADSTER_JUMP_WINDOW','--ticks','1500','--result-name',stem,'--binary',str(binary)]
    proc=subprocess.run(cmd,cwd=ROOT,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
    if proc.returncode:raise RuntimeError(f'{stem}: {proc.stdout[-1800:]}')

@@ -5,7 +5,7 @@ from pathlib import Path
 import time
 import urllib.request
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 def q(command,params=None):
     req=urllib.request.Request('http://127.0.0.1:4198/api/commands',
         data=json.dumps(dict(type='ExecuteCommand',command=command,params=params or {})).encode(),

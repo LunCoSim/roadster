@@ -2,7 +2,7 @@
 """Run the production shared tree and real early/late collision cases."""
 import argparse,hashlib,json,subprocess,sys,time
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
@@ -10,7 +10,7 @@ def main():
     args=parser.parse_args();binary=args.binary.resolve();rows=[]
     for case in ['check','early','late']:
         started=time.time()
-        result=subprocess.run([sys.executable,str(ROOT/'scripts/run_scene_check.py'),
+        result=subprocess.run([sys.executable,str(ROOT/'tests/python/run_scene_check.py'),
             'roadster_course_'+case,'ROADSTER_COURSE','--ticks','2400',
             '--result-name','dynamic-'+case,'--binary',str(binary)]+(['--verification','Roadster::VerifySkillCourse'] if case=='check' else []),cwd=ROOT,
             stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)

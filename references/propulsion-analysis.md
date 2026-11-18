@@ -151,6 +151,7 @@ and parameters and checks them against the authored layout and native COM;
 - `check_hardware.py` and `check_controls.py`: native layout and key checks.
 - Optional matplotlib: `plot_propulsion.py` renders the saved observations.
 
-See `results/propulsion-analysis.json`, `force_rear/lift/side.json`, the
-[force and launch plots](../results/propulsion-analysis.png), and the
-[dimensioned layout](../results/thruster-layout.png).
+Run scripts write machine-readable observations to ignored `results/` files.
+`scripts/plot_propulsion.py` can render local force/launch plots and the
+dimensioned layout from those observations; generated figures are not project
+assets.

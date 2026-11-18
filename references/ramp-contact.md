@@ -15,6 +15,6 @@ wheel collision impulse. Exact triangle meshes use the engine's maintained
 internal-edge correction.
 
 Use `scripts/author_ramp_entry_checks.py` through an owned live document API to
-regenerate fixtures and `scripts/run_ramp_entries.py --binary /path/to/luncosim`
+regenerate fixtures and `python3 tests/python/run_ramp_entries.py --binary /path/to/luncosim`
 to execute the production matrix. See [wheel contact](wheel-contact.md) for the
 current realization and unresolved operating boundaries.

@@ -19,7 +19,7 @@ At 600 L and 293.15 K, the reusable Modelica dry-air equation of state calculate
 
 ## Force, mounting, and qualification
 
-[Measured launch and force results and placement assumptions](../references/propulsion-analysis.md) include the rear mounting moment, balanced collective geometry, wheel-only Performance/Rocket baselines, and finite tank blowdown. The [plots](../results/propulsion-analysis.png) and [thruster layout](../results/thruster-layout.png) are generated from recorded observations and authored study geometry.
+[Measured launch and force results and placement assumptions](../references/propulsion-analysis.md) include the rear mounting moment, balanced collective geometry, wheel-only Performance/Rocket baselines, and finite tank blowdown. The [plot generator](../scripts/plot_propulsion.py) creates local figures after its production reports are generated.
 
 The [wheel-contact and qualification notes](../references/wheel-contact.md) contain the measured limits, supporting checks, and run conditions. Set `LUNCOSIM_BIN` to select a production build explicitly when running the checks.
 
@@ -29,4 +29,6 @@ The fan component contains its geometry probes and seal/plenum calculations. The
 
 See [USD and Omniverse contracts](../references/usd-omniverse.md) for interoperability details. The chassis and wheel attachments use standard schema contracts; Omniverse execution has not been validated. Modelica, Rhai, and custom rendering still require their runtime integrations.
 
-The study uses **120 kWh nominal**, inferred from reported energy above 100 kWh and range above 300 miles, with explicit 220 Wh/km and 90% sizing assumptions. It is editable as `inputs:battery_capacity_kwh`. Modelica adjusts energy, mass, and inertia from the 120 kWh / 1700 kg dry reference; the pack is counted once. This value is an assumption, not a manufacturer-issued specification. See [battery sources and derivation](../references/battery-study.md). An automated sensitivity check is available as `python3 scripts/check_battery_study.py --binary /path/to/luncosim`.
+Jet plumes are clipped against nearby surfaces for visibility. See [presentation notes](../references/known-issues.md); the plume is not a flow or force solution.
+
+The study uses **120 kWh nominal**, inferred from reported energy above 100 kWh and range above 300 miles, with explicit 220 Wh/km and 90% sizing assumptions. It is editable as `inputs:battery_capacity_kwh`. Modelica adjusts energy, mass, and inertia from the 120 kWh / 1700 kg dry reference; the pack is counted once. This value is an assumption, not a manufacturer-issued specification. See [battery sources and derivation](../references/battery-study.md). An automated sensitivity check is available as `python3 tests/python/check_battery_study.py --binary /path/to/luncosim`.

@@ -86,6 +86,11 @@ instant services are explicit game boundaries with mass/thermal accounting.
 Finite acceptance uses 250 kg initial air, 293.15 K refill and the existing
 200 K study discharge guard. Remaining cold air is not treated as usable thrust.
 
+The fan controller preloads at Z = −288 m, 12 m before the ramp entry at
+Z = −300 m. At the authored 12 m/s approach speed this allows one second to
+build suction. Fans remain off during the earlier course phases and stay on
+through the crest until the existing release action.
+
 Completion requires native four-wheel contact, upright attitude, nose alignment
 along +Z, position inside the green road area, speed below 0.2 m/s and a 0.5 s
 stable dwell. Descent severity is visible telemetry rather than a hidden
@@ -97,9 +102,9 @@ qualification.
 ## Reproduction
 
 ```
-python3 scripts/check_course_timing.py --binary /path/to/luncosim
-python3 scripts/check_keyboard_course.py --launch --manual --binary /path/to/luncosim
-python3 scripts/check_keyboard_course.py --launch --manual --autopilot --operator-checks --binary /path/to/luncosim
+python3 tests/python/check_course_timing.py --binary /path/to/luncosim
+python3 tests/python/check_keyboard_course.py --launch --manual --binary /path/to/luncosim
+python3 tests/python/check_keyboard_course.py --launch --manual --autopilot --operator-checks --binary /path/to/luncosim
 ```
 
 The first command runs the actual shared autopilot and early/late timing cases.
@@ -133,16 +138,15 @@ stepping after retry because a fresh scene intentionally resets transport state.
 
 ## Measured jump timing window — 2026-10-20
 
-`results/jump-window.json` records 25 distinct offsets plus a repeated nominal
-trial. Every native frame from **-6 through +6** (offset **-100 to +100 ms**)
+The measured jump-window sweep covered 25 distinct offsets plus a repeated
+nominal trial. Every native frame from **-6 through +6** (offset **-100 to +100 ms**)
 cleared the three cubes without physical contact at the authored guidance speed.
 The adjacent -7 and +7 frame trials fail with measured cube impacts. Positive
 offset requests earlier lift; negative requests later lift. Resolution is 1/60 s,
 not a subframe or all-speed guarantee. Plant/observer source fingerprints are
 held constant throughout the sweep; each case also retains its USD scene hash.
 
-`results/os-keyboard.json` records the latest actual X11 OS-input attempt. The
-desktop did not retain foreground focus, so the guard aborted before driving;
-this is not current full-course acceptance through OS input. The native-injection
-path and HUD-started autopilot remain available. Synthetic input does not
-establish human completion.
+The latest actual X11 OS-input attempt aborted before driving because the
+desktop did not retain foreground focus; full-course OS-input acceptance is not
+established. The native-injection path and HUD-started autopilot remain
+available. Synthetic input does not establish human completion.
