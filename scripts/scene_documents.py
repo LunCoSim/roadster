@@ -8,7 +8,13 @@ def save_scene_as(query, doc_id, destination):
     """Keep authored dependencies anchored before changing a scene's directory."""
     document = query('InspectUsdDocument', doc_id=doc_id)
     source = Path(document['origin']['File']['path'])
-    namespace = 'twin://tesla-roadster-runner/'
+    workspace = query('ReadActiveWorkspace')
+    if workspace.get('kind') != 'twin' or Path(workspace['root']).resolve() != ROOT:
+        raise RuntimeError('Open the Roadster Twin before copying its scene documents')
+    identity = query('RunRhai', code='twin_source_identity()')['stdout'].strip()
+    if not identity:
+        raise RuntimeError('The active Roadster Twin has no stable source identity')
+    namespace = f'twin://{identity}/'
     rewritten = set()
     operations = []
 

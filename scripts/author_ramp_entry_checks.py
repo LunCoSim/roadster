@@ -22,7 +22,7 @@ def main():
  for speed,fan in [(11,1),(25,1),(40,1),(25,0)]:
   name=f'roadster_ramp_entry_{speed}_{fan}'
   save_scene_as(q, doc, str(ROOT/f'scenes/tests/{name}.usda'))
-  values=[('/World/Roadster','xformOp:translate','double3','(0, 0.66, 10)'),('/World/DriverSetup','info:sourceAsset','asset','@twin://tesla-roadster-runner/scenarios/tests/ramp_entry.rhai@'),('/World/DriverSetup','study:targetSpeed','double',str(speed)),('/World/DriverSetup','study:fan','double',str(fan))]
+  values=[('/World/Roadster','xformOp:translate','double3','(0, 0.66, 10)'),('/World/DriverSetup','info:sourceAsset','asset','@../../scenarios/tests/ramp_entry.rhai@'),('/World/DriverSetup','study:targetSpeed','double',str(speed)),('/World/DriverSetup','study:fan','double',str(fan))]
   q('ApplyUsdOps',doc_id=doc,ops=[{'SetAttribute':dict(edit_target='@root@',path=p,name=n,type_name=t,value=v)} for p,n,t,v in values]);q("SaveDocument",doc_id=doc)
   if not q('InspectUsdDocument',doc_id=doc,path='/World/StuntRamp')['prim']['exists']:raise RuntimeError('Missing ramp after save')
   print(name)

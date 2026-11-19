@@ -4,7 +4,7 @@ fn simulation_dependencies(me, ctx) {
     let car = find_path("/World/Roadster");
     #{modelica_entities: [car], entity_reads: [car], entity_writes: [car],
       query_reads: ["ReadPorts", "QueryUsdPrim", "AnalyzeSysml", "ReadActiveTwinContract"],
-      required_inputs: [#{owner: "sysml.twin-analysis", identity: twin_authority()}]}
+      required_inputs: [#{owner: "sysml.twin-analysis", identity: twin_source_identity()}]}
 }
 
 fn sample(car, name) {

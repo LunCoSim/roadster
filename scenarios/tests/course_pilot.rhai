@@ -1,12 +1,12 @@
 // Observer of the production tree. The shared course pilot owns all guidance.
-import "twin://tesla-roadster-runner/tools/wheel_state" as wheels;
+import "../../tools/wheel_state" as wheels;
 fn simulation_dependencies(me,ctx) {
     let car=find_path("/World/Roadster");
     let reads=[car];for corner in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+corner));}
     for i in 0..3 {reads.push(find_path("/World/JumpBlock"+i.to_string()));}
     #{modelica_entities:[car],entity_reads:reads,entity_writes:[car],
       query_reads:["ReadPorts","QueryPhysicsState","QueryUsdPrim","AnalyzeSysml","ReadActiveTwinContract"],
-      required_inputs:[#{owner:"sysml.twin-analysis",identity:twin_authority()}]}
+      required_inputs:[#{owner:"sysml.twin-analysis",identity:twin_source_identity()}]}
 }
 fn on_start(me,ctx) {
     this.car=find_path("/World/Roadster");this.time=0.0;this.last_stage= -1;

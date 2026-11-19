@@ -1,5 +1,5 @@
 // A pre-spun vehicle on a real vertical collider. No kinematic attachment.
-import "twin://tesla-roadster-runner/tools/wheel_state" as wheels;
+import "../../tools/wheel_state" as wheels;
 fn simulation_dependencies(me,ctx) {
  let car=find_path("/World/Roadster");let reads=[car];
  for n in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+n));}

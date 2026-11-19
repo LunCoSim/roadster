@@ -25,7 +25,7 @@ def main():
     else:raise RuntimeError('Rocket document did not become ready')
     doc=matches[-1]['doc_id']
     save_scene_as(q, doc, str(root/'scenes/tests/roadster_moving_jump_check.usda'))
-    q('ApplyUsdOps',doc_id=doc,ops=[{'SetAttribute':dict(edit_target='@root@',path='/World/DriverSetup',name='info:sourceAsset',type_name='asset',value='@twin://tesla-roadster-runner/scenarios/tests/moving_jump.rhai@')}])
+    q('ApplyUsdOps',doc_id=doc,ops=[{'SetAttribute':dict(edit_target='@root@',path='/World/DriverSetup',name='info:sourceAsset',type_name='asset',value='@../../scenarios/tests/moving_jump.rhai@')}])
     q('SaveDocument',doc_id=doc)
     check=q('InspectUsdDocument',doc_id=doc,path='/World/DriverSetup')
     if not check['prim']['exists']:raise RuntimeError('Regression program did not read back')

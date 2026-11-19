@@ -1,5 +1,5 @@
 // Acceptance driver only. Raycast tire mechanics and Modelica own all physics.
-import "twin://tesla-roadster-runner/tools/wheel_state" as wheel_state;
+import "../../tools/wheel_state" as wheel_state;
 fn simulation_dependencies(me,ctx) {
  let car=find_path("/World/Roadster");let reads=[car];
  for n in ["FL","FR","RL","RR"] {reads.push(find_path("/World/Roadster/Wheel_"+n));reads.push(find_path("/World/Roadster/Wheel_"+n+"/CrownedVisual"));}

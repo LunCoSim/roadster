@@ -9,10 +9,10 @@ import time
 from pathlib import Path
 from PIL import Image,ImageChops,ImageStat
 root=Path(__file__).resolve().parents[2]
-old=q('RunRhai',dict(code='twin_authority()'))['stdout'];q('OpenTwin',dict(path=str(root)))
+old=q('ReadActiveTwinContract').get('twin_id');q('OpenTwin',dict(path=str(root)))
 for _ in range(200):
- state=q('GetReadiness');current=q('RunRhai',dict(code='twin_authority()'))['stdout']
- if current!=old and state['ready'] and not state['world_hold'] and not state['pending_count']:
+ state=q('GetReadiness');current=q('ReadActiveTwinContract').get('twin_id')
+ if current is not None and current!=old and state['ready'] and not state['world_hold'] and not state['pending_count']:
   status=q('CosimStatus',dict(include_values=False))
   if any(e.get('name')=='/World/Roadster' and e.get('status')=='Running' for e in status['entities']):break
  time.sleep(.1)

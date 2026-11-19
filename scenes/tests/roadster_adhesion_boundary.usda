@@ -15,6 +15,6 @@ def Xform "World" (
     }
     over "DriverSetup"
     {
-        uniform asset info:sourceAsset = @twin://tesla-roadster-runner/scenarios/tests/adhesion_boundary.rhai@
+        uniform asset info:sourceAsset = @../../scenarios/tests/adhesion_boundary.rhai@
     }
 }

@@ -33,15 +33,16 @@ def main():
     def rh(code):
         return q('RunRhai', {'code': code})['stdout']
 
-    previous = rh('twin_authority()')
+    previous = q('ReadActiveTwinContract').get('twin_id')
     q('OpenTwin', {'path': str(root)})
     deadline = time.monotonic() + 120
     while True:
         ready = q('GetReadiness')
         if ready['faulted']:
             raise RuntimeError(ready['fault'])
+        current = q('ReadActiveTwinContract').get('twin_id')
         if (ready['ready'] and not ready['world_hold'] and not ready['pending_count']
-                and rh('twin_authority()') != previous
+                and current is not None and current != previous
                 and rh('is_controlled(find_path("/World/Roadster"))') == 'true'):
             break
         if time.monotonic() > deadline:
@@ -51,7 +52,7 @@ def main():
     q('StepSimulation', {'hold': True})
     try:
         target = int(rh('find_path("/World")'))
-        asset = f'twin://{rh("twin_authority()")}/scenarios/tests/jump_rebound.rhai'
+        asset = f'twin://{rh("twin_source_identity()")}/scenarios/tests/jump_rebound.rhai'
         q('RunScenarioAsset', {'target': target, 'source_asset': asset,
                               'params': {'held': args.held}})
         for _ in range(40):

@@ -26,7 +26,7 @@ def main():
     doc=matches[-1]['doc_id']
     for bank in ['REAR','LIFT','SIDE']:
         save_scene_as(q, doc, str(root/f'scenes/tests/roadster_force_{bank.lower()}.usda'))
-        fields=[('/World/DriverSetup','info:sourceAsset','asset','@twin://tesla-roadster-runner/scenarios/tests/thrust_analysis.rhai@'),
+        fields=[('/World/DriverSetup','info:sourceAsset','asset','@../../scenarios/tests/thrust_analysis.rhai@'),
                 ('/World/DriverSetup','study:bank','string',bank),
                 ('/World/Roadster','xformOp:translate','double3','(0,20,0)')]
         ops=[{'SetAttribute':dict(edit_target='@root@',path=path,name=name,type_name=kind,value=value)} for path,name,kind,value in fields]
@@ -43,7 +43,7 @@ def main():
         time.sleep(.1)
     else:raise RuntimeError('Track document did not become ready')
     doc=matches[-1]['doc_id'];save_scene_as(q, doc, str(root/'scenes/tests/roadster_performance_motor_launch.usda'))
-    q('ApplyUsdOps',doc_id=doc,ops=[{'SetAttribute':dict(edit_target='@root@',path='/World/DriverSetup',name='info:sourceAsset',type_name='asset',value='@twin://tesla-roadster-runner/scenarios/tests/motor_launch.rhai@')}])
+    q('ApplyUsdOps',doc_id=doc,ops=[{'SetAttribute':dict(edit_target='@root@',path='/World/DriverSetup',name='info:sourceAsset',type_name='asset',value='@../../scenarios/tests/motor_launch.rhai@')}])
     q('SaveDocument',doc_id=doc);q('InspectUsdDocument',doc_id=doc,path='/World/DriverSetup');q('CloseDocument',doc_id=doc)
     print('Saved three force fixtures and the Performance motor fixture through ApplyUsdOps.')
 if __name__=='__main__':main()

@@ -45,7 +45,7 @@ def Xform "World" (
                 uniform token info:implementationSource = "sourceAsset"
                 float inputs:brightness = 1.0
                 token outputs:surface
-                asset info:wesl:sourceAsset = @twin://tesla-roadster-runner/shaders/earth_sky.wesl@
+                asset info:wesl:sourceAsset = @../../shaders/earth_sky.wesl@
             }
         }
     }
@@ -484,7 +484,7 @@ def Xform "World" (
         bool physics:collisionEnabled = false
     }
     def Xform "Roadster" (
-        prepend references = @twin://tesla-roadster-runner/vehicles/roadster.usda@</Roadster>
+        prepend references = @../../vehicles/roadster.usda@</Roadster>
         variants = { string "trim" = "Performance" }
     )
     {
@@ -524,6 +524,6 @@ def Xform "World" (
     )
     {
         uniform token info:implementationSource = "sourceAsset"
-        uniform asset info:sourceAsset = @twin://tesla-roadster-runner/scenarios/tests/motor_launch.rhai@
+        uniform asset info:sourceAsset = @../../scenarios/tests/motor_launch.rhai@
     }
 }

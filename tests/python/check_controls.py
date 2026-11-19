@@ -53,21 +53,20 @@ def main():
             time.sleep(.1)
         raise RuntimeError('Scene did not become ready')
     def fresh_twin():
-        previous=q('RunRhai',dict(code='twin_authority()'))['stdout']
+        previous=q('ReadActiveTwinContract',{}).get('twin_id')
         q('OpenTwin',dict(path=str(root)))
         deadline=time.monotonic()+60
         last_models=[]
         while time.monotonic()<deadline:
-            current=q('RunRhai',dict(code='twin_authority()'))['stdout']
+            current=q('ReadActiveTwinContract',{}).get('twin_id')
             state=q('GetReadiness',{})
             if state['faulted']: raise RuntimeError(state)
-            if current != previous and state['ready'] and not state['pending_count'] and not state['world_hold']:
+            if current is not None and current != previous and state['ready'] and not state['pending_count'] and not state['world_hold']:
                 models=q('CosimStatus',dict(include_values=True))['entities']
                 last_models=[{k:e.get(k) for k in ['name','status','model','modelica_current_time']}
                              for e in models if e.get('has_simcomponent')]
                 if any(e.get('name')=='/World/Roadster' and e.get('status')=='Running'
-                       and e.get('has_simcomponent') and isinstance(e.get('model'),str)
-                       and e['model'].startswith(f'twin://{current}/') for e in models):
+                       and e.get('has_simcomponent') and isinstance(e.get('model'),str) for e in models):
                     car=int(q('RunRhai',dict(code='find_path("/World/Roadster")'))['stdout'])
                     if q('RunRhai',dict(code=f'is_controlled({car})'))['stdout']=='true':
                         return car
@@ -232,14 +231,27 @@ def main():
         car=fresh_twin();click(343,78);autopilot=out('course_autopilot_active')
         key('W','Pressed');wait_sim(.2);key('W','Released');manual=out('course_autopilot_active')
         results.append(dict(key='HUD autopilot and manual takeover',ok=autopilot==1 and manual==0))
-        previous=q('RunRhai',dict(code='twin_authority()'))['stdout'];click(215,78)
+        twin_id=q('ReadActiveTwinContract',{})['twin_id']
+        full_mass=out('gas_mass_kg')
+        key('K','Pressed');wait_sim(.2);key('K','Released');wait_sim(.3)
+        spent_mass=out('gas_mass_kg')
+        if full_mass-spent_mass <= 1.0:
+            raise RuntimeError('HUD retry needs distinguishable fuel consumption')
+        click(215,78)
         deadline=time.monotonic()+60
         while time.monotonic()<deadline:
             state=q('GetReadiness',{})
-            if q('RunRhai',dict(code='twin_authority()'))['stdout']!=previous and state['ready'] and not state['world_hold'] and not state['pending_count']:
-                if q('RunRhai',dict(code='is_controlled(find_path("/World/Roadster"))'))['stdout']=='true':break
+            if state['faulted']: raise RuntimeError(state)
+            if q('ReadActiveTwinContract',{}).get('twin_id') != twin_id:
+                raise RuntimeError('HUD retry changed the active Twin')
+            if state['ready'] and not state['world_hold'] and not state['pending_count']:
+                live_car=int(q('RunRhai',dict(code='find_path("/World/Roadster")'))['stdout'])
+                if live_car >= 0 and q('RunRhai',dict(code=f'is_controlled({live_car})'))['stdout']=='true':
+                    if value(ports(live_car),'gas_mass_kg') > spent_mass+1.0:
+                        car=live_car
+                        break
             time.sleep(.05)
-        else:raise RuntimeError('HUD retry did not restore a ready, controlled Twin')
+        else:raise RuntimeError('HUD retry did not restore the controlled Roadster and tank inventory')
         results.append(dict(key='HUD retry',ok=True))
         status=q('ScriptInspect',dict(target=int(q('RunRhai',dict(code='find_path("/World")'))['stdout'])))
         results.append(dict(key='driver event health',status=status['status'],ok=status['status']['ok']))

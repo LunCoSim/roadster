@@ -171,7 +171,7 @@ class Pilot:
         # initial assets are preparing retires their Twin mount mid-load.
         old = None
         if reopen_twin and not self.args.launch:
-            old = self.q('RunRhai', code='twin_authority()')['stdout']
+            old = self.q('ReadActiveTwinContract').get('twin_id')
             self.q('OpenTwin', path=str(ROOT))
         deadline = time.monotonic() + 120
         while time.monotonic() < deadline:
@@ -179,8 +179,8 @@ class Pilot:
             if state['faulted']:
                 raise RuntimeError(state['fault'])
             if state['ready'] and not state['world_hold'] and not state['pending_count']:
-                current = self.q('RunRhai', code='twin_authority()')['stdout']
-                if old is not None and current == old:
+                current = self.q('ReadActiveTwinContract').get('twin_id')
+                if current is None or (reopen_twin and not self.args.launch and current == old):
                     time.sleep(.1)
                     continue
                 models = self.q('CosimStatus', include_values=False)['entities']
@@ -192,6 +192,9 @@ class Pilot:
         else:
             raise RuntimeError('Course did not become ready')
         self.car = int(self.q('RunRhai', code='find_path("/World/Roadster")')['stdout'])
+        self.source_identity = self.q('RunRhai', code='twin_source_identity()')['stdout'].strip()
+        if not self.source_identity:
+            raise RuntimeError('The active Roadster Twin has no stable source identity')
         self.q('SetTimeTransport', rate=self.args.rate)
         self.report['transport_rate'] = self.args.rate
         self.q('ObserveAvatar')
@@ -203,7 +206,7 @@ class Pilot:
         # Course time resets on retry; the native event clock remains global.
         self.input_epoch=float(self.q('RunRhai',code='clock_snapshot().sim_tick')['stdout'])/60.0
         self.report.setdefault('input_lifetimes',[]).append(dict(course_epoch_s=self.start,
-            native_epoch_s=self.input_epoch,mount_authority=self.q('RunRhai',code='twin_authority()')['stdout']))
+            native_epoch_s=self.input_epoch,twin_source_identity=self.source_identity))
 
     def fan(self, keys, t, observed, desired):
         if t < self.fan_until:
@@ -307,7 +310,7 @@ class Pilot:
             raise RuntimeError('W did not relinquish autopilot program ownership')
         # Use the same secondary-action input as a player to create a non-default
         # Modelica service count before retry. The reset must clear it with the
-        # mission clock and stage while retaining this mounted Twin authority.
+        # mission clock and stage while retaining the active Twin.
         self.keys({'Tab'}, self.snapshot()['course_time_s']-self.start)
         self.step(2)
         self.keys(set(), self.snapshot()['course_time_s']-self.start)
@@ -318,7 +321,7 @@ class Pilot:
         if old_course['course_stage'] < 1 or old_course['course_time_s'] <= 0.5 \
                 or old_course['instant_services'] < 1:
             raise RuntimeError('Retry setup did not create non-default mission and service state')
-        old_authority = self.q('RunRhai',code='twin_authority()')['stdout']
+        old_source = self.source_identity
         old_twin_id = int(self.q('ReadActiveTwinContract')['twin_id'])
         self.keys({'ShiftLeft'}, self.snapshot()['course_time_s']-self.start)
         for state in ['Pressed', 'Released']:
@@ -326,11 +329,11 @@ class Pilot:
         self.q('StepSimulation', hold=True)
         deadline = time.monotonic()+120
         while time.monotonic() < deadline:
-            current_authority = self.q('RunRhai',code='twin_authority()')['stdout']
-            if current_authority != old_authority:
+            current_source = self.q('RunRhai',code='twin_source_identity()')['stdout'].strip()
+            if current_source != old_source:
                 raise RuntimeError(
-                    f'HUD retry changed Twin mount authority: {old_authority!r} -> '
-                    f'{current_authority!r}')
+                    f'HUD retry changed Twin source identity: {old_source!r} -> '
+                    f'{current_source!r}')
             current_twin_id = int(self.q('ReadActiveTwinContract')['twin_id'])
             if current_twin_id != old_twin_id:
                 raise RuntimeError(
@@ -371,8 +374,8 @@ class Pilot:
                  and fresh['course_failure_reason']==0)
         self.report['retry_reset'] = dict(ok=reset, api_id_before=old_car, api_id_after=self.car,
             twin_id_before=old_twin_id,twin_id_after=current_twin_id,
-            mount_authority_before=old_authority,
-            mount_authority_after=current_authority,
+            source_identity_before=old_source,
+            source_identity_after=current_source,
             before_retry=old_course,telemetry=fresh)
         if not reset:
             raise RuntimeError('Retry did not reset the mission, air and pilot')
@@ -452,8 +455,14 @@ class Pilot:
                 native = self.q('QueryPhysicsState', id=self.car)
                 contacts = {}
                 for corner in ['FL', 'FR', 'RL', 'RR']:
-                    code = f'import "twin://tesla-roadster-runner/tools/wheel_state" as wheels; if wheels::contact(find_path("/World/Roadster/Wheel_{corner}")) {{1}} else {{0}}'
-                    contacts[corner] = int(self.q('RunRhai', code=code)['stdout'])
+                    path = f'/World/Roadster/Wheel_{corner}'
+                    wheel = int(self.q('RunRhai', code=f'find_path({json.dumps(path)})')['stdout'])
+                    ports = self.q('ReadPorts', api_id=wheel, port_names=['contact'])['ports']
+                    contact = next((port['value'] for port in ports
+                                    if port['name'] == 'contact' and port['direction'] == 'out'), None)
+                    if contact is None or not math.isfinite(contact):
+                        raise RuntimeError(f'Missing contact state for {path}')
+                    contacts[corner] = int(contact > .5)
                 self.report.update(final=v, native=native, landing_contacts=contacts,
                     hud=self.q('ReadExposures', surface='vessel-hud'))
                 checks = dict(no_cube_contact=self.report.get('maximum_cube_contact_impulse_ns',float('inf'))<1.0, course_complete=stage == 7, blocks=v['course_blocks'] == 3,

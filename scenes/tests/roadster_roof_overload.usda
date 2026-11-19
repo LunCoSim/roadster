@@ -15,6 +15,6 @@ def Xform "World" (
     }
     over "DriverSetup"
     {
-        uniform asset info:sourceAsset = @twin://tesla-roadster-runner/scenarios/tests/roof_overload.rhai@
+        uniform asset info:sourceAsset = @../../scenarios/tests/roof_overload.rhai@
     }
 }

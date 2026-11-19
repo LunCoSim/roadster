@@ -13,7 +13,7 @@ def main():
   program='/World/Scenario/Launch' if trim=='Rocket' else '/World/DriverSetup'
   ops=[{'SetAttribute':dict(edit_target='@root@',path=p,name=n,type_name=t,value=v)}
     for p,n,t,v in [('/World/Roadster','inputs:battery_capacity_kwh','float',str(capacity)),
-      (program,'info:sourceAsset','asset','@twin://tesla-roadster-runner/scenarios/tests/battery_study.rhai@')]]
+      (program,'info:sourceAsset','asset','@../../scenarios/tests/battery_study.rhai@')]]
   q('ApplyUsdOps',doc_id=doc,ops=ops)
   q('SaveDocument',doc_id=doc);q('CloseDocument',doc_id=doc)
   print(target)

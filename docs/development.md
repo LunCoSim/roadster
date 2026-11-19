@@ -64,7 +64,7 @@ See [manual course checks](../tests/manual-course.md), the [dynamic course desig
 
 ## Edit the model
 
-- `scripts/scene_documents.py` preserves portable `twin://` asset paths when saving a scene into `scenes/tests/`.
+- `scripts/scene_documents.py` anchors dependencies to the active Twin’s stable source identity when saving a scene into `scenes/tests/`. Use layer-relative paths for newly authored assets within the same Twin.
 - `tools/author_tire_profile.rhai` updates the raycast wheel mounts and crowned tire visuals through the live document API. Local wheel mounts inherit scene placement; one chassis carries the vehicle mass. See [wheel contact](../references/wheel-contact.md).
 - `scripts/author_ramp.py` authors the ramp and course through the running USD document API. `scripts/author_dynamic_course.py` applies the compact ramp and timing corridor to the base course. These scripts save typed USD operations and inspect the composed documents; curve sampling creates geometry, not vehicle motion.
 - `scripts/study_geometry.py` contains mount study data.

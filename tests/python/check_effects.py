@@ -8,10 +8,10 @@ import time,json
 root=Path(__file__).resolve().parents[2]
 def key(k,s): q('InjectWindowInput',{'event':{'Key':dict(key=('Key'+k if len(k)==1 else k),state=s,text=None,repeat=False)}})
 def fresh():
- old=q('RunRhai',{'code':'twin_authority()'})['stdout'];q('OpenTwin',{'path':str(root)})
+ old=q('ReadActiveTwinContract').get('twin_id');q('OpenTwin',{'path':str(root)})
  for i in range(100):
-  s=q('GetReadiness');n=q('RunRhai',{'code':'twin_authority()'})['stdout']
-  if n!=old and s['ready'] and not s['pending_count'] and not s['world_hold']:
+  s=q('GetReadiness');n=q('ReadActiveTwinContract').get('twin_id')
+  if n is not None and n!=old and s['ready'] and not s['pending_count'] and not s['world_hold']:
    car=find('/World/Roadster')
    if any(e['name']=='/World/Roadster' and e['status']=='Running' for e in q('CosimStatus',{'include_values':False})['entities']): return car
   time.sleep(.1)

@@ -1,4 +1,4 @@
-import "twin://tesla-roadster-runner/tools/wheel_state" as wheel_state;
+import "../../tools/wheel_state" as wheel_state;
 // Raycast-wheel ramp entry, with only ordinary throttle/brake/fan actuator commands.
 fn simulation_dependencies(me,ctx) {
  let car=find_path("/World/Roadster");let reads=[car];

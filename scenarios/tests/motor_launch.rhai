@@ -1,5 +1,5 @@
 // Motor-only standing start with the solved Modelica shaft and raycast tires.
-import "twin://tesla-roadster-runner/tools/wheel_state" as wheels;
+import "../../tools/wheel_state" as wheels;
 fn simulation_dependencies(me, ctx) {
  let car=find_path("/World/Roadster");
  #{modelica_entities:[car],entity_reads:[car,find_path("/World/Roadster/Wheel_RL")],entity_writes:[car],query_reads:["ReadPorts","QueryPhysicsState"],required_inputs:[]}

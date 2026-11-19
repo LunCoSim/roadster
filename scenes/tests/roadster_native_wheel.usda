@@ -42,7 +42,7 @@ def Xform "World" (
                 uniform token info:implementationSource = "sourceAsset"
                 float inputs:brightness = 1.0
                 token outputs:surface
-                asset info:wesl:sourceAsset = @twin://tesla-roadster-runner/shaders/earth_sky.wesl@
+                asset info:wesl:sourceAsset = @../../shaders/earth_sky.wesl@
             }
         }
     }
@@ -485,7 +485,7 @@ def Xform "World" (
     )
     {
         uniform token info:implementationSource = "sourceAsset"
-        uniform asset info:sourceAsset = @twin://tesla-roadster-runner/scenarios/tests/native_wheel_drop.rhai@
+        uniform asset info:sourceAsset = @../../scenarios/tests/native_wheel_drop.rhai@
         custom string study:case = "DROP"
     }
     def Plane "ContactFloor" (
