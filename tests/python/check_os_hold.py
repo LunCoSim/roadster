@@ -14,7 +14,7 @@ def main():
  ap.add_argument('--input-backend',choices=['x11','native'],default='x11')
  a=ap.parse_args();binary=a.binary.resolve()
  p=Pilot(SimpleNamespace(port=a.port,output=a.output,launch=True,manual=True,rate=.25))
- p.report.update(scene='scenes/roadster_rocket.usda',input_path='X11 XTEST -> owned window -> native command ports' if a.input_backend=='x11' else 'InjectWindowInput/native key and repeat events',checks={},hold_samples=[])
+ p.report.update(scene='scenes/roadster_rocket.usda',input_path='X11 XTEST physical keycode -> owned window -> winit -> native ports' if a.input_backend=='x11' else 'InjectWindowInput/native key and repeat events',checks={},hold_samples=[])
  files=['tests/python/x11_window_input.py','tests/python/check_os_hold.py','tests/python/check_keyboard_course.py',
    'config/input-bindings.json','vehicles/roadster.usda','scenes/roadster_rocket.usda']
  files=sorted(set(files)|{str(f.relative_to(ROOT)) for f in (ROOT/'models').glob('*.mo')})
@@ -48,7 +48,8 @@ def main():
   # live solver batch. These aliases report what the physical model consumed.
   def ports():
    values=next(e['outputs'] for e in p.q('CosimStatus',include_values=True)['entities'] if e.get('name')=='/World/Roadster')
-   return dict(steer=values['steering_driver.demand'],throttle=values['steering.throttle'])
+   return dict(steer=values['steering_driver.demand'],throttle=values['steering.throttle'],
+               jet_force_x=values['jet_force_x'])
   for key,port,desired in [('KeyD','steer',{'KeyD','ShiftLeft'}),('KeyW','throttle',{'KeyW'})]:
    p.keys(desired,0.0);time.sleep(.1);p.step(3)
    started=time.monotonic()
@@ -64,6 +65,21 @@ def main():
    p.keys({'ShiftLeft'},0.0);time.sleep(.1);p.step(3)
    released=ports()[port]
    p.report['checks'][key+'_release']=abs(released)<.001
+  # W and D already had X11 hold checks. Exercise a Twin-bound non-WASD key
+  # through the same OS -> Winit -> physical KeyCode path to catch layout drift.
+  p.keys({'KeyJ'},0.0);p.step(12)
+  yaw=ports()['jet_force_x'];state=p.os_input.held_state() if p.os_input else None
+  keyj_held=yaw < -1.0 and (state is None or state['server_keys'].get('KeyJ'))
+  keyj_check='KeyJ_x11_physical_hold' if p.os_input else 'KeyJ_native_code_hold'
+  p.report['checks'][keyj_check]=keyj_held
+  p.report['keyj_sample']=dict(key='KeyJ',jet_force_x_n=yaw,os_state=state)
+  if not keyj_held:raise RuntimeError(f'KeyJ did not reach the yaw-left jet: {yaw}, {state}')
+  p.keys(set(),0.0);p.step(20)
+  released_yaw=ports()['jet_force_x']
+  release_check='KeyJ_x11_physical_release' if p.os_input else 'KeyJ_native_code_release'
+  p.report['checks'][release_check]=abs(released_yaw)<max(1.0,abs(yaw)*.05)
+  if not p.report['checks'][release_check]:
+   raise RuntimeError(f'KeyJ release left yaw force active: {released_yaw}')
   p.screenshot('complete')
   p.report['ok']=all(p.report['checks'].values())
   p.report['failures']=[k for k,v in p.report['checks'].items() if not v]

@@ -1,16 +1,16 @@
-"""OS XTest input restricted to the PID of an owned X11 test window.
+"""Physical OS XTest input restricted to the PID of an owned X11 test window.
 
 This exercises X11 -> winit -> native intents. It is synthetic OS input, not
 physical hardware or evidence that a human completed the course. No global
-keyboard layout/repeat settings are changed. Requires python-xlib and XTEST.
+keyboard layout/repeat settings are changed. Linux evdev scancodes keep the
+test independent of the active XKB character layout. Requires python-xlib and
+XTEST.
 """
 import time
-from Xlib import X, XK, display
+from Xlib import X, display
 from Xlib.ext import xtest
 from Xlib.protocol import event
-
-SYMBOLS = {'Space':'space','Tab':'Tab','ShiftLeft':'Shift_L',
-           'ControlLeft':'Control_L','ControlRight':'Control_R'}
+from x11_physical_keys import physical_x11_keycode
 
 class X11WindowInput:
     def __init__(self, pid):
@@ -74,9 +74,7 @@ class X11WindowInput:
 
     def key(self, key, state):
         if state=='Pressed':self.ensure_focus()
-        symbol=SYMBOLS.get(key,key[3:].lower() if key.startswith('Key') else key)
-        code=self.display.keysym_to_keycode(XK.string_to_keysym(symbol))
-        if not code:raise RuntimeError(f'X11 has no keycode for {symbol}')
+        code=physical_x11_keycode(key)
         xtest.fake_input(self.display,X.KeyPress if state=='Pressed' else X.KeyRelease,code)
         self.display.sync()
         self.events.append(dict(kind='key',key=key,state=state))
@@ -95,8 +93,7 @@ class X11WindowInput:
         bits=self.display.query_keymap()
         values={}
         for key in self.held:
-            symbol=SYMBOLS.get(key,key[3:].lower() if key.startswith('Key') else key)
-            code=self.display.keysym_to_keycode(XK.string_to_keysym(symbol))
+            code=physical_x11_keycode(key)
             values[key]=bool(bits[code//8] & (1 << (code%8)))
         return dict(server_keys=values,focus_window=getattr(self.display.get_input_focus().focus,'id',None),
             owned_window=self.window.id)

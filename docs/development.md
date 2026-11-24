@@ -40,6 +40,7 @@ Set `LUNCOSIM_BIN` to the LunCoSim executable when a script needs one. Run scene
 The test layout is summarized in [`tests/README.md`](../tests/README.md). Host-side checks live in `tests/python/`; USD fixtures and in-simulator Rhai checks remain under `scenes/tests/` and `scenarios/tests/`.
 
 ```sh
+python3 -m unittest discover -s tests/python -p 'test_*.py'
 python3 tests/python/run_launch.py --binary /path/to/luncosim
 python3 tests/python/run_motor_launch.py --binary /path/to/luncosim
 python3 tests/python/run_ramp_entries.py --binary /path/to/luncosim
@@ -58,7 +59,12 @@ For a live session, the direct-load check is `scenarios/tests/default_loading.rh
 
 ```sh
 python3 tests/python/check_controls.py --port 4198 --output-dir .scratch/control-check
+python3 tests/python/check_os_hold.py --input-backend x11 --binary /path/to/luncosim
 ```
+
+The X11 OS hold check sends physical key positions and covers `W`, `D`, and a
+non-WASD `J` binding. Use it to check the native input path independently of
+the active keyboard layout.
 
 See [manual course checks](../tests/manual-course.md), the [dynamic course design](../references/dynamic-course.md), [wheel-contact qualification](../references/wheel-contact.md), and [known issues](../references/known-issues.md). Standing-start timing does not subtract rollout.
 
